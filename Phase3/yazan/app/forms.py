@@ -8,7 +8,7 @@ from wtforms.validators import Regexp
 class StrongPassword:
     def __init__(self, message=None):
         if not message:
-            message = 'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+            message = 'Password must contain at least one uppercase letter\n, one lowercase letter, one digit, and one special character.\nand Password must be at least 8 characters long.'
         self.message = message
 
     def __call__(self, form, field):

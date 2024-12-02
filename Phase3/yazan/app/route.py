@@ -34,6 +34,7 @@ def login():
         cursor.close()
         connection.close()
         if user:
+
             flash('Login successful!')
             return redirect(url_for('index'))
         else:
