@@ -29,7 +29,7 @@ def login():
         password = form.password.data
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users WHERE email=%s AND password=%s", (email, password))
+        cursor.execute("SELECT * FROM Store.Customer WHERE Customer.email=%s AND Customer.password=%s", (email, password))
         user = cursor.fetchone()
         cursor.close()
         connection.close()
