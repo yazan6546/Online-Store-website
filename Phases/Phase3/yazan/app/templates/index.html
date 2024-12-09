@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .button {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 10px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .customers-table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 80%;
+        }
+        .customers-table th, .customers-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .customers-table th {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('login') }}" class="button">Login Now</a>
+    <button class="button" onclick="showCustomersTable()">Show Customers Table</button>
+    <div id="customers-table" style="display: none;">
+        {{ customers_table|safe }}
+    </div>
+    <script>
+        function showCustomersTable() {
+            document.getElementById('customers-table').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
