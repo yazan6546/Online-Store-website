@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Product</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>Update Product</h1>
+</header>
+
+<form method="POST" action="{{ url_for('update_product', id=product_id) }}">
+    {{ form.hidden_tag() }}  <!-- For CSRF token -->
+    <div>
+        <label for="product_name">Product Name</label>
+        {{ form.product_name() }}
+    </div>
+    <div>
+        <label for="stock_quantity">Stock Quantity</label>
+        {{ form.stock_quantity() }}
+    </div>
+    <div>
+        <label for="price">Price</label>
+        {{ form.price() }}
+    </div>
+    <div>
+        <label for="category_ID">Category ID</label>
+        {{ form.category_ID() }}
+    </div>
+    <div>
+        <label for="description">Description</label>
+        {{ form.description() }}
+    </div>
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+
+</body>
+</html>

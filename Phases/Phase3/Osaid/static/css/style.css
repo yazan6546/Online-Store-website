@@ -1,0 +1,130 @@
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: 'cambria math', sans-serif;
+    background: #ecf0f1;
+    color: #2c3e50;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    background: linear-gradient(to right, #3498db, #8e44ad);
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 2rem;
+}
+
+header h1 {
+    font-weight: bold;
+}
+
+/* Table */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #8e44ad;
+    color: white;
+}
+
+table tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+
+
+table tr:hover {
+    background-color: #3498db;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+/* Buttons */
+button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #e74c3c;
+}
+
+/* Forms */
+form input, form select, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+form input[type="submit"] {
+    background: #8e44ad;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+form input[type="submit"]:hover {
+    background: #e74c3c;
+}
+
+/* Pop-up (for add, update forms) */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 10;
+    max-width: 500px;
+}
+
+.popup.active {
+    display: block;
+}
+
+/* Close button inside pop-up */
+.popup .close-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+.popup .close-btn:hover {
+    background: #c0392b;
+}
