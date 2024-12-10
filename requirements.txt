@@ -1,7 +1,7 @@
 dotenv
 os
 pandas
-[lask
+Flask
 SQLAlchemy
 flask_wtf
 wtforms
