@@ -1,0 +1,7 @@
+dotenv
+os
+pandas
+[lask
+SQLAlchemy
+flask_wtf
+wtforms
