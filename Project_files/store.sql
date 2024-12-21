@@ -20,6 +20,7 @@ create table Customer(
 
 create table Manager(
     person_id int not null,
+    since date ,
     foreign key (person_id) references Person(person_id),
     primary key (person_id)
 );
@@ -55,6 +56,7 @@ create table Category(
 
 create table Product(
     product_id int auto_increment,
+    supplier_id int not null ,
     product_name varchar(255) not null,
     product_description varchar(255) not null,
     price decimal(10,2) not null,
@@ -62,6 +64,7 @@ create table Product(
     stock_quantity int not null,
     category_id int not null,
     foreign key (category_id) references Category(category_id),
+    foreign key (supplier_id) references Supplier(supplier_id),
     primary key (product_id)
 
 );
