@@ -1,7 +1,0 @@
-dotenv
-os
-pandas
-Flask
-SQLAlchemy
-flask_wtf
-wtforms

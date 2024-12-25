@@ -35,7 +35,9 @@ create table Supplier(
 create table Address(
     address_id int not null auto_increment,
     city varchar(255) not null,
+    zip_code varchar(255) not null,
     street_address varchar(255) not null,
+
     primary key (address_id)
 );
 
