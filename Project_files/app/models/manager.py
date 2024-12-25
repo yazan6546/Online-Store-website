@@ -1,8 +1,9 @@
 from app.models.person import Person
 from app.db_utils import get_db_connection
 
+
 class Manager(Person):
-    def __init__(self, id, first_name, last_name, email, passcode, since): 
+    def __init__(self, id, first_name, last_name, email, passcode, since):
         super().__init__(id, first_name, last_name, email, passcode)
         self.since = since
 
@@ -10,8 +11,7 @@ class Manager(Person):
         conn = get_db_connection()
 
         try:
-            conn.execute(INSERT_MANAGER_TABLE,
-                         self.to_dict())
+            conn.execute(INSERT_MANAGER_TABLE, self.to_dict())
             conn.commit()
             return 1
         except Exception as e:
@@ -37,6 +37,4 @@ class Manager(Person):
             conn.close()
 
     def to_dict(self):
-        return super().to_dict().update({'since': self.since})
-
-    
+        return super().to_dict().update({"since": self.since})

@@ -1,6 +1,7 @@
 from app.db_utils import get_db_connection
 
-class Person():
+
+class Person:
     def __init__(self, id, first_name, last_name, email, passcode):
         self.id = id
         self.passcode = passcode
@@ -15,8 +16,7 @@ class Person():
         conn = get_db_connection()
 
         try:
-            conn.execute(INSERT_PERSON_TABLE,
-                         self.to_dict())
+            conn.execute(INSERT_PERSON_TABLE, self.to_dict())
             conn.commit()
             return 1
         except Exception as e:
@@ -25,29 +25,24 @@ class Person():
         finally:
             conn.close()
 
-        
-
     def to_dict(self):
-
         return {
-            'id': self.id,
-            'first_name': self.first_name, 
-            'last_name': self.last_name, 
-            'email': self.email, 
-            'passcode': self.passcode
-            }
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "passcode": self.passcode,
+        }
 
     @staticmethod
     def from_dict(dict):
-
-        return Person(dict['id'],
-                       dict['first_name'], 
-                       dict['last_name'], 
-                       dict['email'], 
-                       dict['passcode']
-                       )
-
-        
+        return Person(
+            dict["id"],
+            dict["first_name"],
+            dict["last_name"],
+            dict["email"],
+            dict["passcode"],
+        )
 
     def set_name(self, name):
         self.name = name
