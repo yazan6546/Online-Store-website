@@ -81,7 +81,7 @@ create table Customer_Order(
     order_date date not null,
     delivery_date date not null,
     shipping_status varchar(20) not null check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
-    foreign key (person_id) references Person(person_id),
+    foreign key (person_id) references Customer(person_id),
     foreign key (address_id) references Address_Order(address_id),
     primary key (order_id)
 );
@@ -105,7 +105,7 @@ create table Manager_Order(
     order_date date not null,
     delivery_date date not null,
     shipping_status varchar(20) not null check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
-    foreign key (person_id) references Person(person_id),
+    foreign key (person_id) references Manager(person_id),
     primary key (order_id)
 );
 
