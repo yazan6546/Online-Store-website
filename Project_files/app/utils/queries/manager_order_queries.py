@@ -37,5 +37,4 @@ DROP_MANAGER_ORDER_TABLE = text("""
                                 DROP TABLE IF EXISTS Manager_Order;
                             """)
 
-
-GET_ALL_PRODUCTS_MANAGER_ORDER = text("""
+                                        
