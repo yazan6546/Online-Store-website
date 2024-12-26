@@ -17,7 +17,7 @@ SELECT_MANAGER_ORDER_BY_ID = text("""
 
 DELETE_FROM_MANAGER_ORDER = text("""
                                 DELETE FROM Manager_Order
-                                WHERE order_id = :order_id);
+                                WHERE order_id = :order_id;
                             """)
 
 CREATE_MANAGER_ORDER_TABLE = text("""
@@ -27,11 +27,11 @@ CREATE_MANAGER_ORDER_TABLE = text("""
                             order_date date NOT NULL,
                             delivery_date date NOT NULL,
                             shipping_status VARCHAR(255) NOT NULL,
-                            person_id int NOT NULL,
                             FOREIGN KEY (person_id) REFERENCES Manager(person_id),
                             PRIMARY KEY (order_id)
+                            );
                         """)
 
 DROP_MANAGER_ORDER_TABLE = text("""
-                                DROP TABLE IF Customer_Order_Line;
+                                DROP TABLE IF EXISTS Customer_Order_Line;
                             """)

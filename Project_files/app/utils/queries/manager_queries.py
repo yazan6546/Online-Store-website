@@ -23,7 +23,7 @@ SELECT_MANAGER_BY_EMAIL = text("""
                             """)
 
 SELECT_PASSWORD_FROM_MANAGERS = text("""
-                                SELECT p.passcode FROM Manaeger m, Person p
+                                SELECT p.passcode FROM Manager m, Person p
                                 JOIN Person on m.person_id = p.person.id
                                 WHERE p.email = :email;
                             """)
@@ -39,6 +39,7 @@ CREATE_MANAGERS_TABLE = text("""
                             since date ,
                             FOREIGN KEY (person_id) REFERENCES Person(person_id),
                             PRIMARY KEY (person_id)
+                            );
                         """)
 
 DROP_MANAGERS_TABLE = text("""
