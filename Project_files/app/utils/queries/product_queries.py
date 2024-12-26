@@ -35,6 +35,6 @@ CREATE_PRODUCTS_TABLE = text("""
                             PRIMARY KEY (product_id)
                         """)
 
-DROP_CUSTOMERS_TABLE = text("""
+DROP_PRODUCTS_TABLE = text("""
                                 DROP TABLE IF EXISTS Product;
-                            """)
+                        """)

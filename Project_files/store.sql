@@ -113,8 +113,7 @@ create table Manager_Order_Line(
     product_id int not null,
     order_id int not null,
     price_at_time_of_order int not null,
-    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED')),
-    quantity int not null,
+    quantity INT NOT NULL CHECK (quantity > 0),
     foreign key (order_id) references Manager_Order(order_id),
 	foreign key (product_id) references Product(product_id),
     primary key (order_line_id)
