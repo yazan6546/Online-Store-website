@@ -45,8 +45,7 @@ GET_ALL_INCART_PRODUCTS_BY_ID = text("""
                                     p.product_name,
                                     p.product_description,
                                     p.price,
-                                    col.quantity,
-                                    col.price_at_time_of_order
+                                    col.quantity
                                 FROM 
                                     Customer_Order co
                                 JOIN 

@@ -74,11 +74,11 @@ create table Address_Order(
 create table Customer_Order(
     order_id int not null,
     person_id int not null,
-    address_id int not null,
-    order_date date not null,
-    delivery_date date not null,
+    address_id int,
+    order_date date,
+    delivery_date date,
     order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED')),
-    shipping_status varchar(20) not null check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
+    shipping_status varchar(20) check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
     foreign key (person_id) references Customer(person_id),
     foreign key (address_id) references Address_Order(address_id),
     primary key (order_id)
@@ -99,10 +99,10 @@ create table Customer_Order_Line(
 create table Manager_Order(
     order_id int not null,
     person_id int not null,
-    order_date date not null,
-    delivery_date date not null,
+    order_date date,
+    delivery_date date,
     order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED')),
-    shipping_status varchar(20) not null check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
+    shipping_status varchar(20) check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
     foreign key (person_id) references Manager(person_id),
     primary key (order_id)
 );
@@ -124,3 +124,36 @@ create table Supplier(
     phone_number varchar(255) not null,
     primary key (supplier_id)
 );
+
+
+   -- Trigger for Customer table
+   DELIMITER $$
+
+   CREATE TRIGGER before_insert_customer
+   BEFORE INSERT ON Customer
+   FOR EACH ROW
+   BEGIN
+       -- Check if person_id exists in Manager
+       IF EXISTS (SELECT 1 FROM Manager WHERE person_id = NEW.person_id) THEN
+           SIGNAL SQLSTATE '45000'
+           SET MESSAGE_TEXT = 'This person_id already exists in Manager. A person cannot be both a Manager and a Customer.';
+       END IF;
+   END $$
+
+   DELIMITER ;
+
+   -- Trigger for Manager table
+   DELIMITER $$
+
+   CREATE TRIGGER before_insert_manager
+   BEFORE INSERT ON Manager
+   FOR EACH ROW
+   BEGIN
+       -- Check if person_id exists in Customer
+       IF EXISTS (SELECT 1 FROM Customer WHERE person_id = NEW.person_id) THEN
+           SIGNAL SQLSTATE '45000'
+           SET MESSAGE_TEXT = 'This person_id already exists in Customer. A person cannot be both a Customer and a Manager.';
+       END IF;
+   END $$
+
+   DELIMITER ;
