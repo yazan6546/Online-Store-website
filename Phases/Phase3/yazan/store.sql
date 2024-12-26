@@ -1,7 +1,6 @@
-create database project;
+drop database project  exists;
 use project;
 
-drop database project;
 
 create table Person(
     person_id int not null auto_increment,
