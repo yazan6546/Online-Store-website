@@ -77,6 +77,7 @@ create table Customer_Order(
     address_id int not null,
     order_date date not null,
     delivery_date date not null,
+    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED')),
     shipping_status varchar(20) not null check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
     foreign key (person_id) references Customer(person_id),
     foreign key (address_id) references Address_Order(address_id),
@@ -88,7 +89,6 @@ create table Customer_Order_Line(
     product_id int not null,
     order_id int not null,
     price_at_time_of_order int not null,
-    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED')),
     quantity int not null,
     foreign key (order_id) references Customer_Order(order_id),
 	foreign key (product_id) references Product(product_id),
@@ -101,6 +101,7 @@ create table Manager_Order(
     person_id int not null,
     order_date date not null,
     delivery_date date not null,
+    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED')),
     shipping_status varchar(20) not null check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
     foreign key (person_id) references Manager(person_id),
     primary key (order_id)

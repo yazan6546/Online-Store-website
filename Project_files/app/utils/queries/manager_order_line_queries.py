@@ -1,8 +1,8 @@
 from sqlalchemy import text
 
 
-INSERT_MANAGER_ORDER_TABLE = text("""
-                                INSERT INTO Manager_Order (orderline_id, , order_id, product_id, quantity, price_at_time_of_order) 
+INSERT_MANAGER_ORDER_LINE_TABLE = text("""
+                                INSERT INTO Manager_Order_Line (order_line_id, order_id, product_id, quantity, price_at_time_of_order) 
                                 VALUES (:orderline_id, :order_id, :product_id, :quantity, :price_at_time_of_order);
                             """)
 
@@ -17,7 +17,7 @@ SELECT_MANAGER_ORDER_Line_BY_ID = text("""
 
 DELETE_FROM_MANAGER_ORDER_LINE = text("""
                                 DELETE FROM Manager_Order_Line
-                                WHERE order_id = :order_id);
+                                WHERE order_id = :order_id;
                             """)
 
 CREATE_MANAGER_ORDER_LINE_TABLE = text("""

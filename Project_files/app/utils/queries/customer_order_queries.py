@@ -1,8 +1,8 @@
 from sqlalchemy import text
 
 INSERT_CUSTOMER_ORDER_TABLE = text("""
-                                INSERT INTO Customer_Order (order_id, person_id, order_date, delivery_date, shipping_status) 
-                                VALUES (:order_id, :person_id, :order_date, :delivery_date, :shipping_status);
+                                INSERT INTO Customer_Order (order_id, person_id, address_id, order_date, delivery_date, shipping_status) 
+                                VALUES (:order_id, :person_id, :address_id, :order_date, :delivery_date, :shipping_status);
                             """)
 
 GET_CUSTOMER_ORDER_TABLE = text("""
@@ -23,6 +23,7 @@ CREATE_CUSTOMER_ORDER_TABLE = text("""
                             CREATE TABLE IF NOT EXISTS Manager_Order(
                             order_id int NOT NULL,
                             product_id int NOT NULL,
+                            address_id int NOT NULL,
                             person_id int NOT NULL,
                             order_date date,
                             delivery_date date,
@@ -54,5 +55,5 @@ GET_ALL_INCART_PRODUCTS_BY_ID = text("""
                                     Product p ON col.product_id = p.product_id
                                 WHERE 
                                     co.person_id = :id
-                                    AND col.order_status = 'IN_CART';
+                                    AND co.order_status = 'IN_CART';
                             """)

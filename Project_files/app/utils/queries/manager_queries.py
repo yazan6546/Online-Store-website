@@ -18,13 +18,13 @@ SELECT_MANAGER_BY_ID = text("""
 SELECT_MANAGER_BY_EMAIL = text("""
                                 SELECT *
                                 FROM Manager m, Person p
-                                JOIN Person on m.person_id = p.person.id
+                                JOIN Person on m.person_id = p.person_id
                                 WHERE p.email = :email;
                             """)
 
 SELECT_PASSWORD_FROM_MANAGERS = text("""
                                 SELECT p.passcode FROM Manager m, Person p
-                                JOIN Person on m.person_id = p.person.id
+                                JOIN Person on m.person_id = p.person_id
                                 WHERE p.email = :email;
                             """)
 
