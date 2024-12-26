@@ -8,7 +8,7 @@ INSERT_PRODUCTS_TABLE = text("""
 
 GET_PRODUCTS_TABLE = text("""
                             SELECT * FROM Prodyct ORDER BY 1 DESC;
-""")
+                         """)
 
 SELECT_PRODUCT_BY_ID = text("""
                                 SELECT * FROM Product

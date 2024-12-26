@@ -75,7 +75,6 @@ create table Address_Order(
 
 create table Customer_Order(
     order_id int not null,
-    product_id int not null,
     person_id int not null,
     address_id int not null,
     order_date date not null,
