@@ -1,5 +1,4 @@
-drop database project  exists;
-use project;
+drop database if exists project;
 
 
 create table Person(
