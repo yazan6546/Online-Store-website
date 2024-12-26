@@ -25,12 +25,6 @@ create table Manager(
     primary key (person_id)
 );
 
-create table Supplier(
-    person_id int not null,
-    foreign key (person_id) references Person(person_id),
-    primary key (person_id)
-);
-
 
 create table Address(
     address_id int not null auto_increment,

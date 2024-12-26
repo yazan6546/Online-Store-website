@@ -22,14 +22,14 @@ SELECT_CUSTOMER_BY_EMAIL = text("""
                             """)
 
 SELECT_PASSWORD_FROM_CUSTOMER = text("""
-                                SELECT password FROM Customer, Person
-                                JOIN Person on Customer.person_id = Person.id
+                                SELECT passcode FROM Customer c, Person p
+                                JOIN Person on c.person_id = p.person_id
                                 WHERE email = :email;
                             """)
 
 DELETE_FROM_CUSTOMERS = text("""
                                 DELETE FROM Customer 
-                                WHERE id = :id;
+                                WHERE perosn_id = :id;
                             """)
 
 CREATE_CUSTOMERS_TABLE = text("""
