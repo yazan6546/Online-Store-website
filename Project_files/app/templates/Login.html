@@ -24,26 +24,32 @@
             <!-- Signup Form -->
             <div id="signup-form" class="auth-form" style="display: none;">
                 <h1>Sign Up</h1>
-                <form action="" method="post">
-                    {{ signup_form.hidden_tag() }}
+                <form>
+                    <input type="text" placeholder="First Name" required>
+                    <input type="text" placeholder="Last Name" required>
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Password" required>
+                    <input type="password" placeholder="Confirm Password" required>
+                    <!-- Radio Buttons for User Type -->
+                    <div class="form-group">
+                        <label class="form-inline">What is your role?</label>
+                        <div class="form-inline">
+                            <div class="form-check">
+                                <input type="radio" id="manager" name="userType" value="manager" required>
+                                <label for="manager">Manager</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" id="customer" name="userType" value="customer" required>
+                                <label for="customer">Customer</label>
+                            </div>
+                        </div>
+                    </div>
 
-                    <!-- First Name Field -->
-                    {{ signup_form.first_name(class="form-control", placeholder="First Name") }}
-
-                    <!-- Last Name Field -->
-                    {{ signup_form.last_name(class="form-control", placeholder="Last Name") }}
-
-                    <!-- Email Field -->
-                    {{ signup_form.email(class="form-control", placeholder="Email") }}
-
-                    <!-- Password Field -->
-                    {{ signup_form.password(class="form-control", placeholder="Password") }}
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">{{ signup_form.submit.label.text }}</button>
+                    <button type="submit">Sign Up</button>
                 </form>
                 <a href="#" onclick="showForm('login')">Already have an account? Sign in</a>
             </div>
+
         </div>
     </div>
 {% endblock %}
