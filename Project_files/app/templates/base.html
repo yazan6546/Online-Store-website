@@ -52,41 +52,36 @@
 
                 <div class="navbar align-self-center d-flex">
                     <!-- LOGIN -->
-                    <a class="nav-icon position-relative text-decoration-none" href="#">
+                    <a class="nav-icon position-relative text-decoration-none nav-link" href="{{ url_for('login') }}">
                         <i class="fa fa-fw fa-user text-dark mr-3"></i>
                         <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
                     </a>
 
+                    <!-- CART -->
+                    <!-- Overlay -->
+                    <div id="overlay" class="overlay" onclick="toggleCart()"></div>
 
 
+                        <div class="cart-wrapper">
+                            <!-- Cart Icon -->
+                            <a class="nav-icon position-relative text-decoration-none" onclick="toggleCart()">
+                                <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                                <span id="cartCount" class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+                            </a>
 
-                <!-- CART -->
-                <!-- Overlay -->
-                <div id="overlay" class="overlay" onclick="toggleCart()"></div>
+                            <!-- Cart Container -->
+                            <div class="cart-container" id="cartContainer">
+                                 <button onclick="toggleCart()" class="close-cart-btn">&times;</button>
+                                <h2>Shopping Cart</h2>
 
-
-                    <div class="cart-wrapper">
-                        <!-- Cart Icon -->
-                        <a class="nav-icon position-relative text-decoration-none" onclick="toggleCart()">
-                            <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                            <span id="cartCount" class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
-                        </a>
-
-                        <!-- Cart Container -->
-                        <div class="cart-container" id="cartContainer">
-                             <button onclick="toggleCart()" class="close-cart-btn">&times;</button>
-                            <h2>Shopping Cart</h2>
-
-                            <div class="cart-item">
-                                <div class="item-info">
-                                    <p>Your cart is empty</p>
+                                <div class="cart-item">
+                                    <div class="item-info">
+                                        <p>Your cart is empty</p>
+                                    </div>
                                 </div>
+                                <a href="#" class="checkout-btn btn-success custom-btn">Continue to checkout</a>
                             </div>
-                            <a href="#" class="checkout-btn btn-success custom-btn">Continue to checkout</a>
                         </div>
-                    </div>
-
-
 
                 </div>
             </div>
@@ -150,35 +145,6 @@
                 </div>
 
             </div>
-
-            <div class="row text-light mb-4">
-                <div class="col-12 mb-3">
-                    <div class="w-100 my-3 border-top border-light"></div>
-                </div>
-                <div class="col-auto me-auto">
-                    <ul class="list-inline text-left footer-icons">
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank" href="http://facebook.com/"><i class="fab fa-facebook-f fa-lg fa-fw"></i></a>
-                        </li>
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank" href="https://www.instagram.com/"><i class="fab fa-instagram fa-lg fa-fw"></i></a>
-                        </li>
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank" href="https://twitter.com/"><i class="fab fa-twitter fa-lg fa-fw"></i></a>
-                        </li>
-                        <li class="list-inline-item border border-light rounded-circle text-center">
-                            <a class="text-light text-decoration-none" target="_blank" href="https://www.linkedin.com/"><i class="fab fa-linkedin fa-lg fa-fw"></i></a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-auto">
-                    <label class="sr-only" for="subscribeEmail">Email address</label>
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control bg-dark border-light" id="subscribeEmail" placeholder="Email address">
-                        <div class="input-group-text btn-success text-light">Subscribe</div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="w-100 bg-black py-3">
@@ -186,8 +152,7 @@
                 <div class="row pt-2">
                     <div class="col-12">
                         <p class="text-left text-light">
-                            Copyright &copy; 2021 Company Name
-                            | Designed by <a rel="sponsored" href="https://templatemo.com" target="_blank">TemplateMo</a>
+                            Designed by <a>Yazan & Lana & Osaid</a>
                         </p>
                     </div>
                 </div>

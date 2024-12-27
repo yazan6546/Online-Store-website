@@ -9,8 +9,7 @@ from models.customers import Customer
 # Home Page
 @app.route('/')
 def index():
-    object = Customer.get_by_email('janesmith@example.com')
-    print(object.passcode)
+
     return render_template('index.html')
 
 # About Page
@@ -32,3 +31,8 @@ def shop():
 @app.route('/shop-single')
 def shop_single():
     return render_template('shop-single.html')
+
+# Login Page
+@app.route('/Login')
+def login():
+    return render_template('Login.html')
