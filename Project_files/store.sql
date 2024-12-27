@@ -28,19 +28,12 @@ create table Manager(
 
 create table Address(
     address_id int not null auto_increment,
+    person_id int not null,
     city varchar(255) not null,
     zip_code varchar(255) not null,
     street_address varchar(255) not null,
-
-    primary key (address_id)
-);
-
-create table Address_Customer(
-    address_id int not null,
-    person_id int not null,
-    foreign key (address_id) references Address(address_id),
     foreign key (person_id) references Customer(person_id),
-    primary key (address_id, person_id)
+    primary key (address_id)
 );
 
 create table Category(
