@@ -2,8 +2,7 @@ from app.db_utils import get_db_connection
 
 
 class Person:
-    def __init__(self, id, first_name, last_name, email, passcode):
-        self.id = id
+    def __init__(self, first_name, last_name, email, passcode):
         self.passcode = passcode
         self.email = email
         self.first_name = first_name

@@ -1,17 +1,20 @@
 from app.db_utils import get_db_connection
 from app.models.person import Person
-
+import app.utils.queries as q
 
 
 class Customer(Person):
-    def __init__(self, id, first_name, last_name, email, passcode):
-        super().__init__(id, first_name, last_name, email, passcode)
+    def __init__(self, first_name, last_name, email, passcode):
+        super().__init__(first_name, last_name, email, passcode)
 
     def insert(self):
         conn = get_db_connection()
 
         try:
-            conn.execute(customer.INSERT, self.to_dict())
+            result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
+            id = result.inserted_primary_key[0]
+            conn.execute(q.customer.INSERT_CUSTOMERS_TABLE, {"person_id": id})
+
             conn.commit()
             return 1
         except Exception as e:
@@ -25,7 +28,7 @@ class Customer(Person):
         conn = get_db_connection()
 
         try:
-            conn.execute(DELETE_FROM_CUSTOMERS, {"id": id})
+            conn.execute(q.customer.DELETE_FROM_CUSTOMERS, {"id": id})
             conn.commit()
             return 1
         except Exception as e:
@@ -34,15 +37,16 @@ class Customer(Person):
         finally:
             conn.close()
 
-    def update(self, id, name, phone_number):
+    def update(self, id, name):
         pass
 
     @classmethod
     def get(cls, id):
-        conn = engine.connect()
+        conn = get_db_connection()
 
         try:
-            customer = conn.execute(SELECT_CUSTOMER_BY_ID, {"id": id}).fetchone()
+            customer = conn.execute(q.customer.SELECT_CUSTOMER_BY_ID, {"id": id}).fetchone()
+            conn.commit()
             return cls(
                 id=customer[0],
                 name=customer[1],
@@ -59,11 +63,12 @@ class Customer(Person):
 
     @classmethod
     def get_all(cls):
-        conn = engine.connect()
+        conn = get_db_connection()
 
         try:
             customers_objects = []
-            customers = conn.execute(GET_CUSTOMERS_TABLE).fetchall()
+            customers = conn.execute(q.customer.GET_CUSTOMERS_TABLE).fetchall()
+            conn.commit()
             for customer in customers:
                 customers_objects.append(
                     cls(
@@ -83,12 +88,12 @@ class Customer(Person):
             conn.close()
 
     @classmethod
-    def get_by_phone(cls, phone_number):
-        conn = engine.connect()
+    def get_by_email(cls, email):
+        conn = get_db_connection()
 
         try:
             customer = conn.execute(
-                SELECT_CUSTOMER_BY_PHONE, {"phone_number": phone_number}
+                q.customer.SELECT_CUSTOMER_BY_EMAIL, {"email": email}
             ).fetchone()
             return cls(
                 id=customer[0],
@@ -107,10 +112,5 @@ class Customer(Person):
     @classmethod
     def from_dict(cls, data_dict):
         return cls(
-            id=data_dict["id"],
             name=data_dict["name"],
-            phone_number=data_dict["phone_number"],
-            gender=data_dict["gender"],
-            birth_year=data_dict["birth_year"],
-            favourite_cuisine=data_dict["favourite_cuisine"],
         )
