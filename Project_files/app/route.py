@@ -3,12 +3,14 @@ from markupsafe import Markup
 from sqlalchemy import text
 import pandas as pd
 from app import app
-from app.db_utils import get_db_connection
-from app.forms import *
+from utils.db_utils import get_db_connection
+from models.customers import Customer
 
 # Home Page
 @app.route('/')
 def index():
+    object = Customer.get_by_email('janesmith@example.com')
+    print(object.passcode)
     return render_template('index.html')
 
 # About Page
