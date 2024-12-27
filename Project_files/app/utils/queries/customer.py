@@ -6,18 +6,23 @@ INSERT_CUSTOMERS_TABLE = text("""
                                 VALUES (:person_id);
                             """)
 
-GET_CUSTOMERS_TABLE = text("""
-                            SELECT * FROM Customer ORDER BY 1 DESC;
+GET_CUSTOMER_DETAILS = text("""
+                            SELECT * FROM Customer c
+                            JOIN Person p 
+                            on c.person_id = p.person_id;
 """)
 
 SELECT_CUSTOMER_BY_ID = text("""
-                                SELECT * FROM Customer
-                                WHERE person_id = :id;
+                                SELECT * FROM Customer c
+                                JOIN Person p 
+                                on c.person_id = p.person_id
+                                WHERE p.person_id = :person_id;
                             """)
 
 SELECT_CUSTOMER_BY_EMAIL = text("""
-                                SELECT * FROM Customer c, Person p
-                                JOIN Person on c.person_id = p.person_id
+                                SELECT * FROM Customer c
+                                JOIN Person p
+                                on c.person_id = p.person_id
                                 WHERE p.email = :email;
                             """)
 
@@ -29,7 +34,7 @@ SELECT_PASSWORD_FROM_CUSTOMER = text("""
 
 DELETE_FROM_CUSTOMERS = text("""
                                 DELETE FROM Customer c 
-                                WHERE c.person_id = :id;
+                                WHERE c.person_id = :person_id;
                             """)
 
 CREATE_CUSTOMERS_TABLE = text("""

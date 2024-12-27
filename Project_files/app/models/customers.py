@@ -24,11 +24,11 @@ class Customer(Person):
             conn.close()
 
     @classmethod
-    def delete(cls, id):
+    def delete(cls, person_id):
         conn = get_db_connection()
 
         try:
-            conn.execute(q.customer.DELETE_FROM_CUSTOMERS, {"id": id})
+            conn.execute(q.customer.DELETE_FROM_CUSTOMERS, {"person_id": person_id})
             conn.commit()
             return 1
         except Exception as e:
@@ -41,16 +41,15 @@ class Customer(Person):
         pass
 
     @classmethod
-    def get(cls, id):
+    def get(cls, person_id):
         conn = get_db_connection()
 
         try:
-            customer = conn.execute(q.customer.SELECT_CUSTOMER_BY_ID, {"id": id}).fetchone()
+            customer = conn.execute(q.customer.SELECT_CUSTOMER_BY_ID, {"person_id": person_id}).fetchone()
             conn.commit()
             return cls(
-                id=customer[0],
-                name=customer[1],
-                phone_number=customer[2],
+                first_name=customer[1],
+                last_name=customer[2],
                 gender=customer[3],
                 birth_year=customer[4],
                 favourite_cuisine=customer[5],
