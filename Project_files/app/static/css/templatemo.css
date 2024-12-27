@@ -52,12 +52,12 @@ body, ul, li, p, a, label, input, div {
 .logo { font-weight: 500 !important;}
 .text-warning {  color: #ede861 !important;}
 .text-muted { color: #bcbcbc !important;}
-.text-success { color: #176B87 !important;}   /CHANGED IT TO THIS COLOR: 176B87/
+.text-success { color: #176B87 !important;}
 .text-mytext {color: #78B3CE !important;}
 .text-light { color: #cfd6e1 !important;}
-.bg-dark { background-color: #212934 !important;}
+.bg-dark { background-color: #9AA6B2 !important;}
 .bg-light { background-color: #e9eef5 !important;}
-.bg-black { background-color: #1d242d !important;}
+.bg-black { background-color: #176B87 !important;}
 .bg-success { background-color: #176B87 !important;}
 .btn-success {
     background-color: #176B87; /* Button background color */
@@ -214,7 +214,7 @@ body, ul, li, p, a, label, input, div {
 
 }
 
-/* Cart Icon */
+/****************************************** Cart ***********************/
 .nav-icon {
     cursor: pointer;
 }
@@ -327,4 +327,279 @@ body, ul, li, p, a, label, input, div {
 
 .close-cart-btn:hover {
     color: #000; /* Change color on hover */
+}
+
+/****************************************** LOGIN ***********************/
+/* Main content wrapper */
+.main-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 50px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    margin: 40px 0; /* Adds space outside the box */
+}
+
+.login-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #526D82;
+}
+
+.login-container input[type="email"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #526D82;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+    background-color: #9DB2BF;
+}
+
+.login-container a {
+    display: block;
+    font-size: 14px;
+    color: #9DB2BF;
+    text-decoration: none;
+    margin-top: 15px;
+}
+
+.login-container a:last-child {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.auth-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
+    padding: 50px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.auth-form h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #526D82;
+}
+
+.auth-form form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.auth-form form button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #526D82;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.auth-form form button:hover {
+    background-color: #9DB2BF;
+}
+
+.auth-form a {
+    display: block;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #9DB2BF;
+    text-decoration: none;
+}
+
+.auth-form a:hover {
+    text-decoration: underline;
+}
+
+/* Add spacing to the main-content */
+.main-content {
+    padding: 60px 0; /* Increased space above and below */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(120vh - 250px);
+    box-sizing: border-box;
+}
+
+
+/*******************************SHOP BY CATEGORY*************************/
+/* General Styling */
+.category-section {
+    text-align: center;
+    margin: 40px auto;
+}
+
+.category-carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.category-list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 20px 0;
+    scrollbar-width: none; /* Hide scrollbar for modern browsers */
+}
+
+.category-list::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for WebKit browsers */
+}
+
+.category-card {
+    flex: 0 0 200px; /* Adjust card width */
+    text-align: center;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Image Container for Consistent Layout */
+.image-container {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border-radius: 10px; /* Add this if you want the container rounded */
+    background: #f7f7f7; /* Placeholder background */
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures images fit nicely within the box */
+}
+
+.category-card h5 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Navigation Buttons */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    font-size: 24px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.nav-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
+
+
+.category-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Updated Image Styling */
+.category-card img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    /* No rounded corners */
+    border-radius: 0;
+}
+
+.category-card h5 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Navigation Buttons */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    font-size: 24px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.nav-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
 }
