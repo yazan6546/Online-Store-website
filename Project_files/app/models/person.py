@@ -2,11 +2,12 @@ from app.db_utils import get_db_connection
 
 
 class Person:
-    def __init__(self, first_name, last_name, email, passcode):
+    def __init__(self, person_id, first_name, last_name, email, passcode):
         self.passcode = passcode
         self.email = email
         self.first_name = first_name
         self.last_name = last_name
+        self.person_id = person_id
 
     def get_name(self):
         return self.name
@@ -25,13 +26,17 @@ class Person:
             conn.close()
 
     def to_dict(self):
-        return {
-            "id": self.id,
+        temp =  {
             "first_name": self.first_name,
             "last_name": self.last_name,
             "email": self.email,
             "passcode": self.passcode,
         }
+
+        if self.person_id is not None:
+            temp["person_id"] = self.person_id
+
+        return temp
 
     @staticmethod
     def from_dict(dict):

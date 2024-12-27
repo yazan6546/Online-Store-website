@@ -6,29 +6,49 @@ INSERT_CUSTOMERS_TABLE = text("""
                                 VALUES (:person_id);
                             """)
 
-GET_CUSTOMER_DETAILS = text("""
-                            SELECT * FROM Customer c
-                            JOIN Person p 
+
+GET_ALL_CUSTOMERS = text("""
+                            SELECT
+                            c.person_id AS person_id,
+                            p.first_name AS first_name,
+                            p.last_name AS last_name,
+                            p.email AS email,
+                            p.passcode AS passcode
+                            FROM Customer c
+                            JOIN Person p
                             on c.person_id = p.person_id;
-""")
+                        """)
 
 SELECT_CUSTOMER_BY_ID = text("""
-                                SELECT * FROM Customer c
-                                JOIN Person p 
+                                SELECT 
+                                c.person_id AS person_id,
+                                p.first_name AS first_name,
+                                p.last_name AS last_name,
+                                p.email AS email,
+                                p.passcode AS passcode
+                                FROM Customer c
+                                JOIN Person p
                                 on c.person_id = p.person_id
                                 WHERE p.person_id = :person_id;
                             """)
 
 SELECT_CUSTOMER_BY_EMAIL = text("""
-                                SELECT * FROM Customer c
+                                SELECT 
+                                c.person_id AS person_id,
+                                p.first_name AS first_name,
+                                p.last_name AS last_name,
+                                p.email AS email,
+                                p.passcode AS passcode
+                                FROM Customer c
                                 JOIN Person p
                                 on c.person_id = p.person_id
                                 WHERE p.email = :email;
                             """)
 
 SELECT_PASSWORD_FROM_CUSTOMER = text("""
-                                SELECT p.passcode FROM Customer c, Person p
-                                JOIN Person on c.person_id = p.person_id
+                                SELECT p.passcode FROM Customer c
+                                JOIN Person p 
+                                on c.person_id = p.person_id
                                 WHERE p.email = :email;
                             """)
 

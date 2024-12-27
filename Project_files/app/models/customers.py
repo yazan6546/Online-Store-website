@@ -4,19 +4,25 @@ import app.utils.queries as q
 
 
 class Customer(Person):
-    def __init__(self, first_name, last_name, email, passcode):
-        super().__init__(first_name, last_name, email, passcode)
+    def __init__(self, first_name, last_name, email, passcode, person_id=None):
+        super().__init__(person_id, first_name, last_name, email, passcode)
 
     def insert(self):
         conn = get_db_connection()
 
         try:
-            result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
-            id = result.inserted_primary_key[0]
-            conn.execute(q.customer.INSERT_CUSTOMERS_TABLE, {"person_id": id})
+            if self.person_id is not None:
+                conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
+            else:
+                result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
+                self.person_id = result.inserted_primary_key[0]
+
+            conn.execute(q.customer.INSERT_CUSTOMERS_TABLE, {"person_id": self.person_id})
 
             conn.commit()
+
             return 1
+
         except Exception as e:
             print(f"Error: {e}")
             return 0
@@ -46,13 +52,9 @@ class Customer(Person):
 
         try:
             customer = conn.execute(q.customer.SELECT_CUSTOMER_BY_ID, {"person_id": person_id}).fetchone()
-            conn.commit()
+            customer = customer._mapping
             return cls(
-                first_name=customer[1],
-                last_name=customer[2],
-                gender=customer[3],
-                birth_year=customer[4],
-                favourite_cuisine=customer[5],
+                **customer
             )
         except Exception as e:
             print(f"Error: {e}")
@@ -66,19 +68,15 @@ class Customer(Person):
 
         try:
             customers_objects = []
-            customers = conn.execute(q.customer.GET_CUSTOMERS_TABLE).fetchall()
+            customers = conn.execute(q.customer.GET_ALL_CUSTOMERS).fetchall()
+            customers = [customer._mapping for customer in customers]
             conn.commit()
+
             for customer in customers:
-                customers_objects.append(
-                    cls(
-                        id=customer[0],
-                        name=customer[1],
-                        phone_number=customer[2],
-                        gender=customer[3],
-                        birth_year=customer[4],
-                        favourite_cuisine=customer[5],
-                    )
-                )
+                customers_objects.append(cls(
+                    **customer
+                ))
+
             return customers_objects
         except Exception as e:
             print(f"Error: {e}")
@@ -94,13 +92,9 @@ class Customer(Person):
             customer = conn.execute(
                 q.customer.SELECT_CUSTOMER_BY_EMAIL, {"email": email}
             ).fetchone()
+            customer = customer._mapping
             return cls(
-                id=customer[0],
-                name=customer[1],
-                phone_number=customer[2],
-                gender=customer[3],
-                birth_year=customer[4],
-                favourite_cuisine=customer[5],
+                **customer
             )
         except Exception as e:
             print(f"Error: {e}")
@@ -111,5 +105,5 @@ class Customer(Person):
     @classmethod
     def from_dict(cls, data_dict):
         return cls(
-            name=data_dict["name"],
+            **data_dict
         )
