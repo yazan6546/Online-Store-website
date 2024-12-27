@@ -39,7 +39,7 @@ create table Address_Customer(
     address_id int not null,
     person_id int not null,
     foreign key (address_id) references Address(address_id),
-    foreign key (person_id) references Person(person_id),
+    foreign key (person_id) references Customer(person_id),
     primary key (address_id, person_id)
 );
 
