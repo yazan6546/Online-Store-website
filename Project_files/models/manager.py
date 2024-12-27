@@ -12,12 +12,12 @@ class Manager(Person):
 
         try:
             if self.person_id is not None:
-                conn.execute(q.person.INSERT_MANAGER_ID_TABLE, self.to_dict())
+                conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
             else:
                 result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
                 self.person_id = result.inserted_primary_key[0]
 
-            conn.execute(q.customer.INSERT_MANAGERS_TABLE, {"person_id": self.person_id})
+            conn.execute(q.manager.INSERT_MANAGER_TABLE, {"person_id": self.person_id, "since" : self.since})
 
             conn.commit()
 
@@ -34,7 +34,7 @@ class Manager(Person):
         conn = get_db_connection()
 
         try:
-            conn.execute(q.customer.DELETE_FROM_MANAGERS, {"person_id": person_id})
+            conn.execute(q.manager.DELETE_FROM_MANAGERS, {"person_id": person_id})
             conn.commit()
             return 1
         except Exception as e:
@@ -51,10 +51,10 @@ class Manager(Person):
         conn = get_db_connection()
 
         try:
-            customer = conn.execute(q.customer.SELECT_MANAGER_BY_ID, {"person_id": person_id}).fetchone()
-            customer = customer._mapping
+            manager = conn.execute(q.manager.SELECT_MANAGER_BY_ID, {"person_id": person_id}).fetchone()
+            manager = manager._mapping
             return cls(
-                **customer
+                **manager
             )
         except Exception as e:
             print(f"Error: {e}")
@@ -67,17 +67,17 @@ class Manager(Person):
         conn = get_db_connection()
 
         try:
-            customers_objects = []
-            customers = conn.execute(q.customer.GET_ALL_CUSTOMERS).fetchall()
-            customers = [customer._mapping for customer in customers]
+            managers_objects = []
+            managers = conn.execute(q.manager.GET_ALL_MANAGERS).fetchall()
+            managers = [manager._mapping for manager in managers]
             conn.commit()
 
-            for customer in customers:
-                customers_objects.append(cls(
-                    **customer
+            for manager in managers:
+                managers_objects.append(cls(
+                    **manager
                 ))
 
-            return customers_objects
+            return managers_objects
         except Exception as e:
             print(f"Error: {e}")
             return 0
@@ -89,12 +89,12 @@ class Manager(Person):
         conn = get_db_connection()
 
         try:
-            customer = conn.execute(
-                q.customer.SELECT_CUSTOMER_BY_EMAIL, {"email": email}
+            manager = conn.execute(
+                q.manager.SELECT_MANAGER_BY_EMAIL, {"email": email}
             ).fetchone()
-            customer = customer._mapping
+            manager = manager._mapping
             return cls(
-                **customer
+                **manager
             )
         except Exception as e:
             print(f"Error: {e}")
