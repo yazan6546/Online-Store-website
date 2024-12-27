@@ -56,3 +56,13 @@ GET_ALL_INCART_PRODUCTS_BY_ID = text("""
                                     co.person_id = :id
                                     AND co.order_status = 'IN_CART';
                             """)
+
+
+PENDING_ORDERS = text("""
+    SELECT co.order_id, co.order_date, co.delivery_date, co.shipping_status, p.first_name, p.last_name
+    FROM Customer_Order co 
+    JOIN Person p 
+    ON co.person_id = p.person_id
+    WHERE co.shipping_status = 'Shipped'
+    ORDER BY co.delivery_date;
+""")

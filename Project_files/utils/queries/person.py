@@ -2,8 +2,13 @@ from sqlalchemy import text
 
 
 INSERT_PERSON_TABLE = text("""
+                                INSERT INTO Person (first_name, last_name, email, passcode) 
+                                VALUES (:first_name, :last_name, :email, :passcode);
+                           """)
+
+INSERT_PERSON_ID_TABLE = text("""
                                 INSERT INTO Person (person_id, first_name, last_name, email, passcode) 
-                                VALUES (person_id, first_name, last_name, email, passcode);
+                                VALUES (:first_name, :last_name, :email, :passcode);
                            """)
 
 GET_PERSON_TABLE = text("""

@@ -4,7 +4,6 @@ from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired, Email
 from wtforms.validators import Regexp
 
-
 class StrongPassword:
     def __init__(self, message=None):
         if not message:
