@@ -1,3 +1,4 @@
+
 from flask import render_template, redirect, flash, url_for
 from markupsafe import Markup
 from sqlalchemy import text
@@ -5,6 +6,7 @@ import pandas as pd
 from app import app
 from utils.db_utils import get_db_connection
 from models.customers import Customer
+from app.forms import *
 
 # Home Page
 @app.route('/')
@@ -35,4 +37,7 @@ def shop_single():
 # Login Page
 @app.route('/Login')
 def login():
-    return render_template('Login.html')
+
+    form = LoginForm()
+    signup_form = CustomerForm()
+    return render_template('Login.html', signup_form=signup_form, form=form)

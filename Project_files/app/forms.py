@@ -15,15 +15,46 @@ class StrongPassword:
         validator = Regexp(pattern, message=self.message)
         validator(form, field)
 
+
 class CustomerForm(FlaskForm):
-    first_name = StringField('First Name', validators=[DataRequired()])
-    last_name = StringField('Last Name', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), StrongPassword()])
-    submit = SubmitField('Sign up')
+    first_name = StringField(
+        'First Name',
+        validators=[DataRequired()],
+        render_kw={"placeholder": "First Name", "class": "form-control"}
+    )
+    last_name = StringField(
+        'Last Name',
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Last Name", "class": "form-control"}
+    )
+    email = StringField(
+        'Email',
+        validators=[DataRequired(), Email()],
+        render_kw={"placeholder": "Email", "class": "form-control"}
+    )
+    password = PasswordField(
+        'Password',
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Password", "class": "form-control"}
+    )
+    submit = SubmitField(
+        'Sign up',
+        render_kw={"class": "btn btn-primary"}
+    )
+
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit_signin = SubmitField('Sign In')
-    submit_signup = SubmitField('Sign Up')
+    email = StringField(
+        'Email',
+        validators=[DataRequired(), Email()],
+        render_kw={"placeholder": "Email", "class": "form-control"}  # Placeholder and styling
+    )
+    password = PasswordField(
+        'Password',
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Password", "class": "form-control"}  # Placeholder and styling
+    )
+    submit_signin = SubmitField(
+        'Sign in',
+        render_kw={"class": "btn btn-primary"}  # Button styling
+    )

@@ -10,6 +10,18 @@ GET_MANAGER_TABLE = text("""
                             SELECT * FROM Manager ORDER BY 1 DESC;
 """)
 
+GET_ALL_MANAGERS = text("""
+                            SELECT
+                            m.person_id AS person_id,
+                            p.first_name AS first_name,
+                            p.last_name AS last_name,
+                            p.email AS email,
+                            p.passcode AS passcode
+                            FROM Manager m
+                            JOIN Person p
+                            on m.person_id = p.person_id;
+                        """)
+
 SELECT_MANAGER_BY_ID = text("""
                                 SELECT * FROM Manager
                                 WHERE person_id = :id;
@@ -17,8 +29,9 @@ SELECT_MANAGER_BY_ID = text("""
 
 SELECT_MANAGER_BY_EMAIL = text("""
                                 SELECT *
-                                FROM Manager m, Person p
-                                JOIN Person on m.person_id = p.person_id
+                                FROM Manager m
+                                JOIN Person p
+                                 on m.person_id = p.person_id
                                 WHERE p.email = :email;
                             """)
 

@@ -6,10 +6,17 @@
             <!-- Login Form -->
             <div id="login-form" class="auth-form">
                 <h1>Login</h1>
-                <form>
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Password" required>
-                    <button type="submit">Sign in</button>
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+
+                    <!-- Email Field -->
+                    {{ form.email(class="form-control", placeholder="Email") }}
+
+                    <!-- Password Field -->
+                    {{ form.password(class="form-control", placeholder="Password") }}
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">{{ form.submit_signin.label.text }}</button>
                 </form>
                 <a href="#" onclick="showForm('signup')">New customer? Sign up for an account</a>
             </div>
@@ -45,5 +52,4 @@
 
         </div>
     </div>
-
 {% endblock %}
