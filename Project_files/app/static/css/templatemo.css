@@ -52,7 +52,7 @@ body, ul, li, p, a, label, input, div {
 .logo { font-weight: 500 !important;}
 .text-warning {  color: #ede861 !important;}
 .text-muted { color: #bcbcbc !important;}
-.text-success { color: #176B87 !important;}   /*CHANGED IT TO THIS COLOR: 176B87*/
+.text-success { color: #176B87 !important;}   /CHANGED IT TO THIS COLOR: 176B87/
 .text-mytext {color: #78B3CE !important;}
 .text-light { color: #cfd6e1 !important;}
 .bg-dark { background-color: #212934 !important;}
@@ -78,7 +78,7 @@ body, ul, li, p, a, label, input, div {
 }
 .pagination .page-link:hover {color: #000;}
 .pagination .page-link:hover, .pagination .page-link.active {
-  background-color: #78B3CE;   /*CHANGED IT TO THIS COLOR: 86B6F6*/
+  background-color: #78B3CE;   /CHANGED IT TO THIS COLOR: 86B6F6/
   color: #fff;
 }
 /* Nav */
@@ -186,7 +186,7 @@ body, ul, li, p, a, label, input, div {
   .tempaltemo-carousel .h1 { font-size: 1em !important;}
 }
 
-/*// Medium devices (tablets, 768px and up)*/
+/// Medium devices (tablets, 768px and up)/
 @media (min-width: 768px) {
   #templatemo_main_nav .navbar-nav {max-width: 450px;}
  }
@@ -214,7 +214,117 @@ body, ul, li, p, a, label, input, div {
 
 }
 
+/* Cart Icon */
+.nav-icon {
+    cursor: pointer;
+}
+
+.nav-icon .badge {
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+    background: #ffc107;
+}
 
 
+/* Show Cart Container */
+.cart-container.show {
+    right: 0;
+}
+
+/* Other Styling */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.cart-total {
+    font-weight: bold;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.checkout-btn {
+    display: block;
+    background-color: #78B3CE;
+    color: white !important;    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 20px;
+
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none; /* Hidden by default */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.overlay.active {
+    display: block; /* Show when active */
+    opacity: 1;
+}
+
+.cart-container {
+    padding: 20px; /* Add padding inside the cart */
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 500px;
+    height: 100%;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.cart-container h2,
+.cart-container p,
+.cart-container .checkout-btn {
+    margin: 10px 0; /* Add some space between elements */
+}
+
+.cart-container .checkout-btn {
+    margin-top: 20px;
+}
 
 
+.cart-container.open {
+    right: 0; /* Slide in when the "open" class is added */
+}
+
+/* Close Button */
+.close-cart-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+
+.checkout-btn:hover,
+.checkout-btn:focus,
+.checkout-btn:active {
+    color: white !important; /* Keeps text white on hover, focus, and active states */
+    background-color: #66A3BE; /* Optional: Add a slightly different background on hover */
+}
+
+.close-cart-btn:hover {
+    color: #000; /* Change color on hover */
+}
