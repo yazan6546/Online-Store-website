@@ -14,6 +14,7 @@
 
     <!-- Load fonts style after rendering the layout styles -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
 <body>
@@ -46,17 +47,52 @@
                             <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
                         </li>
                     </ul>
-
                 </div>
+
+
+                <div class="navbar align-self-center d-flex">
+                    <!-- LOGIN -->
                     <a class="nav-icon position-relative text-decoration-none" href="#">
-                        <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                        <i class="fa fa-fw fa-user text-dark mr-3"></i>
                         <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
                     </a>
+
+
+
+
+                <!-- CART -->
+                <!-- Overlay -->
+                <div id="overlay" class="overlay" onclick="toggleCart()"></div>
+
+
+                    <div class="cart-wrapper">
+                        <!-- Cart Icon -->
+                        <a class="nav-icon position-relative text-decoration-none" onclick="toggleCart()">
+                            <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                            <span id="cartCount" class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+                        </a>
+
+                        <!-- Cart Container -->
+                        <div class="cart-container" id="cartContainer">
+                             <button onclick="toggleCart()" class="close-cart-btn">&times;</button>
+                            <h2>Shopping Cart</h2>
+
+                            <div class="cart-item">
+                                <div class="item-info">
+                                    <p>Your cart is empty</p>
+                                </div>
+                            </div>
+                            <a href="#" class="checkout-btn btn-success custom-btn">Continue to checkout</a>
+                        </div>
+                    </div>
+
+
 
                 </div>
             </div>
 
-        </div>
+            </div>
+
     </nav>
     <!-- Close Header -->
 
@@ -162,9 +198,12 @@
     <!-- End Footer -->
 
     <!-- JS Files -->
-    <script src="{{ url_for('static', filename='js/jquery-1.11.0.min.js') }}"></script>
+     <script src="{{ url_for('static', filename='js/jquery-1.11.0.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-migrate-1.2.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/templatemo.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/slick.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/templatemo.js') }}"></script>
 </body>
 </html>
