@@ -12,3 +12,4 @@ Project_files/__pycache__
 Project_files/.vscode
 .idea
 .venv
+Project_files/app/__pycache__
