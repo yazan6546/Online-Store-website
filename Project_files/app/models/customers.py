@@ -2,6 +2,7 @@ from app.db_utils import get_db_connection
 from app.models.person import Person
 
 
+
 class Customer(Person):
     def __init__(self, id, first_name, last_name, email, passcode):
         super().__init__(id, first_name, last_name, email, passcode)
@@ -10,7 +11,7 @@ class Customer(Person):
         conn = get_db_connection()
 
         try:
-            conn.execute(INSERT_CUSTOMERS_TABLE, self.to_dict())
+            conn.execute(customer.INSERT, self.to_dict())
             conn.commit()
             return 1
         except Exception as e:
