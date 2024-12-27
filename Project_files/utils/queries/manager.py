@@ -17,8 +17,9 @@ SELECT_MANAGER_BY_ID = text("""
 
 SELECT_MANAGER_BY_EMAIL = text("""
                                 SELECT *
-                                FROM Manager m, Person p
-                                JOIN Person on m.person_id = p.person_id
+                                FROM Manager m
+                                JOIN Person p
+                                 on m.person_id = p.person_id
                                 WHERE p.email = :email;
                             """)
 
