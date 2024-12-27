@@ -9,6 +9,8 @@ from models.customers import Customer
 # Home Page
 @app.route('/')
 def index():
+    object = Customer.get_by_email('janesmith@example.com')
+    print(object.passcode)
     return render_template('index.html')
 
 # About Page

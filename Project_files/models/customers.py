@@ -1,7 +1,6 @@
-from app.db_utils import get_db_connection
-from app.models.person import Person
-import app.utils.queries as q
-
+from models.person import Person
+import utils.queries as q
+from utils.db_utils import get_db_connection
 
 class Customer(Person):
     def __init__(self, first_name, last_name, email, passcode, person_id=None):
@@ -107,3 +106,6 @@ class Customer(Person):
         return cls(
             **data_dict
         )
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} {self.email}"
