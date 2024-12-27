@@ -462,6 +462,31 @@ body, ul, li, p, a, label, input, div {
     box-sizing: border-box;
 }
 
+.form-group {
+    margin: 15px 0;
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Vertically align content */
+    gap: 10px; /* Add space between the label and radio buttons */
+}
+
+.form-inline {
+    display: flex; /* Align radio buttons horizontally */
+    gap: 15px; /* Space between the options */
+}
+
+.form-check {
+    display: flex;
+    align-items: center; /* Align radio button with label */
+}
+
+input[type="radio"] {
+    margin-right: 5px; /* Space between radio button and label */
+}
+
+label {
+    font-size: 14px;
+    color: #333;
+}
 
 /*******************************SHOP BY CATEGORY*************************/
 /* General Styling */
