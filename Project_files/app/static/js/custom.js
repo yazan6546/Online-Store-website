@@ -29,3 +29,10 @@ function initializeCarousel() {
         ]
     });
 }
+
+function toggleCart() {
+    const cartContainer = document.getElementById('cartContainer');
+    const overlay = document.getElementById('overlay');
+    cartContainer.classList.toggle('open'); // Slide the cart in/out
+    overlay.classList.toggle('active'); // Show/hide the overlay
+}
