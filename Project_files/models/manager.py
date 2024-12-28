@@ -10,16 +10,27 @@ class Manager(Person):
     def insert(self):
         conn = get_db_connection()
 
-        if self.person_id is not None:
-            conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
-        else:
-            result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
-            self.person_id = result.lastrowid
+        try:
+            if self.person_id is not None:
+                conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
+            else:
+                result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
+                self.person_id = result.lastrowid
 
-        conn.execute(q.manager.INSERT_MANAGER_TABLE, {"person_id": self.person_id, "since" : self.since})
-        conn.commit()
+            conn.execute(q.manager.INSERT_MANAGER_TABLE, {"person_id": self.person_id})
 
-        conn.close()
+            if result is None:
+                raise Exception("Duplicate entry")
+
+            conn.commit()
+
+
+        except Exception as e:
+            print(f"Error in insert(): {e}")  # Debugging purposes only
+            conn.rollback()  # Roll back the transaction to maintain database integrity
+            raise e  # Re-raise the exception so it can be caught by the calling code
+        finally:
+            conn.close()
 
     @classmethod
     def delete(cls, person_id):

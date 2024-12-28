@@ -56,7 +56,7 @@ def validate_signup(login_form, signup_form):
 
     # If form validation fails
     flash("Form validation failed. Please correct the errors and try again.", "warning")
-    return render_template('Login.html', signup_form=signup_form, login_form=LoginForm())
+    return render_template('Login.html', signup_form=signup_form, login_form=login_form)
 
 
 def validate_login(login_form, signup_form):
@@ -65,17 +65,41 @@ def validate_login(login_form, signup_form):
         password = login_form.password.data
 
         # Check if the email exists in the database
-        user = Customer.get_by_email(email)
+        user1 = Customer.get_by_email(email)
+        user2 = Manager.get_by_email(email)
 
-        if user is not None:
-            if user.passcode == password:
-                flash(Markup(f"Welcome back, {user.first_name}!"), "success")
-                return redirect(url_for('index'))
-            else:
-                flash("Incorrect password. Please try again.", "danger")
-
-        else:
+        if user1 is None and user2 is None:
             flash("User not found. Please sign up for an account.", "warning")
+
+            return render_template(
+                'Login.html',
+                signup_form=signup_form,
+                login_form=login_form
+            )
+
+        if user1 is not None and user1.passcode == password:
+            flash("Login successful!", "success")
+            return redirect(url_for('index'))
+        elif user1 is not None and user1.passcode != password:
+            flash("Incorrect password. Please try again.", "danger")
+            return render_template(
+                'Login.html',
+                signup_form=signup_form,
+                login_form=login_form)
+
+        if user2 is not None and user2.passcode == password:
+            flash("Login successful!", "success")
+            return redirect(url_for('index'))
+
+        elif user2 is not None and user2.passcode != password:
+            flash("Incorrect password. Please try again.", "danger")
+            return render_template(
+                'Login.html',
+                signup_form=signup_form,
+                login_form=login_form)
+
+        flash("An unexpected error occurred while logging in. Please try again.", "danger")
+
 
         return render_template(
             'Login.html',
