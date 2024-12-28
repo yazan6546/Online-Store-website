@@ -1,8 +1,13 @@
 from utils.db_utils import get_db_connection
+import utils.queries as q
+import utils.password_manager as pm
 
 
 class Person:
-    def __init__(self, person_id, first_name, last_name, email, passcode):
+    def __init__(self, person_id, first_name, last_name, email, passcode, hash=False):
+
+        if hash:
+            passcode = pm.hash_password(passcode)
         self.passcode = passcode
         self.email = email
         self.first_name = first_name
@@ -16,7 +21,7 @@ class Person:
         conn = get_db_connection()
 
         try:
-            conn.execute(INSERT_PERSON_TABLE, self.to_dict())
+            conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
             conn.commit()
             return 1
         except Exception as e:
