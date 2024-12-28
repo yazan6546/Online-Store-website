@@ -22,14 +22,16 @@ def validate_signup(login_form, signup_form):
                 last_name=last_name,
                 email=email,
                 passcode=password,
-                since='2021-01-01'
+                since='2021-01-01',
+                hash=True
             )
         else:  # Regular customer
             new_customer = Customer(
                 first_name=first_name,
                 last_name=last_name,
                 email=email,
-                passcode=password
+                passcode=password,
+                hash=True
             )
 
         try:
