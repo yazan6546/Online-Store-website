@@ -25,6 +25,14 @@ DELETE_FROM_PERSON = text("""
                                 WHERE person_id = :id;
                             """)
 
+UPDATE_PERSON_TABLE = text("""
+                            UPDATE Person
+                            SET first_name = :first_name, last_name = :last_name, email = :email, passcode = :passcode
+                            WHERE person_id = :person_id;
+                            """)
+
+
+
 CREATE_PERSON_TABLE = text("""
                             CREATE TABLE IF NOT EXISTS person(
                             person_id int NOT NULL auto_increment,

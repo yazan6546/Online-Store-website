@@ -61,12 +61,6 @@ CREATE_CUSTOMERS_TABLE = text("""
                             FOREIGN KEY (person_id) REFERENCES Person(person_id),
                             PRIMARY KEY (person_id));
                         """)
-UPDATE_CUSTOMERS_TABLE = text("""
-                            UPDATE Customer
-                            SET first_name = :first_name, last_name = :last_name, email = :email, passcode = :passcode
-                            WHERE person_id = :person_id;
-                            """)
-
 
 DROP_CUSTOMERS_TABLE = text("""
                             DROP TABLE IF EXISTS Customer;
