@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField
+from wtforms.fields.choices import RadioField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired, Email
 from wtforms.validators import Regexp
@@ -37,6 +38,15 @@ class CustomerForm(FlaskForm):
         validators=[DataRequired()],
         render_kw={"placeholder": "Password", "class": "form-control"}
     )
+
+    # Radio field for user type
+    user_type = RadioField(
+        'What is your role?',
+        choices=[('manager', 'Manager'), ('customer', 'Customer')],
+        validators=[DataRequired()],
+        render_kw={"class": "form-check"}  # Optional: Add styling class if needed
+    )
+
     submit = SubmitField(
         'Sign up',
         render_kw={"class": "btn btn-primary"}

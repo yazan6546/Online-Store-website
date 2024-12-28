@@ -1,12 +1,11 @@
 
-from flask import render_template, redirect, flash, url_for
-from markupsafe import Markup
-from sqlalchemy import text
-import pandas as pd
+from flask import render_template, request
 from app import app
-from utils.db_utils import get_db_connection
-from models.customers import Customer
 from app.forms import *
+import app.auth as auth
+
+
+
 
 # Home Page
 @app.route('/')
@@ -35,9 +34,16 @@ def shop_single():
     return render_template('shop-single.html')
 
 # Login Page
-@app.route('/Login')
+@app.route('/Login', methods=['GET', 'POST'])
 def login():
 
-    form = LoginForm()
     signup_form = CustomerForm()
-    return render_template('Login.html', signup_form=signup_form, form=form)
+    login_form = LoginForm()
+
+    if 'submit_login' in request.form.keys():
+        return auth.validate_login(login_form, signup_form)  # Possible redirection after login logic
+
+    elif'submit_signup' in request.form.keys():
+        return auth.validate_signup(login_form, signup_form)
+
+    return render_template('Login.html', signup_form=signup_form, login_form=login_form)

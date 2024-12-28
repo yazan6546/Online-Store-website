@@ -3,18 +3,33 @@ from sqlalchemy import *
 from  models.customers import Customer
 import pandas as pd
 
-print(q.customer.SELECT_CUSTOMER_BY_ID)
+from models.person import Person
+from utils.db_utils import get_db_connection
 
-engine = create_engine('mysql://root:ok@localhost/Store')
-conn = engine.connect()
+# print(q.customer.SELECT_CUSTOMER_BY_ID)
+# object = Customer.get_by_email('janesmith@example.com')
+# objects = Customer.get_all()
+# for i in objects:
+#     print(i)
+#
 
-object = Customer.get_by_email('janesmith@example.com')
-objects = Customer.get_all()
-for i in objects:
-    print(i)
+# customer = Person(first_name='Jane', last_name='Smith', email='minifoldrat@gmail.com', passcode='1234')
+# customer.insert()
 
-df = pd.read_sql(q.customer.GET_ALL_CUSTOMERS ,conn)
-print(object.passcode)
+with get_db_connection() as conn:
+    result = conn.execute(q.person.INSERT_PERSON_TABLE,
+                          {"first_name": "Jane", "last_name": "Smith", "email": "minifddoffwfldrat@gmail.com",
+                           "passcode": "1234"})
+
+    conn.commit()
+    print(result.lastrowid)
+
+# print(result.inserted_primary_key[0])
+conn.commit()
+
+
+
+
 
 from utils.db_utils import get_db_connection
 
