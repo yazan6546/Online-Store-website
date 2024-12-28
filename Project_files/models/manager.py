@@ -3,8 +3,8 @@ import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class Manager(Person):
-    def __init__(self, first_name, last_name, email, passcode, since, person_id=None):
-        super().__init__(person_id, first_name, last_name, email, passcode)
+    def __init__(self, first_name, last_name, email, passcode, since, person_id=None, hash=False):
+        super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
         self.since = since
 
     def insert(self):
@@ -15,17 +15,20 @@ class Manager(Person):
                 conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
             else:
                 result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
-                self.person_id = result.inserted_primary_key[0]
+                self.person_id = result.lastrowid
 
-            conn.execute(q.manager.INSERT_MANAGER_TABLE, {"person_id": self.person_id, "since" : self.since})
+            conn.execute(q.manager.INSERT_MANAGER_TABLE, {"person_id": self.person_id, "since": self.since})
+
+            if result is None:
+                raise Exception("Duplicate entry")
 
             conn.commit()
 
-            return 1
 
         except Exception as e:
-            print(f"Error: {e}")
-            return 0
+            print(f"Error in insert(): {e}")  # Debugging purposes only
+            conn.rollback()  # Roll back the transaction to maintain database integrity
+            raise e  # Re-raise the exception so it can be caught by the calling code
         finally:
             conn.close()
 
@@ -92,7 +95,9 @@ class Manager(Person):
             manager = conn.execute(
                 q.manager.SELECT_MANAGER_BY_EMAIL, {"email": email}
             ).fetchone()
+
             manager = manager._mapping
+
             return cls(
                 **manager
             )

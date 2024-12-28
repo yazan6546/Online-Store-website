@@ -3,8 +3,8 @@ import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class Customer(Person):
-    def __init__(self, first_name, last_name, email, passcode, person_id=None):
-        super().__init__(person_id, first_name, last_name, email, passcode)
+    def __init__(self, first_name, last_name, email, passcode, person_id=None, hash=False):
+        super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
 
     def insert(self):
         conn = get_db_connection()
@@ -14,19 +14,24 @@ class Customer(Person):
                 conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
             else:
                 result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
-                self.person_id = result.inserted_primary_key[0]
+                self.person_id = result.lastrowid
 
             conn.execute(q.customer.INSERT_CUSTOMERS_TABLE, {"person_id": self.person_id})
 
+            if result is None:
+                raise Exception("Duplicate entry")
+
             conn.commit()
 
-            return 1
 
         except Exception as e:
-            print(f"Error: {e}")
-            return 0
+            print(f"Error in insert(): {e}")  # Debugging purposes only
+            conn.rollback()  # Roll back the transaction to maintain database integrity
+            raise e  # Re-raise the exception so it can be caught by the calling code
         finally:
             conn.close()
+
+
 
     @classmethod
     def delete(cls, person_id):
@@ -91,6 +96,7 @@ class Customer(Person):
             customer = conn.execute(
                 q.customer.SELECT_CUSTOMER_BY_EMAIL, {"email": email}
             ).fetchone()
+
             customer = customer._mapping
             return cls(
                 **customer
