@@ -28,7 +28,13 @@ SELECT_MANAGER_BY_ID = text("""
                             """)
 
 SELECT_MANAGER_BY_EMAIL = text("""
-                                SELECT *
+                                SELECT 
+                                m.person_id AS person_id,
+                                p.first_name AS first_name,
+                                p.last_name AS last_name,
+                                p.email AS email,
+                                m.since AS since,
+                                p.passcode AS passcode
                                 FROM Manager m
                                 JOIN Person p
                                  on m.person_id = p.person_id
