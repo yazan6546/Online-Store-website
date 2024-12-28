@@ -1,5 +1,5 @@
 
-from flask import render_template, request
+from flask import render_template, request, jsonify
 from app import app
 from app.forms import *
 import app.auth as auth
@@ -10,7 +10,6 @@ import app.auth as auth
 # Home Page
 @app.route('/')
 def index():
-
     return render_template('index.html')
 
 # About Page
@@ -47,3 +46,12 @@ def login():
         return auth.validate_signup(login_form, signup_form)
 
     return render_template('Login.html', signup_form=signup_form, login_form=login_form)
+
+
+@app.route("/orders")
+def get_orders():
+    orders = [
+        {"order_id": 1, "product": "Laptop", "quantity": 1, "price": 1200.00},
+        {"order_id": 2, "product": "Headphones", "quantity": 2, "price": 150.00}
+    ]
+    return jsonify({"orders": orders})
