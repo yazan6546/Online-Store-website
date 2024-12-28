@@ -17,7 +17,7 @@ class Manager(Person):
                 result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
                 self.person_id = result.lastrowid
 
-            conn.execute(q.manager.INSERT_MANAGER_TABLE, {"person_id": self.person_id})
+            conn.execute(q.manager.INSERT_MANAGER_TABLE, {"person_id": self.person_id, "since": self.since})
 
             if result is None:
                 raise Exception("Duplicate entry")
