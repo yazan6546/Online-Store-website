@@ -40,4 +40,4 @@ def login():
 
     form = LoginForm()
     signup_form = CustomerForm()
-    return render_template('Login.html', signup_form=signup_form, form=form)
+    return render_template('Login.html', signup_form=signup_form, login_form=form)

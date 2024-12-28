@@ -7,16 +7,17 @@
             <div id="login-form" class="auth-form">
                 <h1>Login</h1>
                 <form action="" method="post">
-                    {{ form.hidden_tag() }}
+                    {{ login_form.hidden_tag() }}
 
                     <!-- Email Field -->
-                    {{ form.email(class="form-control", placeholder="Email") }}
+                    {{ login_form.email }}
 
                     <!-- Password Field -->
-                    {{ form.password(class="form-control", placeholder="Password") }}
+                    {{ login_form.password }}
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">{{ form.submit_signin.label.text }}</button>
+                    <button type="submit" class="btn btn-primary">{{ login_form.submit_signin.label.text }}</button>
+
                 </form>
                 <a href="#" onclick="showForm('signup')">New customer? Sign up for an account</a>
             </div>
@@ -24,28 +25,39 @@
             <!-- Signup Form -->
             <div id="signup-form" class="auth-form" style="display: none;">
                 <h1>Sign Up</h1>
-                <form>
-                    <input type="text" placeholder="First Name" required>
-                    <input type="text" placeholder="Last Name" required>
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Password" required>
-                    <input type="password" placeholder="Confirm Password" required>
+                <form action="" method="post">
+                    {{ signup_form.hidden_tag() }}
+
+                    <!-- First Name Field -->
+                    {{ signup_form.first_name }}
+
+                    <!-- Last Name Field -->
+                    {{ signup_form.last_name }}
+
+                    <!-- Email Field -->
+                    {{ signup_form.email }}
+
+                    <!-- Password Field -->
+                    {{ signup_form.password }}
+
                     <!-- Radio Buttons for User Type -->
                     <div class="form-group">
-                        <label class="form-inline">What is your role?</label>
+                        <label class="form-inline">{{ signup_form.user_type.label }}</label>
                         <div class="form-inline">
-                            <div class="form-check">
-                                <input type="radio" id="manager" name="userType" value="manager" required>
-                                <label for="manager">Manager</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" id="customer" name="userType" value="customer" required>
-                                <label for="customer">Customer</label>
-                            </div>
+                            {% for subfield in signup_form.user_type %}
+                                <div class="form-check">
+                                    <!-- Radio Button -->
+                                    {{ subfield }}
+                                    <!-- Label for Radio Button -->
+                                    <label for="{{ subfield.id }}">{{ subfield.label.text }}</label>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
 
-                    <button type="submit">Sign Up</button>
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">{{ signup_form.submit.label.text }}</button>
+
                 </form>
                 <a href="#" onclick="showForm('login')">Already have an account? Sign in</a>
             </div>
