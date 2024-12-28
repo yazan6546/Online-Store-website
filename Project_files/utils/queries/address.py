@@ -1,6 +1,6 @@
 from sqlalchemy import text
 
-Insert_Address_Table = text("""
+INSERT_ADDRESS_TABLE = text("""
                             insert into Address (person_id, city, zip_code, street_address) 
                             values (:person_id, :city, :zip_code, :street);
                             """)
@@ -24,6 +24,14 @@ DELETE_FROM_ADDRESS = text("""
                             delete from Address
                             where address_id = :id;
                             """)
+
+UPDATE_ADDRESS_TABLE = text("""
+                            update Address
+                            set person_id = :person_id , city = :city, zip_code = :zip_code, street_address = :street
+                            where address_id = :id;
+                            """)
+
+
 
 CREATE_ADDRESS_TABLE = text("""
                             create table if not exists Address(
