@@ -39,3 +39,6 @@ from models.customers import Customer
 
 user1 = Customer.get_by_email("minifoldrat88@gmail.com")
 print(user1.passcode)
+
+print("Test PUSH")
+print("Test PUSH again")

@@ -6,10 +6,10 @@ INSERT_PERSON_TABLE = text("""
                                 VALUES (:first_name, :last_name, :email, :passcode);
                            """)
 
-INSERT_PERSON_ID_TABLE = text("""
-                                INSERT INTO Person (person_id, first_name, last_name, email, passcode) 
-                                VALUES (:first_name, :last_name, :email, :passcode);
-                           """)
+# INSERT_PERSON_ID_TABLE = text("""
+#                                 INSERT INTO Person (person_id, first_name, last_name, email, passcode)
+#                                 VALUES (:first_name, :last_name, :email, :passcode);
+#                            """)
 
 GET_PERSON_TABLE = text("""
                             SELECT * FROM Manager ORDER BY 1 DESC;
@@ -24,6 +24,14 @@ DELETE_FROM_PERSON = text("""
                                 DELETE FROM Person 
                                 WHERE person_id = :id;
                             """)
+
+UPDATE_PERSON_TABLE = text("""
+                            UPDATE Person
+                            SET first_name = :first_name, last_name = :last_name, email = :email, passcode = :passcode
+                            WHERE person_id = :person_id;
+                            """)
+
+
 
 CREATE_PERSON_TABLE = text("""
                             CREATE TABLE IF NOT EXISTS person(
