@@ -1,4 +1,5 @@
 from utils.db_utils import get_db_connection
+import utils.queries as q
 
 
 class Person:
@@ -16,7 +17,7 @@ class Person:
         conn = get_db_connection()
 
         try:
-            conn.execute(INSERT_PERSON_TABLE, self.to_dict())
+            conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
             conn.commit()
             return 1
         except Exception as e:

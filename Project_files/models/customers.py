@@ -14,7 +14,7 @@ class Customer(Person):
                 conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
             else:
                 result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
-                self.person_id = result.inserted_primary_key[0]
+                self.person_id = result.lastrowid
 
             conn.execute(q.customer.INSERT_CUSTOMERS_TABLE, {"person_id": self.person_id})
 
