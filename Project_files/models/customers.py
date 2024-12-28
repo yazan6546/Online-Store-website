@@ -18,13 +18,16 @@ class Customer(Person):
 
             conn.execute(q.customer.INSERT_CUSTOMERS_TABLE, {"person_id": self.person_id})
 
+            if result is None:
+                raise Exception("Duplicate entry")
+
             conn.commit()
 
-            return 1
 
         except Exception as e:
-            print(f"Error: {e}")
-            return 0
+            print(f"Error in insert(): {e}")  # Debugging purposes only
+            conn.rollback()  # Roll back the transaction to maintain database integrity
+            raise e  # Re-raise the exception so it can be caught by the calling code
         finally:
             conn.close()
 

@@ -1,6 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <div class="main-content">
         <div class="auth-container">
             <!-- Login Form -->
@@ -16,7 +29,9 @@
                     {{ login_form.password }}
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">{{ login_form.submit_signin.label.text }}</button>
+                    <button type="submit"
+                            name="submit_login"
+                            class="btn btn-primary">{{ login_form.submit_signin.label.text }}</button>
 
                 </form>
                 <a href="#" onclick="showForm('signup')">New customer? Sign up for an account</a>
@@ -56,7 +71,9 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">{{ signup_form.submit.label.text }}</button>
+                    <button type="submit"
+                            name="submit_signup"
+                            class="btn btn-primary">{{ signup_form.submit.label.text }}</button>
 
                 </form>
                 <a href="#" onclick="showForm('login')">Already have an account? Sign in</a>

@@ -10,24 +10,16 @@ class Manager(Person):
     def insert(self):
         conn = get_db_connection()
 
-        try:
-            if self.person_id is not None:
-                conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
-            else:
-                result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
-                self.person_id = result.lastrowid
+        if self.person_id is not None:
+            conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
+        else:
+            result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
+            self.person_id = result.lastrowid
 
-            conn.execute(q.manager.INSERT_MANAGER_TABLE, {"person_id": self.person_id, "since" : self.since})
+        conn.execute(q.manager.INSERT_MANAGER_TABLE, {"person_id": self.person_id, "since" : self.since})
+        conn.commit()
 
-            conn.commit()
-
-            return 1
-
-        except Exception as e:
-            print(f"Error: {e}")
-            return 0
-        finally:
-            conn.close()
+        conn.close()
 
     @classmethod
     def delete(cls, person_id):
