@@ -1,6 +1,6 @@
 from flask import flash, render_template, url_for, redirect
 from markupsafe import Markup
-
+import utils.password_manager as pm
 from models.manager import Manager
 from models.customers import Customer
 
@@ -22,14 +22,16 @@ def validate_signup(login_form, signup_form):
                 last_name=last_name,
                 email=email,
                 passcode=password,
-                since='2021-01-01'
+                since='2021-01-01',
+                hash=True
             )
         else:  # Regular customer
             new_customer = Customer(
                 first_name=first_name,
                 last_name=last_name,
                 email=email,
-                passcode=password
+                passcode=password,
+                hash=True
             )
 
         try:
@@ -77,21 +79,21 @@ def validate_login(login_form, signup_form):
                 login_form=login_form
             )
 
-        if user1 is not None and user1.passcode == password:
+        if user1 is not None and pm.verify_password(password, user1.passcode):
             flash("Login successful!", "success")
             return redirect(url_for('index'))
-        elif user1 is not None and user1.passcode != password:
+        elif user1 is not None and not pm.verify_password(password, user1.passcode):
             flash("Incorrect password. Please try again.", "danger")
             return render_template(
                 'Login.html',
                 signup_form=signup_form,
                 login_form=login_form)
 
-        if user2 is not None and user2.passcode == password:
+        if user2 is not None and pm.verify_password(password, user2.passcode):
             flash("Login successful!", "success")
             return redirect(url_for('index'))
 
-        elif user2 is not None and user2.passcode != password:
+        elif user2 is not None and not pm.verify_password(password, user2.passcode):
             flash("Incorrect password. Please try again.", "danger")
             return render_template(
                 'Login.html',

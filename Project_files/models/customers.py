@@ -3,8 +3,8 @@ import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class Customer(Person):
-    def __init__(self, first_name, last_name, email, passcode, person_id=None):
-        super().__init__(person_id, first_name, last_name, email, passcode)
+    def __init__(self, first_name, last_name, email, passcode, person_id=None, hash=False):
+        super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
 
     def insert(self):
         conn = get_db_connection()
@@ -30,6 +30,8 @@ class Customer(Person):
             raise e  # Re-raise the exception so it can be caught by the calling code
         finally:
             conn.close()
+
+
 
     @classmethod
     def delete(cls, person_id):
@@ -94,6 +96,7 @@ class Customer(Person):
             customer = conn.execute(
                 q.customer.SELECT_CUSTOMER_BY_EMAIL, {"email": email}
             ).fetchone()
+
             customer = customer._mapping
             return cls(
                 **customer
