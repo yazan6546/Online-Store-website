@@ -1,10 +1,11 @@
 from utils.db_utils import get_db_connection
 import utils.queries as q
+import utils.password_manager as pm
 
 
 class Person:
     def __init__(self, person_id, first_name, last_name, email, passcode):
-        self.passcode = passcode
+        self.passcode = pm.hash_password(passcode)
         self.email = email
         self.first_name = first_name
         self.last_name = last_name

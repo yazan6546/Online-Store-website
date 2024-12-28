@@ -1,36 +1,34 @@
-import utils.queries as q
-from sqlalchemy import *
-from  models.customers import Customer
-import pandas as pd
-
-from models.person import Person
-from utils.db_utils import get_db_connection
-
-# print(q.customer.SELECT_CUSTOMER_BY_ID)
-# object = Customer.get_by_email('janesmith@example.com')
-# objects = Customer.get_all()
-# for i in objects:
-#     print(i)
-#
-
-# customer = Person(first_name='Jane', last_name='Smith', email='minifoldrat@gmail.com', passcode='1234')
-# customer.insert()
-
-with get_db_connection() as conn:
-    result = conn.execute(q.person.INSERT_PERSON_TABLE,
-                          {"first_name": "Jane", "last_name": "Smith", "email": "minifddoffwfldrat@gmail.com",
-                           "passcode": "1234"})
-
-    conn.commit()
-    print(result.lastrowid)
-
-# print(result.inserted_primary_key[0])
-conn.commit()
+import bcrypt
 
 
+class PasswordManager:
+    """
+    A reusable class for hashing and verifying passwords.
+    """
+
+    def hash_password(self, plain_password):
+        """
+        Hashes the given plain text password.
+        """
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(plain_password.encode('utf-8'), salt)
+        return hashed_password.decode('utf-8')
+
+    def verify_password(self, plain_password, hashed_password):
+        """
+        Verifies if the given plain text password matches the hashed password.
+        """
+        return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 
+# Example usage
+if __name__ == "__main__":
+    password_manager = PasswordManager()
 
-from utils.db_utils import get_db_connection
+    # Hash a password
+    password_to_store = password_manager.hash_password("securepassword1233")
+    print("Hashed Password:", password_to_store)
 
-
+    # Verify the password
+    is_password_correct = password_manager.verify_password("securepassword123", password_to_store)
+    print("Password is correct:", is_password_correct)

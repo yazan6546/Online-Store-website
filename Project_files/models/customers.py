@@ -31,6 +31,8 @@ class Customer(Person):
         finally:
             conn.close()
 
+
+
     @classmethod
     def delete(cls, person_id):
         conn = get_db_connection()
