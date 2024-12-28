@@ -3,8 +3,8 @@ import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class Manager(Person):
-    def __init__(self, first_name, last_name, email, passcode, since, person_id=None):
-        super().__init__(person_id, first_name, last_name, email, passcode)
+    def __init__(self, first_name, last_name, email, passcode, since, person_id=None, hash=False):
+        super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
         self.since = since
 
     def insert(self):
@@ -95,7 +95,9 @@ class Manager(Person):
             manager = conn.execute(
                 q.manager.SELECT_MANAGER_BY_EMAIL, {"email": email}
             ).fetchone()
+
             manager = manager._mapping
+
             return cls(
                 **manager
             )
