@@ -2,6 +2,7 @@ from models.person import Person
 import utils.queries as q
 from utils.db_utils import get_db_connection
 
+
 class Customer(Person):
     def __init__(self, first_name, last_name, email, passcode, person_id=None, hash=False):
         super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
@@ -11,7 +12,7 @@ class Customer(Person):
 
         try:
             if self.person_id is not None:
-                conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
+                conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
             else:
                 result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
                 self.person_id = result.lastrowid
