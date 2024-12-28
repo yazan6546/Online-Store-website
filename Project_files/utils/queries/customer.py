@@ -1,11 +1,9 @@
 from sqlalchemy import text
 
-
 INSERT_CUSTOMERS_TABLE = text("""
                                 INSERT INTO Customer (person_id) 
                                 VALUES (:person_id);
                             """)
-
 
 GET_ALL_CUSTOMERS = text("""
                             SELECT
@@ -65,5 +63,5 @@ CREATE_CUSTOMERS_TABLE = text("""
                         """)
 
 DROP_CUSTOMERS_TABLE = text("""
-                                DROP TABLE IF EXISTS Customer;
+                            DROP TABLE IF EXISTS Customer;
                             """)
