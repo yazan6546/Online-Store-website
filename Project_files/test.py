@@ -51,3 +51,9 @@ user1 = Manager.get_by_email("minifoldrat990@gmail.com")
 print(user1)
 # print(user1)
 # print(manager)
+
+user1 = Customer.get_by_email("minifoldrat88@gmail.com")
+print(user1.passcode)
+
+print("Test PUSH")
+print("Test PUSH again")
