@@ -62,6 +62,17 @@ CREATE_CUSTOMERS_TABLE = text("""
                             PRIMARY KEY (person_id));
                         """)
 
+SEARCH_CUSTOMERS = text("""
+                            SELECT 
+                            c.person_id AS person_id,
+                            p.first_name AS first_name,
+                            p.last_name AS last_name,
+                            p.email AS email
+                            FROM Customer c
+                            JOIN Person p on c.person_id = p.person_id
+                            WHERE p.first_name like :name or p.last_name like :name;
+                        """)
+
 DROP_CUSTOMERS_TABLE = text("""
                             DROP TABLE IF EXISTS Customer;
                             """)

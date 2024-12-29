@@ -60,6 +60,40 @@ def delete_customer(person_id):
     else:
         return jsonify({"success": False, "error": "Customer not found"})
 
+
+@app.route('/update_customer/<int:person_id>', methods=['POST'])
+def update_customer(person_id):
+    # Logic to update the customer with the given person_id
+
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    customer = Customer.get(person_id)
+    customer.first_name = first_name
+    customer.last_name = last_name
+    result = customer.update(person_id)
+
+    if result:
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "error": "An error occurred while updating the customer"})
+
+@app.route('/search_customer', methods=['GET'])
+def search_customer():
+
+    name = request.args.get('query')
+
+    print(name)
+
+    customers = Customer.search(name)
+
+    print(customers)
+
+    if customers or customers==[]:
+        customers = [customer.to_dict() for customer in customers]
+        return jsonify({"success": True, "customers": customers})
+
+    return jsonify({"success": False, "error": "An error occurred while searching for customers"})
+
 @app.route('/filter_customers', methods=['GET'])
 def filter_customers():
     # Dummy customer data to return
