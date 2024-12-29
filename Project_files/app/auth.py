@@ -1,4 +1,4 @@
-from flask import flash, render_template, url_for, redirect
+from flask import flash, render_template, url_for, redirect, session
 from markupsafe import Markup
 import utils.password_manager as pm
 from models.manager import Manager
@@ -56,13 +56,15 @@ def validate_signup(login_form, signup_form):
                 login_form=login_form
             )
 
-    # If form validation fails
-    flash("Form validation failed. Please correct the errors and try again.", "warning")
-    return render_template('Login.html', signup_form=signup_form, login_form=login_form)
+    else:
+        flash("Wrong email address entered. Try again.", "danger")
+        return render_template('Login.html', signup_form=signup_form, login_form=login_form)
 
 
 def validate_login(login_form, signup_form):
     if login_form.validate_on_submit():
+
+
         email = login_form.email.data
         password = login_form.password.data
 
@@ -70,18 +72,21 @@ def validate_login(login_form, signup_form):
         user1 = Customer.get_by_email(email)
         user2 = Manager.get_by_email(email)
 
+        print(user1, user2)
+
         if user1 is None and user2 is None:
             flash("User not found. Please sign up for an account.", "warning")
-
-            return render_template(
-                'Login.html',
-                signup_form=signup_form,
-                login_form=login_form
-            )
+            print("test")
+            return redirect(url_for('login'))
 
         if user1 is not None and pm.verify_password(password, user1.passcode):
             flash("Login successful!", "success")
-            return redirect(url_for('index'))
+            print("ok error here")
+            session['user'] = user1
+            session['role'] = 'customer'
+            print("ok error her2")
+            return redirect(url_for('customer'))
+
         elif user1 is not None and not pm.verify_password(password, user1.passcode):
             flash("Incorrect password. Please try again.", "danger")
             return render_template(
@@ -91,7 +96,11 @@ def validate_login(login_form, signup_form):
 
         if user2 is not None and pm.verify_password(password, user2.passcode):
             flash("Login successful!", "success")
-            return redirect(url_for('index'))
+            print("ok error her1")
+            session['user'] = user2.to_dict()
+            session['role'] = 'manager'
+            print("ok error her2")
+            return redirect(url_for('admin_dashboard'))
 
         elif user2 is not None and not pm.verify_password(password, user2.passcode):
             flash("Incorrect password. Please try again.", "danger")
@@ -108,3 +117,7 @@ def validate_login(login_form, signup_form):
             signup_form=signup_form,
             login_form=login_form
         )
+
+    else:
+        flash("Wrong email address entered. Try again.", "danger")
+        return render_template('Login.html', signup_form=signup_form, login_form=login_form)
