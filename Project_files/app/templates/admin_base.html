@@ -44,8 +44,8 @@
                 </li>
                 <li class="nav-link">
                     <a href="{{ url_for('courses') }}">
-                        <i class='bx bx-map icon'></i>
-                        <span class="text nav-text">Addresses</span>
+                        <i class='bx bx-store-alt icon'></i>
+                        <span class="text nav-text">Suppliers</span>
                     </a>
                 </li>
                 <li class="nav-link">
@@ -55,15 +55,27 @@
                     </a>
                 </li>
                 <li class="nav-link">
+                    <a href="{{ url_for('parents') }}">
+                        <i class='bx bx-box icon'></i>
+                        <span class="text nav-text">Products</span>
+                    </a>
+                </li>
+                <li class="nav-link">
                     <a href="{{ url_for('organization_statistics') }}">
-                        <i class='bx bx-book-content icon'></i>
-                        <span class="text nav-text">Report</span>
+                        <i class='bx bx-bar-chart icon'></i>
+                        <span class="text nav-text">Statistics</span>
                     </a>
                 </li>
                 <li class="nav-link">
                     <a href="{{ url_for('add_parent_and_child') }}">
-                        <i class='bx bx-window-open icon'></i>
-                        <span class="text nav-text">Register</span>
+                        <i class='bx bx-cart icon'></i>
+                        <span class="text nav-text">Customer's Orders</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('add_parent_and_child') }}">
+                        <i class='bx bx-list-check icon'></i>
+                        <span class="text nav-text">Manager's Orders</span>
                     </a>
                 </li>
             </ul>
