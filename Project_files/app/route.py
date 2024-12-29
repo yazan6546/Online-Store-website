@@ -1,10 +1,10 @@
 
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, session, flash, redirect, url_for
 from app import app
 from app.forms import *
 import app.auth as auth
-
-
+from models.customers import Customer
+from models.manager import Manager
 
 
 # Home Page
@@ -32,6 +32,26 @@ def shop():
 def shop_single():
     return render_template('shop-single.html')
 
+
+@app.route('/customer')
+def customer():
+    if 'user' not in session.keys() or session.get('role') != 'customer':
+        flash("You must be logged in as customer to access the customer dashboard.", "warning")
+        return redirect(url_for('login'))
+
+    return render_template('customer_dashboard.html')
+
+
+@app.route('/admin_dashboard')
+def admin_dashboard():
+
+    if 'user' not in session.keys() or session.get('role') != 'manager':
+        flash("You must be logged in as manager to access the admin dashboard.", "warning")
+        print('ok loser')
+        return redirect(url_for('login'))
+
+    return render_template('admin_dashboard.html')
+
 # Login Page
 @app.route('/Login', methods=['GET', 'POST'])
 def login():
@@ -39,7 +59,9 @@ def login():
     signup_form = CustomerForm()
     login_form = LoginForm()
 
+
     if 'submit_login' in request.form.keys():
+        print("aaajjaa")
         return auth.validate_login(login_form, signup_form)  # Possible redirection after login logic
 
     elif'submit_signup' in request.form.keys():
