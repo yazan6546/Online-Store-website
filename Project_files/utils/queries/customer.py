@@ -51,8 +51,8 @@ SELECT_PASSWORD_FROM_CUSTOMER = text("""
                             """)
 
 DELETE_FROM_CUSTOMERS = text("""
-                                DELETE FROM Customer c 
-                                WHERE c.person_id = :person_id;
+                                DELETE FROM Customer
+                                WHERE person_id = :person_id;
                             """)
 
 CREATE_CUSTOMERS_TABLE = text("""

@@ -17,12 +17,12 @@ GET_PERSON_TABLE = text("""
 
 SELECT_PERSON_BY_ID = text("""
                                 SELECT * FROM Person
-                                WHERE person_id = :id;
+                                WHERE person_id = :person_id;
                             """)
 
 DELETE_FROM_PERSON = text("""
                                 DELETE FROM Person 
-                                WHERE person_id = :id;
+                                WHERE person_id = :person_id;
                             """)
 
 UPDATE_PERSON_TABLE = text("""

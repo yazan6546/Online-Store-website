@@ -43,6 +43,21 @@ class Person:
 
         return temp
 
+    @classmethod
+    def delete(cls, person_id):
+        conn = get_db_connection()
+
+        try:
+            conn.execute(q.person.DELETE_FROM_PERSON, {"person_id": person_id})
+            conn.commit()
+            return 1
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()  # Rollback the transaction if an error occurs
+            return 0
+        finally:
+            conn.close()
+
     @staticmethod
     def from_dict(dict):
         return Person(

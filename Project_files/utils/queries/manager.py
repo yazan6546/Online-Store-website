@@ -49,7 +49,7 @@ SELECT_PASSWORD_FROM_MANAGERS = text("""
 
 DELETE_FROM_MANAGERS = text("""
                                 DELETE FROM Manager 
-                                WHERE person_id = :id;
+                                WHERE person_id = :person_id;
                             """)
 
 CREATE_MANAGERS_TABLE = text("""
