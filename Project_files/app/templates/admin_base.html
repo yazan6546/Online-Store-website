@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+  <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+  <title>{% block title %}Admin Dashboard{% endblock %}</title>
+</head>
+<body>
+<nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <div class="text logo-text">
+                <span class="name">Sbitany</span>
+            </div>
+
+        </div>
+        <i class='bx bx-chevron-right toggle'></i>
+    </header>
+    <div class="menu-bar">
+        <div class="menu">
+            <li class="search-box"></li>
+            <ul class="menu-links">
+                <li class="nav-link">
+                    <a href="{{ url_for('admin_dashboard') }}">
+                        <i class='bx bx-home-alt icon'></i>
+                        <span class="text nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('specialists') }}">
+                        <i class='bx bx-group icon'></i>
+                        <span class="text nav-text">Customers</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('children') }}">
+                        <i class='bx bx-briefcase icon'></i>
+                        <span class="text nav-text">Managers</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('courses') }}">
+                        <i class='bx bx-store-alt icon'></i>
+                        <span class="text nav-text">Suppliers</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('parents') }}">
+                        <i class='bx bx-category icon'></i>
+                        <span class="text nav-text">Categories</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('parents') }}">
+                        <i class='bx bx-box icon'></i>
+                        <span class="text nav-text">Products</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('organization_statistics') }}">
+                        <i class='bx bx-bar-chart icon'></i>
+                        <span class="text nav-text">Statistics</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('add_parent_and_child') }}">
+                        <i class='bx bx-cart icon'></i>
+                        <span class="text nav-text">Customer's Orders</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('add_parent_and_child') }}">
+                        <i class='bx bx-list-check icon'></i>
+                        <span class="text nav-text">Manager's Orders</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="bottom-content">
+            <li>
+                <a href="{{ url_for('logout') }}">
+                    <i class='bx bx-log-out icon'></i>
+                    <span class="text nav-text">Logout</span>
+                </a>
+            </li>
+            <li class="mode">
+                <div class="sun-moon">
+                    <i class='bx bx-moon icon moon'></i>
+                    <i class='bx bx-sun icon sun'></i>
+                </div>
+                <span class="mode-text text">Dark mode</span>
+                <div class="toggle-switch">
+                    <span class="switch"></span>
+                </div>
+            </li>
+        </div>
+    </div>
+</nav>
+<div class="content-wrapper">
+    {% block content %}{% endblock %}
+</div>
+<script src="{{ url_for('static', filename='js/admin_custom.js') }}"></script>
+
+</body>
+</html>

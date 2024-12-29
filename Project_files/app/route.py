@@ -148,3 +148,4 @@ def get_orders():
         {"order_id": 2, "product": "Headphones", "quantity": 2, "price": 150.00}
     ]
     return jsonify({"orders": orders})
+

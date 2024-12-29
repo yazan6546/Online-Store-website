@@ -11,9 +11,9 @@
   /* ===== Colors ===== */
   --body-color: #f7f6f7;
   --sidebar-color: #fff;
-  --primary-color: #f78839;
+  --primary-color: #176B87;
   --primary-color-light: #f6f5ff;
-  --toggle-color: #ddd;
+  --toggle-color: #EEF5FF;
   --text-color: #707070;
 
   /* ====== Transition ====== */
@@ -112,7 +112,14 @@ body.dark {
 .sidebar header .logo-text {
   display: flex;
   flex-direction: column;
+
 }
+
+.sidebar header .logo-text .name {
+  color: #176B87;
+  font-size: 24px;
+}
+
 header .image-text .name {
   margin-top: 2px;
   font-size: 18px;
