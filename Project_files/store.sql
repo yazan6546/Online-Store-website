@@ -150,3 +150,6 @@ create table Supplier(
    END $$
 
    DELIMITER ;
+
+
+select * from Person

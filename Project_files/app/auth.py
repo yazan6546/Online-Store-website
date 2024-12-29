@@ -56,9 +56,9 @@ def validate_signup(login_form, signup_form):
                 login_form=login_form
             )
 
-    # If form validation fails
-    flash("Form validation failed. Please correct the errors and try again.", "warning")
-    return render_template('Login.html', signup_form=signup_form, login_form=login_form)
+    else:
+        flash("Wrong email address entered. Try again.", "danger")
+        return render_template('Login.html', signup_form=signup_form, login_form=login_form)
 
 
 def validate_login(login_form, signup_form):
@@ -118,5 +118,6 @@ def validate_login(login_form, signup_form):
             login_form=login_form
         )
 
-    print(login_form.errors)
-
+    else:
+        flash("Wrong email address entered. Try again.", "danger")
+        return render_template('Login.html', signup_form=signup_form, login_form=login_form)
