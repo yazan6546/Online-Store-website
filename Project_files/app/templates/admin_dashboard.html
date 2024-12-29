@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+  <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+  <title>Administrator Dashboard</title>
+</head>
+<body>
+<nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </span>
+            <div class="text logo-text">
+                <span class="name">SANAD ORG</span>
+            </div>
+        </div>
+        <i class='bx bx-chevron-right toggle'></i>
+    </header>
+    <div class="menu-bar">
+        <div class="menu">
+            <li class="search-box"></li>
+            <ul class="menu-links">
+                <li class="nav-link">
+                    <a href="{{ url_for('admin_dashboard') }}">
+                        <i class='bx bx-home-alt icon'></i>
+                        <span class="text nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('specialists') }}">
+                        <i class='bx bx-group icon'></i>
+                        <span class="text nav-text">Specialists</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('children') }}">
+                        <i class='bx bx-heart icon'></i>
+                        <span class="text nav-text">Children</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('courses') }}">
+                        <i class='bx bx-book icon'></i>
+                        <span class="text nav-text">Courses</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('parents') }}">
+                        <i class='bx bx-home-heart icon'></i>
+                        <span class="text nav-text">Parents</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('organization_statistics') }}">
+                        <i class='bx bx-book-content icon'></i>
+                        <span class="text nav-text">Report</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('add_parent_and_child') }}">
+                        <i class='bx bx-window-open icon'></i>
+                        <span class="text nav-text">Register</span>
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('payments') }}">
+                        <i class='bx bx-wallet icon'></i>
+                        <span class="text nav-text">Payments</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="bottom-content">
+            <li>
+                <a href="{{ url_for('logout') }}">
+                    <i class='bx bx-log-out icon'></i>
+                    <span class="text nav-text">Logout</span>
+                </a>
+            </li>
+            <li class="mode">
+                <div class="sun-moon">
+                    <i class='bx bx-moon icon moon'></i>
+                    <i class='bx bx-sun icon sun'></i>
+                </div>
+                <span class="mode-text text">Dark mode</span>
+                <div class="toggle-switch">
+                    <span class="switch"></span>
+                </div>
+            </li>
+        </div>
+    </div>
+</nav>
+
+  <main class="cd__main">
+    <div class="profile-page">
+      <div class="content">
+        <div class="content__cover">
+          <div class="content__avatar"></div>
+          <div class="content__bull"><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <br>
+
+        <div class="content__title">
+          <h1>{{ admin.Admin_Name }}</h1><span>Welcome Back</span>
+        </div>
+        <div class="content__description">
+          <p>{{ admin.Email }}</p>
+          <p>Role: {{ admin.Admin_Role }}</p>
+        </div>
+        <div class="content__button">
+          <a class="button" href="{{ url_for('organization_statistics') }}">
+            <div class="button__border"></div>
+            <div class="button__bg"></div>
+            <p class="button__text">View Report</p>
+          </a>
+
+          <br>
+          <br>
+          <a class="button" href="payments">
+            <div class="button__border"></div>
+            <div class="button__bg"></div>
+            <p class="button__text">View My Payments</p>
+          </a>
+        </div>
+      </div>
+      <div class="bg">
+        <div><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </main>
+<script>
+    const body = document.querySelector('body'),
+      sidebar = body.querySelector('nav'),
+      toggle = body.querySelector(".toggle"),
+      searchBtn = body.querySelector(".search-box"),
+      modeSwitch = body.querySelector(".toggle-switch"),
+      modeText = body.querySelector(".mode-text");
+    toggle.addEventListener("click", () => {
+      sidebar.classList.toggle("close");
+    })
+    searchBtn.addEventListener("click", () => {
+      sidebar.classList.remove("close");
+    })
+    modeSwitch.addEventListener("click", () => {
+      body.classList.toggle("dark");
+      if (body.classList.contains("dark")) {
+        modeText.innerText = "Light mode";
+      } else {
+        modeText.innerText = "Dark mode";
+      }
+    });
+</script>
+</body>
+</html>
