@@ -540,11 +540,11 @@ body {
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
   font-size: inherit;
-  color: #fd7686;
+  color: #176B87;
   cursor: pointer;
 }
 .theme-orange .theme-switcher-button {
-  color: #fd7686;
+  color: #176B87;
 }
 .theme-purple .theme-switcher-button {
   color: #80f;

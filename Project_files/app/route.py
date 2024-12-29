@@ -85,6 +85,11 @@ def index():
 def about():
     return render_template('about.html')
 
+# Contact Page
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
 # Shop Page
 @app.route('/shop')
 def shop():
@@ -143,3 +148,4 @@ def get_orders():
         {"order_id": 2, "product": "Headphones", "quantity": 2, "price": 150.00}
     ]
     return jsonify({"orders": orders})
+
