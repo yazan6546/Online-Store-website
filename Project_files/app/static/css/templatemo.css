@@ -643,3 +643,52 @@ label {
     color: inherit; /* Ensures the link takes the default text color */
 }
 
+/*******************************FEATURED COLLECTION*************************/
+.featured-collection {
+  padding: 2rem;
+  background-color: #eef5ff;
+}
+
+.featured-collection h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #176b87;
+  text-align: left;
+}
+
+.tabs {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  color: #176b87;
+}
+
+.tab {
+  cursor: pointer;
+  font-size: 1rem;
+  position: relative;
+  padding-bottom: 0.3rem;
+}
+
+.tab.active {
+  font-weight: bold;
+}
+
+.tab.active::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #176b87;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+
