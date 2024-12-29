@@ -5,11 +5,10 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="flash-container">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
+                {% set latest_message = messages[-1] %} {# Get the latest message #}
+                <div class="alert alert-{{ latest_message[0] }}">
+                    {{ latest_message[1] }}
+                </div>
             </div>
         {% endif %}
     {% endwith %}
