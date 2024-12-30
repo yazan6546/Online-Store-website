@@ -40,7 +40,7 @@ class Manager(Person):
 
             # Update the since field in the Manager table
             conn.execute(q.person.UPDATE_PERSON_TABLE, super().to_dict())
-            conn.execute(q.manager.UPDATE_MANAGER_TABLE, self.to_dict())
+            conn.execute(q.manager.UPDATE_MANAGER_TABLE, self.to_dict(person=False))
             conn.commit()
             return 1
 
