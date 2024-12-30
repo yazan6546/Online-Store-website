@@ -46,18 +46,32 @@ create table Category(
     primary key (category_id)
 );
 
+create table Supplier(
+    supplier_id int not null auto_increment,
+    supplier_name varchar(255) not null,
+    phone_number varchar(255) not null,
+    primary key (supplier_id)
+);
+
+
 create table Product(
     product_id int auto_increment,
     product_name varchar(255) not null,
     product_description varchar(255) not null,
+    brand varchar(30) not null,
     price decimal(10,2) not null,
     photo varchar(100),
     stock_quantity int not null,
     category_id int not null,
+    supplier_id int not null,
     foreign key (category_id) references Category(category_id),
+    foreign key (supplier_id) references Supplier(supplier_id),
     primary key (product_id)
 
 );
+
+
+
 
 create table Address_Order(
     address_id int not null auto_increment,
@@ -114,12 +128,6 @@ create table Manager_Order_Line(
     primary key (order_line_id)
 );
 
-create table Supplier(
-    supplier_id int not null auto_increment,
-    supplier_name varchar(255) not null,
-    phone_number varchar(255) not null,
-    primary key (supplier_id)
-);
 
 
    -- Trigger for Customer table
