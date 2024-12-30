@@ -1,5 +1,7 @@
 
 from flask import render_template, request, jsonify, session, flash, redirect, url_for
+from wtforms.validators import email
+
 from app import app
 from app.forms import *
 import app.auth as auth
@@ -9,14 +11,14 @@ from models.manager import Manager
 
 app.first_request_handled = False
 
-
-@app.before_request
-def handle_first_request():
-    if not app.first_request_handled:
-        print("This is the first request. Clearing session.")
-        session.clear()  # Clear the session for the first request only
-        app.first_request_handled = True  # Set the flag so it doesn't run again
-
+#
+# @app.before_request
+# def handle_first_request():
+#     if not app.first_request_handled:
+#         print("This is the first request. Clearing session.")
+#         session.clear()  # Clear the session for the first request only
+#         app.first_request_handled = True  # Set the flag so it doesn't run again
+#
 
 
 # Route for the Administrator Dashboard
@@ -67,9 +69,14 @@ def update_customer(person_id):
 
     first_name = request.form['first_name']
     last_name = request.form['last_name']
+    email = request.form['email']
+
     customer = Customer.get(person_id)
+
     customer.first_name = first_name
     customer.last_name = last_name
+    customer.email = email
+
     result = customer.update(person_id)
 
     if result:
@@ -82,11 +89,7 @@ def search_customer():
 
     name = request.args.get('query')
 
-    print(name)
-
     customers = Customer.search(name)
-
-    print(customers)
 
     if customers or customers==[]:
         customers = [customer.to_dict() for customer in customers]
@@ -107,9 +110,59 @@ def filter_customers():
     return jsonify({"success": True, "customers": customers})
 
 # Route for the Children page
-@app.route('/children')
-def children():
-    return "<h1>Children Page</h1>"  # Replace with render_template if applicable
+@app.route('/admin_dashboard/managers')
+def admin_dashboard_managers():
+    return render_template('managers.html')  # Replace with render_template if applicable
+
+
+
+@app.route('/delete_manager/<int:person_id>', methods=['POST'])
+def delete_manager(person_id):
+    # Logic to delete the customer with the given person_id
+
+    if session['user'].person_id == person_id:
+        return jsonify({"success": False, "error": "You cannot delete yourself."})
+
+    result = Manager.delete(person_id)
+    if result:
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "error": "Manager not found"})
+
+
+@app.route('/update_manager/<int:person_id>', methods=['POST'])
+def update_manager(person_id):
+    # Logic to update the customer with the given person_id
+
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    email = request.form['email']
+
+    manager = Manager.get(person_id)
+
+    manager.first_name = first_name
+    manager.last_name = last_name
+    manager.email = email
+
+    result = manager.update(person_id)
+
+    if result:
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "error": "An error occurred while updating the customer"})
+
+@app.route('/search_manager', methods=['GET'])
+def search_customer():
+
+    name = request.args.get('query')
+
+    managers = Manager.search(name)
+
+    if managers or managers==[]:
+        managers = [manager.to_dict() for manager in managers]
+        return jsonify({"success": True, "managers": managers})
+
+    return jsonify({"success": False, "error": "An error occurred while searching for managers"})
 
 
 # Route for the Courses page
@@ -191,6 +244,28 @@ def admin_dashboard():
 
     admin = session['user']
     return render_template('admin_dashboard.html', admin=admin)
+
+
+@app.route('/add_customer', methods=['GET', 'POST'])
+def add_customer():
+
+    customer_form = CustomerForm()
+    print(customer_form.first_name.data)
+    print(request.method)
+    if customer_form.validate_on_submit():
+        first_name = customer_form.first_name.data
+        last_name = customer_form.last_name.data
+        email = customer_form.email.data
+        passcode = customer_form.password.data
+
+        print("ok")
+        customer = Customer(first_name=first_name, last_name=last_name, email=email, passcode=passcode, hash=True)
+        customer.insert()
+        return redirect(url_for('admin_dashboard_customers'))
+    else:
+        print(customer_form.form_errors)
+        return render_template('add_customer.html', form=customer_form)
+
 
 # Login Page
 @app.route('/Login', methods=['GET', 'POST'])

@@ -34,7 +34,10 @@ Customers
                     <span id="last_name-{{ customer.person_id }}-text">{{ customer.last_name }}</span>
                     <input type="text" id="last_name-{{ customer.person_id }}-input" value="{{ customer.last_name }}" style="display:none; width: 100px;">
                 </td>
-                <td>{{ customer.email }}</td>
+                <td>
+                    <span id="email-{{ customer.person_id }}-text">{{ customer.email }}</span>
+                    <input type="text" id="email-{{ customer.person_id }}-input" value="{{ customer.email }}" style="display:none; width: 100px;">
+                </td>
                 <td>{{ customer.addresses }}</td>
                 <td class="action-buttons">
                     <button id="edit-btn-{{ customer.person_id }}" class="edit" onclick="enableEdit({{ customer.person_id }})">Edit</button>
@@ -46,7 +49,7 @@ Customers
         </tbody>
     </table>
     <div class="btn-container">
-        <button onclick="window.location.href='{{ url_for('customer') }}'" class="btn">Add Customer</button>
+        <button onclick="window.location.href='{{ url_for('add_customer') }}'" class="btn">Add Customer</button>
     </div>
 </div>
 <style>
@@ -188,6 +191,8 @@ Customers
         document.getElementById('first_name-' + person_id + '-input').style.display = 'inline';
         document.getElementById('last_name-' + person_id + '-text').style.display = 'none';
         document.getElementById('last_name-' + person_id + '-input').style.display = 'inline';
+        document.getElementById('email-' + person_id + '-text').style.display = 'none';
+        document.getElementById('email-' + person_id + '-input').style.display = 'inline';
         document.getElementById('save-btn-' + person_id).style.display = 'inline';
         document.getElementById('edit-btn-' + person_id).style.display = 'none';
     }
@@ -196,12 +201,14 @@ Customers
         console.log('Saving edit for customer ID:', person_id);
         var first_name = $('#first_name-' + person_id + '-input').val();
         var last_name = $('#last_name-' + person_id + '-input').val();
+        var email = $('#email-' + person_id + '-input').val();
         $.ajax({
             url: '/update_customer/' + person_id,
             type: 'POST',
             data: {
                 first_name: first_name,
-                last_name: last_name
+                last_name: last_name,
+                email: email
             },
             success: function(response) {
                 if (response.success) {
@@ -209,6 +216,8 @@ Customers
                     $('#first_name-' + person_id + '-input').hide();
                     $('#last_name-' + person_id + '-text').text(last_name).show();
                     $('#last_name-' + person_id + '-input').hide();
+                    $('#email-' + person_id + '-text').text(email).show();
+                    $('#email-' + person_id + '-input').hide();
                     $('#edit-btn-' + person_id).show();
                     $('#save-btn-' + person_id).hide();
                 } else {
@@ -260,7 +269,8 @@ Customers
                                 <input type="text" id="first_name-${customer.person_id}-input" value="${customer.first_name}" style="display:none; width: 100px;"></td>
                                 <td><span id="last_name-${customer.person_id}-text">${customer.last_name}</span>
                                 <input type="text" id="last_name-${customer.person_id}-input" value="${customer.last_name}" style="display:none; width: 100px;"></td>
-                                <td>${customer.email}</td>
+                                <td><span id="email-${customer.person_id}-text">${customer.email}</span>
+                                <input type="text" id="email-${customer.person_id}-input" value="${customer.email}" style="display:none; width: 100px;"></td>
                                 <td>${customer.addresses}</td>
                                 <td class="action-buttons">
                                     <button id="edit-btn-${customer.person_id}" class="edit" onclick="enableEdit(${customer.person_id})">Edit</button>

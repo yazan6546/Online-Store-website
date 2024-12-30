@@ -12,7 +12,7 @@ class Manager(Person):
 
         try:
             if self.person_id is not None:
-                conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
+                conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
             else:
                 result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
                 self.person_id = result.lastrowid
@@ -32,19 +32,6 @@ class Manager(Person):
         finally:
             conn.close()
 
-    @classmethod
-    def delete(cls, person_id):
-        conn = get_db_connection()
-
-        try:
-            conn.execute(q.manager.DELETE_FROM_MANAGERS, {"person_id": person_id})
-            conn.commit()
-            return 1
-        except Exception as e:
-            print(f"Error: {e}")
-            return 0
-        finally:
-            conn.close()
 
     def update(self, id, name):
         pass
@@ -62,6 +49,28 @@ class Manager(Person):
         except Exception as e:
             print(f"Error: {e}")
             return None
+        finally:
+            conn.close()
+
+    @classmethod
+    def search(cls, search_term):
+        conn = get_db_connection()
+
+        try:
+            managers_objects = []
+            managers = conn.execute(q.manager.SEARCH_MANAGERS, {"name": f"%{search_term}%"}).fetchall()
+            managers = [manager._mapping for manager in managers]
+            conn.commit()
+
+            for manager in managers:
+                managers_objects.append(cls(
+                    **manager
+                ))
+
+            return managers_objects
+        except Exception as e:
+            print(f"Error: {e}")
+            return 0
         finally:
             conn.close()
 

@@ -165,5 +165,4 @@ SELECT
                             JOIN Person p on c.person_id = p.person_id
                             WHERE p.first_name like 'IBRAHIM1' or p.last_name like '%IBRAHIM1%';
 
-
 select * from Person;
