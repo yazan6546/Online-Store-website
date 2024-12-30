@@ -16,13 +16,17 @@ def validate_signup(login_form, signup_form):
         user_type = signup_form.user_type.data
 
         # Create a new customer object
-        if user_type.lower() == 'manager':  # Ensure case insensitivity
+        if user_type.lower() == 'manager':
+
+            role = signup_form.manager_role.data
+
             new_customer = Manager(
                 first_name=first_name,
                 last_name=last_name,
                 email=email,
                 passcode=password,
                 since='2021-01-01',
+                role=role,
                 hash=True
             )
         else:  # Regular customer

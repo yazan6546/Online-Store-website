@@ -3,6 +3,7 @@ from sqlalchemy import create_engine, text
 
 from models.addresses import Address
 from models.customers import Customer
+from models.manager import Manager
 from utils.db_utils import get_db_connection
 
 
@@ -38,9 +39,14 @@ def generate_random_address(person_id):
 #     customer = generate_random_customer()
 #     customer.insert()
 
-customers = Customer.get_all()
+# customers = Manager.get_all()
+# for cus in customers:
+#     print(cus)
+# customers = Customer.get_by_email('ibrahim.asad85@gmail.com')
+# print(customers)
+# # print(customers[0].__dict__)
 
-print(customers[0].__dict__)
-customers = [customer.to_dict(address=True) for customer in customers]
+managers = Manager.get_all()
+# customers = [customer.to_dict(address=True) for customer in customers]
 
 

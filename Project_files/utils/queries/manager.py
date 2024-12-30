@@ -2,8 +2,8 @@ from sqlalchemy import text
 
 
 INSERT_MANAGER_TABLE = text("""
-                                INSERT INTO Manager (person_id, since) 
-                                VALUES (:person_id, :since);
+                                INSERT INTO Manager (person_id, since, role) 
+                                VALUES (:person_id, :since, :role);
                             """)
 
 GET_MANAGER_TABLE = text("""
@@ -17,7 +17,8 @@ GET_ALL_MANAGERS = text("""
                             p.last_name AS last_name,
                             p.email AS email,
                             p.passcode AS passcode,
-                            m.since AS since
+                            m.since AS since,
+                            m.role AS role
                             FROM Manager m
                             JOIN Person p
                             on m.person_id = p.person_id;
@@ -30,6 +31,7 @@ SELECT_MANAGER_BY_ID = text("""
                                 p.last_name AS last_name,
                                 p.email AS email,
                                 p.passcode AS passcode,
+                                c.role AS role,
                                 c.since AS since
                                 FROM Manager c
                                 JOIN Person p
@@ -60,7 +62,8 @@ SELECT_PASSWORD_FROM_MANAGERS = text("""
 
 UPDATE_MANAGER_TABLE = text("""
                                 UPDATE Manager
-                                SET since = :since
+                                SET since = :since,
+                                role = :role
                                 WHERE person_id = :person_id;
                             """)
 
@@ -73,6 +76,7 @@ CREATE_MANAGERS_TABLE = text("""
                             CREATE TABLE IF NOT EXISTS Manager(
                             person_id int NOT NULL,
                             since date ,
+                            role varchar(20) not null check (role in ('Financial Manager', 'Assistant Manager', 'Regional Manager')),
                             FOREIGN KEY (person_id) REFERENCES Person(person_id),
                             PRIMARY KEY (person_id)
                             );
@@ -86,6 +90,7 @@ SEARCH_MANAGERS = text("""
                             p.last_name AS last_name,
                             p.email AS email,
                             p.passcode AS passcode,
+                            c.role AS role,
                             c.since AS since
                             FROM Manager c
                             JOIN Person p on c.person_id = p.person_id
