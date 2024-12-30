@@ -33,6 +33,7 @@ def admin_dashboard_customers():
         return redirect(url_for('login'))
 
     customers = Customer.get_all()
+    customers = [customer.to_dict(address=True) for customer in customers]
 
     return render_template('customers.html', customers=customers)  # Replace with render_template if applicable
 

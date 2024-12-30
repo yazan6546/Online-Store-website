@@ -76,13 +76,16 @@ class Address:
         finally:
             conn.close()
 
-    def to_dict(self):
-        return {
-            "person_id": self.person_id,
+    def to_dict(self, person_id=False):
+        dict_temp = {
             "city": self.city,
             "zip_code": self.zip_code,
             "street": self.street
         }
+        if person_id:
+            dict_temp["person_id"] = self.person_id
+
+        return dict_temp
 
     def update(self, address_id):
         conn = get_db_connection()
