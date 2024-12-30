@@ -32,9 +32,28 @@ class Manager(Person):
         finally:
             conn.close()
 
+    def update(self, person_id):
+        conn = get_db_connection()
 
-    def update(self, id, name):
-        pass
+        try:
+            # Check if the person_id exists
+            person = conn.execute(q.manager.SELECT_MANAGER_BY_ID, {"person_id": person_id}).fetchone()
+            if person is None:
+                return 0
+
+            # Update the person if it exists
+            conn.execute(q.manager.UPDATE_MANAGER_TABLE, self.to_dict())
+            conn.commit()
+            return 1
+
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+            return 0
+        finally:
+            conn.close()
+
+
 
     @classmethod
     def get(cls, person_id):
@@ -121,6 +140,11 @@ class Manager(Person):
         return cls(
             **data_dict
         )
+
+    def to_dict(self):
+        temp = super().to_dict()
+        temp["since"] = self.since
+        return
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.email}"

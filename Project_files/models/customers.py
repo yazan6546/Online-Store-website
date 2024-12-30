@@ -39,26 +39,6 @@ class Customer(Person):
             conn.close()
 
 
-    def update(self, person_id):
-        conn = get_db_connection()
-
-        try:
-            # Check if the person_id exists
-            person = conn.execute(q.person.SELECT_PERSON_BY_ID, {"person_id": person_id}).fetchone()
-            if person is None:
-                return 0
-
-            # Update the person if it exists
-            conn.execute(q.person.UPDATE_PERSON_TABLE, self.to_dict())
-            conn.commit()
-            return 1
-
-        except Exception as e:
-            print(f"Error: {e}")
-            conn.rollback()
-            return 0
-        finally:
-            conn.close()
 
     @classmethod
     def get(cls, person_id):

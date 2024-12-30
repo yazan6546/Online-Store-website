@@ -112,7 +112,16 @@ def filter_customers():
 # Route for the Children page
 @app.route('/admin_dashboard/managers')
 def admin_dashboard_managers():
-    return render_template('managers.html')  # Replace with render_template if applicable
+
+    if 'user' not in session.keys() or session.get('role') != 'manager':
+        flash("You must be logged in as manager to access the admin dashboard.", "warning")
+        return redirect(url_for('login'))
+
+    managers = Manager.get_all()
+    print(managers)
+    managers = [manager.to_dict() for manager in managers]
+
+    return render_template('managers.html', managers=managers)  # Replace with render_template if applicable
 
 
 
@@ -120,7 +129,7 @@ def admin_dashboard_managers():
 def delete_manager(person_id):
     # Logic to delete the customer with the given person_id
 
-    if session['user'].person_id == person_id:
+    if session['user']['person_id'] == person_id:
         return jsonify({"success": False, "error": "You cannot delete yourself."})
 
     result = Manager.delete(person_id)
