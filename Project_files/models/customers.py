@@ -56,6 +56,7 @@ class Customer(Person):
         finally:
             conn.close()
 
+    @classmethod
     def get_all(cls):
         conn = get_db_connection()
 
@@ -69,9 +70,8 @@ class Customer(Person):
                 customers_object = cls(**customer)
 
                 customers_object.addresses = Address.get_by_person_id(customers_object.person_id)
-                customers_objects.append(cls(
-                    **customer
-                ))
+                print('okk')
+                customers_objects.append(customers_object)
 
             return customers_objects
         except Exception as e:
@@ -92,29 +92,6 @@ class Customer(Person):
         finally:
             conn.close()
 
-
-
-    @classmethod
-    def get_all(cls):
-        conn = get_db_connection()
-
-        try:
-            customers_objects = []
-            customers = conn.execute(q.customer.GET_ALL_CUSTOMERS).fetchall()
-            customers = [customer._mapping for customer in customers]
-            conn.commit()
-
-            for customer in customers:
-                customers_objects.append(cls(
-                    **customer
-                ))
-
-            return customers_objects
-        except Exception as e:
-            print(f"Error: {e}")
-            return 0
-        finally:
-            conn.close()
 
     @classmethod
     def get_by_email(cls, email):
@@ -162,6 +139,14 @@ class Customer(Person):
         return cls(
             **data_dict
         )
+
+    def to_dict(self, address=False):
+        temp = super().to_dict()
+
+        if address:
+            temp["addresses"] = [address.to_dict() for address in self.addresses]
+
+        return temp
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.email}"
