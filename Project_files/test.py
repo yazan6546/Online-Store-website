@@ -6,4 +6,12 @@ from utils.db_utils import get_db_connection
 
 
 
-customers = Customer.delete(3)
+manager = Manager(
+    first_name="John",
+    last_name="Doe",
+    email="yazanaboeloun@gmail.com",
+    passcode='123',
+    since='2021-01-01',
+    hash=True)
+
+x = manager.insert()

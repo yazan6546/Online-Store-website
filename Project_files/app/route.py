@@ -118,7 +118,6 @@ def admin_dashboard_managers():
         return redirect(url_for('login'))
 
     managers = Manager.get_all()
-    print(managers)
     managers = [manager.to_dict() for manager in managers]
 
     return render_template('managers.html', managers=managers)  # Replace with render_template if applicable

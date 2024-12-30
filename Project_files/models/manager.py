@@ -144,7 +144,7 @@ class Manager(Person):
     def to_dict(self):
         temp = super().to_dict()
         temp["since"] = self.since
-        return
+        return temp
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.email}"
