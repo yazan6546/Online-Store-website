@@ -9,7 +9,7 @@ Customers
     <h1>Customers</h1>
     <form id="search-form" onsubmit="event.preventDefault(); searchCustomers();">
         <input type="text" id="search-query" placeholder="Search customers...">
-        <button type="submit">Search</button>
+        <button type="submit" class="btn">Search</button>
     </form>
     <table id="customers-table">
         <thead>
@@ -38,7 +38,41 @@ Customers
                     <span id="email-{{ customer.person_id }}-text">{{ customer.email }}</span>
                     <input type="text" id="email-{{ customer.person_id }}-input" value="{{ customer.email }}" style="display:none; width: 100px;">
                 </td>
-                <td>{{ customer.addresses }}</td>
+                <td>
+                    <table class="address-subtable">
+                        <thead>
+                            <tr>
+                                <th>Street Address</th>
+                                <th>City</th>
+                                <th>Zip Code</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for address in customer.addresses %}
+                            <tr id="address-row-{{ address.id }}">
+                                <td>
+                                    <span id="street_address-{{ address.id }}-text">{{ address.street_address }}</span>
+                                    <input type="text" id="street_address-{{ address.id }}-input" value="{{ address.street_address }}" style="display:none; width: 100px;">
+                                </td>
+                                <td>
+                                    <span id="city-{{ address.id }}-text">{{ address.city }}</span>
+                                    <input type="text" id="city-{{ address.id }}-input" value="{{ address.city }}" style="display:none; width: 100px;">
+                                </td>
+                                <td>
+                                    <span id="zip_code-{{ address.id }}-text">{{ address.zip_code }}</span>
+                                    <input type="text" id="zip_code-{{ address.id }}-input" value="{{ address.zip_code }}" style="display:none; width: 100px;">
+                                </td>
+                                <td class="action-buttons">
+                                    <button id="edit-address-btn-{{ address.id }}" class="edit" onclick="enableEditAddress({{ address.id }})">Edit</button>
+                                    <button id="save-address-btn-{{ address.id }}" class="save" style="display:none;" onclick="saveEditAddress({{ address.id }})">Save</button>
+                                    <button class="delete" onclick="deleteAddress({{ address.id }})">Delete</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
                 <td class="action-buttons">
                     <button id="edit-btn-{{ customer.person_id }}" class="edit" onclick="enableEdit({{ customer.person_id }})">Edit</button>
                     <button id="save-btn-{{ customer.person_id }}" class="save" style="display:none;" onclick="saveEdit({{ customer.person_id }})">Save</button>
@@ -55,58 +89,9 @@ Customers
 
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f4f4f4;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        height: 100vh;
-    }
-    #wrapper {
-        max-width: 800px;
-        width: 100%;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-    h1 {
-        color: #333;
-        margin-bottom: 20px;
-    }
-    #search-form {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        margin-bottom: 20px;
-    }
-    #search-query {
-        flex: 1;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px 0 0 5px;
-        font-size: 16px;
-    }
-    #search-query:focus {
-        outline: none;
-    }
-    #search-form button {
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border: none;
-        border-radius: 0 5px 5px 0;
-        background-color: #007bff;
-        color: white;
-    }
-    #search-form button:hover {
-        background-color: #0056b3;
-    }
+    /* Existing styles */
     table {
-        width: 100%;
+        width: 80%;
         border-collapse: collapse;
         margin-bottom: 20px;
     }
@@ -157,135 +142,168 @@ Customers
         display: flex;
         gap: 10px;
     }
+    /* Styles for the address subtable */
+    .address-subtable {
+        width: 100%;
+        border: 1px solid #ddd;
+        margin-top: 10px;
+    }
+    .address-subtable th, .address-subtable td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    .address-subtable th {
+        background-color: #e9ecef;
+        text-align: center;
+    }
+    .address-subtable tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+    .address-subtable tr:hover {
+        background-color: #e2e6ea;
+    }
 </style>
 
 
 <script>
-    function filterCustomers() {
-        var query = $('#search-query').val();
-        $.ajax({
-            url: '/filter_customers',
-            type: 'GET',
-            data: { query: query },
-            success: function(response) {
-                if (response.success) {
-                    var tableBody = $('#customers-table tbody');
-                    tableBody.empty();
-                    response.customers.forEach(function(customer) {
-                        tableBody.append(`
-                            <tr id="row-${customer.person_id}">
-                                [...]
-                            </tr>`);
-                    });
-                } else {
-                    alert('Error filtering customers: ' + response.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                alert('Error filtering customers: ' + xhr.responseText);
-            }
-        });
-    }
-
-    function enableEdit(person_id) {
-        console.log('Enabling edit for customer ID:', person_id);
-        var row = document.getElementById('row-' + person_id);
+    /* Existing JavaScript functions */
+    function enableEditAddress(address_id) {
+        console.log('Enabling edit for address ID:', address_id);
+        var row = document.getElementById('address-row-' + address_id);
         row.classList.add('edit-mode');
-        document.getElementById('first_name-' + person_id + '-text').style.display = 'none';
-        document.getElementById('first_name-' + person_id + '-input').style.display = 'inline';
-        document.getElementById('last_name-' + person_id + '-text').style.display = 'none';
-        document.getElementById('last_name-' + person_id + '-input').style.display = 'inline';
-        document.getElementById('email-' + person_id + '-text').style.display = 'none';
-        document.getElementById('email-' + person_id + '-input').style.display = 'inline';
-        document.getElementById('save-btn-' + person_id).style.display = 'inline';
-        document.getElementById('edit-btn-' + person_id).style.display = 'none';
+        document.getElementById('street_address-' + address_id + '-text').style.display = 'none';
+        document.getElementById('street_address-' + address_id + '-input').style.display = 'inline';
+        document.getElementById('city-' + address_id + '-text').style.display = 'none';
+        document.getElementById('city-' + address_id + '-input').style.display = 'inline';
+        document.getElementById('zip_code-' + address_id + '-text').style.display = 'none';
+        document.getElementById('zip_code-' + address_id + '-input').style.display = 'inline';
+        document.getElementById('save-address-btn-' + address_id).style.display = 'inline';
+        document.getElementById('edit-address-btn-' + address_id).style.display = 'none';
     }
 
-    function saveEdit(person_id) {
-        console.log('Saving edit for customer ID:', person_id);
-        var first_name = $('#first_name-' + person_id + '-input').val();
-        var last_name = $('#last_name-' + person_id + '-input').val();
-        var email = $('#email-' + person_id + '-input').val();
+    function saveEditAddress(address_id) {
+        console.log('Saving edit for address ID:', address_id);
+        var street_address = $('#street_address-' + address_id + '-input').val();
+        var city = $('#city-' + address_id + '-input').val();
+        var zip_code = $('#zip_code-' + address_id + '-input').val();
         $.ajax({
-            url: '/update_customer/' + person_id,
+            url: '/update_address/' + address_id,
             type: 'POST',
             data: {
-                first_name: first_name,
-                last_name: last_name,
-                email: email
+                street_address: street_address,
+                city: city,
+                zip_code: zip_code
             },
             success: function(response) {
                 if (response.success) {
-                    $('#first_name-' + person_id + '-text').text(first_name).show();
-                    $('#first_name-' + person_id + '-input').hide();
-                    $('#last_name-' + person_id + '-text').text(last_name).show();
-                    $('#last_name-' + person_id + '-input').hide();
-                    $('#email-' + person_id + '-text').text(email).show();
-                    $('#email-' + person_id + '-input').hide();
-                    $('#edit-btn-' + person_id).show();
-                    $('#save-btn-' + person_id).hide();
+                    $('#street_address-' + address_id + '-text').text(street_address).show();
+                    $('#street_address-' + address_id + '-input').hide();
+                    $('#city-' + address_id + '-text').text(city).show();
+                    $('#city-' + address_id + '-input').hide();
+                    $('#zip_code-' + address_id + '-text').text(zip_code).show();
+                    $('#zip_code-' + address_id + '-input').hide();
+                    $('#edit-address-btn-' + address_id).show();
+                    $('#save-address-btn-' + address_id).hide();
                 } else {
-                    alert('Error updating customer: ' + response.error);
+                    alert('Error updating address: ' + response.error);
                 }
             },
             error: function(xhr, status, error) {
-                alert('Error updating customer: ' + xhr.responseText);
+                alert('Error updating address: ' + xhr.responseText);
             }
         });
     }
 
-    function deleteCustomer(person_id) {
-        console.log('Deleting customer ID:', person_id);
-        if (confirm('Are you sure you want to delete this customer?')) {
+    function deleteAddress(address_id) {
+        console.log('Deleting address ID:', address_id);
+        if (confirm('Are you sure you want to delete this address?')) {
             $.ajax({
-                url: '/delete_customer/' + person_id,
+                url: '/delete_address/' + address_id,
                 type: 'POST',
                 success: function(response) {
                     if (response.success) {
-                        $('#row-' + person_id).remove();
+                        $('#address-row-' + address_id).remove();
                     } else {
-                        alert('Error deleting customer: ' + response.error);
+                        alert('Error deleting address: ' + response.error);
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert('Error deleting customer: ' + xhr.responseText);
+                    alert('Error deleting address: ' + xhr.responseText);
                 }
             });
         }
     }
 
     function searchCustomers() {
-        console.log('Searching customers');
-        var query = $('#search-query').val();
+        var query = document.getElementById('search-query').value;
         $.ajax({
-            url: '/search_customer',
+            url: '/search_customers',
             type: 'GET',
             data: { query: query },
             success: function(response) {
-                if (response.success) {
-                    var tableBody = $('#customers-table tbody');
-                    tableBody.empty();
-                    response.customers.forEach(function(customer) {
-                        tableBody.append(`
-                            <tr id="row-${customer.person_id}">
-                                <td>${customer.person_id}</td>
-                                <td><span id="first_name-${customer.person_id}-text">${customer.first_name}</span>
-                                <input type="text" id="first_name-${customer.person_id}-input" value="${customer.first_name}" style="display:none; width: 100px;"></td>
-                                <td><span id="last_name-${customer.person_id}-text">${customer.last_name}</span>
-                                <input type="text" id="last_name-${customer.person_id}-input" value="${customer.last_name}" style="display:none; width: 100px;"></td>
-                                <td><span id="email-${customer.person_id}-text">${customer.email}</span>
-                                <input type="text" id="email-${customer.person_id}-input" value="${customer.email}" style="display:none; width: 100px;"></td>
-                                <td>${customer.addresses}</td>
-                                <td class="action-buttons">
-                                    <button id="edit-btn-${customer.person_id}" class="edit" onclick="enableEdit(${customer.person_id})">Edit</button>
-                                    <button id="save-btn-${customer.person_id}" class="save" style="display:none;" onclick="saveEdit(${customer.person_id})">Save</button>
-                                    <button class="delete" onclick="deleteCustomer(${customer.person_id})">Delete</button>
-                                </td>
-                            </tr>`);
-                    });
-                } else {
-                    alert('Error searching customers: ' + response.error);
-                }
+                var tbody = document.querySelector('#customers-table tbody');
+                tbody.innerHTML = '';
+                response.customers.forEach(function(customer) {
+                    var row = document.createElement('tr');
+                    row.id = 'row-' + customer.person_id;
+                    row.innerHTML = `
+                        <td>${customer.person_id}</td>
+                        <td>
+                            <span id="first_name-${customer.person_id}-text">${customer.first_name}</span>
+                            <input type="text" id="first_name-${customer.person_id}-input" value="${customer.first_name}" style="display:none; width: 100px;">
+                        </td>
+                        <td>
+                            <span id="last_name-${customer.person_id}-text">${customer.last_name}</span>
+                            <input type="text" id="last_name-${customer.person_id}-input" value="${customer.last_name}" style="display:none; width: 100px;">
+                        </td>
+                        <td>
+                            <span id="email-${customer.person_id}-text">${customer.email}</span>
+                            <input type="text" id="email-${customer.person_id}-input" value="${customer.email}" style="display:none; width: 100px;">
+                        </td>
+                        <td>
+                            <table class="address-subtable">
+                                <thead>
+                                    <tr>
+                                        <th>Street Address</th>
+                                        <th>City</th>
+                                        <th>Zip Code</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${customer.addresses.map(address => `
+                                        <tr id="address-row-${address.id}">
+                                            <td>
+                                                <span id="street_address-${address.id}-text">${address.street_address}</span>
+                                                <input type="text" id="street_address-${address.id}-input" value="${address.street_address}" style="display:none; width: 100px;">
+                                            </td>
+                                            <td>
+                                                <span id="city-${address.id}-text">${address.city}</span>
+                                                <input type="text" id="city-${address.id}-input" value="${address.city}" style="display:none; width: 100px;">
+                                            </td>
+                                            <td>
+                                                <span id="zip_code-${address.id}-text">${address.zip_code}</span>
+                                                <input type="text" id="zip_code-${address.id}-input" value="${address.zip_code}" style="display:none; width: 100px;">
+                                            </td>
+                                            <td class="action-buttons">
+                                                <button id="edit-address-btn-${address.id}" class="edit" onclick="enableEditAddress(${address.id})">Edit</button>
+                                                <button id="save-address-btn-${address.id}" class="save" style="display:none;" onclick="saveEditAddress(${address.id})">Save</button>
+                                                <button class="delete" onclick="deleteAddress(${address.id})">Delete</button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="action-buttons">
+                            <button id="edit-btn-${customer.person_id}" class="edit" onclick="enableEdit(${customer.person_id})">Edit</button>
+                            <button id="save-btn-${customer.person_id}" class="save" style="display:none;" onclick="saveEdit(${customer.person_id})">Save</button>
+                            <button class="delete" onclick="deleteCustomer(${customer.person_id})">Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
             },
             error: function(xhr, status, error) {
                 alert('Error searching customers: ' + xhr.responseText);

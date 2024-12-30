@@ -39,3 +39,8 @@ def generate_random_address(person_id):
 #     customer.insert()
 
 customers = Customer.get_all()
+
+print(customers[0].__dict__)
+customers = [customer.to_dict(address=True) for customer in customers]
+
+
