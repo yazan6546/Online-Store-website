@@ -172,3 +172,5 @@ select * from Manager;
 select * from Address;
 
 delete from Person where person_id > 20
+
+
