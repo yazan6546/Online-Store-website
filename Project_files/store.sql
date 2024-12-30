@@ -14,14 +14,14 @@ create table Person(
 
 create table Customer(
     person_id int not null,
-    foreign key (person_id) references Person(person_id),
+    foreign key (person_id) references Person(person_id) on delete cascade on update cascade,
     primary key (person_id)
 );
 
 create table Manager(
     person_id int not null,
     since date ,
-    foreign key (person_id) references Person(person_id),
+    foreign key (person_id) references Person(person_id) on delete cascade on update cascade,
     primary key (person_id)
 );
 
@@ -32,7 +32,7 @@ create table Address(
     city varchar(255) not null,
     zip_code varchar(255) not null,
     street_address varchar(255) not null,
-    foreign key (person_id) references Customer(person_id),
+    foreign key (person_id) references Customer(person_id) on delete cascade on update cascade,
     primary key (address_id)
 );
 
@@ -72,7 +72,7 @@ create table Customer_Order(
     delivery_date date,
     order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED')),
     shipping_status varchar(20) check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
-    foreign key (person_id) references Customer(person_id),
+    foreign key (person_id) references Customer(person_id) on delete cascade on update cascade,
     foreign key (address_id) references Address_Order(address_id),
     primary key (order_id)
 );
@@ -150,3 +150,23 @@ create table Supplier(
    END $$
 
    DELIMITER ;
+
+
+select * from Person;
+
+select * from Customer;
+
+SELECT
+                            c.person_id AS person_id,
+                            p.first_name AS first_name,
+                            p.last_name AS last_name,
+                            p.email AS email
+                            FROM Customer c
+                            JOIN Person p on c.person_id = p.person_id
+                            WHERE p.first_name like 'IBRAHIM1' or p.last_name like '%IBRAHIM1%';
+
+select * from Person;
+
+select * from Address;
+
+delete from Person where person_id > 20

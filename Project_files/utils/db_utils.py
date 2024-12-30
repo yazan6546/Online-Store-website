@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from flask import current_app, has_app_context
 
 # Default standalone engine for non-Flask apps
-DEFAULT_DB_URI = 'mysql://root:osaid@localhost/Store'
+DEFAULT_DB_URI = 'mysql://root:ok@localhost/Store'
 standalone_engine = create_engine(DEFAULT_DB_URI)
 
 

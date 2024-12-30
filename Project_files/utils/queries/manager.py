@@ -16,19 +16,35 @@ GET_ALL_MANAGERS = text("""
                             p.first_name AS first_name,
                             p.last_name AS last_name,
                             p.email AS email,
-                            p.passcode AS passcode
+                            p.passcode AS passcode,
+                            m.since AS since
                             FROM Manager m
                             JOIN Person p
                             on m.person_id = p.person_id;
                         """)
 
 SELECT_MANAGER_BY_ID = text("""
-                                SELECT * FROM Manager
-                                WHERE person_id = :id;
+                                SELECT 
+                                c.person_id AS person_id,
+                                p.first_name AS first_name,
+                                p.last_name AS last_name,
+                                p.email AS email,
+                                p.passcode AS passcode,
+                                c.since AS since
+                                FROM Manager c
+                                JOIN Person p
+                                on c.person_id = p.person_id
+                                WHERE p.person_id = :person_id;
                             """)
 
 SELECT_MANAGER_BY_EMAIL = text("""
-                                SELECT *
+                                SELECT 
+                                m.person_id AS person_id,
+                                p.first_name AS first_name,
+                                p.last_name AS last_name,
+                                p.email AS email,
+                                m.since AS since,
+                                p.passcode AS passcode
                                 FROM Manager m
                                 JOIN Person p
                                  on m.person_id = p.person_id
@@ -41,9 +57,16 @@ SELECT_PASSWORD_FROM_MANAGERS = text("""
                                 WHERE p.email = :email;
                             """)
 
+
+UPDATE_MANAGER_TABLE = text("""
+                                UPDATE Manager
+                                SET since = :since
+                                WHERE person_id = :person_id;
+                            """)
+
 DELETE_FROM_MANAGERS = text("""
                                 DELETE FROM Manager 
-                                WHERE person_id = :id;
+                                WHERE person_id = :person_id;
                             """)
 
 CREATE_MANAGERS_TABLE = text("""
@@ -53,6 +76,20 @@ CREATE_MANAGERS_TABLE = text("""
                             FOREIGN KEY (person_id) REFERENCES Person(person_id),
                             PRIMARY KEY (person_id)
                             );
+                        """)
+
+
+SEARCH_MANAGERS = text("""
+                            SELECT 
+                            c.person_id AS person_id,
+                            p.first_name AS first_name,
+                            p.last_name AS last_name,
+                            p.email AS email,
+                            p.passcode AS passcode,
+                            c.since AS since
+                            FROM Manager c
+                            JOIN Person p on c.person_id = p.person_id
+                            WHERE p.first_name like :name or p.last_name like :name;
                         """)
 
 DROP_MANAGERS_TABLE = text("""

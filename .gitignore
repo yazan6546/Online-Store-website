@@ -16,3 +16,6 @@ Project_files/app/__pycache__
 Project_files/models/__pycache__
 Project_files/utils/__pycache__
 Project_files/utils/queries/__pycache__
+Project_files/app/__pycache__/*
+Project_files/app/templates1/*
+Project_files/app/static1/*

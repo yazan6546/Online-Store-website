@@ -58,3 +58,15 @@ function scrollCategories(direction) {
         behavior: 'smooth',
     });
 }
+
+function showCategory(category) {
+  const tabs = document.querySelectorAll('.tab');
+  const productList = document.getElementById('product-list');
+
+  // Update the active tab
+  tabs.forEach((tab) => tab.classList.remove('active'));
+  document.querySelector(`.tab[onclick="showCategory('${category}')"]`).classList.add('active');
+
+  // Example: Change the product list dynamically
+  productList.innerHTML = `<p>Showing products for ${category.replace('-', ' ')}</p>`;
+}

@@ -1,44 +1,41 @@
-import utils.password_manager as pm
+import random
+from sqlalchemy import create_engine, text
+
+from models.addresses import Address
 from models.customers import Customer
-
-# import bcrypt
-#
-#
-# class PasswordManager:
-#     """
-#     A reusable class for hashing and verifying passwords.
-#     """
-#
-#     def hash_password(self, plain_password):
-#         """
-#         Hashes the given plain text password.
-#         """
-#         salt = bcrypt.gensalt()
-#         hashed_password = bcrypt.hashpw(plain_password.encode('utf-8'), salt)
-#         return hashed_password.decode('utf-8')
-#
-#     def verify_password(self, plain_password, hashed_password):
-#         """
-#         Verifies if the given plain text password matches the hashed password.
-#         """
-#         return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
-#
-#
-# # Example usage
-# if __name__ == "__main__":
-#     password_manager = PasswordManager()
-#
-#     # Hash a password
-#     password_to_store = password_manager.hash_password("securepassword1233")
-#     print("Hashed Password:", password_to_store)
-#
-#     # Verify the password
-#     is_password_correct = password_manager.verify_password("securepassword123", password_to_store)
-#     print("Password is correct:", is_password_correct)
+from utils.db_utils import get_db_connection
 
 
-user1 = Customer.get_by_email("minifoldrat88@gmail.com")
-print(user1.passcode)
 
-print("Test PUSH")
-print("Test PUSH again")
+# Generate random customer data
+def generate_random_customer():
+    first_names = ['John', 'Jane', 'Alice', 'Bob', 'Charlie']
+    last_names = ['Smith', 'Doe', 'Johnson', 'Williams', 'Brown']
+    first_name = random.choice(first_names)
+    last_name = random.choice(last_names)
+    email = f"{first_name.lower()}.{last_name.lower()}{random.randint(1, 1000)}@example.com"
+    passcode = f"Pass{random.randint(1000, 9999)}!"
+    return Customer(first_name, last_name, email, passcode, hash=True)
+
+# Generate random address data
+def generate_random_address(person_id):
+    cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix']
+    streets = ['Main St', '2nd St', '3rd St', '4th St', '5th St']
+    city = random.choice(cities)
+    street_address = f"{random.randint(1, 9999)} {random.choice(streets)}"
+    zip_code = f"{random.randint(10000, 99999)}"
+    return Address(person_id, city, zip_code, street_address)
+
+# # Insert 20 random addresses for customers
+# customer_ids = [customer.person_id for customer in Customer.get_all()]
+# for _ in range(10):
+#     person_id = random.choice(customer_ids)
+#     address = generate_random_address(person_id)
+#     address.insert()
+
+# # Insert 50 random customers
+# for _ in range(50):
+#     customer = generate_random_customer()
+#     customer.insert()
+
+customers = Customer.get_all()

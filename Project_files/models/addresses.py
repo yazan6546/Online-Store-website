@@ -4,8 +4,8 @@ from utils.db_utils import get_db_connection
 
 
 class Address:
-    def __init__(self, person_id, city, zip_code, street):
-        self.address_id = None
+    def __init__(self, person_id, city, zip_code, street, address_id=None):
+        self.address_id = address_id
         self.person_id = person_id
         self.city = city
         self.zip_code = zip_code
@@ -105,5 +105,4 @@ class Address:
             conn.close()
 
     def __str__(self):
-        return (f"Address ID: {self.address_id}, Person ID: {self.person_id}, City: {self.city},"
-                f" Zip Code: {self.zip_code}, Street: {self.street}")
+        return f"{self.zip_code}, {self.street}, {self.city}"

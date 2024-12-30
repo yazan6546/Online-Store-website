@@ -1,0 +1,41 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+Administrator Dashboard
+{% endblock %}
+
+{% block content %}
+<main class="cd__main">
+    <div class="profile-page">
+      <div class="content">
+        <div class="content__cover">
+          <div class="content__avatar"></div>
+          <div class="content__bull"><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <br>
+
+        <div class="content__title">
+          <h1>{{ admin.first_name }}</h1><span>Welcome Back</span>
+        </div>
+        <div class="content__description">
+          <p>{{ admin.email }}</p>
+          <p>Role: {{ admin.email }}</p>
+        </div>
+        <div class="content__button">
+          <a class="button" href="{{ url_for('organization_statistics') }}">
+            <div class="button__border"></div>
+            <div class="button__bg"></div>
+            <p class="button__text">View Report</p>
+          </a>
+
+          <br>
+          <br>
+
+        </div>
+      </div>
+      <div class="bg">
+        <div><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+    </div>
+</main>
+{% endblock %}

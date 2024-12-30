@@ -16,7 +16,12 @@ SELECT_ADDRESS_BY_Address_ID = text("""
                             """)
 
 SELECT_ADDRESS_BY_Person_ID = text("""
-                            select * from Address
+                            select
+                            street_address AS street,
+                            city,
+                            zip_code,
+                            person_id
+                            from Address
                             where person_id = :id;
                             """)
 
