@@ -5,6 +5,7 @@ from wtforms.validators import email
 from app import app
 from app.forms import *
 import app.auth as auth
+from models.addresses import Address
 from models.customers import Customer
 from models.manager import Manager
 
@@ -135,6 +136,8 @@ def update_manager(person_id):
     # Logic to update the customer with the given person_id
 
     manager = Manager.get(person_id)
+
+    print(manager)
 
     manager.first_name = request.form['first_name']
     manager.last_name = request.form['last_name']
@@ -279,6 +282,38 @@ def login():
         return auth.validate_signup(login_form, signup_form)
 
     return render_template('Login.html', signup_form=signup_form, login_form=login_form)
+
+
+@app.route('/delete_address/<int:address_id>', methods=['POST'])
+def delete_address(address_id):
+    # Logic to delete the address with the given address_id
+    result = Address.delete(address_id)
+    if result:
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "error": "An error occured while deleting the address."})
+
+@app.route('/edit_address/<int:address_id>', methods=['POST'])
+def edit_address(address_id):
+    # Logic to update the address with the given address_id
+    street = request.form['street']
+    city = request.form['city']
+    state = request.form['state']
+    zip_code = request.form['zip_code']
+
+    address = Address.get(address_id)
+
+    address.street = street
+    address.city = city
+    address.state = state
+    address.zip_code = zip_code
+    result = address.update()
+
+    if result:
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "error": "An error occurred while updating the address."})
+
 
 
 @app.route("/orders")

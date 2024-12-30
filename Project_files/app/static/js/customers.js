@@ -140,3 +140,71 @@
             }
         });
     }
+
+
+       function enableEdit(person_id) {
+        console.log('Enabling edit for customer ID:', person_id);
+        var row = document.getElementById('row-' + person_id);
+        row.classList.add('edit-mode');
+        document.getElementById('first_name-' + person_id + '-text').style.display = 'none';
+        document.getElementById('first_name-' + person_id + '-input').style.display = 'inline';
+        document.getElementById('last_name-' + person_id + '-text').style.display = 'none';
+        document.getElementById('last_name-' + person_id + '-input').style.display = 'inline';
+        document.getElementById('email-' + person_id + '-text').style.display = 'none';
+        document.getElementById('email-' + person_id + '-input').style.display = 'inline';
+        document.getElementById('save-btn-' + person_id).style.display = 'inline';
+        document.getElementById('edit-btn-' + person_id).style.display = 'none';
+    }
+
+    function saveEdit(person_id) {
+        console.log('Saving edit for customer ID:', person_id);
+        var first_name = $('#first_name-' + person_id + '-input').val();
+        var last_name = $('#last_name-' + person_id + '-input').val();
+        var email = $('#email-' + person_id + '-input').val();
+        $.ajax({
+            url: '/update_customer/' + person_id,
+            type: 'POST',
+            data: {
+                first_name: first_name,
+                last_name: last_name,
+                email: email
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#first_name-' + person_id + '-text').text(first_name).show();
+                    $('#first_name-' + person_id + '-input').hide();
+                    $('#last_name-' + person_id + '-text').text(last_name).show();
+                    $('#last_name-' + person_id + '-input').hide();
+                    $('#email-' + person_id + '-text').text(email).show();
+                    $('#email-' + person_id + '-input').hide();
+                    $('#edit-btn-' + person_id).show();
+                    $('#save-btn-' + person_id).hide();
+                } else {
+                    alert('Error updating customer: ' + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Error updating customer: ' + xhr.responseText);
+            }
+        });
+    }
+
+    function deleteCustomer(person_id) {
+        console.log('Deleting customer ID:', person_id);
+        if (confirm('Are you sure you want to delete this customer?')) {
+            $.ajax({
+                url: '/delete_customer/' + person_id,
+                type: 'POST',
+                success: function(response) {
+                    if (response.success) {
+                        $('#row-' + person_id).remove();
+                    } else {
+                        alert('Error deleting customer: ' + response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Error deleting customer: ' + xhr.responseText);
+                }
+            });
+        }
+    }

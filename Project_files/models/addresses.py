@@ -34,6 +34,21 @@ class Address:
             conn.close()
 
     @classmethod
+    def get(cls, id):
+        conn = get_db_connection()
+        try:
+            address = conn.execute(q.address.SELECT_ADDRESS_BY_Address_ID, {"id": id}).fetchone()
+            address = address._mapping
+            return cls(
+                **address
+            )
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
+
+    @classmethod
     def delete(cls, address_id):
         conn = get_db_connection()
 
