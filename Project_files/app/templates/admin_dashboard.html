@@ -1,41 +1,104 @@
 {% extends "admin_base.html" %}
 
 {% block title %}
-Administrator Dashboard
+Admin Dashboard
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
-<main class="cd__main">
-    <div class="profile-page">
-      <div class="content">
-        <div class="content__cover">
-          <div class="content__avatar"></div>
-          <div class="content__bull"><span></span><span></span><span></span><span></span><span></span></div>
-        </div>
-        <br>
+  <header class="dashboard-header">
+    <h1>
+      Welcome back, {{ admin.first_name }}! <span class="waving-icon">👋</span>
+    </h1>
+  </header>
 
-        <div class="content__title">
-          <h1>{{ admin.first_name }}</h1><span>Welcome Back</span>
-        </div>
-        <div class="content__description">
-          <p>{{ admin.email }}</p>
-          <p>Role: {{ admin.email }}</p>
-        </div>
-        <div class="content__button">
-          <a class="button" href="{{ url_for('organization_statistics') }}">
-            <div class="button__border"></div>
-            <div class="button__bg"></div>
-            <p class="button__text">View Report</p>
-          </a>
-
-          <br>
-          <br>
-
-        </div>
-      </div>
-      <div class="bg">
-        <div><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-      </div>
+<!-- STATS CARDS-->
+  <section class="stats">
+  <div class="card">
+    <div class="icon">
+      <i class="bx bx-user"></i>
     </div>
-</main>
+    <div class="content">
+      <h4>2000+</h4>
+      <span>Total Customers</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="icon">
+      <i class="bx bx-package"></i>
+    </div>
+    <div class="content">
+      <h4>140+</h4>
+      <span>Total Products</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="icon">
+      <i class="bx bx-cart"></i>
+    </div>
+    <div class="content">
+      <h4>1600+</h4>
+      <span>Total Orders</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="icon">
+      <i class="bx bx-dollar-circle"></i>
+    </div>
+    <div class="content">
+      <h4>2000+</h4>
+      <span>Total Sales</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- CHARTS-->
+  <section class="charts">
+    <div class="chart" id="revenue-chart">
+      <h2>Revenue</h2>
+      <canvas id="revenueChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboardscript.js') }}"></script>
+
+<!--TABLES-->
+    <div class="top-products">
+      <div class="header">
+        <h3>Top Products</h3>
+      </div>
+      <ul class="product-list">
+        <li>
+          <img src="#" class="product-image">
+          <div class="product-details">
+            <span class="product-name">asus laptop</span>
+            <span class="product-category">Computers & Tablets</span>
+          </div>
+          <span class="product-price">$1,428</span>
+        </li>
+        <li>
+          <img src="#" class="product-image">
+          <div class="product-details">
+            <span class="product-name">asus laptop</span>
+            <span class="product-category">Computers & Tablets</span>
+          </div>
+          <span class="product-price">$1,428</span>
+        </li>
+        <li>
+          <img src="#" class="product-image">
+          <div class="product-details">
+            <span class="product-name">asus laptop</span>
+            <span class="product-category">Computers & Tablets</span>
+          </div>
+          <span class="product-price">$1,428</span>
+        </li>
+      </ul>
+    </div>
+
+  </section>
+
 {% endblock %}
