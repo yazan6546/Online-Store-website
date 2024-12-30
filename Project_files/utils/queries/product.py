@@ -15,6 +15,16 @@ SELECT_PRODUCT_BY_ID = text("""
                                 WHERE product_id = :product_id;
                             """)
 
+SELECT_PRODUCT_BY_CATEGORY = text("""
+                                SELECT * FROM Product   
+                                WHERE category_id = :category_id;
+                            """)
+
+SELECT_PRODUCT_BY_SUPPLIER = text("""
+                                SELECT * FROM Product   
+                                WHERE supplier_id = :supplier_id;
+                            """)
+
 UPDATE_PRODUCTS_TABLE = text("""
                                 UPDATE Product
                                 SET product_name = :product_name,
