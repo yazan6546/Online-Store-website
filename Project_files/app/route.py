@@ -45,7 +45,7 @@ def edit_customer(person_id):
     customer = Customer.get(person_id)
     customer.first_name = first_name
     customer.last_name = last_name
-    customer.update(person_id)
+    customer.update()
     return redirect(url_for('admin_dashboard_customers'))
 
 
@@ -73,7 +73,7 @@ def update_customer(person_id):
     customer.last_name = last_name
     customer.email = email
 
-    result = customer.update(person_id)
+    result = customer.update()
 
     if result:
         return jsonify({"success": True})
@@ -148,7 +148,7 @@ def update_manager(person_id):
     manager.last_name = last_name
     manager.email = email
 
-    result = manager.update(person_id)
+    result = manager.update()
 
     if result:
         return jsonify({"success": True})

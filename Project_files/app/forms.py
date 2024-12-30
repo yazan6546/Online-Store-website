@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField
-from wtforms.fields.choices import RadioField
+from wtforms.fields.choices import RadioField, SelectField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired, Email
 from wtforms.validators import Regexp
@@ -48,6 +48,17 @@ class CustomerForm(FlaskForm):
         validators=[DataRequired()],
         render_kw={"class": "form-check"}  # Optional: Add styling class if needed
     )
+
+
+    manager_role = SelectField(
+        'Manager Role',
+        render_kw={"class": "form-control"},
+        choices=[('Financial Manager', 'Financial Manager'),
+                 ('Regional Manager', 'Regional Manager'),
+                 ('Assistant Manager', 'Assistant Manager')],
+        validators=[DataRequired()]
+    )
+
 
     submit = SubmitField(
         'Sign up',
