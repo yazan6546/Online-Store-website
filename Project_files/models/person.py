@@ -14,10 +14,6 @@ class Person:
         self.last_name = last_name
         self.person_id = person_id
 
-
-    def get_name(self):
-        return self.name
-
     def insert_person(self):
         conn = get_db_connection()
 
@@ -90,8 +86,3 @@ class Person:
             dict["passcode"],
         )
 
-    def set_name(self, name):
-        self.name = name
-
-    def set_age(self, age):
-        self.age = age

@@ -3,7 +3,7 @@ from utils.db_utils import get_db_connection
 
 
 class Supplier:
-    def __init__(self, supplier_name, phone_number ,supplier_id=None):
+    def __init__(self, supplier_name, phone_number, supplier_id=None):
         self.supplier_id = supplier_id
         self.name = supplier_name
         self.phone = phone_number
