@@ -7,8 +7,8 @@ from models.addresses import Address
 class Customer(Person):
     def __init__(self, first_name, last_name, email, passcode, person_id=None, hash=False):
         super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
+        self.addresses = []  # List of Address objects
 
-    addresses = []  # List of Address objects
     def insert(self):
         conn = get_db_connection()
 
@@ -66,6 +66,9 @@ class Customer(Person):
             conn.commit()
 
             for customer in customers:
+                customers_object = cls(**customer)
+
+                customers_object.addresses = Address.get_by_person_id(customers_object.person_id)
                 customers_objects.append(cls(
                     **customer
                 ))
