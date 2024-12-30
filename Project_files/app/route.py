@@ -152,7 +152,7 @@ def update_manager(person_id):
         return jsonify({"success": False, "error": "An error occurred while updating the customer"})
 
 @app.route('/search_manager', methods=['GET'])
-def search_customer():
+def search_manager():
 
     name = request.args.get('query')
 
