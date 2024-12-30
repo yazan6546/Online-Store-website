@@ -37,16 +37,14 @@ def admin_dashboard_customers():
     return render_template('customers.html', customers=customers)  # Replace with render_template if applicable
 
 
-@app.route('/edit_customer/<int:person_id>', methods=['POST'])
 def edit_customer(person_id):
-    if request.method == 'POST':
-        # Logic to update the customer with the given person_id
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        customer = Customer.get(person_id)
-        customer.first_name = first_name
-        customer.last_name = last_name
-        customer.update(person_id)
+    # Logic to update the customer with the given person_id
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    customer = Customer.get(person_id)
+    customer.first_name = first_name
+    customer.last_name = last_name
+    customer.update(person_id)
         return redirect(url_for('admin_dashboard_customers'))
     else:
         customer = Customer.get(person_id)
