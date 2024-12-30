@@ -37,6 +37,7 @@ def admin_dashboard_customers():
 
     return render_template('customers.html', customers=customers)  # Replace with render_template if applicable
 
+
 @app.route('/edit_customer/<int:person_id>', methods=['POST'])
 def edit_customer(person_id):
     # Logic to update the customer with the given person_id
@@ -170,9 +171,9 @@ def search_manager():
 
 
 # Route for the Courses page
-@app.route('/courses')
+@app.route('/suppliers')
 def courses():
-    return "<h1>Courses Page</h1>"  # Replace with render_template if applicable
+    return "<h1>Supplier Page</h1>"  # Replace with render_template if applicable
 
 
 # Route for the Parents page
