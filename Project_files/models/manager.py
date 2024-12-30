@@ -99,6 +99,7 @@ class Manager(Person):
             managers_objects = []
             managers = conn.execute(q.manager.GET_ALL_MANAGERS).fetchall()
             managers = [manager._mapping for manager in managers]
+            print(managers)
             conn.commit()
 
             for manager in managers:

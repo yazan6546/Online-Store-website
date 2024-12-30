@@ -17,6 +17,7 @@ GET_ALL_MANAGERS = text("""
                             p.last_name AS last_name,
                             p.email AS email,
                             p.passcode AS passcode,
+                            m.since AS since,
                             m.role AS role
                             FROM Manager m
                             JOIN Person p

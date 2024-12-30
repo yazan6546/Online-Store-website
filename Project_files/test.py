@@ -46,9 +46,7 @@ def generate_random_address(person_id):
 # print(customers)
 # # print(customers[0].__dict__)
 
-manager = Manager('Ibrahim', 'Asad', 'yazanaboeloun@gmail.com', '1234', '2021-01-01', 'Financial Manager', hash=True)
-manager.insert()
-print(manager)
+managers = Manager.get_all()
 # customers = [customer.to_dict(address=True) for customer in customers]
 
 
