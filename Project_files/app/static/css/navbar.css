@@ -49,15 +49,33 @@ body.dark {
   top: 0;
   left: 0;
   height: 100%;
-  width: 250px;
+  width: 260px; /* Default open width */
   padding: 10px 14px;
   background: var(--sidebar-color);
   transition: var(--tran-05);
   z-index: 100;
 }
+
 .sidebar.close {
-  width: 88px;
+  width: 88px; /* Width when closed */
 }
+
+.sidebar .menu-links {
+  padding-left: 10px; /* Add some padding for items */
+}
+
+.sidebar .toggle {
+    position: absolute;
+    top: 50%;
+    right: -25px;
+    z-index: 200; /* Higher than other elements */
+}
+
+
+.sidebar.close .toggle {
+  transform: translateY(-50%) rotate(0deg);
+}
+
 
 /* ===== Reusable code - Here ===== */
 .sidebar li {
