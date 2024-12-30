@@ -105,5 +105,4 @@ class Address:
             conn.close()
 
     def __str__(self):
-        return (f"Address ID: {self.address_id}, Person ID: {self.person_id}, City: {self.city},"
-                f" Zip Code: {self.zip_code}, Street: {self.street}")
+return f"{self.zip_code} {self.street_address}, {self.city}"

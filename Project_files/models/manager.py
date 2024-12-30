@@ -12,7 +12,7 @@ class Manager(Person):
 
         try:
             if self.person_id is not None:
-                conn.execute(q.person.INSERT_PERSON_ID_TABLE, self.to_dict())
+                conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
             else:
                 result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
                 self.person_id = result.lastrowid
@@ -32,22 +32,25 @@ class Manager(Person):
         finally:
             conn.close()
 
-    @classmethod
-    def delete(cls, person_id):
+    def update(self, person_id):
         conn = get_db_connection()
 
         try:
-            conn.execute(q.manager.DELETE_FROM_MANAGERS, {"person_id": person_id})
+
+            # Update the since field in the Manager table
+            conn.execute(q.person.UPDATE_PERSON_TABLE, super().to_dict())
+            conn.execute(q.manager.UPDATE_MANAGER_TABLE, {"since": self.since, "person_id": person_id})
             conn.commit()
             return 1
+
         except Exception as e:
             print(f"Error: {e}")
+            conn.rollback()
             return 0
         finally:
             conn.close()
 
-    def update(self, id, name):
-        pass
+
 
     @classmethod
     def get(cls, person_id):
@@ -62,6 +65,28 @@ class Manager(Person):
         except Exception as e:
             print(f"Error: {e}")
             return None
+        finally:
+            conn.close()
+
+    @classmethod
+    def search(cls, search_term):
+        conn = get_db_connection()
+
+        try:
+            managers_objects = []
+            managers = conn.execute(q.manager.SEARCH_MANAGERS, {"name": f"%{search_term}%"}).fetchall()
+            managers = [manager._mapping for manager in managers]
+            conn.commit()
+
+            for manager in managers:
+                managers_objects.append(cls(
+                    **manager
+                ))
+
+            return managers_objects
+        except Exception as e:
+            print(f"Error: {e}")
+            return 0
         finally:
             conn.close()
 
@@ -112,6 +137,11 @@ class Manager(Person):
         return cls(
             **data_dict
         )
+
+    def to_dict(self):
+        temp = super().to_dict()
+        temp["since"] = self.since
+        return temp
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.email}"

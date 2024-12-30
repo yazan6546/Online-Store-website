@@ -51,8 +51,8 @@ SELECT_PASSWORD_FROM_CUSTOMER = text("""
                             """)
 
 DELETE_FROM_CUSTOMERS = text("""
-                                DELETE FROM Customer c 
-                                WHERE c.person_id = :person_id;
+                                DELETE FROM Customer
+                                WHERE person_id = :person_id;
                             """)
 
 CREATE_CUSTOMERS_TABLE = text("""
@@ -60,6 +60,18 @@ CREATE_CUSTOMERS_TABLE = text("""
                             person_id int not null,
                             FOREIGN KEY (person_id) REFERENCES Person(person_id),
                             PRIMARY KEY (person_id));
+                        """)
+
+SEARCH_CUSTOMERS = text("""
+                            SELECT 
+                            c.person_id AS person_id,
+                            p.first_name AS first_name,
+                            p.last_name AS last_name,
+                            p.email AS email,
+                            p.passcode AS passcode
+                            FROM Customer c
+                            JOIN Person p on c.person_id = p.person_id
+                            WHERE p.first_name like :name or p.last_name like :name;
                         """)
 
 DROP_CUSTOMERS_TABLE = text("""

@@ -39,39 +39,6 @@ class Customer(Person):
             conn.close()
 
 
-    @classmethod
-    def delete(cls, person_id):
-        conn = get_db_connection()
-
-        try:
-            conn.execute(q.customer.DELETE_FROM_CUSTOMERS, {"person_id": person_id})
-            conn.commit()
-            return 1
-        except Exception as e:
-            print(f"Error: {e}")
-            return 0
-        finally:
-            conn.close()
-
-    def update(self, person_id):
-        conn = get_db_connection()
-
-        try:
-            # Check if the person_id exists
-            person = conn.execute(q.person.SELECT_PERSON_BY_ID, {"id": person_id}).fetchone()
-            if person is None:
-                return 0
-
-            # Update the person if it exists
-            conn.execute(q.person.UPDATE_PERSON_TABLE, self.to_dict())
-            conn.commit()
-            return 1
-
-        except Exception as e:
-            print(f"Error: {e}")
-            return 0
-        finally:
-            conn.close()
 
     @classmethod
     def get(cls, person_id):
@@ -86,6 +53,27 @@ class Customer(Person):
         except Exception as e:
             print(f"Error: {e}")
             return None
+        finally:
+            conn.close()
+
+    def get_all(cls):
+        conn = get_db_connection()
+
+        try:
+            customers_objects = []
+            customers = conn.execute(q.customer.GET_ALL_CUSTOMERS).fetchall()
+            customers = [customer._mapping for customer in customers]
+            conn.commit()
+
+            for customer in customers:
+                customers_objects.append(cls(
+                    **customer
+                ))
+
+            return customers_objects
+        except Exception as e:
+            print(f"Error: {e}")
+            return 0
         finally:
             conn.close()
 
@@ -141,6 +129,28 @@ class Customer(Person):
         except Exception as e:
             print(f"Error: {e}")
             return None
+        finally:
+            conn.close()
+
+    @classmethod
+    def search(cls, search_term):
+        conn = get_db_connection()
+
+        try:
+            customers_objects = []
+            customers = conn.execute(q.customer.SEARCH_CUSTOMERS, {"name": f"%{search_term}%"}).fetchall()
+            customers = [customer._mapping for customer in customers]
+            conn.commit()
+
+            for customer in customers:
+                customers_objects.append(cls(
+                    **customer
+                ))
+
+            return customers_objects
+        except Exception as e:
+            print(f"Error: {e}")
+            return 0
         finally:
             conn.close()
 

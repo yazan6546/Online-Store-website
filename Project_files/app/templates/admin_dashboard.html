@@ -15,11 +15,11 @@ Administrator Dashboard
         <br>
 
         <div class="content__title">
-          <h1>{{ admin.Admin_Name }}</h1><span>Welcome Back</span>
+          <h1>{{ admin.first_name }}</h1><span>Welcome Back</span>
         </div>
         <div class="content__description">
-          <p>{{ admin.Email }}</p>
-          <p>Role: {{ admin.Admin_Role }}</p>
+          <p>{{ admin.email }}</p>
+          <p>Role: {{ admin.email }}</p>
         </div>
         <div class="content__button">
           <a class="button" href="{{ url_for('organization_statistics') }}">
