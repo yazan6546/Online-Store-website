@@ -3,21 +3,22 @@ import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class Manager(Person):
-    def __init__(self, first_name, last_name, email, passcode, since, person_id=None, hash=False):
+    def __init__(self, first_name, last_name, email, passcode, since, role='Financial Manager', person_id=None, hash=False):
         super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
         self.since = since
+        self.role = role
 
     def insert(self):
         conn = get_db_connection()
 
         try:
             if self.person_id is not None:
-                conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
+                conn.execute(q.person.INSERT_PERSON_TABLE, super().to_dict())
             else:
-                result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
+                result = conn.execute(q.person.INSERT_PERSON_TABLE, super().to_dict())
                 self.person_id = result.lastrowid
 
-            conn.execute(q.manager.INSERT_MANAGER_TABLE, {"person_id": self.person_id, "since": self.since})
+            conn.execute(q.manager.INSERT_MANAGER_TABLE, self.to_dict(person=False))
 
             if result is None:
                 raise Exception("Duplicate entry")
@@ -32,14 +33,14 @@ class Manager(Person):
         finally:
             conn.close()
 
-    def update(self, person_id):
+    def update(self):
         conn = get_db_connection()
 
         try:
 
             # Update the since field in the Manager table
             conn.execute(q.person.UPDATE_PERSON_TABLE, super().to_dict())
-            conn.execute(q.manager.UPDATE_MANAGER_TABLE, {"since": self.since, "person_id": person_id})
+            conn.execute(q.manager.UPDATE_MANAGER_TABLE, self.to_dict(person=False))
             conn.commit()
             return 1
 
@@ -98,6 +99,7 @@ class Manager(Person):
             managers_objects = []
             managers = conn.execute(q.manager.GET_ALL_MANAGERS).fetchall()
             managers = [manager._mapping for manager in managers]
+            print(managers)
             conn.commit()
 
             for manager in managers:
@@ -138,9 +140,16 @@ class Manager(Person):
             **data_dict
         )
 
-    def to_dict(self):
-        temp = super().to_dict()
-        temp["since"] = self.since
+    def to_dict(self, person=True):
+
+        if person:
+          temp = super().to_dict()
+        else:
+            temp= {'person_id': self.person_id}
+
+        temp['since'] = self.since
+        temp['role'] = self.role
+
         return temp
 
     def __str__(self):

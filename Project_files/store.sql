@@ -20,11 +20,11 @@ create table Customer(
 
 create table Manager(
     person_id int not null,
-    since date ,
+    since date,
+    role varchar(20) not null check (role in ('Financial Manager', 'Assistant Manager', 'Regional Manager')),
     foreign key (person_id) references Person(person_id) on delete cascade on update cascade,
     primary key (person_id)
 );
-
 
 create table Address(
     address_id int not null auto_increment,
@@ -167,6 +167,10 @@ SELECT
 
 select * from Person;
 
+select * from Manager;
+
 select * from Address;
 
 delete from Person where person_id > 20
+
+

@@ -8,5 +8,6 @@ from .manager_order import *
 from .product import *
 from .data_analysis import *
 from .address import *
+from .supplier import *
 
-__all__= ['customer', 'customer_order_line', 'person', 'customer_order', 'manager_order', 'manager_order_line', 'product', 'data_analysis', 'address']
+__all__= ['customer', 'customer_order_line', 'person', 'customer_order', 'manager_order', 'manager_order_line', 'product', 'data_analysis', 'address', 'supplier']

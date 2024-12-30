@@ -14,6 +14,7 @@ class Person:
         self.last_name = last_name
         self.person_id = person_id
 
+
     def get_name(self):
         return self.name
 
@@ -58,12 +59,12 @@ class Person:
         finally:
             conn.close()
 
-    def update(self, person_id):
+    def update(self):
         conn = get_db_connection()
 
         try:
             # Check if the person_id exists
-            person = conn.execute(q.person.SELECT_PERSON_BY_ID, {"person_id": person_id}).fetchone()
+            person = conn.execute(q.person.SELECT_PERSON_BY_ID, {"person_id": self.person_id}).fetchone()
             if person is None:
                 return 0
 

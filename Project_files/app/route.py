@@ -45,7 +45,7 @@ def edit_customer(person_id):
     customer = Customer.get(person_id)
     customer.first_name = first_name
     customer.last_name = last_name
-    customer.update(person_id)
+    customer.update()
     return redirect(url_for('admin_dashboard_customers'))
 
 
@@ -62,18 +62,13 @@ def delete_customer(person_id):
 @app.route('/update_customer/<int:person_id>', methods=['POST'])
 def update_customer(person_id):
     # Logic to update the customer with the given person_id
-
-    first_name = request.form['first_name']
-    last_name = request.form['last_name']
-    email = request.form['email']
-
     customer = Customer.get(person_id)
 
-    customer.first_name = first_name
-    customer.last_name = last_name
-    customer.email = email
+    customer.first_name = request.form['first_name']
+    customer.last_name = request.form['last_name']
+    customer.email = request.form['email']
 
-    result = customer.update(person_id)
+    result = customer.update()
 
     if result:
         return jsonify({"success": True})
@@ -138,17 +133,14 @@ def delete_manager(person_id):
 def update_manager(person_id):
     # Logic to update the customer with the given person_id
 
-    first_name = request.form['first_name']
-    last_name = request.form['last_name']
-    email = request.form['email']
-
     manager = Manager.get(person_id)
 
-    manager.first_name = first_name
-    manager.last_name = last_name
-    manager.email = email
+    manager.first_name = request.form['first_name']
+    manager.last_name = request.form['last_name']
+    manager.email = request.form['email']
+    manager.role = request.form['role']
 
-    result = manager.update(person_id)
+    result = manager.update()
 
     if result:
         return jsonify({"success": True})
