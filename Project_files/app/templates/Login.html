@@ -69,6 +69,12 @@
                         </div>
                     </div>
 
+                    <!-- Dropdown for Manager Role -->
+                    <div id="manager-dropdown" class="form-group" style="display: none;">
+                        <label for="manager_role">Manager Role</label>
+                        {{ signup_form.manager_role }}
+                    </div>
+
                     <!-- Submit Button -->
                     <button type="submit"
                             name="submit_signup"
@@ -80,4 +86,21 @@
 
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userTypeRadios = document.querySelectorAll('input[name="user_type"]');
+            const managerDropdown = document.getElementById('manager-dropdown');
+
+            userTypeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value.toLowerCase() === 'manager') {
+                        managerDropdown.style.display = 'block';
+                    } else {
+                        managerDropdown.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}
