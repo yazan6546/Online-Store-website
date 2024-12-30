@@ -59,9 +59,9 @@ SELECT_PASSWORD_FROM_MANAGERS = text("""
 
 
 UPDATE_MANAGER_TABLE = text("""
-                            UPDATE Person
-                            SET first_name = :first_name, last_name = :last_name, email = :email, passcode = :passcode, since = :since
-                            WHERE person_id = :person_id;
+                                UPDATE Manager
+                                SET since = :since
+                                WHERE person_id = :person_id;
                             """)
 
 DELETE_FROM_MANAGERS = text("""

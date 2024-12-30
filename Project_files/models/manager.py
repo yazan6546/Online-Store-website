@@ -36,13 +36,10 @@ class Manager(Person):
         conn = get_db_connection()
 
         try:
-            # Check if the person_id exists
-            person = conn.execute(q.manager.SELECT_MANAGER_BY_ID, {"person_id": person_id}).fetchone()
-            if person is None:
-                return 0
 
-            # Update the person if it exists
-            conn.execute(q.manager.UPDATE_MANAGER_TABLE, self.to_dict())
+            # Update the since field in the Manager table
+            conn.execute(q.person.UPDATE_PERSON_TABLE, super().to_dict())
+            conn.execute(q.manager.UPDATE_MANAGER_TABLE, {"since": self.since, "person_id": person_id})
             conn.commit()
             return 1
 
