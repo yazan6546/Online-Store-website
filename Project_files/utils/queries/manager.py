@@ -67,7 +67,7 @@ UPDATE_MANAGER_TABLE = text("""
                                 WHERE person_id = :person_id;
                             """)
 
-DELETE_FROM_MANAGERS = text("""
+DELETE_FROM_MANAGER = text("""
                                 DELETE FROM Manager 
                                 WHERE person_id = :person_id;
                             """)
