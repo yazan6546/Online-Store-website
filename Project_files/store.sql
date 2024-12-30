@@ -18,6 +18,8 @@ create table Customer(
     primary key (person_id)
 );
 
+
+
 create table Manager(
     person_id int not null,
     since date,
@@ -25,6 +27,7 @@ create table Manager(
     foreign key (person_id) references Person(person_id) on delete cascade on update cascade,
     primary key (person_id)
 );
+
 
 create table Address(
     address_id int not null auto_increment,

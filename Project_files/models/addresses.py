@@ -76,6 +76,27 @@ class Address:
         finally:
             conn.close()
 
+    def get_all(cls):
+        conn = get_db_connection()
+
+        try:
+            addresses_objects = []
+            addresses = conn.execute(q.address.GET_ADDRESS_TABLE).fetchall()
+
+            # Convert rows to dictionaries using `dict()` for proper mapping
+            addresses = [dict(address) for address in addresses]
+
+            for address in addresses:
+                address_object = cls(**address)  # Mapping the dictionary to the class constructor
+                addresses_objects.append(address_object)
+
+            return addresses_objects
+        except Exception as e:
+            print(f"Error: {e}")
+            return []  # Returning an empty list instead of 0 to indicate failure
+        finally:
+            conn.close()
+
     def to_dict(self, person_id=False):
         dict_temp = {
             "city": self.city,
