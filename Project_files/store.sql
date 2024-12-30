@@ -166,3 +166,7 @@ SELECT
                             WHERE p.first_name like 'IBRAHIM1' or p.last_name like '%IBRAHIM1%';
 
 select * from Person;
+
+select * from Address;
+
+delete from Person where person_id > 20
