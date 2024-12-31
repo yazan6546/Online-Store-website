@@ -78,6 +78,14 @@
   opacity: 0.8;
 }
 
+/*search and add section*/
+#container_search_add {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    gap: 10px; /* Space between the search form and the button */
+    margin-bottom: 20px;
+}
+
 /* Pagination Styling */
 .btn-container {
   margin-top: 15px;
@@ -101,31 +109,40 @@
 
 /* Search Form Styling */
 #search-form {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between the input and the button */
+    flex-grow: 1; /* Makes the search form take up remaining space */
 }
 
 #search-query {
-  width: 70%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+    flex: 1; /* Allows the input to stretch */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
 }
 
-#search-form .btn {
-  background-color: #176B87;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 14px;
-  cursor: pointer;
+#search-form .btn,
+#container_search_add .btn {
+    background-color: #176B87;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
-#search-form .btn:hover {
-  background-color: #78B3CE;
+#search-form .btn:hover,
+#container_search_add .btn:hover {
+    background-color: #78B3CE;
+}
+
+#search-query:focus {
+    outline: none;
+    border-color: #176B87;
+    box-shadow: 0 0 5px rgba(23, 107, 135, 0.5);
 }
 
 /* Address Subtable Header (within Addresses column) */
@@ -304,4 +321,6 @@
         opacity: 1;
     }
 }
+
+
 
