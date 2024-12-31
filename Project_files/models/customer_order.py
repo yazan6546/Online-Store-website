@@ -10,11 +10,12 @@ class CustomerOrder(Order):
         self.address_id = address_id
 
     def insert(self):
-        if self.insert_order() and self.insert_order_line():
+        if self.insert_order() and self.insert_order():
             return 1
         else:
             print("Error in insert()")
             return 0
+
 
     def insert_order(self):
         conn = get_db_connection()
@@ -32,6 +33,7 @@ class CustomerOrder(Order):
             return 0
         finally:
             conn.close()
+
 
     def insert_order_lines(self):
         """
@@ -74,18 +76,39 @@ class CustomerOrder(Order):
         finally:
             conn.close()
 
-    # def get_order_details(self):
-    #     conn = get_db_connection()
-    #     try:
-    #         order_details_result = conn.execute(q.customer_order.SELECT_ORDER_BY_ID, {"order_id": self.order_id}).fetchone()
-    #         order_details = order_details_result._mapping if order_details_result else None
-    #
-    #         order_lines_result = conn.execute(q.customer_order.SELECT_ORDER_LINES_BY_ORDER_ID, {"order_id": self.order_id}).fetchall()
-    #         self.products = [dict(row._mapping) for row in order_lines_result]
-    #
-    #         return {"order_details": order_details, "order_lines": self.products}
-    #     finally:
-    #         conn.close()
+    @staticmethod
+    def get_all_orders():
+        conn = get_db_connection()
+        try:
+            order_details_result = conn.execute(q.customer_order.GET_ALL_PLACED_ORDERS).fetchall()
+            order_details = [order._mapping for order in order_details_result]
+
+            orders = []
+            for order in order_details:
+                order_obj = CustomerOrder(
+                    person_id=order["person_id"],
+                    address_id=order["address_id"],
+                    delivery_date=order["delivery_date"],
+                    shipping_status=order["shipping_status"],
+                    order_date=order["order_date"],
+                    order_id=order["order_id"]
+                )
+
+                order_obj.products = {
+                    order["product_id"]: {
+                        "price_at_time_of_order": order["price_at_time_of_order"],
+                        "quantity": order["quantity"]
+                    }
+                }
+                orders.append(order_obj)
+
+            return orders
+
+        except Exception as e:
+            print(f"Error in get_all_orders(): {e}")
+            return None
+        finally:
+            conn.close()
 
     def to_dict(self, status=False):
         order_dict = super().to_dict()

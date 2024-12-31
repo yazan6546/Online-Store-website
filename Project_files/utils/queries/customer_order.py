@@ -70,6 +70,32 @@ GET_ALL_INCART_PRODUCTS_BY_ID = text("""
                             """)
 
 
+GET_ALL_PLACED_ORDERS = text("""
+
+                                SELECT 
+                                    co.order_id,
+                                    co.order_date,
+                                    co.delivery_date,
+                                    co.shipping_status,
+                                    co.person_id,
+                                    co.address_id,
+                                    p.product_id,
+                                    p.product_name,
+                                    p.product_description,
+                                    p.price,
+                                    col.quantity,
+                                    col.price_at_time_of_order
+                                FROM 
+                                    Customer_Order co
+                                JOIN 
+                                    Customer_Order_Line col ON co.order_id = col.order_id
+                                JOIN 
+                                    Product p ON col.product_id = p.product_id
+                                WHERE 
+                                    co.order_status = 'PLACED';
+                            """)
+
+
 PENDING_ORDERS = text("""
     SELECT co.order_id, co.order_date, co.delivery_date, co.shipping_status, p.first_name, p.last_name
     FROM Customer_Order co 
