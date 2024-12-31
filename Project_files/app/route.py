@@ -298,16 +298,16 @@ def edit_address(address_id):
     # Logic to update the address with the given address_id
     street = request.form['street']
     city = request.form['city']
-    state = request.form['state']
     zip_code = request.form['zip_code']
 
     address = Address.get(address_id)
 
+    print(address)
+
     address.street = street
     address.city = city
-    address.state = state
     address.zip_code = zip_code
-    result = address.update()
+    result = address.update(address_id)
 
     if result:
         return jsonify({"success": True})

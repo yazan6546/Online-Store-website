@@ -2,6 +2,7 @@
 
         console.log('Enabling edit for address ID:', address_id);
         var row = document.getElementById('address-row-' + address_id);
+        console.log(row);
         row.classList.add('edit-mode');
         document.getElementById('street_address-' + address_id + '-text').style.display = 'none';
         document.getElementById('street_address-' + address_id + '-input').style.display = 'inline';
@@ -22,7 +23,7 @@
             url: '/edit_address/' + address_id,
             type: 'POST',
             data: {
-                street_address: street_address,
+                street: street_address,
                 city: city,
                 zip_code: zip_code
             },
@@ -82,6 +83,7 @@
                     console.log(customer.addresses)
                     if (Array.isArray(customer.addresses)) {
                         customer.addresses.forEach(function(address) {
+                            console.log("street = " + address.street)
                             addressesHtml += `
                                 <tr id="address-row-${address.address_id}">
                                     <td>

@@ -56,16 +56,16 @@ Customers
                             {% for address in customer.addresses %}
                             <tr id="address-row-{{ address.address_id }}">
                                 <td>
-                                    <span id="street_address-{{ address.address_id }}-text">{{ address.street_address }}</span>
+                                    <span id="street_address-{{ address.address_id }}-text">{{ address.street }}</span>
                                     <input type="text" id="street_address-{{ address.address_id }}-input" value="{{ address.street_address }}" style="display:none; width: 100px;">
                                 </td>
                                 <td>
                                     <span id="city-{{ address.address_id }}-text">{{ address.city }}</span>
-                                    <input type="text" id="city-{{ address.id }}-input" value="{{ address.city }}" style="display:none; width: 100px;">
+                                    <input type="text" id="city-{{ address.address_id }}-input" value="{{ address.city }}" style="display:none; width: 100px;">
                                 </td>
                                 <td>
                                     <span id="zip_code-{{ address.address_id }}-text">{{ address.zip_code }}</span>
-                                    <input type="text" id="zip_code-{{ address.id }}-input" value="{{ address.zip_code }}" style="display:none; width: 100px;">
+                                    <input type="text" id="zip_code-{{ address.address_id }}-input" value="{{ address.zip_code }}" style="display:none; width: 100px;">
                                 </td>
                                 <td class="action-buttons">
                                     <button id="edit-address-btn-{{ address.address_id }}" class="edit" onclick="enableEditAddress({{ address.address_id }})">Edit</button>

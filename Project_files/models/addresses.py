@@ -135,7 +135,7 @@ class Address:
                 return 0
 
             # Update the address if it exists
-            conn.execute(q.address.UPDATE_ADDRESS_TABLE, self.to_dict())
+            conn.execute(q.address.UPDATE_ADDRESS_TABLE, self.to_dict(address_id=True, person_id=True))
             conn.commit()
             return 1
 
