@@ -11,12 +11,18 @@ GET_ADDRESS_TABLE = text("""
                         """)
 
 SELECT_ADDRESS_BY_Address_ID = text("""
-                            select * from Address
+                            select address_id,
+                            street_address AS street,
+                            city,
+                            zip_code,
+                            person_id
+                            from Address
                             where address_id = :id;
                             """)
 
 SELECT_ADDRESS_BY_Person_ID = text("""
                             select
+                            address_id,
                             street_address AS street,
                             city,
                             zip_code,
@@ -33,7 +39,7 @@ DELETE_FROM_ADDRESS = text("""
 UPDATE_ADDRESS_TABLE = text("""
                             update Address
                             set person_id = :person_id , city = :city, zip_code = :zip_code, street_address = :street
-                            where address_id = :id;
+                            where address_id = :address_id;
                             """)
 
 

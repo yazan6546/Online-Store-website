@@ -99,7 +99,7 @@ class Address:
             addresses = conn.execute(q.address.GET_ADDRESS_TABLE).fetchall()
 
             # Convert rows to dictionaries using `dict()` for proper mapping
-            addresses = [dict(address) for address in addresses]
+            addresses = [address._mapping for address in addresses]
 
             for address in addresses:
                 address_object = cls(**address)  # Mapping the dictionary to the class constructor
@@ -112,12 +112,14 @@ class Address:
         finally:
             conn.close()
 
-    def to_dict(self, person_id=False):
+    def to_dict(self, person_id=False, address_id=False):
         dict_temp = {
             "city": self.city,
             "zip_code": self.zip_code,
             "street": self.street
         }
+        if address_id:
+            dict_temp["address_id"] = self.address_id
         if person_id:
             dict_temp["person_id"] = self.person_id
 
@@ -133,7 +135,7 @@ class Address:
                 return 0
 
             # Update the address if it exists
-            conn.execute(q.address.UPDATE_ADDRESS_TABLE, self.to_dict())
+            conn.execute(q.address.UPDATE_ADDRESS_TABLE, self.to_dict(address_id=True, person_id=True))
             conn.commit()
             return 1
 

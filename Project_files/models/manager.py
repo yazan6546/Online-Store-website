@@ -51,23 +51,6 @@ class Manager(Person):
         finally:
             conn.close()
 
-    @classmethod
-    def delete(cls, person_id):
-
-        conn = get_db_connection()
-
-        try:
-            # Execute deletion queries
-            conn.execute(q.manager.DELETE_FROM_MANAGER, {"person_id": person_id})
-            conn.execute(q.person.DELETE_FROM_PERSON, {"person_id": person_id})
-            conn.commit()
-            return 1
-        except Exception as e:
-            print(f"Error occurred during deletion: {e}")
-            return 0
-        finally:
-            conn.close()
-
 
     @classmethod
     def get(cls, person_id):

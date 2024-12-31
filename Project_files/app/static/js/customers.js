@@ -1,6 +1,8 @@
     function enableEditAddress(address_id) {
+
         console.log('Enabling edit for address ID:', address_id);
         var row = document.getElementById('address-row-' + address_id);
+        console.log(row);
         row.classList.add('edit-mode');
         document.getElementById('street_address-' + address_id + '-text').style.display = 'none';
         document.getElementById('street_address-' + address_id + '-input').style.display = 'inline';
@@ -18,10 +20,10 @@
         var city = $('#city-' + address_id + '-input').val();
         var zip_code = $('#zip_code-' + address_id + '-input').val();
         $.ajax({
-            url: '/update_address/' + address_id,
+            url: '/edit_address/' + address_id,
             type: 'POST',
             data: {
-                street_address: street_address,
+                street: street_address,
                 city: city,
                 zip_code: zip_code
             },
@@ -81,24 +83,25 @@
                     console.log(customer.addresses)
                     if (Array.isArray(customer.addresses)) {
                         customer.addresses.forEach(function(address) {
+                            console.log("street = " + address.street)
                             addressesHtml += `
-                                <tr id="address-row-${address.id}">
+                                <tr id="address-row-${address.address_id}">
                                     <td>
-                                        <span id="street_address-${address.id}-text">${address.street_address}</span>
-                                        <input type="text" id="street_address-${address.id}-input" value="${address.street_address}" style="display:none; width: 100px;">
+                                        <span id="street_address-${address.address_id}-text">${address.street}</span>
+                                        <input type="text" id="street_address-${address.address_id}-input" value="${address.street}" style="display:none; width: 100px;">
                                     </td>
                                     <td>
                                         <span id="city-${address.id}-text">${address.city}</span>
-                                        <input type="text" id="city-${address.id}-input" value="${address.city}" style="display:none; width: 100px;">
+                                        <input type="text" id="city-${address.address_id}-input" value="${address.city}" style="display:none; width: 100px;">
                                     </td>
                                     <td>
                                         <span id="zip_code-${address.id}-text">${address.zip_code}</span>
-                                        <input type="text" id="zip_code-${address.id}-input" value="${address.zip_code}" style="display:none; width: 100px;">
+                                        <input type="text" id="zip_code-${address.address_id}-input" value="${address.zip_code}" style="display:none; width: 100px;">
                                     </td>
                                     <td class="action-buttons">
-                                        <button id="edit-address-btn-${address.id}" class="edit" onclick="enableEditAddress(${address.id})">Edit</button>
-                                        <button id="save-address-btn-${address.id}" class="save" style="display:none;" onclick="saveEditAddress(${address.id})">Save</button>
-                                        <button class="delete" onclick="deleteAddress(${address.id})">Delete</button>
+                                        <button id="edit-address-btn-${address.address_id}" class="edit" onclick="enableEditAddress(${address.address_id})">Edit</button>
+                                        <button id="save-address-btn-${address.address_id}" class="save" style="display:none;" onclick="saveEditAddress(${address.address_id})">Save</button>
+                                        <button class="delete" onclick="deleteAddress(${address.address_id})">Delete</button>
                                     </td>
                                 </tr>`;
                         });
