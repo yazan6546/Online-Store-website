@@ -79,48 +79,58 @@
     }
 
     function searchManagers() {
-        console.log('Searching managers');
-        var query = $('#search-query').val();
-        $.ajax({
-            url: '/search_manager',
-            type: 'GET',
-            data: { query: query },
-            success: function(response) {
-                if (response.success) {
-                    var tableBody = $('#managers-table tbody');
-                    tableBody.empty();
-                    response.managers.forEach(function(manager) {
-                        tableBody.append(`
-                            <tr id="row-${manager.person_id}">
-                                <td>${manager.person_id}</td>
-                                <td><span id="first_name-${manager.person_id}-text">${manager.first_name}</span>
-                                <input type="text" id="first_name-${manager.person_id}-input" value="${manager.first_name}" style="display:none; width: 100px;"></td>
-                                <td><span id="last_name-${manager.person_id}-text">${manager.last_name}</span>
-                                <input type="text" id="last_name-${manager.person_id}-input" value="${manager.last_name}" style="display:none; width: 100px;"></td>
-                                <td><span id="email-${manager.person_id}-text">${manager.email}</span>
-                                <input type="text" id="email-${manager.person_id}-input" value="${manager.email}" style="display:none; width: 100px;"></td>
-                                <td><span id="since-${manager.person_id}-text">${manager.since}</span>
-                                <input type="text" id="since-${manager.person_id}-input" value="${manager.since}" style="display:none; width: 100px;"></td>
-                                <td><span id="role-${manager.person_id}-text">${manager.role}</span>
+    console.log('Searching managers');
+    var query = $('#search-query').val();
+    $.ajax({
+        url: '/search_manager',
+        type: 'GET',
+        data: { query: query },
+        success: function(response) {
+            if (response.success) {
+                var tableBody = $('#table tbody'); // Ensure the id matches the HTML
+                tableBody.empty(); // Clear the existing table rows
+                response.managers.forEach(function(manager) {
+                    var row = `
+                        <tr id="row-${manager.person_id}">
+                            <td>${manager.person_id}</td>
+                            <td>
+                                <span id="first_name-${manager.person_id}-text">${manager.first_name}</span>
+                                <input type="text" id="first_name-${manager.person_id}-input" value="${manager.first_name}" style="display:none; width: 100px;">
+                            </td>
+                            <td>
+                                <span id="last_name-${manager.person_id}-text">${manager.last_name}</span>
+                                <input type="text" id="last_name-${manager.person_id}-input" value="${manager.last_name}" style="display:none; width: 100px;">
+                            </td>
+                            <td>
+                                <span id="email-${manager.person_id}-text">${manager.email}</span>
+                                <input type="text" id="email-${manager.person_id}-input" value="${manager.email}" style="display:none; width: 100px;">
+                            </td>
+                            <td>
+                                <span id="since-${manager.person_id}-text">${manager.since}</span>
+                                <input type="text" id="since-${manager.person_id}-input" value="${manager.since}" style="display:none; width: 100px;">
+                            </td>
+                            <td>
+                                <span id="role-${manager.person_id}-text">${manager.role}</span>
                                 <select id="role-${manager.person_id}-input" style="display:none; width: 150px;">
-                                    <option value="Financial Manager" ${manager.role == 'Financial Manager' ? 'selected' : ''}>Financial Manager</option>
-                                    <option value="Assistant Manager" ${manager.role == 'Assistant Manager' ? 'selected' : ''}>Assistant Manager</option>
-                                    <option value="Regional Manager" ${manager.role == 'Regional Manager' ? 'selected' : ''}>Regional Manager</option>
+                                    <option value="Financial Manager" ${manager.role === 'Financial Manager' ? 'selected' : ''}>Financial Manager</option>
+                                    <option value="Assistant Manager" ${manager.role === 'Assistant Manager' ? 'selected' : ''}>Assistant Manager</option>
+                                    <option value="Regional Manager" ${manager.role === 'Regional Manager' ? 'selected' : ''}>Regional Manager</option>
                                 </select>
-                                </td>
-                                <td class="action-buttons">
-                                    <button id="edit-btn-${manager.person_id}" class="edit" onclick="enableEdit(${manager.person_id})">Edit</button>
-                                    <button id="save-btn-${manager.person_id}" class="save" style="display:none;" onclick="saveEdit(${manager.person_id})">Save</button>
-                                    <button class="delete" onclick="deleteManager(${manager.person_id})">Delete</button>
-                                </td>
-                            </tr>`);
-                    });
-                } else {
-                    alert('Error searching managers: ' + response.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                alert('Error searching managers: ' + xhr.responseText);
+                            </td>
+                            <td class="action-buttons">
+                                <button id="edit-btn-${manager.person_id}" class="edit" onclick="enableEdit(${manager.person_id})">Edit</button>
+                                <button id="save-btn-${manager.person_id}" class="save" style="display:none;" onclick="saveEdit(${manager.person_id})">Save</button>
+                                <button class="delete" onclick="deleteManager(${manager.person_id})">Delete</button>
+                            </td>
+                        </tr>`;
+                    tableBody.append(row);
+                });
+            } else {
+                alert('Error searching managers: ' + response.error);
             }
-        });
-    }
+        },
+        error: function(xhr, status, error) {
+            alert('Error searching managers: ' + xhr.responseText);
+        }
+    });
+}

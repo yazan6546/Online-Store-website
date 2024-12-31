@@ -123,11 +123,16 @@ class Customer(Person):
             conn.commit()
 
             for customer in customers:
-                customers_objects.append(cls(
+
+                customer = cls(
                     **customer
-                ))
+                )
+
+                customer.addresses = Address.get_by_person_id(customer.person_id)
+                customers_objects.append(customer)
 
             return customers_objects
+
         except Exception as e:
             print(f"Error: {e}")
             return 0

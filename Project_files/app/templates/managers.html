@@ -12,7 +12,7 @@ Managers
 <div id="wrapper">
     <h1>Managers</h1>
     <form id="search-form" onsubmit="event.preventDefault(); searchManagers();">
-        <input type="text" id="search-query" placeholder="Search customers...">
+         <label for="search-query"></label><input type="text" id="search-query" placeholder="Search managers...">
         <button type="submit" class="btn">Search</button>
     </form>
     <table id="table">
@@ -33,23 +33,23 @@ Managers
                 <td>{{ manager.person_id }}</td>
                 <td>
                     <span id="first_name-{{ manager.person_id }}-text">{{ manager.first_name }}</span>
-                    <input type="text" id="first_name-{{ manager.person_id }}-input" value="{{ manager.first_name }}" style="display:none; width: 90%;">
+                    <label for="first_name-{{ manager.person_id }}-input"></label><input type="text" id="first_name-{{ manager.person_id }}-input" value="{{ manager.first_name }}" style="display:none; width: 90%;">
                 </td>
                 <td>
                     <span id="last_name-{{ manager.person_id }}-text">{{ manager.last_name }}</span>
-                    <input type="text" id="last_name-{{ manager.person_id }}-input" value="{{ manager.last_name }}" style="display:none; width: 90%;">
+                    <label for="last_name-{{ manager.person_id }}-input"></label><input type="text" id="last_name-{{ manager.person_id }}-input" value="{{ manager.last_name }}" style="display:none; width: 90%;">
                 </td>
                 <td>
                     <span id="email-{{ manager.person_id }}-text">{{ manager.email }}</span>
-                    <input type="text" id="email-{{ manager.person_id }}-input" value="{{ manager.email }}" style="display:none; width: 90%;">
+                    <label for="email-{{ manager.person_id }}-input"></label><input type="text" id="email-{{ manager.person_id }}-input" value="{{ manager.email }}" style="display:none; width: 90%;">
                 </td>
                 <td>
                     <span id="since-{{ manager.person_id }}-text">{{ manager.since }}</span>
-                    <input type="text" id="since-{{ manager.person_id }}-input" value="{{ manager.since }}" style="display:none; width: 90%;">
+                    <label for="since-{{ manager.person_id }}-input"></label><input type="text" id="since-{{ manager.person_id }}-input" value="{{ manager.since }}" style="display:none; width: 90%;">
                 </td>
                 <td>
                     <span id="role-{{ manager.person_id }}-text">{{ manager.role }}</span>
-                    <select id="role-{{ manager.person_id }}-input" style="display:none; width: 150px;">
+                    <label for="role-{{ manager.person_id }}-input"></label><select id="role-{{ manager.person_id }}-input" style="display:none; width: 150px;">
                         <option value="Financial Manager" {% if manager.role == 'Financial Manager' %}selected{% endif %}>Financial Manager</option>
                         <option value="Assistant Manager" {% if manager.role == 'Assistant Manager' %}selected{% endif %}>Assistant Manager</option>
                         <option value="Regional Manager" {% if manager.role == 'Regional Manager' %}selected{% endif %}>Regional Manager</option>
