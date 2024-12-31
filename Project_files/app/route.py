@@ -8,6 +8,10 @@ import app.auth as auth
 from models.addresses import Address
 from models.customers import Customer
 from models.manager import Manager
+from models.suppliers import Supplier
+from models.products import Product
+
+
 
 
 app.first_request_handled = False
@@ -24,6 +28,9 @@ app.first_request_handled = False
 
 # Route for the Administrator Dashboard
 
+############################################################################################################
+# Customers section
+############################################################################################################
 
 # Route for the Specialists page
 @app.route('/admin_dashboard/customers')
@@ -36,7 +43,7 @@ def admin_dashboard_customers():
     customers = Customer.get_all()
     customers = [customer.to_dict(address=True) for customer in customers]
 
-    print(customers[0]['addresses'][0]['address_id'])
+    #print(customers[0]['addresses'][0]['address_id'])
     return render_template('customers.html', customers=customers)  # Replace with render_template if applicable
 
 
@@ -102,7 +109,12 @@ def filter_customers():
     ]
     return jsonify({"success": True, "customers": customers})
 
-# Route for the Children page
+############################################################################################################
+# Managers Section
+############################################################################################################
+
+
+# Route for the managers page
 @app.route('/admin_dashboard/managers')
 def admin_dashboard_managers():
 
@@ -165,34 +177,163 @@ def search_manager():
     return jsonify({"success": False, "error": "An error occurred while searching for managers"})
 
 
-# Route for the suppliers page
-@app.route('/suppliers')
-def courses():
+############################################################################################################
+# suppliers section
+############################################################################################################
+@app.route('/admin_dashboard/suppliers')
+def admin_dashboard_suppliers():
+    if 'user' not in session.keys() or session.get('role') != 'manager':
+        flash("You must be logged in as manager to access the admin dashboard.", "warning")
+        return redirect(url_for('login'))
+
+    suppliers = Supplier.get_all()
+    suppliers = [supplier.to_dict() for supplier in suppliers]
+
+    return render_template('suppliers.html', suppliers=suppliers)
+
     return "<h1>Supplier Page</h1>"  # Replace with render_template if applicable
 
+# update
+@app.route('/update_supplier/<int:supplier_id>', methods=['POST'])
+def update_supplier(supplier_id):
+    try:
+        # Extract data from the request
+        name = request.form.get('name')
+        phone = request.form.get('phone')
+
+        # Validate inputs
+        if not name or not phone:
+            return jsonify(success=False, error="Name and phone are required.")
+
+        # Fetch the supplier by ID and update its fields
+        supplier = Supplier.get_by_supplier_id(supplier_id)
+        if not supplier:
+            return jsonify(success=False, error="Supplier not found.")
+
+        supplier.name = name
+        supplier.phone = phone
+        result = supplier.update()
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to update supplier.")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+# Delete
+@app.route('/delete_supplier/<int:supplier_id>', methods=['POST'])
+def delete_supplier(supplier_id):
+    try:
+        # Call the delete method of the Supplier class
+        result = Supplier.delete(supplier_id)
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to delete supplier from that database")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+# search
+@app.route('/search_supplier', methods=['GET'])
+def search_supplier():
+    try:
+        # Get the search query from the request
+        query = request.args.get('query', '')
+
+        # Fetch all suppliers and filter them by name or phone
+        all_suppliers = Supplier.get_all()
+        filtered_suppliers = [
+            supplier.to_dict() for supplier in all_suppliers
+            if query.lower() in supplier.name.lower() or query in supplier.phone
+        ]
+
+        return jsonify(success=True, suppliers=filtered_suppliers)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+# get all suppliers
+@app.route('/get_suppliers', methods=['GET'])
+def get_suppliers():
+    try:
+        # Use the get_all class method of the Supplier class
+        suppliers = Supplier.get_all()
+        suppliers_dicts = [supplier.to_dict() for supplier in suppliers]
+
+        return jsonify(success=True, suppliers=suppliers_dicts)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+# add supplier
+@app.route('/add_supplier', methods=['POST'])
+def add_supplier():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        name = data.get('name')
+        phone = data.get('phone')
+
+        # Validate inputs
+        if not name or not phone:
+            return jsonify(success=False, error="Name and phone are required.")
+
+        # Create and insert a new supplier
+        new_supplier = Supplier(supplier_name=name, phone_number=phone)
+        new_supplier.insert()
+
+        return jsonify(success=True, supplier=new_supplier.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+############################################################################################################
+#Category section
+############################################################################################################
 
 # Route for the Parents page
-@app.route('/parents')
-def parents():
-    return "<h1>Parents Page</h1>"  # Replace with render_template if applicable
+@app.route('/admin_dashboard/categories')
+def admin_dashboard_categories():
+    return "<h1>Categories Page</h1>"  # Replace with render_template if applicable
 
+
+############################################################################################################
+# Statistics section
+############################################################################################################
 
 # Route for the Organization Statistics (Report) page
 @app.route('/organization_statistics')
 def organization_statistics():
     return "<h1>Organization Statistics Page</h1>"  # Replace with render_template if applicable
 
+############################################################################################################
+# Products section
+############################################################################################################
 
 # Route for the Register Parent and Child page
-@app.route('/add_parent_and_child')
-def add_parent_and_child():
-    return "<h1>Register Parent and Child Page</h1>"  # Replace with render_template if applicable
+@app.route('/admin_dashboard/products')
+def admin_dashboard_products():
+    return "<h1>Products page</h1>"  # Replace with render_template if applicable
 
+############################################################################################################
+# Customer's orders section
+############################################################################################################
 
 # Route for the Payments page
-@app.route('/payments')
-def payments():
-    return "<h1>Payments Page</h1>"  # Replace with render_template if applicable
+@app.route('/admin_dashboard/customer_orders')
+def admin_dashboard_customer_orders():
+    return "<h1>customer's orders</h1>"  # Replace with render_template if applicable
+
+
+
+############################################################################################################
+# Manager's orders section
+############################################################################################################
+
+@app.route('/admin_dashboard/managers_orders')
+def admin_dashboard_managers_orders():
+    return "<h1>manager's orders</h1>"  # Replace with render_template if applicable
+
 
 @app.route('/')
 def index():
