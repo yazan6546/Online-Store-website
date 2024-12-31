@@ -1,10 +1,8 @@
+import os
+
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from flask import current_app, has_app_context
-
-# Default standalone engine for non-Flask apps
-DEFAULT_DB_URI = 'mysql://root:osaid@localhost/Store'
-standalone_engine = create_engine(DEFAULT_DB_URI)
-
 
 def get_db_connection():
     """
@@ -18,6 +16,16 @@ def get_db_connection():
         engine = current_app.extensions["sqlalchemy"].get_engine()
         return engine.connect()
     else:
-        # Fall back to the standalone engine
+        DEFAULT_DB_URI = os.getenv('DATABASE_URL_TEST')
+
+        if not DEFAULT_DB_URI:
+
+            dir = os.path.abspath(os.path.dirname(__file__))
+            dir = os.path.dirname(dir)
+            load_dotenv(dotenv_path=os.path.join(dir, '.env'))
+            DEFAULT_DB_URI = os.getenv('DATABASE_URL_TEST')
+            # Fall back to the standalone engine
+
+        standalone_engine = create_engine(DEFAULT_DB_URI)
         return standalone_engine.connect()
 
