@@ -220,10 +220,21 @@
     padding: 20px;
     border: 1px solid #176B87;
     width: 30%;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
     animation: scaleUp 0.4s ease-in-out; /* Added animation for modal content */
 }
+
+.modal-content h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
 
 
 .close {
