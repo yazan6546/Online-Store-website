@@ -74,7 +74,7 @@ create table Product(
 
 
 create table Address_Order(
-    address_id int not null auto_increment,
+    address_id int,
     city varchar(255) not null,
     street_address varchar(255) not null,
     primary key (address_id)
@@ -82,7 +82,7 @@ create table Address_Order(
 );
 
 create table Customer_Order(
-    order_id int not null,
+    order_id int not null auto_increment,
     person_id int not null,
     address_id int,
     order_date date,
@@ -95,7 +95,7 @@ create table Customer_Order(
 );
 
 create table Customer_Order_Line(
-    order_line_id int not null,
+    order_line_id int not null auto_increment,
     product_id int not null,
     order_id int not null,
     price_at_time_of_order int not null,

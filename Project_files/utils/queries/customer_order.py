@@ -19,6 +19,18 @@ DELETE_FROM_CUSTOMER_ORDER = text("""
                                 WHERE order_id = :order_id;
                             """)
 
+
+UPDATE_CUSTOMER_ORDER_TABLE = text("""
+                            UPDATE Customer_Order
+                            SET order_status=:order_status,
+                            person_id=:person_id,
+                            address_id=:address_id, 
+                            delivery_date=:delivery_date, 
+                            shipping_status=:shipping_status, 
+                            order_date=:order_date
+                            WHERE order_id = :order_id;
+                            """)
+
 CREATE_CUSTOMER_ORDER_TABLE = text("""
                             CREATE TABLE IF NOT EXISTS Manager_Order(
                             order_id int NOT NULL,

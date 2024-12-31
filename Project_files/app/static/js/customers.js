@@ -1,4 +1,46 @@
-    function enableEditAddress(address_id) {
+function sortCustomers(column) {
+    const table = document.getElementById('table');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    // Extract elements at indices that are multiples of 4
+    const elementsToSort = rows.filter((_, index) => index % 4 === 0);
+    console.log('Elements to sort:', elementsToSort);
+
+    // Sort the extracted elements
+    const sortedElements = elementsToSort.sort((a, b) => {
+        const aElement = a.querySelector(`td:nth-child(${getColumnIndex(column)})`);
+        const bElement = b.querySelector(`td:nth-child(${getColumnIndex(column)})`);
+
+        const aText = aElement ? aElement.textContent.trim() : '';
+        const bText = bElement ? bElement.textContent.trim() : '';
+
+        if (aText < bText) return -1;
+        if (aText > bText) return 1;
+        return 0;
+    });
+    console.log('Sorted elements:', sortedElements);
+
+    // Create a copy of the sorted elements and place them back into their original positions
+    sortedElements.forEach((sortedElement, sortedIndex) => {
+        const originalIndex = sortedIndex * 4;
+        const newRow = sortedElement.cloneNode(true);
+        tbody.replaceChild(newRow, rows[originalIndex]);
+    });
+}
+
+function getColumnIndex(column) {
+    switch (column) {
+        case 'person_id': return 1;
+        case 'first_name': return 2;
+        case 'last_name': return 3;
+        case 'email': return 4;
+        default: return 1;
+    }
+}
+
+
+function enableEditAddress(address_id) {
 
         console.log('Enabling edit for address ID:', address_id);
         var row = document.getElementById('address-row-' + address_id);

@@ -14,7 +14,7 @@ class Person:
         self.last_name = last_name
         self.person_id = person_id
 
-    def insert_person(self):
+    def insert(self):
         conn = get_db_connection()
 
         try:

@@ -153,28 +153,16 @@ function searchSuppliers() {
 /////////////////////////////////////////////////////////////////////////
 
 // Open the modal
-// function openModal() {
-//     document.getElementById('add-supplier-modal').style.display = 'block';
-//
-// }
-//
-// // Close the modal
-// function closeModal() {
-//     document.getElementById('add-supplier-modal').style.display = 'none';
-//     // Clear form inputs
-//     document.getElementById('supplier-name').value = '';
-//     document.getElementById('supplier-phone').value = '';
-// }
-
-
 function openModal() {
-    const modal = document.getElementById("add-supplier-modal");
-    modal.classList.add("show");
+    document.getElementById('add-supplier-modal').style.display = 'block';
 }
 
+// Close the modal
 function closeModal() {
-    const modal = document.getElementById("add-supplier-modal");
-    modal.classList.remove("show");
+    document.getElementById('add-supplier-modal').style.display = 'none';
+    // Clear form inputs
+    document.getElementById('supplier-name').value = '';
+    document.getElementById('supplier-phone').value = '';
 }
 
 // Add supplier

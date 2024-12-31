@@ -12,16 +12,10 @@ Suppliers
 {% block content %}
 <div id="wrapper">
     <h1>Suppliers</h1>
-   <section>
     <form id="search-form" onsubmit="event.preventDefault(); searchSuppliers();">
         <input type="text" id="search-query" placeholder="Search suppliers...">
         <button type="submit" class="btn">Search</button>
     </form>
-
-    <div class="btn-container">
-    <button onclick="openModal()" class="btn">Add Supplier</button>
-    </div>
-    </section>
     <table id="table">
         <thead>
             <tr>
@@ -52,7 +46,9 @@ Suppliers
             {% endfor %}
         </tbody>
     </table>
-
+    <div class="btn-container">
+    <button onclick="openModal()" class="btn">Add Supplier</button>
+    </div>
 </div>
     <div id="add-supplier-modal" class="modal">
     <div class="modal-content">

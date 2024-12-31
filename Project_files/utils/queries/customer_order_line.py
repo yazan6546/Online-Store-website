@@ -1,26 +1,26 @@
 from sqlalchemy import text
 
 
-INSERT_MANAGER_ORDER_LINE_TABLE = text("""
-                                INSERT INTO Manager_Order (order_id, person_id, order_status, order_date, delivery_date, shipping_status, person_id) 
-                                VALUES (:order_id, :person_id,:order_status, :order_date, :delivery_date, :shipping_status, :person_id);
+INSERT_CUSTOMER_ORDER_LINE_TABLE = text("""
+                                INSERT INTO Customer_Order_Line (order_id, product_id, price_at_time_of_order, quantity) 
+                                VALUES (:order_id, :product_id, :price_at_time_of_order, :quantity);
                             """)
 
-GET_MANAGER_ORDER_LINE_TABLE = text("""
+GET_CUSTOMER_ORDER_LINE_TABLE = text("""
                             SELECT * FROM Manager_Order ORDER BY 1 DESC;
 """)
 
-SELECT_MANAGER_ORDER_BY_ID = text("""
+SELECT_CUSTOMER_ORDER_BY_ID = text("""
                                 SELECT * FROM Manager_Order
                                 WHERE person_id = :id;
                             """)
 
-DELETE_FROM_MANAGER_ORDER = text("""
+DELETE_FROM_CUSTOMER_ORDER = text("""
                                 DELETE FROM Manager_Order
                                 WHERE order_id = :order_id;
                             """)
 
-CREATE_MANAGER_ORDER_TABLE = text("""
+CREATE_CUSTOMER_ORDER_TABLE = text("""
                             CREATE TABLE IF NOT EXISTS Manager_Order(
                             order_id int NOT NULL,
                             person_id int NOT NULL,

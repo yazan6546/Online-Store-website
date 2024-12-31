@@ -191,6 +191,8 @@ def admin_dashboard_suppliers():
 
     return render_template('suppliers.html', suppliers=suppliers)
 
+    return "<h1>Supplier Page</h1>"  # Replace with render_template if applicable
+
 # update
 @app.route('/update_supplier/<int:supplier_id>', methods=['POST'])
 def update_supplier(supplier_id):
