@@ -162,7 +162,7 @@ def search_manager():
     return jsonify({"success": False, "error": "An error occurred while searching for managers"})
 
 
-# Route for the Courses page
+# Route for the suppliers page
 @app.route('/suppliers')
 def courses():
     return "<h1>Supplier Page</h1>"  # Replace with render_template if applicable
