@@ -187,10 +187,9 @@ def admin_dashboard_suppliers():
         return redirect(url_for('login'))
 
     suppliers = Supplier.get_all()
-    customers = [supplier.to_dict() for supplier in suppliers]
+    suppliers = [supplier.to_dict() for supplier in suppliers]
 
-    return render_template('suppliers.html', suppliers=suppliers)  # Replace with render_template if applicable
-
+    return render_template('suppliers.html', suppliers=suppliers)
 
     return "<h1>Supplier Page</h1>"  # Replace with render_template if applicable
 
@@ -232,7 +231,7 @@ def delete_supplier(supplier_id):
         if result:
             return jsonify(success=True)
         else:
-            return jsonify(success=False, error="Failed to delete supplier.")
+            return jsonify(success=False, error="Failed to delete supplier from that database")
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
@@ -271,14 +270,15 @@ def get_suppliers():
 def add_supplier():
     try:
         # Extract data from the request
-        name = request.form.get('name')
-        phone = request.form.get('phone')
+        data = request.get_json()
+        name = data.get('name')
+        phone = data.get('phone')
 
         # Validate inputs
         if not name or not phone:
             return jsonify(success=False, error="Name and phone are required.")
 
-        # Create a new Supplier instance and insert it into the database
+        # Create and insert a new supplier
         new_supplier = Supplier(supplier_name=name, phone_number=phone)
         new_supplier.insert()
 
