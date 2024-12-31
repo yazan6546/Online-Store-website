@@ -333,5 +333,13 @@
     }
 }
 
-
+.card-heading {
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 8px 20px;
+    margin: 10px auto; /* Center horizontally */
+    text-align: center; /* Centers the heading text */
+    display: inline-block; /* Keeps the width compact */
+}
 
