@@ -6,7 +6,7 @@ INSERT_SUPPLIER_TABLE = text("""
                             """)
 
 GET_SUPPLIER_TABLE = text("""
-                            SELECT * FROM Supplier ORDER BY 1 DESC;
+                            SELECT * FROM Supplier ORDER BY 1 ASC;
                             """)
 
 SELECT_SUPPLIER_BY_SUPPLIER_ID = text("""
