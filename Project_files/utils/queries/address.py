@@ -17,6 +17,7 @@ SELECT_ADDRESS_BY_Address_ID = text("""
 
 SELECT_ADDRESS_BY_Person_ID = text("""
                             select
+                            address_id,
                             street_address AS street,
                             city,
                             zip_code,

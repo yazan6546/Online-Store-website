@@ -149,7 +149,7 @@ class Customer(Person):
         temp = super().to_dict()
 
         if address:
-            temp["addresses"] = [address.to_dict() for address in self.addresses]
+            temp["addresses"] = [address.to_dict(address_id=True) for address in self.addresses]
 
         return temp
 

@@ -36,6 +36,7 @@ def admin_dashboard_customers():
     customers = Customer.get_all()
     customers = [customer.to_dict(address=True) for customer in customers]
 
+    print(customers[0]['addresses'][0]['address_id'])
     return render_template('customers.html', customers=customers)  # Replace with render_template if applicable
 
 
