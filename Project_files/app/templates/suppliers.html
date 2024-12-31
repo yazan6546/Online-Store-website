@@ -12,16 +12,16 @@ Suppliers
 {% block content %}
 <div id="wrapper">
     <h1>Suppliers</h1>
-   <section>
-    <form id="search-form" onsubmit="event.preventDefault(); searchSuppliers();">
-        <input type="text" id="search-query" placeholder="Search suppliers...">
-        <button type="submit" class="btn">Search</button>
-    </form>
 
-    <div class="btn-container">
-    <button onclick="openModal()" class="btn">Add Supplier</button>
+    <div id="container_search_add">
+        <form id="search-form" onsubmit="event.preventDefault(); searchSuppliers();">
+            <input type="text" id="search-query" placeholder="Search suppliers...">
+            <button type="submit" class="btn">Search</button>
+        </form>
+        <button onclick="openModal()" class="btn">Add Supplier</button>
     </div>
-    </section>
+
+
     <table id="table">
         <thead>
             <tr>
