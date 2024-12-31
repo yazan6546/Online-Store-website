@@ -11,14 +11,14 @@ class Address:
         self.zip_code = zip_code
         self.street = street
 
-    def insert(self):
+    def insert(self, person_id=False):
         conn = get_db_connection()
         result = None
         try:
             if self.address_id is not None:
-                conn.execute(q.address.INSERT_ADDRESS_TABLE, self.to_dict())
+                conn.execute(q.address.INSERT_ADDRESS_TABLE, self.to_dict(person_id))
             else:
-                result = conn.execute(q.address.INSERT_ADDRESS_TABLE, self.to_dict())
+                result = conn.execute(q.address.INSERT_ADDRESS_TABLE, self.to_dict(person_id))
                 self.address_id = result.lastrowid
 
             conn.commit()
@@ -91,6 +91,7 @@ class Address:
         finally:
             conn.close()
 
+    @classmethod
     def get_all(cls):
         conn = get_db_connection()
 

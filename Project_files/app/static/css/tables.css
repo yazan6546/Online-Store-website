@@ -188,17 +188,26 @@
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.4s ease-in-out;
 }
 
+/* Modal shown */
+.modal.show {
+    display: block;
+}
+
+/* Modal content */
 .modal-content {
     background-color: #fff;
     margin: 15% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid #176B87;
     width: 30%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    animation: scaleUp 0.4s ease-in-out; /* Added animation for modal content */
 }
+
 
 .close {
     color: #aaa;
@@ -216,5 +225,83 @@
 
 .show {
     display: block;
+}
+
+
+
+
+/* Styling the modal form elements specifically */
+#add-supplier-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#add-supplier-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #176B87;
+}
+
+#supplier-name,
+#supplier-phone {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #176B87;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+#supplier-name:focus,
+#supplier-phone:focus {
+    border-color: #0B4F5F;
+    box-shadow: 0 0 5px rgba(23, 107, 135, 0.6);
+    outline: none;
+}
+
+#add-supplier-form button {
+    background-color: #176B87;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease-in-out;
+}
+
+#add-supplier-form button:hover {
+    background-color: #0B4F5F;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#add-supplier-form button:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+/* Fade-in animation for modal background */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Scale-up animation for modal content */
+@keyframes scaleUp {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
