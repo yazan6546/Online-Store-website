@@ -83,9 +83,8 @@ def search_customer():
     name = request.args.get('query')
 
     customers = Customer.search(name)
-
     if customers or customers==[]:
-        customers = [customer.to_dict() for customer in customers]
+        customers = [customer.to_dict(address=True) for customer in customers]
         return jsonify({"success": True, "customers": customers})
 
     return jsonify({"success": False, "error": "An error occurred while searching for customers"})
