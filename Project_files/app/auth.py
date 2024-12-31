@@ -86,7 +86,7 @@ def validate_login(login_form, signup_form):
         if user1 is not None and pm.verify_password(password, user1.passcode):
             flash("Login successful!", "success")
             print("ok error here")
-            session['user'] = user1
+            session['user'] = user1.to_dict()
             session['role'] = 'customer'
             print("ok error her2")
             return redirect(url_for('customer'))
