@@ -84,7 +84,6 @@
     align-items: center; /* Align items vertically */
     gap: 10px; /* Space between the search form and the button */
     margin-bottom: 20px;
-    margin-top: 20px;
 }
 
 /* Pagination Styling */
@@ -257,6 +256,8 @@
 }
 
 
+
+
 /* Styling the modal form elements specifically */
 #add-supplier-form {
     display: flex;
@@ -266,6 +267,7 @@
 
 #add-supplier-form label {
     font-weight: bold;
+    margin-bottom: 5px;
     color: #176B87;
 }
 
@@ -335,10 +337,9 @@
     background-color: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    padding: 10px 20px;
-    margin: 10px auto;
-    text-align: center;
-    display: inline-block;
+    padding: 8px 20px;
+    margin: 10px auto; /* Center horizontally */
+    text-align: center; /* Centers the heading text */
+    display: inline-block; /* Keeps the width compact */
 }
-
 
