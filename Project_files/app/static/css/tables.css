@@ -327,7 +327,7 @@
 
 #manager-firstName,
 #manager-lastName,
-#manger-email {
+#manager-email {
     width: 100%;
     padding: 10px;
     border: 2px solid #176B87;
@@ -339,7 +339,7 @@
 
 #manager-firstName:focus,
 #manager-lastName:focus,
-#manger-email:focus {
+#manager-email:focus {
     border-color: #0B4F5F;
     box-shadow: 0 0 5px rgba(23, 107, 135, 0.6);
     outline: none;
