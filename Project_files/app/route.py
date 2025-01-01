@@ -187,28 +187,6 @@ def admin_dashboard_managers():
     return render_template('managers.html', managers=managers)  # Replace with render_template if applicable
 
 
-@app.route('/add_manager', methods=['POST'])
-def add_manager():
-    try:
-        # Extract data from the request
-        data = request.get_json()
-        name = data.get('name')
-        phone = data.get('phone')
-
-        # Validate inputs
-        if not name or not phone:
-            return jsonify(success=False, error="Name and phone are required.")
-
-        # Create and insert a new supplier
-        new_supplier = Supplier(supplier_name=name, phone_number=phone)
-        new_supplier.insert()
-
-        return jsonify(success=True, supplier=new_supplier.to_dict())
-    except Exception as e:
-        return jsonify(success=False, error=str(e))
-
-
-
 @app.route('/delete_manager/<int:person_id>', methods=['POST'])
 def delete_manager(person_id):
     # Logic to delete the customer with the given person_id
