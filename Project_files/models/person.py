@@ -27,7 +27,7 @@ class Person:
         finally:
             conn.close()
 
-    def to_dict(self):
+    def to_dict(self, person_id=False):
         temp =  {
             "first_name": self.first_name,
             "last_name": self.last_name,
@@ -35,7 +35,7 @@ class Person:
             "passcode": self.passcode,
         }
 
-        if self.person_id is not None:
+        if person_id:
             temp["person_id"] = self.person_id
 
         return temp

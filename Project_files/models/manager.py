@@ -139,10 +139,10 @@ class Manager(Person):
             **data_dict
         )
 
-    def to_dict(self, person=True):
+    def to_dict(self, person=True, person_id=False):
 
         if person:
-          temp = super().to_dict()
+          temp = super().to_dict(person_id=person_id)
         else:
             temp= {'person_id': self.person_id}
 

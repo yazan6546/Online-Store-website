@@ -17,19 +17,18 @@ class Customer(Person):
                 conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
             else:
                 result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
+
                 self.person_id = result.lastrowid
 
-            conn.execute(q.customer.INSERT_CUSTOMERS_TABLE, {"person_id": self.person_id})
-
+            result = conn.execute(q.customer.INSERT_CUSTOMERS_TABLE, {"person_id": self.person_id})
+            conn.commit()
             for address in self.addresses:
                 address.person_id = self.person_id
                 address.insert()
 
             if result is None:
                 raise Exception("Duplicate entry")
-
             conn.commit()
-
         except Exception as e:
             print(f"Error in insert(): {e}")  # Debugging purposes only
             conn.rollback()  # Roll back the transaction to maintain database integrity
@@ -145,8 +144,8 @@ class Customer(Person):
             **data_dict
         )
 
-    def to_dict(self, address=False):
-        temp = super().to_dict()
+    def to_dict(self, address=False, person_id=False):
+        temp = super().to_dict(person_id=person_id)
 
         if address:
             temp["addresses"] = [address.to_dict(address_id=True) for address in self.addresses]

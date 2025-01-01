@@ -104,7 +104,7 @@ class Supplier:
             "phone": self.phone,
         }
 
-        if self.supplier_id:
+        if supplier_id:
             temp["supplier_id"] = self.supplier_id
 
         return temp

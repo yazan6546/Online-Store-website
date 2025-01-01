@@ -185,3 +185,5 @@ select * from Address;
 delete from Person where person_id > 20;
 
 select * from Category;
+
+delete from Customer;
