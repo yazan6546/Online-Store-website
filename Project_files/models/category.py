@@ -89,7 +89,7 @@ class Category:
     def __str__(self):
         return f"{self.category_name} - {self.category_description}"
 
-    def to_dict(self, category_id=False):
+    def to_dict(self, category_id=True):
 
         category = {
             'category_name': self.category_name,

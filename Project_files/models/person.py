@@ -27,7 +27,7 @@ class Person:
         finally:
             conn.close()
 
-    def to_dict(self, person_id=False):
+    def to_dict(self, person_id=True):
         temp =  {
             "first_name": self.first_name,
             "last_name": self.last_name,

@@ -78,7 +78,7 @@ class Product:
         finally:
             conn.close()
 
-    def to_dict(self, product_id=False):
+    def to_dict(self, product_id=True):
         temp =  {
             "product_name": self.product_name,
             "product_description": self.product_description,

@@ -142,7 +142,7 @@ class Customer(Person):
             **data_dict
         )
 
-    def to_dict(self, address=False, person_id=False):
+    def to_dict(self, address=False, person_id=True):
         temp = super().to_dict(person_id=person_id)
 
         if address:

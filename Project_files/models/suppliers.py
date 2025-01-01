@@ -98,7 +98,7 @@ class Supplier:
             conn.close()
 
 
-    def to_dict(self, supplier_id=False):
+    def to_dict(self, supplier_id=True):
         temp = {
             "name": self.name,
             "phone": self.phone,
