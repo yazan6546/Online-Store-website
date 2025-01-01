@@ -86,7 +86,7 @@ class Supplier:
                 return []
             print("Converting rows to dictionaries...")
             # Safely convert rows to dictionaries
-            suppliers = [supplier._asdict() for supplier in suppliers]
+            suppliers = [supplier._mapping for supplier in suppliers]
 
 
             for supplier in suppliers:
@@ -101,13 +101,13 @@ class Supplier:
             conn.close()
 
 
-    def to_dict(self):
+    def to_dict(self, supplier_id=False):
         temp = {
             "name": self.name,
             "phone": self.phone,
         }
 
-        if self.supplier_id is not None:
+        if self.supplier_id:
             temp["supplier_id"] = self.supplier_id
 
         return temp

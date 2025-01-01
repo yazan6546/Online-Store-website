@@ -67,8 +67,11 @@ class Product:
     def get_by_product_id(cls, product_id):
         conn = get_db_connection()
         try:
-            result = conn.execute(q.product.SELECT_PRODUCT_BY_ID, {"product_id": product_id})
-            return result.fetchone()
+            result = conn.execute(q.product.SELECT_PRODUCT_BY_ID, {"product_id": product_id}).fetchone()
+            product = result._mapping
+            return cls(
+                **product
+            )
         except Exception as e:
             print(f"Error: {e}")
             return None
@@ -92,8 +95,9 @@ class Product:
     def get_all(cls):
         conn = get_db_connection()
         try:
-            result = conn.execute(q.product.GET_PRODUCTS_TABLE)
-            return result.fetchall()
+            result = conn.execute(q.product.GET_PRODUCTS_TABLE).fetchall()
+            products = [cls(**product._mapping) for product in result]
+            return products
         except Exception as e:
             print(f"Error: {e}")
             return None
@@ -106,8 +110,10 @@ class Product:
         conn = get_db_connection()
 
         try:
-            result = conn.execute(q.product.SELECT_PRODUCT_BY_CATEGORY, {"category_id": category_id})
-            return result.fetchall()
+            result = conn.execute(q.product.SELECT_PRODUCT_BY_CATEGORY, {"category_id": category_id}).fetchall()
+            products = [cls(**product._mapping) for product in result]
+            return products
+
         except Exception as e:
             print(f"Error: {e}")
             return None
@@ -120,8 +126,9 @@ class Product:
         conn = get_db_connection()
 
         try:
-            result = conn.execute(q.product.SELECT_PRODUCT_BY_SUPPLIER, {"supplier_id": supplier_id})
-            return result.fetchall()
+            result = conn.execute(q.product.SELECT_PRODUCT_BY_SUPPLIER, {"supplier_id": supplier_id}).fetchall()
+            products = [cls(**product._mapping) for product in result]
+            return products
         except Exception as e:
             print(f"Error: {e}")
             return None

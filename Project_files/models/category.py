@@ -73,6 +73,7 @@ class Category:
         conn = get_db_connection()
         try:
             result = conn.execute(q.category.SELECT_CATEGORY_BY_ID, {'category_id': category_id}).fetchone()
+            print(result)
             if result:
                 return Category(category_id=result['category_id'], category_name=result['category_name'], category_description=result['category_description'])
             return None

@@ -9,6 +9,7 @@ from .product import *
 from .data_analysis import *
 from .address import *
 from .supplier import *
+from .category import *
 
 __all__= ['customer',
           'manager',
