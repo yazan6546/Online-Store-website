@@ -123,7 +123,7 @@ def add_address(customer_id):
 
     address = Address(person_id=customer_id, city=city, zip_code=zip_code, street=street)
     try:
-        result = address.insert(customer_id)
+        result = address.insert()
         if result:
             return jsonify(success=True, address=address.to_dict())
         else:
@@ -296,8 +296,6 @@ def admin_dashboard_suppliers():
 
     return render_template('suppliers.html', suppliers=suppliers)
 
-    return "<h1>Supplier Page</h1>"  # Replace with render_template if applicable
-
 # update
 @app.route('/update_supplier/<int:supplier_id>', methods=['POST'])
 def update_supplier(supplier_id):
@@ -430,10 +428,6 @@ def index():
 def about():
     return render_template('about.html')
 
-# Contact Page
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
 
 # Shop Page
 @app.route('/shop')
