@@ -93,15 +93,25 @@
 #         customer_order_line.insert()
 import os
 
-from sqlalchemy import text
-
+from models.category import Category
+import utils.queries as q
 from utils.db_utils import get_db_connection
 
+#
+# from sqlalchemy import text
+#
+# from utils.db_utils import get_db_connection
+#
+# conn = get_db_connection()
+# try:
+#     print(conn.execute(text("SELECT * FROM Customer")).fetchall())
+#     print("Connection successful")
+# except Exception as e:
+#     print(f"Connection failed: {e}")
+# finally:
+#     conn.close()
 conn = get_db_connection()
-try:
-    print(conn.execute(text("SELECT * FROM Customer")).fetchall())
-    print("Connection successful")
-except Exception as e:
-    print(f"Connection failed: {e}")
-finally:
-    conn.close()
+result = conn.execute(q.category.GET_CATEGORY_TABLE).fetchall()
+categories = [Category(category_id=row['category_id'], category_name=row['category_name'], category_description=row['category_description']) for row in result]
+
+print(categories)

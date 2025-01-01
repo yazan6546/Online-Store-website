@@ -6,7 +6,11 @@ INSERT_CATEGORY_TABLE = text("""
 """)
 
 GET_CATEGORY_TABLE = text("""
-    SELECT * FROM Category ORDER BY category_id DESC;
+    SELECT
+    category_id,
+    category_name,
+    category_description
+    FROM Category ORDER BY category_id;
 """)
 
 SELECT_CATEGORY_BY_ID = text("""
