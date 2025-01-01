@@ -1,4 +1,70 @@
-    function enableEditAddress(address_id) {
+let currentSortOrder = 'asc'; // Keeps track of the current sort order
+
+function sortCustomers(column) {
+    console.log('Sorting by:', column);
+
+    // Get the table body and convert rows to an array
+    const tableBody = document.querySelector('#table tbody');
+    const rows = Array.from(tableBody.querySelectorAll('tr'));
+
+    // Determine the sort direction
+    currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+
+    // Sort rows based on the specified column
+    rows.sort((a, b) => {
+        let aValue = a.querySelector(`td:nth-child(${getColumnIndex(column)})`).innerText.trim();
+        let bValue = b.querySelector(`td:nth-child(${getColumnIndex(column)})`).innerText.trim();
+
+        // Handle numeric sorting for `person_id`
+        if (column === 'person_id') {
+            aValue = parseInt(aValue, 10);
+            bValue = parseInt(bValue, 10);
+        }
+
+        if (currentSortOrder === 'asc') {
+            return aValue > bValue ? 1 : -1;
+        } else {
+            return aValue < bValue ? 1 : -1;
+        }
+    });
+
+    // Clear the table body and append sorted rows
+    tableBody.innerHTML = '';
+    rows.forEach(row => tableBody.appendChild(row));
+}
+
+// Utility function to map column names to their respective indices
+function getColumnIndex(column) {
+    switch (column) {
+        case 'person_id':
+            return 1; // 1st column
+        case 'first_name':
+            return 2; // 2nd column
+        case 'last_name':
+            return 3; // 3rd column
+        case 'email':
+            return 4; // 4th column
+        default:
+            return 1;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function enableEditAddress(address_id) {
 
         console.log('Enabling edit for address ID:', address_id);
         var row = document.getElementById('address-row-' + address_id);
@@ -66,6 +132,94 @@
             });
         }
     }
+    //
+    // function addAddress(person_id) {
+    //     console.log('Adding address for customer ID:', person_id);
+    //     $.ajax({
+    //         url: '/add_address/' + person_id,
+    //         type: 'POST',
+    //         success: function(response) {
+    //             if (response.success) {
+    //                 var addressesTable = document.querySelector(`#row-${person_id} .address-subtable tbody`);
+    //                 var address = response.address;
+    //                 var row = `
+    //                     <tr id="address-row-${address.address_id}">
+    //                         <td>
+    //                             <span id="street_address-${address.address_id}-text">${address.street}</span>
+    //                             <input type="text" id="street_address-${address.address_id}-input" value="${address.street}" style="display:none; width: 100px;">
+    //                         </td>
+    //                         <td>
+    //                             <span id="city-${address.address_id}-text">${address.city}</span>
+    //                             <input type="text" id="city-${address.address_id}-input" value="${address.city}" style="display:none; width: 100px;">
+    //                         </td>
+    //                         <td>
+    //                             <span id="zip_code-${address.address_id}-text">${address.zip_code}</span>
+    //                             <input type="text" id="zip_code-${address.address_id}-input" value="${address.zip_code}" style="display:none; width: 100px;">
+    //                         </td>
+    //                         <td class="action-buttons">
+    //                             <button id="edit-address-btn-${address.address_id}" class="edit" onclick="enableEditAddress(${address.address_id})">Edit</button>
+    //                             <button id="save-address-btn-${address.address_id}" class="save" style="display:none;" onclick="saveEditAddress(${address.address_id})">Save</button>
+    //                             <button class="delete" onclick="deleteAddress(${address.address_id})">Delete</button>
+    //                         </td>
+    //                     </tr>`;
+    //                 addressesTable.insertAdjacentHTML('beforeend', row);
+    //             } else {
+    //                 alert('Error adding address: ' + response.error);
+    //             }
+    //         },
+    //         error: function(xhr, status, error) {
+    //             alert('Error adding address: ' + xhr.responseText);
+    //         }
+    //     });
+    // }
+
+
+function addAddress() {
+    const customerId = document.getElementById('customer-id').value;
+    const street = document.getElementById('address-street').value;
+    const city = document.getElementById('address-city').value;
+    const zip = document.getElementById('address-zip').value;
+
+    // Validate inputs
+    if (!street || !city || !zip) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    // AJAX call to server
+    $.ajax({
+        url: `/add_address/${customerId}`,
+        type: 'POST',
+        data: JSON.stringify({street, city, zip }),
+        contentType: 'application/json',
+        success: function (response) {
+            if (response.success) {
+                alert('Address added successfully!');
+                const addressesTable = document.querySelector(`#row-${customerId} .address-subtable tbody`);
+                const newRow = `
+                    <tr id="address-row-${response.address.address_id}">
+                        <td>${response.address.street}</td>
+                        <td>${response.address.city}</td>
+                        <td>${response.address.zip}</td>
+                        <td class="action-buttons">
+                            <button class="edit" onclick="enableEditAddress(${response.address.address_id})">Edit</button>
+                            <button class="delete" onclick="deleteAddress(${response.address.address_id})">Delete</button>
+                        </td>
+                    </tr>`;
+                addressesTable.insertAdjacentHTML('beforeend', newRow);
+                closeAddAddressModal();
+            } else {
+                alert('Error adding address: ' + response.error);
+            }
+        },
+        error: function (xhr) {
+            alert('Error adding address: ' + xhr.responseText);
+        },
+    });
+}
+
+
+
 
     function searchCustomers() {
     console.log('Searching customers');
@@ -221,3 +375,16 @@
             });
         }
     }
+
+
+    function openAddAddressModal(customerId) {
+    document.getElementById('add-address-modal').style.display = 'block';
+    document.getElementById('customer-id').value = customerId;
+}
+
+function closeAddAddressModal() {
+    document.getElementById('add-address-modal').style.display = 'none';
+    document.getElementById('street').value = '';
+    document.getElementById('city').value = '';
+    document.getElementById('zip').value = '';
+}
