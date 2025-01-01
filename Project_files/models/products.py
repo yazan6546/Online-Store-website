@@ -78,9 +78,8 @@ class Product:
         finally:
             conn.close()
 
-    def to_dict(self):
-        return {
-            "product_id": self.product_id,
+    def to_dict(self, product_id=False):
+        temp =  {
             "product_name": self.product_name,
             "product_description": self.product_description,
             "brand": self.brand,
@@ -90,6 +89,10 @@ class Product:
             "category_id": self.category_id,
             "supplier_id": self.supplier_id
         }
+
+        if product_id:
+            temp["product_id"] = self.product_id
+        return temp
 
     @classmethod
     def get_all(cls):

@@ -1,0 +1,5 @@
+person_id,first_name,last_name,email,passcode,since,role
+1,yazan,abualoun,yazan@example.com,passcode1,2023-01-01,Financial Manager
+2,Lana,Musaffer,Lana@example.com,passcode2,2023-01-02,Assistant Manager
+3,Osaid,Nour,Osaid@example.com,passcode3,2023-01-03,Regional Manager
+4,Bassim,Sayrafi,Bassim@example.com,passcode4,2023-01-04,Financial Manager

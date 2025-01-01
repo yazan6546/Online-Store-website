@@ -104,8 +104,8 @@ class ManagerOrder(Order):
         finally:
             conn.close()
 
-    def to_dict(self, status=False):
-        order_dict = super().to_dict()
+    def to_dict(self, status=False, order_id=False):
+        order_dict = super().to_dict(order_id)
         if status:
             order_dict["order_status"] = "PLACED"
         return order_dict
