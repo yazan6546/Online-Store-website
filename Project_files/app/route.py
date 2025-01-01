@@ -182,18 +182,18 @@ def add_manager():
     try:
         # Extract data from the request
         data = request.get_json()
-        firstName = data.get('firstName')
-        lastName = data.get('lastName')
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
         email = data.get('email')
         role = data.get('role')
 
 
         # Validate inputs
-        if not firstName or not lastName or not email or not role:
+        if not first_name or not last_name or not email or not role:
             return jsonify(success=False, error="firstName, lastName, email, and role are required.")
 
         # Create and insert a new manager
-        new_manager = Manager(manager_firstName=firstName, manager_lastName=lastName, manager_email=email, manager_role=role)
+        new_manager = Manager(first_name=first_name, last_name=last_name, email=email, role=role, hash=True)
         new_manager.insert()
 
         return jsonify(success=True, manager=new_manager.to_dict())

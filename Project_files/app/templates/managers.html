@@ -72,12 +72,14 @@ Managers
             {% endfor %}
         </tbody>
     </table>
+</div>
 
     <div id="add-manager-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModalManager()">&times;</span>
             <h2>Add Manager</h2>
             <form id="add-manager-form" onsubmit="event.preventDefault(); addManager();">
+
                 <label for="manager-firstName">First Name</label>
                 <input type="text" id="manager-firstName" placeholder="Enter manager First Name" required>
 
@@ -95,6 +97,5 @@ Managers
         </div>
     </div>
 
-</div>
 <script src="{{ url_for('static', filename='js/managers.js') }}"></script>
 {% endblock %}

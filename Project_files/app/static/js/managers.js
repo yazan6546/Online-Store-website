@@ -148,13 +148,13 @@ function closeModalManager() {
 
 // Add manager
 function addManager() {
-    const firstName = document.getElementById('manager-firstName').value;
-    const lastName = document.getElementById('manager-lastName').value;
+    const first_name = document.getElementById('manager-firstName').value;
+    const last_name = document.getElementById('manager-lastName').value;
     const email = document.getElementById('manager-email').value;
     const role = document.getElementById('manager-role').value;
 
     // Validate inputs
-    if (!firstName || !lastName || !email || !role) {
+    if (!first_name || !last_name || !email || !role) {
         alert('Please fill in all fields.');
         return;
     }
@@ -165,7 +165,7 @@ function addManager() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName, lastName, email, role }),
+        body: JSON.stringify({ first_name, last_name, email, role }),
     })
         .then(response => response.json())
         .then(data => {
@@ -178,13 +178,13 @@ function addManager() {
                     <tr id="row-${data.manager.manager}">
                         <td>${data.manager.manager_id}</td>
                         <td>
-                            <span id="firstName-${data.manager.manager_id}-text">${data.manager.firstName}</span>
-                            <input type="text" id="firstName-${data.manager.manager_id}-input" value="${data.manager.firstName}" style="display:none; width: 100px;">
+                            <span id="first_name-${data.manager.manager_id}-text">${data.manager.first_name}</span>
+                            <input type="text" id="first_name-${data.manager.manager_id}-input" value="${data.manager.first_name}" style="display:none; width: 100px;">
                         </td>
 
                          <td>
-                            <span id="lastName-${data.manager.manager_id}-text">${data.manager.lastName}</span>
-                            <input type="text" id="lastName-${data.manager.manager_id}-input" value="${data.manager.lastName}" style="display:none; width: 100px;">
+                            <span id="last_name-${data.manager.manager_id}-text">${data.manager.last_name}</span>
+                            <input type="text" id="last_name-${data.manager.manager_id}-input" value="${data.manager.last_name}" style="display:none; width: 100px;">
                         </td>
 
                         <td>
