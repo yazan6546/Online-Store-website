@@ -1,9 +1,11 @@
+from unicodedata import category
+
 from sqlalchemy import text
 from utils.db_utils import get_db_connection
 import utils.queries as q
 
 class Category:
-    def __init__(self, category_id=None, category_name=None, category_description=None):
+    def __init__(self, category_name, category_description, category_id=None):
         self.category_id = category_id
         self.category_name = category_name
         self.category_description = category_description
@@ -73,12 +75,27 @@ class Category:
         conn = get_db_connection()
         try:
             result = conn.execute(q.category.SELECT_CATEGORY_BY_ID, {'category_id': category_id}).fetchone()
-            print(result)
-            if result:
-                return Category(category_id=result['category_id'], category_name=result['category_name'], category_description=result['category_description'])
-            return None
+            result = result._mapping
+            return Category(**result)
         except Exception as e:
             print(f"Error in get_by_id(): {e}")
             return None
         finally:
             conn.close()
+
+    def __repr__(self):
+        return f"{self.category_name} - {self.category_description}"
+
+    def __str__(self):
+        return f"{self.category_name} - {self.category_description}"
+
+    def to_dict(self, category_id=False):
+
+        category = {
+            'category_name': self.category_name,
+            'category_description': self.category_description
+        }
+        if category_id:
+            category['category_id'] = self.category_id
+
+        return category

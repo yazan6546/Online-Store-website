@@ -13,11 +13,8 @@ class Supplier:
         conn = get_db_connection()
         result = None
         try:
-            if self.supplier_id is not None:
-                conn.execute(q.supplier.INSERT_SUPPLIER_TABLE, self.to_dict())
-            else:
-                result = conn.execute(q.supplier.INSERT_SUPPLIER_TABLE, self.to_dict())
-                self.supplier_id = result.lastrowid
+            result = conn.execute(q.supplier.INSERT_SUPPLIER_TABLE, self.to_dict())
+            self.supplier_id = result.lastrowid
 
             conn.commit()
 

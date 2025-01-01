@@ -146,12 +146,11 @@ def generate_customer_order_line_data(num_records, order_ids, product_ids):
     df.to_csv('csv_files/CustomerOrderLine.csv', index=False)
     return df
 
-def generate_manager_order_data(num_records, manager_ids, address_ids):
+def generate_manager_order_data(num_records, manager_ids):
     data = []
-    for _ in range(num_records):
+    for i in range(num_records):
         data.append({
             'manager_id': random.choice(manager_ids),
-            'address_id': random.choice(address_ids),
             'order_date': fake.date_between(start_date='-30d', end_date='today'),
             'delivery_date': fake.date_between(start_date='today', end_date='+10d'),
             'order_status': random.choice(['IN_CART', 'PLACED']),
@@ -178,8 +177,26 @@ def generate_manager_order_line_data(num_records, order_ids, product_ids):
 
 # Example usage
 if __name__ == '__main__':
-    generate_customer_data(2001)
-    generate_address_data(10000)
-    generate_category_data()
-    generate_product_data(100, list(range(1, 6)))
 
+    num_customer_records = 2000
+    num_address_records = 10000
+    num_category_records = 15
+    num_product_records = 100
+    num_supplier_records = 10
+    num_customer_order_records = 100
+    num_customer_order_line_records = 500
+    num_manager_order_records = 100
+    num_manager_order_line_records = 500
+
+    num_manager_records = 4
+
+    df = generate_customer_data(num_customer_records)
+
+    generate_address_data(num_address_records, df['person_id'].tolist())
+    generate_category_data()
+    generate_product_data(num_product_records, list(range(1, num_category_records+1)))
+    generate_manager_order_data(num_manager_order_records, list(range(1, num_manager_records+1)))
+    generate_supplier_data(num_supplier_records)
+    generate_customer_order_data(num_customer_order_records, df['person_id'].tolist(), list(range(1, num_address_records+1)))
+    generate_customer_order_line_data(num_customer_order_line_records, list(range(1, num_customer_order_records+1)), list(range(1, num_product_records+1)))
+    generate_manager_order_line_data(num_manager_order_line_records, list(range(1, num_manager_order_records+1)), list(range(1, num_product_records+1)))

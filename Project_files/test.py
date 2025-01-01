@@ -115,10 +115,3 @@ from utils.db_utils import get_db_connection
 # categories = [Category(category_id=row['category_id'], category_name=row['category_name'], category_description=row['category_description']) for row in result]
 #
 # print(categories)
-
-# category = Category(category_name="Test Category", category_description="A test category.")
-# category.insert()
-
-category = Category.get_by_id(1)
-
-print(category)
