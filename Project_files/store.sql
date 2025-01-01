@@ -190,7 +190,8 @@ delete from Category;
 
 delete from Customer;
 delete from Person;
-
+select * from Customer;
+select * from Manager;
 select * from Person;
 
 delete from Address;

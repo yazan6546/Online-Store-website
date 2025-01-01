@@ -5,7 +5,7 @@ from models.customers import Customer
 from utils.db_utils import get_db_connection, reset_db
 
 
-def read_csv_to_objects(file_path, model_class:Customer | Manager):
+def read_csv_to_objects(file_path, model_class:Customer| Manager):
     df = pd.read_csv(file_path)
     objects = []
     for _, row in df.iterrows():
@@ -23,7 +23,7 @@ def save_objects_to_db(objects):
 
 
 
-def import_data_and_save_to_db(csv_file_path, table_name, engine, length=4):
+def import_data_and_save_to_db(csv_file_path, table_name, engine):
     """
     Reads data from a CSV file into a Pandas DataFrame and inserts it into a specified database table.
 
@@ -36,9 +36,6 @@ def import_data_and_save_to_db(csv_file_path, table_name, engine, length=4):
     try:
         # Step 1: Read data into a Pandas DataFrame
         df = pd.read_csv(csv_file_path)
-
-        if table_name == 'Customer_Order':
-            df['person_id'] = df['person_id'] + length
 
         # Step 2: Save the DataFrame into the specified database table
         df.to_sql(
@@ -81,3 +78,5 @@ if __name__ == "__main__":
     # Call the function for each CSV file and corresponding table
     for file_path, table_name in csv_table_mapping.items():
         import_data_and_save_to_db(file_path, table_name, conn)
+
+    conn.close()
