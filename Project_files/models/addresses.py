@@ -25,6 +25,8 @@ class Address:
 
             if result is None:
                 raise Exception("Duplicate entry")
+            else:
+                return 1  # Return 1 if the insert was successful
 
         except Exception as e:
             print(f"Error in insert(): {e}")

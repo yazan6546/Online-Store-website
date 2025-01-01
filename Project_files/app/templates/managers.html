@@ -10,11 +10,19 @@ Managers
 
 {% block content %}
 <div id="wrapper">
-    <h1>Managers</h1>
-    <form id="search-form" onsubmit="event.preventDefault(); searchManagers();">
-         <label for="search-query"></label><input type="text" id="search-query" placeholder="Search managers...">
-        <button type="submit" class="btn">Search</button>
-    </form>
+    <div class="card-heading">
+        <h1>Managers</h1>
+    </div>
+    <div id="container_search_add">
+        <form id="search-form" onsubmit="event.preventDefault(); searchManagers();">
+             <label for="search-query"></label><input type="text" id="search-query" placeholder="Search managers...">
+            <button type="submit" class="btn">Search</button>
+        </form>
+
+        <button onclick="openModalManager()" class="btn">Add Manager</button>
+
+    </div>
+
     <table id="table">
         <thead>
             <tr>
@@ -64,9 +72,34 @@ Managers
             {% endfor %}
         </tbody>
     </table>
-    <div class="btn-container">
-        <button onclick="window.location.href='{{ url_for('add_customer') }}'" class="btn">Add Manager</button>
-    </div>
 </div>
+
+    <div id="add-manager-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModalManager()">&times;</span>
+            <h2>Add Manager</h2>
+            <form id="add-manager-form" onsubmit="event.preventDefault(); addManager();">
+
+                <label for="manager-firstName">First Name</label>
+                <input type="text" id="manager-firstName" placeholder="Enter manager First Name" required>
+
+                <label for="manager-lastName">Last Name</label>
+                <input type="text" id="manager-lastName" placeholder="Enter manager Last Name" required>
+
+                <label for="manager-email">Email</label>
+                <input type="text" id="manager-email" placeholder="Enter manager Email" required>
+
+                <label for="manager-role">Role</label>
+                <select id="manager-role" name="role" class="form-control">
+                    <option value="Financial Manager">Financial Manager</option>
+                    <option value="Assistant Manager">Assistant Manager</option>
+                    <option value="Regional Manager">Regional Manager</option>
+                </select>
+
+                <button type="submit" class="btn">Add Manager</button>
+            </form>
+        </div>
+    </div>
+
 <script src="{{ url_for('static', filename='js/managers.js') }}"></script>
 {% endblock %}

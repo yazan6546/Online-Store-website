@@ -11,11 +11,19 @@ Suppliers
 
 {% block content %}
 <div id="wrapper">
-    <h1>Suppliers</h1>
-    <form id="search-form" onsubmit="event.preventDefault(); searchSuppliers();">
-        <input type="text" id="search-query" placeholder="Search suppliers...">
-        <button type="submit" class="btn">Search</button>
-    </form>
+    <div class="card-heading">
+        <h1>Suppliers</h1>
+    </div>
+
+    <div id="container_search_add">
+        <form id="search-form" onsubmit="event.preventDefault(); searchSuppliers();">
+            <input type="text" id="search-query" placeholder="Search suppliers...">
+            <button type="submit" class="btn">Search</button>
+        </form>
+        <button onclick="openModal()" class="btn">Add Supplier</button>
+    </div>
+
+
     <table id="table">
         <thead>
             <tr>
@@ -46,23 +54,23 @@ Suppliers
             {% endfor %}
         </tbody>
     </table>
-    <div class="btn-container">
-    <button onclick="openModal()" class="btn">Add Supplier</button>
-    </div>
+
 </div>
     <div id="add-supplier-modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Add Supplier</h2>
-        <form id="add-supplier-form" onsubmit="event.preventDefault(); addSupplier();">
-            <label for="supplier-name">Name:</label>
-            <input type="text" id="supplier-name" placeholder="Enter supplier name" required>
-            <label for="supplier-phone">Phone:</label>
-            <input type="text" id="supplier-phone" placeholder="Enter supplier phone" required>
-            <button type="submit" class="btn">Add Supplier</button>
-        </form>
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add Supplier</h2>
+            <form id="add-supplier-form" onsubmit="event.preventDefault(); addSupplier();">
+                <label for="supplier-name">Name</label>
+                <input type="text" id="supplier-name" placeholder="Enter supplier name" required>
+                <label for="supplier-phone">Phone</label>
+                <input type="text" id="supplier-phone" placeholder="Enter supplier phone" required>
+                <button type="submit" class="btn">Add Supplier</button>
+            </form>
+        </div>
     </div>
-</div>
+
+
 
 <script src="{{ url_for('static', filename='js/suppliers.js') }}"></script>
 {% endblock %}

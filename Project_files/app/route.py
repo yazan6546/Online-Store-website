@@ -109,6 +109,65 @@ def filter_customers():
     ]
     return jsonify({"success": True, "customers": customers})
 
+# the following routes are for the address section
+
+@app.route('/add_address/<int:customer_id>', methods=['POST'])
+def add_address(customer_id):
+    data = request.json
+    street = data.get('street')
+    city = data.get('city')
+    zip_code = data.get('zip')
+
+    if not street or not city or not zip_code:
+        return jsonify(success=False, error="All fields are required.")
+
+    address = Address(person_id=customer_id, city=city, zip_code=zip_code, street=street)
+    try:
+        result = address.insert(customer_id)
+        if result:
+            return jsonify(success=True, address=address.to_dict())
+        else:
+            return jsonify(success=False, error="Failed to insert address.")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+    # return jsonify(success=True, address=address.to_dict())
+
+@app.route('/delete_address/<int:address_id>', methods=['POST'])
+def delete_address(address_id):
+    # Logic to delete the address with the given address_id
+    result = Address.delete(address_id)
+    if result:
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "error": "An error occured while deleting the address."})
+
+@app.route('/edit_address/<int:address_id>', methods=['POST'])
+def edit_address(address_id):
+    # Logic to update the address with the given address_id
+    street = request.form['street']
+    city = request.form['city']
+    zip_code = request.form['zip_code']
+
+    address = Address.get(address_id)
+
+    print(address)
+
+    address.street = street
+    address.city = city
+    address.zip_code = zip_code
+    result = address.update(address_id)
+
+    if result:
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "error": "An error occurred while updating the address."})
+
+
+
+
+
 ############################################################################################################
 # Managers Section
 ############################################################################################################
@@ -126,6 +185,27 @@ def admin_dashboard_managers():
     managers = [manager.to_dict() for manager in managers]
 
     return render_template('managers.html', managers=managers)  # Replace with render_template if applicable
+
+
+@app.route('/add_supplier', methods=['POST'])
+def add_supplier():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        name = data.get('name')
+        phone = data.get('phone')
+
+        # Validate inputs
+        if not name or not phone:
+            return jsonify(success=False, error="Name and phone are required.")
+
+        # Create and insert a new supplier
+        new_supplier = Supplier(supplier_name=name, phone_number=phone)
+        new_supplier.insert()
+
+        return jsonify(success=True, supplier=new_supplier.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
 
 
 
@@ -175,6 +255,31 @@ def search_manager():
         return jsonify({"success": True, "managers": managers})
 
     return jsonify({"success": False, "error": "An error occurred while searching for managers"})
+
+# add manager
+@app.route('/add_manager', methods=['POST'])
+def add_manager():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        email = data.get('email')
+        role = data.get('role')
+
+
+        # Validate inputs
+        if not first_name or not last_name or not email or not role:
+            return jsonify(success=False, error="firstName, lastName, email, and role are required.")
+
+        # Create and insert a new manager
+        new_manager = Manager(first_name=first_name, last_name=last_name, email=email, role=role, hash=True)
+        new_manager.insert()
+
+        return jsonify(success=True, manager=new_manager.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
 
 
 ############################################################################################################
@@ -265,26 +370,7 @@ def get_suppliers():
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
-# add supplier
-@app.route('/add_supplier', methods=['POST'])
-def add_supplier():
-    try:
-        # Extract data from the request
-        data = request.get_json()
-        name = data.get('name')
-        phone = data.get('phone')
 
-        # Validate inputs
-        if not name or not phone:
-            return jsonify(success=False, error="Name and phone are required.")
-
-        # Create and insert a new supplier
-        new_supplier = Supplier(supplier_name=name, phone_number=phone)
-        new_supplier.insert()
-
-        return jsonify(success=True, supplier=new_supplier.to_dict())
-    except Exception as e:
-        return jsonify(success=False, error=str(e))
 
 
 ############################################################################################################
@@ -424,36 +510,6 @@ def login():
 
     return render_template('Login.html', signup_form=signup_form, login_form=login_form)
 
-
-@app.route('/delete_address/<int:address_id>', methods=['POST'])
-def delete_address(address_id):
-    # Logic to delete the address with the given address_id
-    result = Address.delete(address_id)
-    if result:
-        return jsonify({"success": True})
-    else:
-        return jsonify({"success": False, "error": "An error occured while deleting the address."})
-
-@app.route('/edit_address/<int:address_id>', methods=['POST'])
-def edit_address(address_id):
-    # Logic to update the address with the given address_id
-    street = request.form['street']
-    city = request.form['city']
-    zip_code = request.form['zip_code']
-
-    address = Address.get(address_id)
-
-    print(address)
-
-    address.street = street
-    address.city = city
-    address.zip_code = zip_code
-    result = address.update(address_id)
-
-    if result:
-        return jsonify({"success": True})
-    else:
-        return jsonify({"success": False, "error": "An error occurred while updating the address."})
 
 
 

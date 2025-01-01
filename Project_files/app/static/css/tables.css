@@ -78,6 +78,14 @@
   opacity: 0.8;
 }
 
+/*search and add section*/
+#container_search_add {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    gap: 10px; /* Space between the search form and the button */
+    margin-bottom: 20px;
+}
+
 /* Pagination Styling */
 .btn-container {
   margin-top: 15px;
@@ -101,31 +109,40 @@
 
 /* Search Form Styling */
 #search-form {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between the input and the button */
+    flex-grow: 1; /* Makes the search form take up remaining space */
 }
 
 #search-query {
-  width: 70%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+    flex: 1; /* Allows the input to stretch */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
 }
 
-#search-form .btn {
-  background-color: #176B87;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 14px;
-  cursor: pointer;
+#search-form .btn,
+#container_search_add .btn {
+    background-color: #176B87;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
-#search-form .btn:hover {
-  background-color: #78B3CE;
+#search-form .btn:hover,
+#container_search_add .btn:hover {
+    background-color: #78B3CE;
+}
+
+#search-query:focus {
+    outline: none;
+    border-color: #176B87;
+    box-shadow: 0 0 5px rgba(23, 107, 135, 0.5);
 }
 
 /* Address Subtable Header (within Addresses column) */
@@ -188,17 +205,37 @@
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.4s ease-in-out;
 }
 
+/* Modal shown */
+.modal.show {
+    display: block;
+}
+
+/* Modal content */
 .modal-content {
     background-color: #fff;
     margin: 15% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid #176B87;
     width: 30%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    animation: scaleUp 0.4s ease-in-out; /* Added animation for modal content */
 }
+
+.modal-content h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+
 
 .close {
     color: #aaa;
@@ -212,5 +249,179 @@
 .close:focus {
     color: #000;
     text-decoration: none;
+}
+
+.show {
+    display: block;
+}
+
+
+
+
+/* Styling the modal form elements specifically */
+#add-supplier-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#add-supplier-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #176B87;
+}
+
+#supplier-name,
+#supplier-phone,
+#address-street,
+#address-city,
+#address-zip
+{
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #176B87;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+#supplier-name:focus,
+#supplier-phone:focus,
+#address-street:focus,
+#address-city:focus,
+#address-zip:focus
+{
+    border-color: #0B4F5F;
+    box-shadow: 0 0 5px rgba(23, 107, 135, 0.6);
+    outline: none;
+}
+
+#add-supplier-form button {
+    background-color: #176B87;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease-in-out;
+}
+
+#add-supplier-form button:hover {
+    background-color: #0B4F5F;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#add-supplier-form button:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+
+
+#add-manager-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#add-manager-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #176B87;
+}
+
+#manager-firstName,
+#manager-lastName,
+#manager-email {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #176B87;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+#manager-firstName:focus,
+#manager-lastName:focus,
+#manager-email:focus {
+    border-color: #0B4F5F;
+    box-shadow: 0 0 5px rgba(23, 107, 135, 0.6);
+    outline: none;
+}
+
+select.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #176B87;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+    color: #333;
+    background-color: #fff;
+}
+
+select.form-control:focus {
+    border-color: #0B4F5F;
+    box-shadow: 0 0 5px rgba(23, 107, 135, 0.6);
+    outline: none;
+}
+
+
+#add-manager-form button {
+    background-color: #176B87;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease-in-out;
+}
+
+#add-manager-form button:hover {
+    background-color: #0B4F5F;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#add-manager-form button:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+/* Fade-in animation for modal background */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Scale-up animation for modal content */
+@keyframes scaleUp {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.card-heading {
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 8px 20px;
+    margin: 10px auto; /* Center horizontally */
+    text-align: center; /* Centers the heading text */
+    display: inline-block; /* Keeps the width compact */
 }
 

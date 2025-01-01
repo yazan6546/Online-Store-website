@@ -134,3 +134,91 @@
         }
     });
 }
+
+/////////////////////////////////
+function openModalManager() {
+    const modal = document.getElementById("add-manager-modal");
+    modal.classList.add("show");
+}
+
+function closeModalManager() {
+    const modal = document.getElementById("add-manager-modal");
+    modal.classList.remove("show");
+}
+
+// Add manager
+function addManager() {
+    const first_name = document.getElementById('manager-firstName').value;
+    const last_name = document.getElementById('manager-lastName').value;
+    const email = document.getElementById('manager-email').value;
+    const role = document.getElementById('manager-role').value;
+
+    // Validate inputs
+    if (!first_name || !last_name || !email || !role) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    // Send data to the server via AJAX
+    fetch('/add_manager', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ first_name, last_name, email, role }),
+    })
+        .then(response => response.json())
+        .then(data => {
+
+            if (data.success) {
+                alert('Manager added successfully!');
+                closeModalManager();
+                // Optionally, update the table dynamically
+                const tableBody = document.querySelector('#table tbody');
+                const newRow = `
+                    <tr id="row-${data.manager.person_id}">
+                        <td>${data.manager.person_id}</td>
+                        <td>
+                            <span id="first_name-${data.manager.person_id}-text">${data.manager.first_name}</span>
+                            <input type="text" id="first_name-${data.manager.person_id}-input" value="${data.manager.first_name}" style="display:none; width: 100px;">
+                        </td>
+
+                         <td>
+                            <span id="last_name-${data.manager.person_id}-text">${data.manager.last_name}</span>
+                            <input type="text" id="last_name-${data.manager.person_id}-input" value="${data.manager.last_name}" style="display:none; width: 100px;">
+                        </td>
+
+                        <td>
+                            <span id="email-${data.manager.person_id}-text">${data.manager.email}</span>
+                            <input type="text" id="email-${data.manager.person_id}-input" value="${data.manager.email}" style="display:none; width: 100px;">
+                        </td>
+
+                         <td>
+                            <span id="since-${data.manager.person_id}-text">${data.manager.since}</span>
+                            <input type="text" id="since-${data.manager.person_id}-input" value="${data.manager.since}" style="display:none; width: 100px;">
+                        </td>
+                        
+                        <td>
+                            <span id="role-${data.manager.person_id}-text">${data.manager.role}</span>
+                            <input type="text" id="role-${data.manager.person_id}-input" value="${data.manager.role}" style="display:none; width: 100px;">
+                        </td>
+
+
+                        <td class="action-buttons">
+                            <button id="edit-btn-${data.manager.person_id}" class="edit" onclick="enableEdit(${data.manager.person_id})">Edit</button>
+                            <button id="save-btn-${data.manager.person_id}" class="save" style="display:none;" onclick="saveEdit(${data.manager.person_id})">Save</button>
+                            <button class="delete" onclick="deleteManager(${data.manager.person_id})">Delete</button>
+                        </td>
+                    </tr>`;
+                tableBody.insertAdjacentHTML('beforeend', newRow);
+            } else {
+                alert('Error adding manager: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while adding the manager.');
+        });
+}
+
+
