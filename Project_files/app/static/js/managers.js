@@ -1,4 +1,47 @@
-    function enableEdit(person_id) {
+let sortDirection = {}; // Tracks sorting direction for each column
+
+function sortManagers(column) {
+    const table = document.getElementById('table');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    // Determine sort direction (toggle if already sorted by this column)
+    sortDirection[column] = !sortDirection[column];
+
+    // Sort rows based on the specified column
+    rows.sort((rowA, rowB) => {
+        let cellA = rowA.querySelector(`#${column}-${rowA.id.split('-')[1]}-text`)?.textContent.trim() || '';
+        let cellB = rowB.querySelector(`#${column}-${rowB.id.split('-')[1]}-text`)?.textContent.trim() || '';
+
+        if (column === 'person_id') {
+            // Numeric sort for Person ID
+            cellA = parseInt(cellA, 10) || 0; // Fallback to 0 if not a valid number
+            cellB = parseInt(cellB, 10) || 0;
+            return sortDirection[column] ? cellA - cellB : cellB - cellA;
+        }
+
+        if (column === 'since') {
+            // Date sort for Since column
+            const dateA = new Date(cellA).getTime() || 0; // Fallback to 0 for invalid dates
+            const dateB = new Date(cellB).getTime() || 0;
+            return sortDirection[column] ? dateA - dateB : dateB - dateA;
+        }
+
+        // Default: String sort (alphabetical)
+        return sortDirection[column]
+            ? cellA.localeCompare(cellB, undefined, { numeric: true })
+            : cellB.localeCompare(cellA, undefined, { numeric: true });
+    });
+
+    // Update the table with sorted rows
+    tbody.innerHTML = '';
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+
+
+
+function enableEdit(person_id) {
         console.log('Enabling edit for manager ID:', person_id);
         var row = document.getElementById('row-' + person_id);
         row.classList.add('edit-mode');
@@ -215,10 +258,10 @@ function addManager() {
                 alert('Error adding manager: ' + data.error);
             }
         })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while adding the manager.');
-        });
+        // .catch(error => {
+        //     console.error('Error:', error);
+        //     alert('An error occurred while adding the manager.');
+        // });
 }
 
 

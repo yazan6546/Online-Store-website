@@ -54,7 +54,9 @@ Customers
                                 <th>Street Address</th>
                                 <th>City</th>
                                 <th>Zip Code</th>
-                                <th>Actions</th>
+                                <th class="actions-header">Actions
+                                <button class="add-address-btn" onclick="openAddAddressModal({{ customer.person_id }})">Add</button>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,7 +78,7 @@ Customers
                                 <button id="edit-address-btn-{{ address.address_id }}" class="edit" onclick="enableEditAddress({{ address.address_id }})">Edit</button>
                                 <button id="save-address-btn-{{ address.address_id }}" class="save" style="display:none;" onclick="saveEditAddress({{ address.address_id }})">Save</button>
                                 <button class="delete" onclick="deleteAddress({{ address.address_id }})">Delete</button>
-                                <button class="add-address-btn" onclick="openAddAddressModal({{ customer.person_id }})">Add</button>
+
                                 </td>
                             </tr>
                             {% endfor %}
