@@ -76,6 +76,22 @@ class Person:
         finally:
             conn.close()
 
+
+    @staticmethod
+    def delete_all():
+        conn = get_db_connection()
+
+        try:
+            conn.execute(q.person.DELETE_ALL_FROM_PERSON)
+            conn.commit()
+            return 1
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+            return 0
+        finally:
+            conn.close()
+
     @staticmethod
     def from_dict(dict):
         return Person(

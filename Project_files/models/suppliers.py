@@ -109,4 +109,24 @@ class Supplier:
 
         return temp
 
+    def __repr__(self):
+        return f"{self.name} - {self.phone}"
+
+    def __str__(self):
+        return f"{self.name} - {self.phone}"
+
+    @staticmethod
+    def delete_all():
+        conn = get_db_connection()
+        try:
+            conn.execute(q.supplier.DELETE_ALL_FROM_SUPPLIER)
+            conn.commit()
+            return 1
+        except Exception as e:
+            print(f"Error in delete_all(): {e}")
+            conn.rollback()
+            return 0
+        finally:
+            conn.close()
+
 

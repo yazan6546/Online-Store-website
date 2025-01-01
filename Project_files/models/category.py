@@ -83,6 +83,20 @@ class Category:
         finally:
             conn.close()
 
+    @staticmethod
+    def delete_all():
+        conn = get_db_connection()
+        try:
+            conn.execute(q.category.DELETE_ALL_FROM_CATEGORY)
+            conn.commit()
+            return 1
+        except Exception as e:
+            print(f"Error in delete_all(): {e}")
+            conn.rollback()
+            return 0
+        finally:
+            conn.close()
+
     def __repr__(self):
         return f"{self.category_name} - {self.category_description}"
 

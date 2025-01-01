@@ -41,4 +41,9 @@ DROP_SUPPLIER_TABLE = text("""
                                 DROP TABLE IF EXISTS Supplier;
                         """)
 
+DELETE_ALL_FROM_SUPPLIER = text("""
+    DELETE FROM Supplier;
+""")
+
+
 

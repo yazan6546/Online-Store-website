@@ -42,3 +42,7 @@ CREATE_CATEGORY_TABLE = text("""
 DROP_CATEGORY_TABLE = text("""
     DROP TABLE IF EXISTS Category;
 """)
+
+DELETE_ALL_FROM_CATEGORY = text("""
+    DELETE FROM Category;
+""")

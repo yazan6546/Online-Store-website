@@ -29,3 +29,10 @@ def get_db_connection():
         standalone_engine = create_engine(DEFAULT_DB_URI)
         return standalone_engine.connect()
 
+
+    def reset_db():
+
+
+    # Call the function to reset the database
+    reset_db()
+

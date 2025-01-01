@@ -104,3 +104,7 @@ PENDING_ORDERS = text("""
     WHERE co.shipping_status = 'Shipped'
     ORDER BY co.delivery_date;
 """)
+
+DELETE_ALL_FROM_CUSTOMER_ORDER = text("""
+    DELETE FROM Customer_Order;
+""")

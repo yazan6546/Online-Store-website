@@ -137,3 +137,16 @@ class Product:
             return None
         finally:
             conn.close()
+
+    @staticmethod
+    def delete_all():
+        conn = get_db_connection()
+        try:
+            conn.execute(q.product.DELETE_ALL_FROM_PRODUCT)
+            conn.commit()
+            return 1
+        except Exception as e:
+            print(f"Error: {e}")
+            return 0
+        finally:
+            conn.close()

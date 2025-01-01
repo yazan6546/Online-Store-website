@@ -35,3 +35,7 @@ CREATE_CUSTOMER_ORDER_TABLE = text("""
 DROP_MANAGER_ORDER_TABLE = text("""
                                 DROP TABLE IF EXISTS Customer_Order_Line;
                             """)
+
+DELETE_ALL_FROM_CUSTOMER_ORDER_LINE = text("""
+    DELETE FROM Customer_Order_Line;
+""")

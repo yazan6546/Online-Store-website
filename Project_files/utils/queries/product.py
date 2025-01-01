@@ -64,3 +64,7 @@ CREATE_PRODUCTS_TABLE = text("""
 DROP_PRODUCTS_TABLE = text("""
                                 DROP TABLE IF EXISTS Product;
                         """)
+
+DELETE_ALL_FROM_PRODUCT = text("""
+    DELETE FROM Product;
+""")

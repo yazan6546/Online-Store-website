@@ -147,5 +147,18 @@ class Address:
         finally:
             conn.close()
 
+    @staticmethod
+    def delete_all():
+        conn = get_db_connection()
+        try:
+            conn.execute(q.address.DELETE_ALL_FROM_ADDRESS)
+            conn.commit()
+            return 1
+        except Exception as e:
+            print(f"Error: {e}")
+            return 0
+        finally:
+            conn.close()
+
     def __str__(self):
         return f"{self.zip_code}, {self.street}, {self.city}"
