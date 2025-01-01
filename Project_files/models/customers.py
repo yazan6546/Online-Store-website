@@ -13,12 +13,10 @@ class Customer(Person):
         conn = get_db_connection()
 
         try:
-            if self.person_id is not None:
-                conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
-            else:
-                result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
 
-                self.person_id = result.lastrowid
+            result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
+            conn.commit()
+            self.person_id = result.lastrowid
 
             result = conn.execute(q.customer.INSERT_CUSTOMERS_TABLE, {"person_id": self.person_id})
             conn.commit()

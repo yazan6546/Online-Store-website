@@ -9,6 +9,7 @@ from models.manager_order import ManagerOrder
 
 def read_csv_to_objects(file_path, model_class):
     df = pd.read_csv(file_path)
+    print(df.duplicated(subset='email').sum())
     objects = []
     for _, row in df.iterrows():
         print(row)
@@ -29,6 +30,7 @@ if __name__ == '__main__':
 
     # Read and save Customer objects
     customer_objects = read_csv_to_objects('csv_files/Customer.csv', Customer)
+
     save_objects_to_db(customer_objects)
     #
     # # Read and save Address objects
