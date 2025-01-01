@@ -311,6 +311,80 @@
     box-shadow: none;
 }
 
+
+
+#add-manager-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#add-manager-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #176B87;
+}
+
+#manager-firstName,
+#manager-lastName,
+#manager-email {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #176B87;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+#manager-firstName:focus,
+#manager-lastName:focus,
+#manager-email:focus {
+    border-color: #0B4F5F;
+    box-shadow: 0 0 5px rgba(23, 107, 135, 0.6);
+    outline: none;
+}
+
+select.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #176B87;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+    color: #333;
+    background-color: #fff;
+}
+
+select.form-control:focus {
+    border-color: #0B4F5F;
+    box-shadow: 0 0 5px rgba(23, 107, 135, 0.6);
+    outline: none;
+}
+
+
+#add-manager-form button {
+    background-color: #176B87;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease-in-out;
+}
+
+#add-manager-form button:hover {
+    background-color: #0B4F5F;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#add-manager-form button:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
 /* Fade-in animation for modal background */
 @keyframes fadeIn {
     from {
