@@ -1,8 +1,8 @@
 import os
 
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
 from flask import current_app, has_app_context
+from sqlalchemy import create_engine, text
 
 def get_db_connection():
     """
@@ -30,9 +30,38 @@ def get_db_connection():
         return standalone_engine.connect()
 
 
-    def reset_db():
 
+def reset_db():
+    connection = get_db_connection()
 
-    # Call the function to reset the database
-    reset_db()
+    # Disable foreign key checks
+    connection.execute(text("SET FOREIGN_KEY_CHECKS = 0;"))
+
+    # Deleting all records from tables directly
+    tables = [
+        "Manager_Order_Line",
+        "Manager_Order",
+        "Customer_Order_Line",
+        "Customer_Order",
+        "Product",
+        "Supplier",
+        "Category",
+        "Address",
+        "Person"
+    ]
+
+    # Delete all records from each table
+    for table in tables:
+        connection.execute(text(f"DELETE FROM {table};"))
+
+    # Reset auto-increment values for all tables
+    for table in tables:
+        connection.execute(text(f"ALTER TABLE {table} AUTO_INCREMENT = 1;"))
+
+    # Enable foreign key checks
+    connection.execute(text("SET FOREIGN_KEY_CHECKS = 1;"))
+
+    # Close the connection
+    connection.close()
+
 

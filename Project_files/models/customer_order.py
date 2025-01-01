@@ -115,6 +115,7 @@ class CustomerOrder(Order):
         conn = get_db_connection()
         try:
             conn.execute(q.customer_order.DELETE_ALL_FROM_CUSTOMER_ORDER)
+            conn.execute(q.customer_order_line.DELETE_ALL_FROM_CUSTOMER_ORDER_LINE)
             conn.commit()
             return 1
         except Exception as e:

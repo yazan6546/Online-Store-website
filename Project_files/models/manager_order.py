@@ -109,6 +109,7 @@ class ManagerOrder(Order):
         conn = get_db_connection()
         try:
             conn.execute(q.manager_order.DELETE_ALL_FROM_MANAGER_ORDER)
+            conn.execute(q.manager_order_line.DELETE_ALL_FROM_MANAGER_ORDER_Line)
             conn.commit()
             return 1
         except Exception as e:

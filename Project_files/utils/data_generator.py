@@ -202,13 +202,13 @@ if __name__ == '__main__':
 
     num_manager_records = 4
     #
-    # df = generate_customer_data(num_customer_records)
-    #
-    # generate_address_data(num_address_records, df['person_id'].tolist())
-    # generate_category_data()
+    df = generate_customer_data(num_customer_records)
+
+    generate_address_data(num_address_records, df['person_id'].tolist())
+    generate_category_data()
     generate_product_data(num_product_records, list(range(1, num_category_records+1)), list(range(1, num_supplier_records+1)))
-    # generate_manager_order_data(num_manager_order_records, list(range(1, num_manager_records+1)))
-    # generate_supplier_data(num_supplier_records)
-    # generate_customer_order_data(num_customer_order_records, df['person_id'].tolist(), list(range(1, num_address_records+1)))
-    # generate_customer_order_line_data(num_customer_order_line_records, list(range(1, num_customer_order_records+1)), list(range(1, num_product_records+1)))
-    # generate_manager_order_line_data(num_manager_order_line_records, list(range(1, num_manager_order_records+1)), list(range(1, num_product_records+1)))
+    generate_manager_order_data(num_manager_order_records, list(range(1, num_manager_records+1)))
+    generate_supplier_data(num_supplier_records)
+    generate_customer_order_data(num_customer_order_records, df['person_id'].tolist(), list(range(1, num_address_records+1)))
+    generate_customer_order_line_data(num_customer_order_line_records, list(range(1, num_customer_order_records+1)), list(range(1, num_product_records+1)))
+    generate_manager_order_line_data(num_manager_order_line_records, list(range(1, num_manager_order_records+1)), list(range(1, num_product_records+1)))
