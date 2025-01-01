@@ -425,3 +425,33 @@ select.form-control:focus {
     display: inline-block; /* Keeps the width compact */
 }
 
+
+/* Align the Add button in the Actions header */
+.actions-header {
+    position: relative;
+    text-align: left; /* Align the text and button to the left */
+}
+
+/* Style the Add button in the header */
+.add-address-btn-header {
+    background-color: #176B87;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px; /* Add space between "Actions" label and the button */
+    display: inline-block; /* Align inline with Actions text */
+}
+
+.add-address-btn-header:hover {
+    background-color: #0B4F5F; /* Change background on hover */
+}
+
+.add-address-btn-header:active {
+    transform: scale(0.95); /* Add slight scale effect on click */
+    box-shadow: none;
+}
+
