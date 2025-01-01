@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from models.order import Order
-import utils.queries.manager_order as q
+import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class ManagerOrder(Order):
@@ -37,7 +37,7 @@ class ManagerOrder(Order):
         conn = get_db_connection()
         try:
             conn.execute(
-                q.INSERT_MANAGER_ORDER_LINE_TABLE,
+                q.manager_order_line.INSERT_MANAGER_ORDER_LINE_TABLE,
                 [
                     {
                         "order_id": self.order_id,
@@ -60,7 +60,7 @@ class ManagerOrder(Order):
     def update_order(self):
         conn = get_db_connection()
         try:
-            conn.execute(q.UPDATE_MANAGER_ORDER_TABLE, self.to_dict(status=True))
+            conn.execute(q.manager_order.UPDATE_MANAGER_ORDER_TABLE, self.to_dict(status=True))
             conn.commit()
             return 1
 
