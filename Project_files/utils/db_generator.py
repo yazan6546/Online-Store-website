@@ -1,11 +1,7 @@
 import pandas as pd
-from models.category import Category
 from models.customers import Customer
-from models.addresses import Address
-from models.products import Product
-from models.suppliers import Supplier
-from models.customer_order import CustomerOrder
-from models.manager_order import ManagerOrder
+from utils.db_utils import get_db_connection, reset_db
+
 
 def read_csv_to_objects(file_path, model_class):
     df = pd.read_csv(file_path)
@@ -24,45 +20,54 @@ def save_objects_to_db(objects):
     print(f"Successfully saved {len(objects)} objects to the database.")
 
 
-if __name__ == '__main__':
-    # Read and save Category objects
-    category_objects = read_csv_to_objects('csv_files/Category.csv', Category)
-    save_objects_to_db(category_objects)
 
-    # Read and save Customer objects
+def import_data_and_save_to_db(csv_file_path, table_name, engine):
+    """
+    Reads data from a CSV file into a Pandas DataFrame and inserts it into a specified database table.
+
+    Parameters:
+        csv_file_path (str): The path to the CSV file containing the data.
+        table_name (str): The name of the database table where the data needs to be inserted.
+
+
+    """
+    try:
+        # Step 1: Read data into a Pandas DataFrame
+        df = pd.read_csv(csv_file_path)
+
+        # Step 2: Save the DataFrame into the specified database table
+        df.to_sql(
+            name=table_name,
+            con=engine,
+            if_exists='append',  # Append to the table if it already exists
+            index=False  # Do not save the DataFrame index as a column
+        )
+
+        print(f"Data from {csv_file_path} successfully inserted into the table '{table_name}'.")
+    except Exception as e:
+        print(f"Error inserting data into table '{table_name}': {e}")
+
+
+if __name__ == "__main__":
+
+    reset_db()
+
     customer_objects = read_csv_to_objects('csv_files/Customer.csv', Customer)
-
     save_objects_to_db(customer_objects)
 
-    # Read and save Address objects
+    conn = get_db_connection()
+    # Hardcoded mapping between CSV file paths and table names
+    csv_table_mapping = {
+        "csv_files/Address.csv": "Address",
+        "csv_files/Category.csv": "Category",
+        "csv_files/Supplier.csv": "Supplier",
+        "csv_files/Product.csv": "Product",
+        "csv_files/CustomerOrder.csv": "Customer_Order",
+        "csv_files/CustomerOrderLine.csv": "Customer_Order_Line",
+        "csv_files/ManagerOrder.csv": "Manager_Order",
+        "csv_files/ManagerOrderLine.csv": "Manager_Order_Line",
+    }
 
-
-    address_objects = read_csv_to_objects('csv_files/Address.csv', Address)
-    save_objects_to_db(address_objects)
-
-
-    # # Read and save Supplier objects
-    supplier_objects = read_csv_to_objects('csv_files/Supplier.csv', Supplier)
-    save_objects_to_db(supplier_objects)
-
-
-    # Read and save Product objects
-    product_objects = read_csv_to_objects('csv_files/Product.csv', Product)
-    save_objects_to_db(product_objects)
-    #
-
-    # Read and save CustomerOrder objects
-    customer_order_objects = read_csv_to_objects('csv_files/CustomerOrder.csv', CustomerOrder)
-    save_objects_to_db(customer_order_objects)
-
-    # Read and save CustomerOrderLine objects
-    customer_order_line_objects = read_csv_to_objects('csv_files/CustomerOrderLine.csv', CustomerOrderLine)
-    save_objects_to_db(customer_order_line_objects)
-
-    # Read and save ManagerOrder objects
-    manager_order_objects = read_csv_to_objects('csv_files/ManagerOrder.csv', ManagerOrder)
-    save_objects_to_db(manager_order_objects)
-
-    # Read and save ManagerOrderLine objects
-    manager_order_line_objects = read_csv_to_objects('csv_files/ManagerOrderLine.csv', ManagerOrderLine)
-    save_objects_to_db(manager_order_line_objects)
+    # Call the function for each CSV file and corresponding table
+    for file_path, table_name in csv_table_mapping.items():
+        import_data_and_save_to_db(file_path, table_name, conn)

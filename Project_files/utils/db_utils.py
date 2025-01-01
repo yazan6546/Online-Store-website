@@ -47,19 +47,24 @@ def reset_db():
         "Supplier",
         "Category",
         "Address",
-        "Person"
+        "Person",
+        "Customer"
     ]
 
     # Delete all records from each table
     for table in tables:
         connection.execute(text(f"DELETE FROM {table};"))
+        print(f"Deleted all records from the table '{table}'.")
 
     # Reset auto-increment values for all tables
     for table in tables:
         connection.execute(text(f"ALTER TABLE {table} AUTO_INCREMENT = 1;"))
 
+
     # Enable foreign key checks
     connection.execute(text("SET FOREIGN_KEY_CHECKS = 1;"))
+
+    connection.commit()
 
     # Close the connection
     connection.close()

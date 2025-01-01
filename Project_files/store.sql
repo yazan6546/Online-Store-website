@@ -90,7 +90,7 @@ create table Customer_Order(
     order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED')),
     shipping_status varchar(20) check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
     foreign key (person_id) references Customer(person_id) on delete cascade on update cascade,
-    foreign key (address_id) references Address_Order(address_id),
+    foreign key (address_id) references Address(address_id),
     primary key (order_id)
 );
 
@@ -118,7 +118,7 @@ create table Manager_Order(
 );
 
 create table Manager_Order_Line(
-    order_line_id int not null,
+    order_line_id int not null auto_increment,
     product_id int not null,
     order_id int not null,
     price_at_time_of_order int not null,
@@ -191,8 +191,13 @@ delete from Category;
 delete from Customer;
 delete from Person;
 
+select * from Person;
+
 delete from Address;
 select COUNT(*) from Customer;
 select COUNT(*) from Address;
 
+select * from Category;
 select * from Supplier;
+
+select * from Customer_Order;
