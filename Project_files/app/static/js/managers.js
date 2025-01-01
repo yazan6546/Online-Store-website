@@ -176,36 +176,36 @@ function addManager() {
                 // Optionally, update the table dynamically
                 const tableBody = document.querySelector('#table tbody');
                 const newRow = `
-                    <tr id="row-${data.manager.manager}">
+                    <tr id="row-${data.manager.person_id}">
                         <td>${data.manager.person_id}</td>
                         <td>
-                            <span id="first_name-${data.manager.manager_id}-text">${data.manager.first_name}</span>
+                            <span id="first_name-${data.manager.person_id}-text">${data.manager.first_name}</span>
                             <input type="text" id="first_name-${data.manager.person_id}-input" value="${data.manager.first_name}" style="display:none; width: 100px;">
                         </td>
 
                          <td>
-                            <span id="last_name-${data.manager.manager_id}-text">${data.manager.last_name}</span>
+                            <span id="last_name-${data.manager.person_id}-text">${data.manager.last_name}</span>
                             <input type="text" id="last_name-${data.manager.person_id}-input" value="${data.manager.last_name}" style="display:none; width: 100px;">
                         </td>
 
                         <td>
-                            <span id="email-${data.manager.manager_id}-text">${data.manager.email}</span>
+                            <span id="email-${data.manager.person_id}-text">${data.manager.email}</span>
                             <input type="text" id="email-${data.manager.person_id}-input" value="${data.manager.email}" style="display:none; width: 100px;">
                         </td>
 
                          <td>
-                            <span id="role-${data.manager.manager_id}-text">${data.manager.since}</span>
-                            <input type="text" id="role-${data.manager.person_id}-input" value="${data.manager.since}" style="display:none; width: 100px;">
+                            <span id="since-${data.manager.person_id}-text">${data.manager.since}</span>
+                            <input type="text" id="since-${data.manager.person_id}-input" value="${data.manager.since}" style="display:none; width: 100px;">
                         </td>
                         
                         <td>
-                            <span id="role-${data.manager.manager_id}-text">${data.manager.role}</span>
+                            <span id="role-${data.manager.person_id}-text">${data.manager.role}</span>
                             <input type="text" id="role-${data.manager.person_id}-input" value="${data.manager.role}" style="display:none; width: 100px;">
                         </td>
 
 
                         <td class="action-buttons">
-                            <button id="edit-btn-${data.manager.manager}" class="edit" onclick="enableEdit(${data.manager.person_id})">Edit</button>
+                            <button id="edit-btn-${data.manager.person_id}" class="edit" onclick="enableEdit(${data.manager.person_id})">Edit</button>
                             <button id="save-btn-${data.manager.person_id}" class="save" style="display:none;" onclick="saveEdit(${data.manager.person_id})">Save</button>
                             <button class="delete" onclick="deleteManager(${data.manager.person_id})">Delete</button>
                         </td>
