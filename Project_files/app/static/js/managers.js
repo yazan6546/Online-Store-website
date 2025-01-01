@@ -134,3 +134,84 @@
         }
     });
 }
+
+/////////////////////////////////
+function openModalManager() {
+    const modal = document.getElementById("add-manager-modal");
+    modal.classList.add("show");
+}
+
+function closeModalManager() {
+    const modal = document.getElementById("add-manager-modal");
+    modal.classList.remove("show");
+}
+
+// Add manager
+function addManager() {
+    const firstName = document.getElementById('manager-firstName').value;
+    const lastName = document.getElementById('manager-lastName').value;
+    const email = document.getElementById('manager-email').value;
+    const role = document.getElementById('manager-role').value;
+
+    // Validate inputs
+    if (!firstName || !lastName || !email || !role) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    // Send data to the server via AJAX
+    fetch('/add_manager', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ firstName, lastName, email, role }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Manager added successfully!');
+                closeModal();
+                // Optionally, update the table dynamically
+                const tableBody = document.querySelector('#table tbody');
+                const newRow = `
+                    <tr id="row-${data.manager.manager}">
+                        <td>${data.manager.manager_id}</td>
+                        <td>
+                            <span id="firstName-${data.manager.manager_id}-text">${data.manager.firstName}</span>
+                            <input type="text" id="firstName-${data.manager.manager_id}-input" value="${data.manager.firstName}" style="display:none; width: 100px;">
+                        </td>
+
+                         <td>
+                            <span id="lastName-${data.manager.manager_id}-text">${data.manager.lastName}</span>
+                            <input type="text" id="lastName-${data.manager.manager_id}-input" value="${data.manager.lastName}" style="display:none; width: 100px;">
+                        </td>
+
+                        <td>
+                            <span id="email-${data.manager.manager_id}-text">${data.manager.email}</span>
+                            <input type="text" id="email-${data.manager.manager_id}-input" value="${data.manager.email}" style="display:none; width: 100px;">
+                        </td>
+
+                         <td>
+                            <span id="role-${data.manager.manager_id}-text">${data.manager.role}</span>
+                            <input type="text" id="role-${data.manager.manager_id}-input" value="${data.manager.role}" style="display:none; width: 100px;">
+                        </td>
+
+
+                        <td class="action-buttons">
+                            <button id="edit-btn-${data.manager.manager}" class="edit" onclick="enableEditManager(${data.manager.manager_id})">Edit</button>
+                            <button id="save-btn-${data.manager.manager_id}" class="save" style="display:none;" onclick="saveEditManager(${data.manager.manager_id})">Save</button>
+                            <button class="delete" onclick="deleteManager(${data.manager.manager_id})">Delete</button>
+                        </td>
+                    </tr>`;
+                tableBody.insertAdjacentHTML('beforeend', newRow);
+            } else {
+                alert('Error adding manager: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while adding the manager.');
+        });
+}
+

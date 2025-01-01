@@ -176,6 +176,29 @@ def search_manager():
 
     return jsonify({"success": False, "error": "An error occurred while searching for managers"})
 
+# add manager
+@app.route('/add_manager', methods=['POST'])
+def add_manager():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        firstName = data.get('firstName')
+        lastName = data.get('lastName')
+        email = data.get('email')
+        role = data.get('role')
+
+
+        # Validate inputs
+        if not firstName or not lastName or not email or not role:
+            return jsonify(success=False, error="firstName, lastName, email, and role are required.")
+
+        # Create and insert a new manager
+        new_manager = Manager(manager_firstName=firstName, manager_lastName=lastName, manager_email=email, manager_role=role)
+        new_manager.insert()
+
+        return jsonify(success=True, manager=new_manager.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
 
 ############################################################################################################
 # suppliers section
