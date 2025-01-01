@@ -36,3 +36,7 @@ CREATE_MANAGER_ORDER_LINE_TABLE = text("""
 DROP_MANAGER_ORDER_TABLE = text("""
                                 DROP TABLE IF EXISTS Manager_Order;
                             """)
+
+DELETE_ALL_FROM_MANAGER_ORDER_Line = text("""
+    DELETE FROM Manager_Order_Line;
+""")

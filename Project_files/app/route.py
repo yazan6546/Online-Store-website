@@ -123,7 +123,7 @@ def add_address(customer_id):
 
     address = Address(person_id=customer_id, city=city, zip_code=zip_code, street=street)
     try:
-        result = address.insert(customer_id)
+        result = address.insert()
         if result:
             return jsonify(success=True, address=address.to_dict())
         else:
@@ -428,10 +428,6 @@ def index():
 def about():
     return render_template('about.html')
 
-# Contact Page
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
 
 # Shop Page
 @app.route('/shop')

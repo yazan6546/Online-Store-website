@@ -12,11 +12,10 @@ class Manager(Person):
         conn = get_db_connection()
 
         try:
-            if self.person_id is not None:
-                conn.execute(q.person.INSERT_PERSON_TABLE, super().to_dict())
-            else:
-                result = conn.execute(q.person.INSERT_PERSON_TABLE, super().to_dict())
-                self.person_id = result.lastrowid
+            result = conn.execute(q.person.INSERT_PERSON_TABLE, super().to_dict())
+            self.person_id = result.lastrowid
+
+            conn.commit()
 
             conn.execute(q.manager.INSERT_MANAGER_TABLE, self.to_dict(person=False))
 
@@ -139,10 +138,10 @@ class Manager(Person):
             **data_dict
         )
 
-    def to_dict(self, person=True):
+    def to_dict(self, person=True, person_id=True):
 
         if person:
-          temp = super().to_dict()
+          temp = super().to_dict(person_id=person_id)
         else:
             temp= {'person_id': self.person_id}
 
