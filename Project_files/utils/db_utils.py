@@ -47,13 +47,30 @@ def reset_db():
         "Supplier",
         "Category",
         "Address",
-        "Person",
-        "Customer"
+        "Customer",
+        'Manager'
     ]
 
     # Delete all records from each table
     for table in tables:
-        connection.execute(text(f"DELETE FROM {table};"))
+
+        if table == 'Customer':
+            connection.execute(text("""
+            DELETE FROM Person
+            WHERE person_id IN (
+                  SELECT person_id
+                  FROM Customer
+            );"""))
+        elif table == 'Manager':
+            connection.execute(text("""
+            DELETE FROM Person
+            WHERE person_id IN (
+                  SELECT person_id
+                  FROM Manager
+            );"""))
+
+        else:
+            connection.execute(text(f"DELETE FROM {table};"))
         print(f"Deleted all records from the table '{table}'.")
 
     # Reset auto-increment values for all tables

@@ -107,7 +107,7 @@ create table Customer_Order_Line(
 
 
 create table Manager_Order(
-    order_id int not null,
+    order_id int not null auto_increment,
     person_id int not null,
     order_date date,
     delivery_date date,

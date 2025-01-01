@@ -1,14 +1,16 @@
 import pandas as pd
+
+from models import Manager
 from models.customers import Customer
 from utils.db_utils import get_db_connection, reset_db
 
 
-def read_csv_to_objects(file_path, model_class):
+def read_csv_to_objects(file_path, model_class:Customer | Manager):
     df = pd.read_csv(file_path)
     objects = []
     for _, row in df.iterrows():
         print(row.to_dict())
-        obj = model_class(**row.to_dict())
+        obj = model_class(**row.to_dict(), hash=True)
         objects.append(obj)
     return objects
 
@@ -21,7 +23,7 @@ def save_objects_to_db(objects):
 
 
 
-def import_data_and_save_to_db(csv_file_path, table_name, engine):
+def import_data_and_save_to_db(csv_file_path, table_name, engine, length=4):
     """
     Reads data from a CSV file into a Pandas DataFrame and inserts it into a specified database table.
 
@@ -34,6 +36,9 @@ def import_data_and_save_to_db(csv_file_path, table_name, engine):
     try:
         # Step 1: Read data into a Pandas DataFrame
         df = pd.read_csv(csv_file_path)
+
+        if table_name == 'Customer_Order':
+            df['person_id'] = df['person_id'] + length
 
         # Step 2: Save the DataFrame into the specified database table
         df.to_sql(
@@ -51,6 +56,11 @@ def import_data_and_save_to_db(csv_file_path, table_name, engine):
 if __name__ == "__main__":
 
     reset_db()
+
+    customer_objects = read_csv_to_objects('csv_files/Manager.csv', Manager)
+    save_objects_to_db(customer_objects)
+
+    length = len(customer_objects)
 
     customer_objects = read_csv_to_objects('csv_files/Customer.csv', Customer)
     save_objects_to_db(customer_objects)
