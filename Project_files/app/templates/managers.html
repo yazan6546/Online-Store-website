@@ -90,7 +90,11 @@ Managers
                 <input type="text" id="manager-email" placeholder="Enter manager Email" required>
 
                 <label for="manager-role">Role</label>
-                <input type="text" id="manager-role" placeholder="Enter manager Role" required>
+                <select id="manager-role" name="role" class="form-control">
+                    <option value="Financial Manager">Financial Manager</option>
+                    <option value="Assistant Manager">Assistant Manager</option>
+                    <option value="Regional Manager">Regional Manager</option>
+                </select>
 
                 <button type="submit" class="btn">Add Manager</button>
             </form>
