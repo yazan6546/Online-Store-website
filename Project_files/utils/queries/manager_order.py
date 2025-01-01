@@ -20,6 +20,16 @@ DELETE_FROM_MANAGER_ORDER = text("""
                                 WHERE order_id = :order_id;
                             """)
 
+UPDATE_MANAGER_ORDER_TABLE = text("""
+                            UPDATE Manager_Order
+                            SET order_status=:order_status,
+                            person_id=:person_id,
+                            delivery_date=:delivery_date, 
+                            shipping_status=:shipping_status, 
+                            order_date=:order_date
+                            WHERE order_id = :order_id;
+                            """)
+
 CREATE_MANAGER_ORDER_TABLE = text("""
                             CREATE TABLE IF NOT EXISTS Manager_Order(
                             order_id int NOT NULL,
@@ -35,5 +45,9 @@ CREATE_MANAGER_ORDER_TABLE = text("""
 DROP_MANAGER_ORDER_TABLE = text("""
                                 DROP TABLE IF EXISTS Manager_Order;
                             """)
+
+DELETE_ALL_FROM_MANAGER_ORDER = text("""
+    DELETE FROM Manager_Order;
+""")
 
                                         

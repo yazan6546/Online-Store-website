@@ -9,5 +9,17 @@ from .product import *
 from .data_analysis import *
 from .address import *
 from .supplier import *
+from .category import *
 
-__all__= ['customer','manager', 'customer_order_line', 'person', 'customer_order', 'manager_order', 'manager_order_line', 'product', 'data_analysis', 'address', 'supplier']
+__all__= ['customer',
+          'manager',
+          'customer_order_line',
+          'person',
+          'customer_order',
+          'manager_order',
+          'manager_order_line',
+          'product',
+          'data_analysis',
+          'address',
+          'supplier',
+          'category']

@@ -100,3 +100,7 @@ SEARCH_MANAGERS = text("""
 DROP_MANAGERS_TABLE = text("""
                                 DROP TABLE IF EXISTS Manager;
                             """)
+
+DELETE_ALL_FROM_MANAGER = text("""
+    DELETE FROM Manager;
+""")

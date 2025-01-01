@@ -19,6 +19,18 @@ DELETE_FROM_CUSTOMER_ORDER = text("""
                                 WHERE order_id = :order_id;
                             """)
 
+
+UPDATE_CUSTOMER_ORDER_TABLE = text("""
+                            UPDATE Customer_Order
+                            SET order_status=:order_status,
+                            person_id=:person_id,
+                            address_id=:address_id, 
+                            delivery_date=:delivery_date, 
+                            shipping_status=:shipping_status, 
+                            order_date=:order_date
+                            WHERE order_id = :order_id;
+                            """)
+
 CREATE_CUSTOMER_ORDER_TABLE = text("""
                             CREATE TABLE IF NOT EXISTS Manager_Order(
                             order_id int NOT NULL,
@@ -58,6 +70,32 @@ GET_ALL_INCART_PRODUCTS_BY_ID = text("""
                             """)
 
 
+GET_ALL_PLACED_ORDERS = text("""
+
+                                SELECT 
+                                    co.order_id,
+                                    co.order_date,
+                                    co.delivery_date,
+                                    co.shipping_status,
+                                    co.person_id,
+                                    co.address_id,
+                                    p.product_id,
+                                    p.product_name,
+                                    p.product_description,
+                                    p.price,
+                                    col.quantity,
+                                    col.price_at_time_of_order
+                                FROM 
+                                    Customer_Order co
+                                JOIN 
+                                    Customer_Order_Line col ON co.order_id = col.order_id
+                                JOIN 
+                                    Product p ON col.product_id = p.product_id
+                                WHERE 
+                                    co.order_status = 'PLACED';
+                            """)
+
+
 PENDING_ORDERS = text("""
     SELECT co.order_id, co.order_date, co.delivery_date, co.shipping_status, p.first_name, p.last_name
     FROM Customer_Order co 
@@ -65,4 +103,8 @@ PENDING_ORDERS = text("""
     ON co.person_id = p.person_id
     WHERE co.shipping_status = 'Shipped'
     ORDER BY co.delivery_date;
+""")
+
+DELETE_ALL_FROM_CUSTOMER_ORDER = text("""
+    DELETE FROM Customer_Order;
 """)

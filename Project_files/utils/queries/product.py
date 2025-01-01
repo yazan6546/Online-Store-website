@@ -38,6 +38,7 @@ UPDATE_PRODUCTS_TABLE = text("""
                                 WHERE product_id = :product_id;
                             """)
 
+
 DELETE_FROM_PRODUCTS = text("""
                                 DELETE FROM Product 
                                 WHERE product_id = :product_id;
@@ -63,3 +64,7 @@ CREATE_PRODUCTS_TABLE = text("""
 DROP_PRODUCTS_TABLE = text("""
                                 DROP TABLE IF EXISTS Product;
                         """)
+
+DELETE_ALL_FROM_PRODUCT = text("""
+    DELETE FROM Product;
+""")

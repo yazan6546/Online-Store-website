@@ -59,3 +59,7 @@ CREATE_ADDRESS_TABLE = text("""
 DROP_ADDRESS_TABLE = text("""
                             drop table if exists Address;
                             """)
+
+DELETE_ALL_FROM_ADDRESS = text("""
+    DELETE FROM Address;
+""")

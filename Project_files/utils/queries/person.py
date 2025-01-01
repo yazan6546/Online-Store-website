@@ -47,3 +47,7 @@ CREATE_PERSON_TABLE = text("""
 DROP_PERSON_TABLE = text("""
                                 DROP TABLE IF EXISTS Person;
                             """)
+
+DELETE_ALL_FROM_PERSON = text("""
+    DELETE FROM Person;
+""")

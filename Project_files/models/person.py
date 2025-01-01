@@ -14,7 +14,7 @@ class Person:
         self.last_name = last_name
         self.person_id = person_id
 
-    def insert_person(self):
+    def insert(self):
         conn = get_db_connection()
 
         try:
@@ -27,7 +27,7 @@ class Person:
         finally:
             conn.close()
 
-    def to_dict(self):
+    def to_dict(self, person_id=True):
         temp =  {
             "first_name": self.first_name,
             "last_name": self.last_name,
@@ -35,7 +35,7 @@ class Person:
             "passcode": self.passcode,
         }
 
-        if self.person_id is not None:
+        if person_id:
             temp["person_id"] = self.person_id
 
         return temp
@@ -69,6 +69,22 @@ class Person:
             conn.commit()
             return 1
 
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+            return 0
+        finally:
+            conn.close()
+
+
+    @staticmethod
+    def delete_all():
+        conn = get_db_connection()
+
+        try:
+            conn.execute(q.person.DELETE_ALL_FROM_PERSON)
+            conn.commit()
+            return 1
         except Exception as e:
             print(f"Error: {e}")
             conn.rollback()

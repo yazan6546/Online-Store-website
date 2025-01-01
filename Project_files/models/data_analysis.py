@@ -22,7 +22,7 @@ def update_graph(selected_analysis):
 
     conn = get_db_connection()
     # Execute the SQL query
-with get_db_connection() as conn: result = pd.read_sql(query, conn)
+    with get_db_connection() as conn: result = pd.read_sql(query, conn)
 
     # Generate the plot based on the selected analysis
     if selected_analysis == 'Top 10 Selling Products':

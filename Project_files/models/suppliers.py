@@ -13,11 +13,8 @@ class Supplier:
         conn = get_db_connection()
         result = None
         try:
-            if self.supplier_id is not None:
-                conn.execute(q.supplier.INSERT_SUPPLIER_TABLE, self.to_dict())
-            else:
-                result = conn.execute(q.supplier.INSERT_SUPPLIER_TABLE, self.to_dict())
-                self.supplier_id = result.lastrowid
+            result = conn.execute(q.supplier.INSERT_SUPPLIER_TABLE, self.to_dict())
+            self.supplier_id = result.lastrowid
 
             conn.commit()
 
@@ -86,7 +83,7 @@ class Supplier:
                 return []
             print("Converting rows to dictionaries...")
             # Safely convert rows to dictionaries
-            suppliers = [supplier._asdict() for supplier in suppliers]
+            suppliers = [supplier._mapping for supplier in suppliers]
 
 
             for supplier in suppliers:
@@ -101,15 +98,35 @@ class Supplier:
             conn.close()
 
 
-    def to_dict(self):
+    def to_dict(self, supplier_id=True):
         temp = {
             "name": self.name,
             "phone": self.phone,
         }
 
-        if self.supplier_id is not None:
+        if supplier_id:
             temp["supplier_id"] = self.supplier_id
 
         return temp
+
+    def __repr__(self):
+        return f"{self.name} - {self.phone}"
+
+    def __str__(self):
+        return f"{self.name} - {self.phone}"
+
+    @staticmethod
+    def delete_all():
+        conn = get_db_connection()
+        try:
+            conn.execute(q.supplier.DELETE_ALL_FROM_SUPPLIER)
+            conn.commit()
+            return 1
+        except Exception as e:
+            print(f"Error in delete_all(): {e}")
+            conn.rollback()
+            return 0
+        finally:
+            conn.close()
 
 
