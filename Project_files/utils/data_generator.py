@@ -70,7 +70,7 @@ def generate_address_data(num_records, customer_ids):
             'person_id': random.choice(customer_ids),
             'city': fake.city(),
             'zip_code': fake.zipcode(),
-            'street_address': fake.street_address()
+            'street': fake.street_address()
         })
     df = pd.DataFrame(data)
     df.to_csv('csv_files/Address.csv', index=False)
@@ -99,7 +99,7 @@ def generate_category_data():
     df.to_csv('csv_files/Category.csv', index=False)
     return df
 
-def generate_product_data(num_records, category_ids):
+def generate_product_data(num_records, category_ids, supplier_ids):
     data = []
     for _ in range(num_records):
         data.append({
@@ -107,7 +107,9 @@ def generate_product_data(num_records, category_ids):
             'product_description': fake.text(max_nb_chars=100),
             'price': round(random.uniform(50, 1000), 2),
             'photo': fake.image_url(),
+            'brand': fake.company(),
             'stock_quantity': random.randint(1, 100),
+            'supplier_id': random.choice(supplier_ids),
             'category_id': random.choice(category_ids)
         })
     df = pd.DataFrame(data)
@@ -117,11 +119,12 @@ def generate_product_data(num_records, category_ids):
 def generate_supplier_data(num_records):
     data = []
     for _ in range(num_records):
+
+        phone_number_pattern = f'{0}{5}#-###-####'
+
         data.append({
             'supplier_name': fake.company(),
-            'contact_name': fake.name(),
-            'contact_email': fake.email(),
-            'contact_phone': fake.phone_number()
+            'phone_number': fake.numerify(phone_number_pattern)
         })
     df = pd.DataFrame(data)
     df.to_csv('csv_files/Supplier.csv', index=False)
@@ -198,12 +201,12 @@ if __name__ == '__main__':
     num_manager_order_line_records = 500
 
     num_manager_records = 4
-
-    df = generate_customer_data(num_customer_records)
-
+    #
+    # df = generate_customer_data(num_customer_records)
+    #
     # generate_address_data(num_address_records, df['person_id'].tolist())
     # generate_category_data()
-    # generate_product_data(num_product_records, list(range(1, num_category_records+1)))
+    generate_product_data(num_product_records, list(range(1, num_category_records+1)), list(range(1, num_supplier_records+1)))
     # generate_manager_order_data(num_manager_order_records, list(range(1, num_manager_records+1)))
     # generate_supplier_data(num_supplier_records)
     # generate_customer_order_data(num_customer_order_records, df['person_id'].tolist(), list(range(1, num_address_records+1)))

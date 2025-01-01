@@ -186,5 +186,13 @@ delete from Person where person_id > 20;
 
 select * from Category;
 
+delete from Category;
+
 delete from Customer;
 delete from Person;
+
+delete from Address;
+select COUNT(*) from Customer;
+select COUNT(*) from Address;
+
+select * from Supplier;

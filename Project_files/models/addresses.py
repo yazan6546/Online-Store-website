@@ -16,9 +16,9 @@ class Address:
         result = None
         try:
             if self.address_id is not None:
-                conn.execute(q.address.INSERT_ADDRESS_TABLE, self.to_dict())
+                conn.execute(q.address.INSERT_ADDRESS_TABLE, self.to_dict(person_id=True))
             else:
-                result = conn.execute(q.address.INSERT_ADDRESS_TABLE, self.to_dict())
+                result = conn.execute(q.address.INSERT_ADDRESS_TABLE, self.to_dict(person_id=True))
                 self.address_id = result.lastrowid
 
             conn.commit()

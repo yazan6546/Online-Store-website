@@ -9,10 +9,9 @@ from models.manager_order import ManagerOrder
 
 def read_csv_to_objects(file_path, model_class):
     df = pd.read_csv(file_path)
-    print(df.duplicated(subset='email').sum())
     objects = []
     for _, row in df.iterrows():
-        print(row)
+        print(row.to_dict())
         obj = model_class(**row.to_dict())
         objects.append(obj)
     return objects
@@ -28,23 +27,25 @@ if __name__ == '__main__':
     # category_objects = read_csv_to_objects('csv_files/Category.csv', Category)
     # save_objects_to_db(category_objects)
 
-    # Read and save Customer objects
-    customer_objects = read_csv_to_objects('csv_files/Customer.csv', Customer)
-
-    save_objects_to_db(customer_objects)
+    # # Read and save Customer objects
+    # customer_objects = read_csv_to_objects('csv_files/Customer.csv', Customer)
     #
-    # # Read and save Address objects
+    # save_objects_to_db(customer_objects)
+    #
+    # Read and save Address objects
+
+    #
     # address_objects = read_csv_to_objects('csv_files/Address.csv', Address)
     # save_objects_to_db(address_objects)
     #
-    # # Read and save Product objects
-    # product_objects = read_csv_to_objects('csv_files/Product.csv', Product)
-    # save_objects_to_db(product_objects)
+    # Read and save Product objects
+    product_objects = read_csv_to_objects('csv_files/Product.csv', Product)
+    save_objects_to_db(product_objects)
     #
     # # Read and save Supplier objects
     # supplier_objects = read_csv_to_objects('csv_files/Supplier.csv', Supplier)
     # save_objects_to_db(supplier_objects)
-    #
+
     # # Read and save CustomerOrder objects
     # customer_order_objects = read_csv_to_objects('csv_files/CustomerOrder.csv', CustomerOrder)
     # save_objects_to_db(customer_order_objects)
