@@ -272,7 +272,11 @@
 }
 
 #supplier-name,
-#supplier-phone {
+#supplier-phone,
+#address-street,
+#address-city,
+#address-zip
+{
     width: 100%;
     padding: 10px;
     border: 2px solid #176B87;
@@ -283,7 +287,11 @@
 }
 
 #supplier-name:focus,
-#supplier-phone:focus {
+#supplier-phone:focus,
+#address-street:focus,
+#address-city:focus,
+#address-zip:focus
+{
     border-color: #0B4F5F;
     box-shadow: 0 0 5px rgba(23, 107, 135, 0.6);
     outline: none;
