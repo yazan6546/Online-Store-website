@@ -1,0 +1,84 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/manager_shop.css') }}">
+{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+    <div class="card-heading">
+        <h1>Shopping List</h1>
+    </div>
+
+  <!-- SORT SECTION -->
+  <div class="sort-container">
+    <div class="sort-box">
+      <label for="sort-options">Sort by:</label>
+      <select id="sort-options">
+            <option value="featured">Featured</option>
+            <option value="best-selling">Best Selling</option>
+            <option value="a-z">Alphabetically, A-Z</option>
+            <option value="z-a">Alphabetically, Z-A</option>
+            <option value="low-high">Price, Low to High</option>
+            <option value="high-low">Price, High to Low</option>
+            <option value="old-new">Date, Old to New</option>
+            <option value="new-old">Date, New to Old</option>
+      </select>
+      <span class="product-count"># of products</span>
+    </div>
+  </div>
+
+<!-- FILTER SECTION -->
+  <div class="heading">
+    <h2>Filter:</h2>
+  </div>
+
+  <div class="main-section">
+    <div class="filters">
+      <!-- Filter: Category -->
+      <div class="filter-box">
+        <h3>Category</h3>
+        <ul>
+          <li><input type="checkbox"> Home Appliances</li>
+          <li><input type="checkbox"> Television</li>
+          <li><input type="checkbox"> Small Appliances</li>
+          <li><input type="checkbox"> Computers & Tablets</li>
+          <li><input type="checkbox"> Mobiles & Audio</li>
+          <li><input type="checkbox"> Beauty Care</li>
+          <li><input type="checkbox"> Office Supplies</li>
+          <li><input type="checkbox"> Heating & Cooling</li>
+        </ul>
+      </div>
+
+      <!-- Filter: Price -->
+      <div class="filter-box">
+        <h3>Price</h3>
+        <p>The highest price is $#</p>
+          <div class="range-slider">
+            <input type="range" id="minPrice" class="range-input" min="0" max="1500" value="122">
+            <input type="range" id="maxPrice" class="range-input" min="0" max="1500" value="891">
+          </div>
+          <p>Price: $<span id="priceMin">#</span> - $<span id="priceMax">#</span></p>
+        </div>
+
+      <!-- Filter: Availability -->
+      <div class="filter-box">
+        <h3>Availability</h3>
+        <ul>
+          <li><input type="checkbox"> In Stock</li>
+          <li><input type="checkbox"> Out of Stock</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+    <!-- Product List -->
+
+</div>
+
+
+{% endblock %}
