@@ -202,3 +202,17 @@ select * from Category;
 select * from Supplier;
 
 select * from Customer_Order;
+
+SELECT p.product_id, p.product_name, SUM(col.quantity) AS total_quantity_sold
+    FROM Product p
+    JOIN Customer_Order_Line col ON p.product_id = col.product_id
+    JOIN Customer_Order co ON col.order_id = co.order_id
+    WHERE co.order_status = 'PLACED'
+    GROUP BY p.product_id, p.product_name
+    ORDER BY total_quantity_sold DESC
+    LIMIT 10;
+
+
+SELECT COUNT(DISTINCT c.person_id) AS customers_with_address
+FROM Customer c
+JOIN Address a ON c.person_id = a.person_id;
