@@ -211,10 +211,14 @@ const coloredBarChart = new Chart(ctxBar, {
 });
 
 // Function to process input data and update the chart
-function updateChartData(inputData) {
+async function fetchBestProductsByMonth() {
+
+    const response = await fetch('/api/best_selling_products_by_month');
+    const data = await response.json();
+
     // Assuming inputData is an array of objects with 3 columns
-    const labels = inputData.map(item => item.month);
-    const datasetData = inputData.map(item => item.total_quantity_sold);
+    const labels = data.map(item => item.month);
+    const datasetData = data.map(item => item.total_quantity_sold);
 
     // Update the chart data
     coloredBarChart.data.labels = labels;
@@ -222,24 +226,9 @@ function updateChartData(inputData) {
     coloredBarChart.update();
 }
 
-// Example input data
-const inputData = [
-    { month: '2023-01', product_name: 'time', total_quantity_sold: 26.0 },
-    { month: '2023-02', product_name: 'image', total_quantity_sold: 28.0 },
-    { month: '2023-03', product_name: 'blue', total_quantity_sold: 22.0 },
-    { month: '2023-04', product_name: 'former', total_quantity_sold: 26.0 },
-    { month: '2023-05', product_name: 'half', total_quantity_sold: 29.0 },
-    { month: '2023-06', product_name: 'represent', total_quantity_sold: 25.0 },
-    { month: '2023-07', product_name: 'five', total_quantity_sold: 25.0 },
-    { month: '2023-08', product_name: 'option', total_quantity_sold: 29.0 },
-    { month: '2023-09', product_name: 'environmental', total_quantity_sold: 41.0 },
-    { month: '2023-10', product_name: 'mean', total_quantity_sold: 30.0 },
-    { month: '2023-11', product_name: 'theory', total_quantity_sold: 25.0 },
-    { month: '2023-12', product_name: 'scientist', total_quantity_sold: 25.0 }
-];
 
 // Update the chart with the example input data
-updateChartData(inputData);
+fetchBestProductsByMonth();
 
 
 // // Call the function to fetch and process the data

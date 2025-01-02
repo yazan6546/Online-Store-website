@@ -531,4 +531,9 @@ def get_best_selling_products_by_month():
     best_selling_products = da.get_best_selling_product_by_month(2023)
     return jsonify(best_selling_products)
 
+# @app.route('/api/best_customers', methods=['GET'])
+# def get_best_customers():
+#     best_customers = da.get_best_customers()
+#     return jsonify(best_customers)
+
 
