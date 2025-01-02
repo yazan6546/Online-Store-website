@@ -64,11 +64,14 @@ def generate_customer_data(num_records):
 #     return df
 
 def generate_address_data(num_records, customer_ids):
+    west_bank_cities = [
+        'Hebron', 'Nablus', 'Ramallah', 'Bethlehem', 'Jenin', 'Tulkarm', 'Qalqilya', 'Jericho', 'Salfit', 'Tubas'
+    ]
     data = []
     for _ in range(num_records):
         data.append({
             'person_id': random.choice(customer_ids),
-            'city': fake.city(),
+            'city': random.choice(west_bank_cities),
             'zip_code': fake.zipcode(),
             'street_address': fake.street_address()
         })
@@ -136,7 +139,7 @@ def generate_customer_order_data(num_records, customer_ids, address_ids):
         data.append({
             'person_id': random.choice(customer_ids),
             'address_id': random.choice(address_ids),
-            'order_date': fake.date_between(start_date='-30d', end_date='today'),
+            'order_date': fake.date_between(start_date='-4y', end_date='today'),
             'delivery_date': fake.date_between(start_date='today', end_date='+10d'),
             'order_status': random.choice(['IN_CART', 'PLACED']),
             'shipping_status': random.choice(['Shipped', 'Delivered', 'Cancelled'])
@@ -163,7 +166,7 @@ def generate_manager_order_data(num_records, manager_ids):
     for i in range(num_records):
         data.append({
             'person_id': random.choice(manager_ids),
-            'order_date': fake.date_between(start_date='-30d', end_date='today'),
+            'order_date': fake.date_between(start_date='-4y', end_date='today'),
             'delivery_date': fake.date_between(start_date='today', end_date='+10d'),
             'order_status': random.choice(['IN_CART', 'PLACED']),
             'shipping_status': random.choice(['Shipped', 'Delivered', 'Cancelled'])
@@ -195,10 +198,10 @@ if __name__ == '__main__':
     num_category_records = 15
     num_product_records = 100
     num_supplier_records = 10
-    num_customer_order_records = 500
+    num_customer_order_records = 2000
     num_customer_order_line_records = 10000
-    num_manager_order_records = 100
-    num_manager_order_line_records = 500
+    num_manager_order_records = 350
+    num_manager_order_line_records = 600
 
     num_manager_records = 4
     #
@@ -206,10 +209,10 @@ if __name__ == '__main__':
     df['person_id'] = df['person_id'] + num_manager_records
 
     generate_address_data(num_address_records, df['person_id'].tolist())
-    generate_category_data()
-    generate_product_data(num_product_records, list(range(1, num_category_records)), list(range(1, num_supplier_records)))
+    # generate_category_data()
+    # generate_product_data(num_product_records, list(range(1, num_category_records)), list(range(1, num_supplier_records)))
     generate_manager_order_data(num_manager_order_records, list(range(1, num_manager_records)))
-    generate_supplier_data(num_supplier_records)
+    # generate_supplier_data(num_supplier_records)
     generate_customer_order_data(num_customer_order_records, df['person_id'].tolist(), list(range(1, num_address_records)))
     generate_customer_order_line_data(num_customer_order_line_records, list(range(1, num_customer_order_records+1)), list(range(1, num_product_records)))
     generate_manager_order_line_data(num_manager_order_line_records, list(range(1, num_manager_order_records+1)), list(range(1, num_product_records+1)))

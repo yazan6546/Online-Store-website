@@ -57,7 +57,7 @@ FROM
 JOIN
     Customer_Order_Line col ON co.order_id = col.order_id
 WHERE
-    YEAR(co.order_date) = :year
+    YEAR(co.order_date) = :year AND co.order_status = 'PLACED'
 GROUP BY
     month
 ORDER BY
@@ -100,3 +100,33 @@ GROUP BY
 ORDER BY
     customer_count DESC;
 """
+
+
+best_selling_product_by_month = """
+SELECT
+    month,
+    product_name,
+    total_quantity_sold
+FROM (
+    SELECT
+        DATE_FORMAT(co.order_date, '%%Y-%%m') AS month,
+        p.product_name,
+        SUM(col.quantity) AS total_quantity_sold,
+        ROW_NUMBER() OVER (PARTITION BY DATE_FORMAT(co.order_date, '%%Y-%%m') ORDER BY SUM(col.quantity) DESC) AS rn
+    FROM
+        Customer_Order co
+    JOIN
+        Customer_Order_Line col ON co.order_id = col.order_id
+    JOIN
+        Product p ON col.product_id = p.product_id
+    WHERE
+        co.order_status = 'PLACED' AND YEAR(co.order_date) = %(year)s
+    GROUP BY
+        month, p.product_name
+) subquery
+WHERE rn = 1
+ORDER BY month;
+"""
+
+
+
