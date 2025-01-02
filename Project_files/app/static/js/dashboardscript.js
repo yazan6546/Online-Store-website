@@ -52,5 +52,31 @@ async function fetchRevenues() {
     }
 }
 
+
+function animateValue(element, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        element.innerHTML = Math.floor(progress * (end - start) + start);
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const countCustomersElement = document.getElementById('count_customers');
+    const countProductsElement = document.getElementById('count_products');
+    const countOrdersElement = document.getElementById('count_orders');
+    const totalRevenueElement = document.getElementById('total_revenue');
+
+    animateValue(countCustomersElement, 0, parseInt(countCustomersElement.innerText), 500);
+    animateValue(countProductsElement, 0, parseInt(countProductsElement.innerText), 500);
+    animateValue(countOrdersElement, 0, parseInt(countOrdersElement.innerText), 500);
+    animateValue(totalRevenueElement, 0, parseInt(totalRevenueElement.innerText), 500);
+});
+
 // Call the function to fetch and process the data
 fetchRevenues();
