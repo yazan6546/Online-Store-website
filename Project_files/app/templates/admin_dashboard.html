@@ -22,7 +22,7 @@ Admin Dashboard
       <i class="bx bx-user"></i>
     </div>
     <div class="content">
-      <h4>{{ stats.count_customers }}</h4>
+      <h4 id="count_customers">{{ stats.count_customers }}</h4>
       <span>Total Customers</span>
     </div>
   </div>
@@ -31,7 +31,7 @@ Admin Dashboard
       <i class="bx bx-package"></i>
     </div>
     <div class="content">
-      <h4> {{ stats.count_products }}</h4>
+      <h4 id="count_products">{{ stats.count_products }}</h4>
       <span>Total Products</span>
     </div>
   </div>
@@ -40,7 +40,7 @@ Admin Dashboard
       <i class="bx bx-cart"></i>
     </div>
     <div class="content">
-      <h4> {{ stats.count_orders }}</h4>
+      <h4 id="count_orders">{{ stats.count_orders }}</h4>
       <span>Total Orders</span>
     </div>
   </div>
@@ -49,7 +49,7 @@ Admin Dashboard
       <i class="bx bx-dollar-circle"></i>
     </div>
     <div class="content">
-      <h4> ${{ stats.total_revenue }}</h4>
+        <h4><span id="dollar_sign">$ </span><span id="total_revenue">{{ stats.total_revenue }}</span></h4>
       <span>Total Revenue</span>
     </div>
   </div>

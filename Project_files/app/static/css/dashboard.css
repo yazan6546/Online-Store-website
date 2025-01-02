@@ -259,3 +259,18 @@
   color: #4a4a4a;
   font-weight: 600;
 }
+
+#dollar_sign {
+    /* Copy the styles from h4 */
+    font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #373A40; /* Black text for the number */
+}
+
+#total_revenue {
+    font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #373A40; /* Black text for the number */
+}
