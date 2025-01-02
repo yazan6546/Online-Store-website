@@ -65,6 +65,24 @@ ORDER BY
     """)
 
 
+all_revenues = """
+    SELECT
+        YEAR(co.order_date) AS year,
+        MONTH(co.order_date) AS month,
+        SUM(col.price_at_time_of_order * col.quantity) AS total_revenue
+    FROM
+        Customer_Order co
+    JOIN
+        Customer_Order_Line col ON co.order_id = col.order_id
+    WHERE
+        co.order_status = 'PLACED'
+    GROUP BY
+        YEAR(co.order_date), MONTH(co.order_date)
+    ORDER BY
+        year, month;
+    """
+
+
 best_customers = """
 SELECT
     p.first_name,
@@ -128,5 +146,23 @@ WHERE rn = 1
 ORDER BY month;
 """
 
+
+COUNT_CUSTOMERS = text("""
+    SELECT COUNT(*) FROM Customer;
+""")
+COUNT_ORDERS = text("""
+    SELECT COUNT(*) FROM Customer_Order
+    WHERE order_status = 'PLACED';
+""")
+COUNT_PRODUCTS = text("""
+    SELECT COUNT(*) FROM Product;
+""")
+
+TOTAL_REVENUE = text("""
+    SELECT SUM(price_at_time_of_order * quantity) AS total_revenue
+    FROM Customer_Order_Line
+    JOIN Customer_Order ON Customer_Order.order_id = Customer_Order_Line.order_id
+    WHERE order_status = 'PLACED';
+""")
 
 
