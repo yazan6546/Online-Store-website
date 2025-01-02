@@ -40,7 +40,7 @@ def get_category_count():
     conn = get_db_connection()
     try:
         df = pd.read_sql(da.CATEGORY_COUNT, conn)
-        return df
+        return df.to_dict(orient='records')
     except Exception as e:
         print(f"Error: {e}")
         return []
@@ -62,6 +62,8 @@ def get_best_customers():
     conn = get_db_connection()
     try:
         df = pd.read_sql(da.best_customers, conn)
+        return df.to_dict(orient='records')
+
         return df
     except Exception as e:
         print(f"Error: {e}")

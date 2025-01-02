@@ -511,3 +511,31 @@ def get_revenues():
     data_by_year = da.get_all_revenues()
     return jsonify(data_by_year)
 
+
+@app.route('/api/categories', methods=['GET'])
+def get_categories():
+    categories = da.get_category_count()
+    print(categories)
+
+    return jsonify(categories)
+
+
+@app.route('/api/best_customers', methods=['GET'])
+def get_best_customers():
+    best_customers = da.get_best_customers()
+
+    # dummy_data = [
+    #     {"first_name": "John", "last_name": "Doe", "amount_paid": 1500.00},
+    #     {"first_name": "Jane", "last_name": "Smith", "amount_paid": 1400.00},
+    #     {"first_name": "Alice", "last_name": "Johnson", "amount_paid": 1300.00},
+    #     {"first_name": "Bob", "last_name": "Brown", "amount_paid": 1200.00},
+    #     {"first_name": "Charlie", "last_name": "Davis", "amount_paid": 1100.00},
+    #     {"first_name": "Diana", "last_name": "Miller", "amount_paid": 1000.00},
+    #     {"first_name": "Eve", "last_name": "Wilson", "amount_paid": 900.00},
+    #     {"first_name": "Frank", "last_name": "Moore", "amount_paid": 800.00},
+    #     {"first_name": "Grace", "last_name": "Taylor", "amount_paid": 700.00},
+    #     {"first_name": "Hank", "last_name": "Anderson", "amount_paid": 600.00}
+    # ]
+    return jsonify(best_customers)
+
+
