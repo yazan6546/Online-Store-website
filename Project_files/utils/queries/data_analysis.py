@@ -1,15 +1,15 @@
 from sqlalchemy import text
 
 TOP_10_SELLING_PRODUCTS = text("""
-    SELECT p.product_id, p.product_name, SUM(col.quantity) AS total_quantity_sold
+    SELECT p.product_id, p.product_name, c.category_name, s.supplier_name, p.price, SUM(col.quantity) AS total_quantity_sold
     FROM Product p
     JOIN Customer_Order_Line col ON p.product_id = col.product_id
     JOIN Customer_Order co ON col.order_id = co.order_id
+    JOIN Category c ON p.category_id = c.category_id
+    JOIN Supplier s ON p.supplier_id = s.supplier_id
     WHERE co.order_status = 'PLACED'
     GROUP BY p.product_id, p.product_name
-    ORDER BY total_quantity_sold DESC
-    LIMIT 10;
-""")
+    """)
 
 
 LOW_STOCK_PRODUCTS = text("""
@@ -27,3 +27,76 @@ MONTHLY_INCOME_REPORT = text("""
     GROUP BY DATE_FORMAT(co.order_date, '%Y-%m')
     ORDER BY month DESC;
 """)
+
+CATEGORY_COUNT = text("""SELECT 
+    c.category_name,
+    SUM(col.quantity) AS total_quantity_sold
+FROM 
+    Category c
+JOIN 
+    Product p ON c.category_id = p.category_id
+JOIN 
+    Customer_Order_Line col ON p.product_id = col.product_id
+JOIN 
+    Customer_Order co ON col.order_id = co.order_id
+WHERE 
+    co.order_status = 'PLACED'
+GROUP BY 
+    c.category_name
+ORDER BY 
+    total_quantity_sold DESC;
+""")
+
+
+yearly_revenue = text("""
+SELECT
+    DATE_FORMAT(co.order_date, '%Y-%m') AS month,
+    SUM(col.price_at_time_of_order * col.quantity) AS total_revenue
+FROM
+    Customer_Order co
+JOIN
+    Customer_Order_Line col ON co.order_id = col.order_id
+WHERE
+    YEAR(co.order_date) = :year
+GROUP BY
+    month
+ORDER BY
+    month;
+    """)
+
+
+best_customers = """
+SELECT
+    p.first_name,
+    p.last_name,
+    SUM(col.price_at_time_of_order * col.quantity) AS total_paid
+FROM
+    Customer_Order co
+JOIN
+    Customer_Order_Line col ON co.order_id = col.order_id
+JOIN
+    Customer c ON co.person_id = c.person_id
+JOIN
+    Person p ON c.person_id = p.person_id
+WHERE
+    co.order_status = 'PLACED'
+GROUP BY
+    p.first_name, p.last_name
+ORDER BY
+    total_paid DESC
+LIMIT 10;
+"""
+
+customer_demographics = """
+SELECT
+    a.city,
+    COUNT(c.person_id) AS customer_count
+FROM
+    Customer c
+JOIN
+    Address a ON c.person_id = a.person_id
+GROUP BY
+    a.city
+ORDER BY
+    customer_count DESC;
+"""
