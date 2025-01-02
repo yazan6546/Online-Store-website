@@ -516,3 +516,29 @@ def get_revenues():
     data_by_year = da.get_all_revenues()
     return jsonify(data_by_year)
 
+
+@app.route('/api/categories', methods=['GET'])
+def get_categories():
+    categories = da.get_category_count()
+    print(categories)
+
+    return jsonify(categories)
+
+
+@app.route('/api/best_customers', methods=['GET'])
+def get_best_customers():
+    best_customers = da.get_best_customers()
+    return jsonify(best_customers)
+
+@app.route('/api/best_selling_products_by_month', methods=['GET'])
+def get_best_selling_products_by_month():
+    # year = request.args.get('year')
+    best_selling_products = da.get_best_selling_product_by_month(2023)
+    return jsonify(best_selling_products)
+
+# @app.route('/api/best_customers', methods=['GET'])
+# def get_best_customers():
+#     best_customers = da.get_best_customers()
+#     return jsonify(best_customers)
+
+

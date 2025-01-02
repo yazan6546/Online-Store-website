@@ -102,7 +102,7 @@ GROUP BY
     p.first_name, p.last_name
 ORDER BY
     total_paid DESC
-LIMIT 10;
+LIMIT 5;
 """
 
 customer_demographics = """

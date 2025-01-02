@@ -78,5 +78,165 @@ document.addEventListener('DOMContentLoaded', () => {
     animateValue(totalRevenueElement, 0, parseInt(totalRevenueElement.innerText), 500);
 });
 
+// Initialize the category chart
+const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+const categoryChart = new Chart(ctxCategory, {
+    type: 'pie',
+    data: {
+        labels: ['Electronics', 'Clothing', 'Home Appliances', 'Books', 'Toys'],
+        datasets: [{
+            data: [30, 20, 15, 25, 10],
+            backgroundColor: [
+    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+    '#E7E9ED', '#76D7C4', '#F7DC6F', '#F1948A', '#85C1E9', '#BB8FCE',
+    '#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#A133FF', '#33FFA1',
+    '#FF8C00', '#8B0000', '#008B8B', '#B8860B', '#A9A9A9', '#2F4F4F'
+    ]
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+
+
+async function fetchCategoryData() {
+    try {
+        const response = await fetch('/api/categories');
+        const data = await response.json();
+
+        // Process the data to fit the chart format
+        const labels = data.map(item => item.category_name);
+        const datasetData = data.map(item => item.total_quantity_sold);
+
+        // Update the chart
+        categoryChart.data.labels = labels;
+        categoryChart.data.datasets[0].data = datasetData;
+        categoryChart.update();
+    } catch (error) {
+        console.error('Error fetching category data:', error);
+    }
+}
+
+
+// Define a fixed set of colors
+const colors1 = [
+    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+    '#E7E9ED', '#76D7C4', '#F7DC6F', '#F1948A', '#85C1E9', '#BB8FCE',
+    '#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#A133FF', '#33FFA1',
+    '#FF8C00', '#8B0000', '#008B8B', '#B8860B', '#A9A9A9', '#2F4F4F'
+];
+
+
+
+// Initialize the top customers chart
+const ctxTopCustomers = document.getElementById('topCustomersChart').getContext('2d');
+const topCustomersChart = new Chart(ctxTopCustomers, {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Amount Paid',
+            data: [],
+            backgroundColor: colors1.slice(0, 10) // Use the first 10 colors
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        scales: {
+            x: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+async function fetchTopCustomersData() {
+    try {
+
+        const response = await fetch('/api/best_customers');
+        const data = await response.json();
+
+
+        // Log the data to verify its format
+        console.log('Fetched top customers data:', data);
+
+        // Process the dummy data to fit the chart format
+        const labels = data.map(item => `${item.first_name} ${item.last_name}`);
+        const datasetData = data.map(item => item.total_paid);
+
+        console.log('Processed labels:', labels);
+        console.log('Processed dataset data:', datasetData);
+
+        // Update the chart with dummy data
+        topCustomersChart.data.labels = labels;
+        topCustomersChart.data.datasets[0].data = datasetData;
+        topCustomersChart.update();
+
+    } catch (error) {
+        console.error('Error fetching top customers data:', error);
+    }
+}
+
+// Define a fixed set of 12 colors
+const colors2 = [
+    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+    '#E7E9ED', '#76D7C4', '#F7DC6F', '#F1948A', '#85C1E9', '#BB8FCE'
+];
+
+// Initialize the chart
+const ctxBar = document.getElementById('coloredBarChart').getContext('2d');
+const coloredBarChart = new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+        labels: [], // To be filled with the month of input data
+        datasets: [{
+            label: 'Total Quantity Sold', // Customize the label as needed
+            data: [], // To be filled with the total_quantity_sold of input data
+            backgroundColor: colors2 // Use the defined colors
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                beginAtZero: true
+            },
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Function to process input data and update the chart
+async function fetchBestProductsByMonth() {
+
+    const response = await fetch('/api/best_selling_products_by_month');
+    const data = await response.json();
+
+    // Assuming inputData is an array of objects with 3 columns
+    const labels = data.map(item => item.month);
+    const datasetData = data.map(item => item.total_quantity_sold);
+
+    // Update the chart data
+    coloredBarChart.data.labels = labels;
+    coloredBarChart.data.datasets[0].data = datasetData;
+    coloredBarChart.update();
+}
+
+
+// Update the chart with the example input data
+fetchBestProductsByMonth();
+
+
+// // Call the function to fetch and process the data
+fetchTopCustomersData();
+
+// Call the function to fetch and process the data
+fetchCategoryData();
+
+
 // Call the function to fetch and process the data
 fetchRevenues();
