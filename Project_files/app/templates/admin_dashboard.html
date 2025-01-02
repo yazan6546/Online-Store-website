@@ -63,6 +63,22 @@ Admin Dashboard
       <canvas id="revenueChart"></canvas>
     </div>
 
+
+    <div class="chart" id="category-chart">
+    <h2>Product Categories</h2>
+    <canvas id="categoryChart"></canvas>
+    </div>
+
+    <div class="chart" id="top-customers-chart">
+    <h2>Top 10 Customers</h2>
+    <canvas id="topCustomersChart"></canvas>
+    </div>
+
+    <div class="chart" id="colored-bar-chart">
+    <h2>Best selling products by month in 2023</h2>
+    <canvas id="coloredBarChart"></canvas>
+  </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ url_for('static', filename='js/dashboardscript.js') }}"></script>
 
@@ -100,5 +116,6 @@ Admin Dashboard
     </div>
 
   </section>
+
 
 {% endblock %}
