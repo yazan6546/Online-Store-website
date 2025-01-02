@@ -87,7 +87,8 @@ def get_best_selling_product_by_month(year):
     conn = get_db_connection()
     try:
         df = pd.read_sql(da.best_selling_product_by_month, conn, params={'year': year})
-        return df
+
+        return df.to_dict(orient='records')
     except Exception as e:
         print(f"Error: {e}")
         return []

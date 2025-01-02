@@ -152,19 +152,6 @@ const topCustomersChart = new Chart(ctxTopCustomers, {
     }
 });
 
-// Dummy data for top customers
-const dummyData = [
-    {"first_name": "John", "last_name": "Doe", "amount_paid": 1500.00},
-    {"first_name": "Jane", "last_name": "Smith", "amount_paid": 1400.00},
-    {"first_name": "Alice", "last_name": "Johnson", "amount_paid": 1300.00},
-    {"first_name": "Bob", "last_name": "Brown", "amount_paid": 1200.00},
-    {"first_name": "Charlie", "last_name": "Davis", "amount_paid": 1100.00},
-    {"first_name": "Diana", "last_name": "Miller", "amount_paid": 1000.00},
-    {"first_name": "Eve", "last_name": "Wilson", "amount_paid": 900.00},
-    {"first_name": "Frank", "last_name": "Moore", "amount_paid": 800.00},
-    {"first_name": "Grace", "last_name": "Taylor", "amount_paid": 700.00},
-    {"first_name": "Hank", "last_name": "Anderson", "amount_paid": 600.00}
-];
 async function fetchTopCustomersData() {
     try {
 
@@ -192,27 +179,69 @@ async function fetchTopCustomersData() {
     }
 }
 
+// Define a fixed set of 12 colors
+const colors2 = [
+    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+    '#E7E9ED', '#76D7C4', '#F7DC6F', '#F1948A', '#85C1E9', '#BB8FCE'
+];
+
+// Initialize the chart
+const ctxBar = document.getElementById('coloredBarChart').getContext('2d');
+const coloredBarChart = new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+        labels: [], // To be filled with the month of input data
+        datasets: [{
+            label: 'Total Quantity Sold', // Customize the label as needed
+            data: [], // To be filled with the total_quantity_sold of input data
+            backgroundColor: colors2 // Use the defined colors
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                beginAtZero: true
+            },
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Function to process input data and update the chart
+function updateChartData(inputData) {
+    // Assuming inputData is an array of objects with 3 columns
+    const labels = inputData.map(item => item.month);
+    const datasetData = inputData.map(item => item.total_quantity_sold);
+
+    // Update the chart data
+    coloredBarChart.data.labels = labels;
+    coloredBarChart.data.datasets[0].data = datasetData;
+    coloredBarChart.update();
+}
+
+// Example input data
+const inputData = [
+    { month: '2023-01', product_name: 'time', total_quantity_sold: 26.0 },
+    { month: '2023-02', product_name: 'image', total_quantity_sold: 28.0 },
+    { month: '2023-03', product_name: 'blue', total_quantity_sold: 22.0 },
+    { month: '2023-04', product_name: 'former', total_quantity_sold: 26.0 },
+    { month: '2023-05', product_name: 'half', total_quantity_sold: 29.0 },
+    { month: '2023-06', product_name: 'represent', total_quantity_sold: 25.0 },
+    { month: '2023-07', product_name: 'five', total_quantity_sold: 25.0 },
+    { month: '2023-08', product_name: 'option', total_quantity_sold: 29.0 },
+    { month: '2023-09', product_name: 'environmental', total_quantity_sold: 41.0 },
+    { month: '2023-10', product_name: 'mean', total_quantity_sold: 30.0 },
+    { month: '2023-11', product_name: 'theory', total_quantity_sold: 25.0 },
+    { month: '2023-12', product_name: 'scientist', total_quantity_sold: 25.0 }
+];
+
+// Update the chart with the example input data
+updateChartData(inputData);
 
 
-// async function fetchTopCustomersData() {
-//     try {
-//         const response = await fetch('/api/top_customers');
-//         const data = await response.json();
-//
-//         // Process the data to fit the chart format
-//         const labels = data.map(item => `${item.first_name} ${item.last_name}`);
-//         const datasetData = data.map(item => item.amount_paid);
-//
-//         // Update the chart
-//         topCustomersChart.data.labels = labels;
-//         topCustomersChart.data.datasets[0].data = datasetData;
-//         topCustomersChart.update();
-//     } catch (error) {
-//         console.error('Error fetching top customers data:', error);
-//     }
-// }
-//
-//
 // // Call the function to fetch and process the data
 fetchTopCustomersData();
 
