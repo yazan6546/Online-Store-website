@@ -456,6 +456,11 @@ def admin_dashboard():
     admin = session['user']
     return render_template('admin_dashboard.html', admin=admin, stats=dict_stats)
 
+# Shop for manager Page
+@app.route('/admin_shop')
+def admin_shop():
+    return render_template('admin_shop.html')
+
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():

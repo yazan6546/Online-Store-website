@@ -44,13 +44,20 @@ body.dark {
 }
 
 /* ===== Sidebar ===== */
+.sidebar li.search-box {
+  border-radius: 6px;
+  background-color: var(--primary-color-light);
+  cursor: pointer;
+  transition: var(--tran-05);
+}
+
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 260px; /* Default open width */
-  padding: 10px 14px;
+  padding: 10px 20px;
   background: var(--sidebar-color);
   transition: var(--tran-05);
   z-index: 100;
@@ -79,7 +86,7 @@ body.dark {
 
 /* ===== Reusable code - Here ===== */
 .sidebar li {
-  height: 50px;
+  height: 40px;
   list-style: none;
   display: flex;
   align-items: center;
@@ -150,16 +157,7 @@ header .image-text .profession {
   display: block;
 }
 
-.sidebar header .image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.sidebar header .image img {
-  width: 40px;
-  border-radius: 6px;
-}
 
 .sidebar header .toggle {
   position: absolute;
@@ -191,12 +189,7 @@ body.dark .sidebar header .toggle {
   margin-top: 40px;
 }
 
-.sidebar li.search-box {
-  border-radius: 6px;
-  background-color: var(--primary-color-light);
-  cursor: pointer;
-  transition: var(--tran-05);
-}
+
 
 .sidebar li.search-box input {
   height: 100%;
