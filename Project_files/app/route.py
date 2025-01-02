@@ -9,6 +9,7 @@ from models.addresses import Address
 from models.customers import Customer
 from models.manager import Manager
 from models.suppliers import Supplier
+import models.data_analysis as da
 from models.products import Product
 
 
@@ -42,6 +43,8 @@ def admin_dashboard_customers():
 
     customers = Customer.get_all()
     customers = [customer.to_dict(address=True) for customer in customers]
+
+
 
     #print(customers[0]['addresses'][0]['address_id'])
     return render_template('customers.html', customers=customers)  # Replace with render_template if applicable
@@ -381,19 +384,6 @@ def admin_dashboard_categories():
     return "<h1>Categories Page</h1>"  # Replace with render_template if applicable
 
 
-############################################################################################################
-# Statistics section
-############################################################################################################
-
-# Route for the Organization Statistics (Report) page
-@app.route('/organization_statistics')
-def organization_statistics():
-    return "<h1>Organization Statistics Page</h1>"  # Replace with render_template if applicable
-
-############################################################################################################
-# Products section
-############################################################################################################
-
 # Route for the Register Parent and Child page
 @app.route('/admin_dashboard/products')
 def admin_dashboard_products():
@@ -462,9 +452,9 @@ def admin_dashboard():
         print('ok loser')
         return redirect(url_for('login'))
 
-
+    dict_stats = da.get_stats()
     admin = session['user']
-    return render_template('admin_dashboard.html', admin=admin)
+    return render_template('admin_dashboard.html', admin=admin, stats=dict_stats)
 
 
 @app.route('/add_customer', methods=['GET', 'POST'])
@@ -514,4 +504,10 @@ def get_orders():
         {"order_id": 2, "product": "Headphones", "quantity": 2, "price": 150.00}
     ]
     return jsonify({"orders": orders})
+
+
+@app.route('/api/revenues', methods=['GET'])
+def get_revenues():
+    data_by_year = da.get_all_revenues()
+    return jsonify(data_by_year)
 

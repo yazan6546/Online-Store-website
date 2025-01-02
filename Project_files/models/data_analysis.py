@@ -93,3 +93,37 @@ def get_best_selling_product_by_month(year):
         conn.close()
 
 
+def get_stats():
+    conn = get_db_connection()
+    dict = {}
+
+    try:
+        dict['count_customers'] = conn.execute(da.COUNT_CUSTOMERS).fetchone()[0]
+        dict['count_orders'] = conn.execute(da.COUNT_ORDERS).fetchone()[0]
+        dict['count_products'] = conn.execute(da.COUNT_PRODUCTS).fetchone()[0]
+        dict['total_revenue'] = conn.execute(da.TOTAL_REVENUE).fetchone()[0]
+
+        return dict
+    except:
+        print("Error in get_stats()")
+    finally:
+        conn.close()
+
+
+def get_all_revenues():
+    conn = get_db_connection()
+    try:
+        df = pd.read_sql(da.all_revenues, conn)
+        # Group data by year and create a dictionary of DataFrames
+        data_by_year = {year: data.drop(columns=['year']).to_dict(orient='records') for year, data in df.groupby('year')}
+
+
+        return data_by_year
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return []
+    finally:
+        conn.close()
+
+
