@@ -5,8 +5,8 @@ import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class ManagerOrder(Order):
-    def __init__(self, person_id, delivery_date, shipping_status, order_date=datetime.now(), order_id=None):
-        super().__init__(person_id, delivery_date, shipping_status, order_date, order_id)
+    def __init__(self, person_id, delivery_date, order_date=datetime.now(), order_id=None):
+        super().__init__(person_id, delivery_date, order_date, order_id)
 
     def insert(self):
         if self.insert_order() and self.insert_order_lines():
