@@ -71,15 +71,6 @@ h2 {
   margin: 10px 0;
 }
 
-.price {
-  font-size: 16px;
-  color: #333;
-}
-
-.original-price {
-  text-decoration: line-through;
-  color: #888;
-}
 
 .discount {
   color: green;
@@ -314,6 +305,7 @@ h2 {
   font-weight: normal;
   margin-bottom: 10px;
   color: #333;
+
 }
 
 .product-info-section .price {
@@ -330,11 +322,6 @@ h2 {
   margin-bottom: 5px;
 }
 
-.product-card h5 {
-  color: #000;
-  margin-bottom: 5px;
-}
-
 
 /****************************** OPEN THE PRODUCT **************************************/
 .modal {
@@ -345,7 +332,7 @@ h2 {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Transparent black overlay */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -356,16 +343,18 @@ h2 {
   background-color: #fff;
   border-radius: 8px;
   padding: 20px;
-  max-width: 600px;
-  width: 90%; /* Adjust as needed */
-  text-align: center;
+  max-width: 800px;
+  width: 90%;
+  text-align: left;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
 }
 
 .close-btn {
   position: absolute;
-  top: 10px; /* Adjust as needed */
-  right: 10px; /* Adjust as needed */
+  top: 10px;
+  right: 10px;
   font-size: 24px;
   color: #333;
   cursor: pointer;
@@ -377,6 +366,94 @@ h2 {
   color: #ff0000;
 }
 
+.modal-body {
+  display: flex;
+  gap: 20px;
+}
+
+.modal-image-section {
+  flex: 1;
+}
+
+.modal-description-section {
+  flex: 2;
+}
+
+.modal-image-section img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.modal-description-section h5 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.price {
+  color: #0D9276;
+  font-weight: bold;
+  font-size: 18px;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+.modal-description-section p {
+  margin-bottom: 10px;
+}
+
+.add-to-cart {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #176B87;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart:hover {
+  background-color: #78B3CE;
+  transform: scale(1.1);
+}
 
 
+/*******************************************************************/
+.action-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Adjust alignment if necessary */
+  gap: 15px; /* Space between quantity selector and button */
+  margin-top: 20px; /* Add space above */
+}
 
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between minus, number, and plus */
+}
+
+.qty-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.qty-btn:hover {
+  background-color: #e0e0e0;
+}
+
+#quantity {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0 10px;
+}

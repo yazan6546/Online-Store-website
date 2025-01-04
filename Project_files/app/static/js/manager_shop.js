@@ -23,3 +23,22 @@ window.addEventListener("click", function (e) {
     modal.style.display = "none";
   }
 });
+
+
+const decreaseQtyBtn = document.getElementById('decrease-qty');
+const increaseQtyBtn = document.getElementById('increase-qty');
+const quantityDisplay = document.getElementById('quantity');
+
+let quantity = 1;
+
+decreaseQtyBtn.addEventListener('click', () => {
+  if (quantity > 1) {
+    quantity--;
+    quantityDisplay.textContent = quantity;
+  }
+});
+
+increaseQtyBtn.addEventListener('click', () => {
+  quantity++;
+  quantityDisplay.textContent = quantity;
+});
