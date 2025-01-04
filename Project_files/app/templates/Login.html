@@ -72,7 +72,7 @@
                     <!-- Birth Date Field -->
                     <div id="birth-date-field" class="form-group" style="display: none;">
                         {{ signup_form.birth_date.label }}
-                        {{ signup_form.birth_date(class="form-control") }}
+                        {{ signup_form.birth_date(class="form-control", id="birth_date") }}
                     </div>
 
                     <!-- Dropdown for Manager Role -->
@@ -98,18 +98,22 @@
             const userTypeRadios = document.querySelectorAll('input[name="user_type"]');
             const managerDropdown = document.getElementById('manager-dropdown');
             const birthDateField = document.getElementById('birth-date-field');
+            const birthDateInput = document.getElementById('birth_date');
 
             userTypeRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     if (this.value.toLowerCase() === 'manager') {
                         managerDropdown.style.display = 'block';
                         birthDateField.style.display = 'none';
+                        birthDateInput.removeAttribute('required');
                     } else if (this.value.toLowerCase() === 'customer') {
                         birthDateField.style.display = 'block';
+                        birthDateInput.setAttribute('required', 'required');
                         managerDropdown.style.display = 'none';
                     } else {
                         managerDropdown.style.display = 'none';
                         birthDateField.style.display = 'none';
+                        birthDateInput.removeAttribute('required');
                     }
                 });
             });

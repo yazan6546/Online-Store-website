@@ -1,8 +1,8 @@
 from sqlalchemy import text
 
 INSERT_CUSTOMERS_TABLE = text("""
-                                INSERT INTO Customer (person_id) 
-                                VALUES (:person_id);
+                                INSERT INTO Customer (person_id, birth_date) 
+                                VALUES (:person_id, :birth_date);
                             """)
 
 GET_ALL_CUSTOMERS = text("""
@@ -12,6 +12,7 @@ GET_ALL_CUSTOMERS = text("""
                             p.last_name AS last_name,
                             p.email AS email,
                             p.passcode AS passcode
+                            c.birth_date AS birth_date
                             FROM Customer c
                             JOIN Person p
                             on c.person_id = p.person_id;

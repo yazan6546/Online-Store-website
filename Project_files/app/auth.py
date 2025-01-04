@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import flash, render_template, url_for, redirect, session
 from markupsafe import Markup
 import utils.password_manager as pm
@@ -14,6 +16,10 @@ def validate_signup(login_form, signup_form):
         email = signup_form.email.data
         password = signup_form.password.data
         user_type = signup_form.user_type.data
+        birth_date = signup_form.birth_date.data
+        print(birth_date)
+
+        print(type(birth_date))
 
         # Create a new customer object
         if user_type.lower() == 'manager':
@@ -25,7 +31,7 @@ def validate_signup(login_form, signup_form):
                 last_name=last_name,
                 email=email,
                 passcode=password,
-                since='2021-01-01',
+                since=datetime.now(),
                 role=role,
                 hash=True
             )
@@ -35,6 +41,7 @@ def validate_signup(login_form, signup_form):
                 last_name=last_name,
                 email=email,
                 passcode=password,
+                birth_date=signup_form.birth_date.data,
                 hash=True
             )
 
@@ -53,7 +60,8 @@ def validate_signup(login_form, signup_form):
             if "Duplicate entry" in str(e.orig):
                 flash("Email already exists. Please use a different email address.", "danger")
             else:
-                flash("An unexpected error occurred while creating your account. Please try again.", "danger")
+                flash(str(e.orig), "danger")
+
             return render_template(
                 'Login.html',
                 signup_form=signup_form,

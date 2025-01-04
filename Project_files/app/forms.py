@@ -34,12 +34,12 @@ class CustomerForm(FlaskForm):
     email = StringField(
         'Email',
         validators=[DataRequired(), Email()],
-        render_kw={"placeholder": "Email", "class": "form-control"}
+        render_kw={"placeholder": "Email", "class": "form-control", "id": "signup_email"}
     )
     password = PasswordField(
         'Password',
         validators=[DataRequired()],
-        render_kw={"placeholder": "Password", "class": "form-control"}
+        render_kw={"placeholder": "Password", "class": "form-control", "id": "signup_password"}
     )
 
     # Radio field for user type
@@ -77,12 +77,12 @@ class LoginForm(FlaskForm):
     email = StringField(
         'Email',
         validators=[DataRequired(), Email()],
-        render_kw={"placeholder": "Email", "class": "form-control"}  # Placeholder and styling
+        render_kw={"placeholder": "Email", "class": "form-control", "id":"signin_email"}  # Placeholder and styling
     )
     password = PasswordField(
         'Password',
         validators=[DataRequired()],
-        render_kw={"placeholder": "Password", "class": "form-control"}  # Placeholder and styling
+        render_kw={"placeholder": "Password", "class": "form-control", "id":"signin_password"}  # Placeholder and styling
     )
     submit_signin = SubmitField(
         'Sign in',
