@@ -1,3 +1,5 @@
+from datetime import date
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField
 from wtforms.fields.choices import RadioField, SelectField
@@ -52,6 +54,7 @@ class CustomerForm(FlaskForm):
 
     birth_date = DateField(
         'Birth Date',
+        default=date(2000, 1, 1),  # Set a default value
         validators=[DataRequired()],
         render_kw={"class": "form-control"}
     )

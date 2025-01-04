@@ -24,7 +24,6 @@ def validate_signup(login_form, signup_form):
         try:
             # Create a new customer object
             if user_type.lower() == 'manager':
-
                 role = signup_form.manager_role.data
 
                 new_customer = Manager(
@@ -48,13 +47,13 @@ def validate_signup(login_form, signup_form):
                 )
 
                 # Attempt to insert the new user into the database
-                new_customer.insert()
-                flash(
-                    Markup('<strong>Success!</strong> Account created successfully!'),
+            new_customer.insert()
+            flash(
+                Markup('<strong>Success!</strong> Account created successfully!'),
                 'success'
-                )
+            )
 
-                return redirect(url_for('login'))  # Redirect to the login page
+            return redirect(url_for('login'))  # Redirect to the login page
         except Exception as e:
 
             # Handle MySQL IntegrityError (e.g., duplicate email)
@@ -74,7 +73,10 @@ def validate_signup(login_form, signup_form):
             )
 
     else:
-        flash("Wrong email address entered. Try again.", "danger")
+        for field, errors in signup_form.errors.items():
+            for error in errors:
+                flash(f"Error in {getattr(signup_form, field).label.text}: {error}", "danger")
+        flash("An error occured with the form. Try again.", "danger")
         return render_template('Login.html', signup_form=signup_form, login_form=login_form)
 
 

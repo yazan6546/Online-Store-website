@@ -3,15 +3,16 @@
 {% block content %}
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-    {% endwith %}
         {% if messages %}
             <div class="flash-container">
-                {% set latest_message = messages[-1] %} {# Get the latest message #}
-                <div class="alert alert-{{ latest_message[0] }}">
-                    {{ latest_message[1] }}
-                </div>
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             </div>
         {% endif %}
+    {% endwith %}
 
     <div class="main-content">
         <div class="auth-container">
@@ -94,35 +95,35 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const userTypeRadios = document.querySelectorAll('input[name="user_type"]');
-            const managerDropdown = document.getElementById('manager-dropdown');
-            const birthDateField = document.getElementById('birth-date-field');
-            const birthDateInput = document.getElementById('birth_date');
+         document.addEventListener('DOMContentLoaded', function() {
+        const userTypeRadios = document.querySelectorAll('input[name="user_type"]');
+        const managerDropdown = document.getElementById('manager-dropdown');
+        const birthDateField = document.getElementById('birth-date-field');
+        const birthDateInput = document.getElementById('birth_date');
 
-            userTypeRadios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    if (this.value.toLowerCase() === 'manager') {
-                        managerDropdown.style.display = 'block';
-                        birthDateField.style.display = 'none';
-                        birthDateInput.removeAttribute('required');
-                    } else if (this.value.toLowerCase() === 'customer') {
-                        birthDateField.style.display = 'block';
-                        birthDateInput.setAttribute('required', 'required');
-                        managerDropdown.style.display = 'none';
-                    } else {
-                        managerDropdown.style.display = 'none';
-                        birthDateField.style.display = 'none';
-                        birthDateInput.removeAttribute('required');
-                    }
-                });
+        userTypeRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value.toLowerCase() === 'manager') {
+                    managerDropdown.style.display = 'block';
+                    birthDateField.style.display = 'none';
+                    birthDateInput.removeAttribute('required');
+                } else if (this.value.toLowerCase() === 'customer') {
+                    birthDateField.style.display = 'block';
+                    birthDateInput.setAttribute('required', 'required');
+                    managerDropdown.style.display = 'none';
+                } else {
+                    managerDropdown.style.display = 'none';
+                    birthDateField.style.display = 'none';
+                    birthDateInput.removeAttribute('required');
+                }
             });
-
-            // Initial call to set the correct state on page load
-            const selectedRadio = document.querySelector('input[name="user_type"]:checked');
-            if (selectedRadio) {
-                selectedRadio.dispatchEvent(new Event('change'));
-            }
         });
+
+        // Initial call to set the correct state on page load
+        const selectedRadio = document.querySelector('input[name="user_type"]:checked');
+        if (selectedRadio) {
+            selectedRadio.dispatchEvent(new Event('change'));
+        }
+    });
     </script>
 {% endblock %}
