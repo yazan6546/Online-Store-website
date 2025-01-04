@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import flash, render_template, url_for, redirect, session
 from markupsafe import Markup
 import utils.password_manager as pm
@@ -14,32 +16,37 @@ def validate_signup(login_form, signup_form):
         email = signup_form.email.data
         password = signup_form.password.data
         user_type = signup_form.user_type.data
+        birth_date = signup_form.birth_date.data
+        print(birth_date)
 
-        # Create a new customer object
-        if user_type.lower() == 'manager':
-
-            role = signup_form.manager_role.data
-
-            new_customer = Manager(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                passcode=password,
-                since='2021-01-01',
-                role=role,
-                hash=True
-            )
-        else:  # Regular customer
-            new_customer = Customer(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                passcode=password,
-                hash=True
-            )
+        print(type(birth_date))
 
         try:
-            # Attempt to insert the new user into the database
+            # Create a new customer object
+            if user_type.lower() == 'manager':
+                role = signup_form.manager_role.data
+
+                new_customer = Manager(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    passcode=password,
+                    since=datetime.now(),
+                    role=role,
+                    hash=True
+                )
+            else:
+                # Regular customer
+                new_customer = Customer(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    passcode=password,
+                    birth_date=signup_form.birth_date.data,
+                    hash=True
+                )
+
+                # Attempt to insert the new user into the database
             new_customer.insert()
             flash(
                 Markup('<strong>Success!</strong> Account created successfully!'),
@@ -47,13 +54,18 @@ def validate_signup(login_form, signup_form):
             )
 
             return redirect(url_for('login'))  # Redirect to the login page
-        except Exception as e:  # Handle MySQL IntegrityError (e.g., duplicate email)
+        except Exception as e:
+
+            # Handle MySQL IntegrityError (e.g., duplicate email)
 
             # Check if the exception is specifically for the duplicate email
-            if "Duplicate entry" in str(e.orig):
+            if "Duplicate entry" in str(e):
+                print("okok")
                 flash("Email already exists. Please use a different email address.", "danger")
             else:
-                flash("An unexpected error occurred while creating your account. Please try again.", "danger")
+                print("okok11")
+                flash(str(e), "danger")
+
             return render_template(
                 'Login.html',
                 signup_form=signup_form,
@@ -61,7 +73,10 @@ def validate_signup(login_form, signup_form):
             )
 
     else:
-        flash("Wrong email address entered. Try again.", "danger")
+        for field, errors in signup_form.errors.items():
+            for error in errors:
+                flash(f"Error in {getattr(signup_form, field).label.text}: {error}", "danger")
+        flash("An error occured with the form. Try again.", "danger")
         return render_template('Login.html', signup_form=signup_form, login_form=login_form)
 
 

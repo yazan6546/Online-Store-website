@@ -14,7 +14,9 @@ create table Person(
 
 create table Customer(
     person_id int not null,
+    birth_date date,
     foreign key (person_id) references Person(person_id) on delete cascade on update cascade,
+
     primary key (person_id)
 );
 
@@ -216,3 +218,18 @@ SELECT p.product_id, p.product_name, SUM(col.quantity) AS total_quantity_sold
 SELECT COUNT(DISTINCT c.person_id) AS customers_with_address
 FROM Customer c
 JOIN Address a ON c.person_id = a.person_id;
+
+
+select * from Customer;
+
+SELECT
+    c.person_id AS person_id,
+    p.first_name AS first_name,
+    p.last_name AS last_name,
+    p.email AS email,
+    p.passcode AS passcode,
+    c.birth_date AS birth_date
+FROM Customer c
+JOIN Person p
+ON c.person_id = p.person_id
+WHERE p.email = :email;
