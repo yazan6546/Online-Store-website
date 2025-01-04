@@ -75,12 +75,13 @@ GET_ALL_PLACED_ORDERS = text("""
                                     co.order_id,
                                     co.order_date,
                                     co.delivery_date,
-                                    co.shipping_status,
                                     co.person_id,
                                     co.address_id,
                                     p.product_id,
                                     p.product_name,
                                     p.product_description,
+                                    co.delivery_service_id,
+                                    co.order_status,
                                     p.price,
                                     col.quantity,
                                     col.price_at_time_of_order
@@ -96,11 +97,11 @@ GET_ALL_PLACED_ORDERS = text("""
 
 
 PENDING_ORDERS = text("""
-    SELECT co.order_id, co.order_date, co.delivery_date, co.shipping_status, p.first_name, p.last_name
+    SELECT co.order_id, co.order_date, co.delivery_date, p.first_name, p.last_name
     FROM Customer_Order co 
     JOIN Person p 
     ON co.person_id = p.person_id
-    WHERE co.shipping_status = 'Shipped'
+    WHERE co.order_status = 'PLACED
     ORDER BY co.delivery_date;
 """)
 

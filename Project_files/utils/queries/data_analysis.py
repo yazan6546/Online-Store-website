@@ -7,7 +7,7 @@ TOP_10_SELLING_PRODUCTS = text("""
     JOIN Customer_Order co ON col.order_id = co.order_id
     JOIN Category c ON p.category_id = c.category_id
     JOIN Supplier s ON p.supplier_id = s.supplier_id
-    WHERE co.order_status = 'PLACED'
+    WHERE co.order_status = 'COMPLETED'
     GROUP BY p.product_id, p.product_name
     """)
 
@@ -23,7 +23,7 @@ MONTHLY_INCOME_REPORT = text("""
            SUM(col.quantity * col.price_at_time_of_order) AS tot
     FROM Customer_Order co 
     JOIN Customer_Order_Line col ON co.order_id = col.order_id
-    WHERE co.order_status = 'PLACED'
+    WHERE co.order_status = 'COMPLETED'
     GROUP BY DATE_FORMAT(co.order_date, '%Y-%m')
     ORDER BY month DESC;
 """)
@@ -40,7 +40,7 @@ JOIN
 JOIN 
     Customer_Order co ON col.order_id = co.order_id
 WHERE 
-    co.order_status = 'PLACED'
+    co.order_status = 'COMPLETED'
 GROUP BY 
     c.category_name
 ORDER BY 
@@ -57,7 +57,7 @@ FROM
 JOIN
     Customer_Order_Line col ON co.order_id = col.order_id
 WHERE
-    YEAR(co.order_date) = :year AND co.order_status = 'PLACED'
+    YEAR(co.order_date) = :year AND co.order_status = 'COMPLETED'
 GROUP BY
     month
 ORDER BY
@@ -75,7 +75,7 @@ all_revenues = """
     JOIN
         Customer_Order_Line col ON co.order_id = col.order_id
     WHERE
-        co.order_status = 'PLACED'
+        co.order_status = 'COMPLETED'
     GROUP BY
         YEAR(co.order_date), MONTH(co.order_date)
     ORDER BY
@@ -97,7 +97,7 @@ JOIN
 JOIN
     Person p ON c.person_id = p.person_id
 WHERE
-    co.order_status = 'PLACED'
+    co.order_status = 'COMPLETED'
 GROUP BY
     p.first_name, p.last_name
 ORDER BY
@@ -138,7 +138,7 @@ FROM (
     JOIN
         Product p ON col.product_id = p.product_id
     WHERE
-        co.order_status = 'PLACED' AND YEAR(co.order_date) = %(year)s
+        co.order_status = 'COMPLETED' AND YEAR(co.order_date) = %(year)s
     GROUP BY
         month, p.product_name
 ) subquery
@@ -152,7 +152,7 @@ COUNT_CUSTOMERS = text("""
 """)
 COUNT_ORDERS = text("""
     SELECT COUNT(*) FROM Customer_Order
-    WHERE order_status = 'PLACED';
+    WHERE order_status = 'COMPLETED';
 """)
 COUNT_PRODUCTS = text("""
     SELECT COUNT(*) FROM Product;
@@ -162,7 +162,7 @@ TOTAL_REVENUE = text("""
     SELECT SUM(price_at_time_of_order * quantity) AS total_revenue
     FROM Customer_Order_Line
     JOIN Customer_Order ON Customer_Order.order_id = Customer_Order_Line.order_id
-    WHERE order_status = 'PLACED';
+    WHERE order_status = 'COMPLETED';
 """)
 
 

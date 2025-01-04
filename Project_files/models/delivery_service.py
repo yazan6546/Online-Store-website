@@ -73,7 +73,7 @@ class DeliveryService:
         conn = get_db_connection()
 
         try:
-            conn.execute(q.delivery_service.DELETE_ALL_DELIVERY_SERVICES)
+            conn.execute(q.delivery_service.DELETE_DELIVERY_SERVICE)
             conn.commit()
             return 1
         except Exception as e:

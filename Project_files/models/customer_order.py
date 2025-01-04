@@ -89,8 +89,8 @@ class CustomerOrder(Order):
                     person_id=order["person_id"],
                     address_id=order["address_id"],
                     delivery_date=order["delivery_date"],
-                    shipping_status=order["shipping_status"],
                     order_date=order["order_date"],
+                    delivery_service_id=order["delivery_service_id"],
                     order_id=order["order_id"]
                 )
 
