@@ -10,7 +10,7 @@ from .data_analysis import *
 from .address import *
 from .supplier import *
 from .category import *
-from .delivery_service import import *
+from .delivery_service import *
 
 __all__= ['customer',
           'manager',
