@@ -120,19 +120,38 @@ Admin Dashboard
       <!-- Upper Section -->
       <div class="product-image-section">
         <img src="../static/img/p9-d-removebg-preview.png" alt="Product Image">
-        <div class="circle-btn">
+        <div class="circle-btn" id="open-modal-btn">
           <i class="bx bx-plus"></i>
         </div>
+
       </div>
       <!-- Lower Section -->
       <div class="product-info-section">
         <h5>AirPods Max offer high-fidelity audio, 20-hour battery life, USB-C charging, in fresh green color.</h5>
-        <p class="price">$20</p>
+        <p class="price">$220</p>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div id="blank-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Product Details</h2>
+        <img src="../static/img/p9-d-removebg-preview.png" alt="Product Image">
+        <p>Description: AirPods Max offer high-fidelity audio, 20-hour battery life, USB-C charging, in fresh green color.</p>
+        <p>Price: $220</p>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+    </div>
+
+<!-- finish of shopping products section -->
+
 
   </div>
 
 
 </div>
+
+<script src="{{ url_for('static', filename='js/manager_shop.js') }}"></script>
+
 {% endblock %}
