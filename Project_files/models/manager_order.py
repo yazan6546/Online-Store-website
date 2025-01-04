@@ -5,8 +5,8 @@ import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class ManagerOrder(Order):
-    def __init__(self, person_id, delivery_date, order_date=datetime.now(), order_id=None):
-        super().__init__(person_id, delivery_date, order_date, order_id)
+    def __init__(self, person_id, order_status, delivery_date, delivery_service_id, order_date=datetime.now(), order_id=None):
+        super().__init__(person_id, delivery_date, order_status, delivery_service_id, order_date, order_id)
 
     def insert(self):
         if self.insert_order() and self.insert_order_lines():
@@ -18,7 +18,7 @@ class ManagerOrder(Order):
     def insert_order(self):
         conn = get_db_connection()
         try:
-            result = conn.execute(q.INSERT_MANAGER_ORDER_TABLE, self.to_dict(status=True))
+            result = conn.execute(q.INSERT_MANAGER_ORDER_TABLE, self.to_dict())
             conn.commit()
             self.order_id = result.lastrowid
             return 1
@@ -83,7 +83,7 @@ class ManagerOrder(Order):
                 order_obj = ManagerOrder(
                     person_id=order["person_id"],
                     delivery_date=order["delivery_date"],
-                    shipping_status=order["shipping_status"],
+                    order_status=order["order_status"],
                     order_date=order["order_date"],
                     order_id=order["order_id"]
                 )
@@ -121,6 +121,4 @@ class ManagerOrder(Order):
 
     def to_dict(self, status=False, order_id=True):
         order_dict = super().to_dict(order_id)
-        if status:
-            order_dict["order_status"] = "PLACED"
         return order_dict

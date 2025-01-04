@@ -1,8 +1,8 @@
 from sqlalchemy import text
 
 INSERT_CUSTOMER_ORDER_TABLE = text("""
-                                INSERT INTO Customer_Order (order_id, person_id, order_status, address_id, order_date, delivery_date, shipping_status) 
-                                VALUES (:order_id, :person_id, :order_status, :address_id, :order_date, :delivery_date, :shipping_status);
+                                INSERT INTO Customer_Order (order_id, person_id, order_status, address_id, delivery_service_id, order_date, delivery_date) 
+                                VALUES (:order_id, :person_id, :order_status, :address_id, :delivery_service_id, :order_date, :delivery_date);
                             """)
 
 GET_CUSTOMER_ORDER_TABLE = text("""
@@ -26,7 +26,6 @@ UPDATE_CUSTOMER_ORDER_TABLE = text("""
                             person_id=:person_id,
                             address_id=:address_id, 
                             delivery_date=:delivery_date, 
-                            shipping_status=:shipping_status, 
                             order_date=:order_date
                             WHERE order_id = :order_id;
                             """)
