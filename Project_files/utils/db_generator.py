@@ -17,7 +17,7 @@ def read_csv_to_objects(file_path, model_class:Customer| Manager):
             obj = model_class(**row.to_dict(), birth_date=birth_date, hash=True)
 
         else:
-            obj = model_class(**row.to_dict())
+            obj = model_class(**row.to_dict(), hash=True)
 
         objects.append(obj)
     return objects
