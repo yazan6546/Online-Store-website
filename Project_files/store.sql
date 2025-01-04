@@ -221,3 +221,15 @@ JOIN Address a ON c.person_id = a.person_id;
 
 
 select * from Customer;
+
+SELECT
+    c.person_id AS person_id,
+    p.first_name AS first_name,
+    p.last_name AS last_name,
+    p.email AS email,
+    p.passcode AS passcode,
+    c.birth_date AS birth_date
+FROM Customer c
+JOIN Person p
+ON c.person_id = p.person_id
+WHERE p.email = :email;
