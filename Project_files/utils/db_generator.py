@@ -10,7 +10,15 @@ def read_csv_to_objects(file_path, model_class:Customer| Manager):
     objects = []
     for _, row in df.iterrows():
         print(row.to_dict())
-        obj = model_class(**row.to_dict(), hash=True)
+
+        if model_class == Customer:
+            birth_date = pd.to_datetime(row['birth_date'])
+            row.drop('birth_date', inplace=True)
+            obj = model_class(**row.to_dict(), birth_date=birth_date, hash=True)
+
+        else:
+            obj = model_class(**row.to_dict())
+
         objects.append(obj)
     return objects
 

@@ -160,6 +160,7 @@ class Customer(Person):
         if address:
             temp["addresses"] = [address.to_dict(address_id=True) for address in self.addresses]
 
+        temp["birth_date"] = self.birth_date.strftime('%Y-%m-%d')
         return temp
 
     def __str__(self):
