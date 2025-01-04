@@ -461,6 +461,11 @@ def admin_dashboard():
 def admin_shop():
     return render_template('admin_shop.html')
 
+# Shop for delivery Page
+@app.route('/delivery')
+def delivery():
+    return render_template('delivery.html')
+
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
