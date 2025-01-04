@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField
 from wtforms.fields.choices import RadioField, SelectField
+from wtforms.fields.datetime import DateField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired, Email
 from wtforms.validators import Regexp
@@ -47,6 +48,12 @@ class CustomerForm(FlaskForm):
         choices=[('manager', 'Manager'), ('customer', 'Customer')],
         validators=[DataRequired()],
         render_kw={"class": "form-check"}  # Optional: Add styling class if needed
+    )
+
+    birth_date = DateField(
+        'Birth Date',
+        validators=[DataRequired()],
+        render_kw={"class": "form-control"}
     )
 
 

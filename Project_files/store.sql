@@ -14,6 +14,7 @@ create table Person(
 
 create table Customer(
     person_id int not null,
+    birth_date date,
     foreign key (person_id) references Person(person_id) on delete cascade on update cascade,
     primary key (person_id)
 );

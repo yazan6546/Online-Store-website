@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from models.person import Person
 import utils.queries as q
 from utils.db_utils import get_db_connection
@@ -5,9 +7,10 @@ from models.addresses import Address
 
 
 class Customer(Person):
-    def __init__(self, first_name, last_name, email, passcode, person_id=None, hash=False):
+    def __init__(self, first_name, last_name, email, passcode, birth_date, person_id=None, hash=False):
         super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
         self.addresses = []  # List of Address objects
+        self.birth_date = datetime.strptime(birth_date, "%Y-%m-%d")
 
     def insert(self):
         conn = get_db_connection()
@@ -147,6 +150,8 @@ class Customer(Person):
 
         if address:
             temp["addresses"] = [address.to_dict(address_id=True) for address in self.addresses]
+
+        temp["birth_date"] = self.birth_date.strftime("%Y-%m-%d")
 
         return temp
 
