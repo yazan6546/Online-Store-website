@@ -184,6 +184,11 @@ h2 {
   margin-bottom: 5px;
 }
 
+.filter-box label {
+  cursor: pointer;
+}
+
+
 .range-slider {
   position: relative;
   width: 100%;
