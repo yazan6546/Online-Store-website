@@ -21,46 +21,51 @@ def validate_signup(login_form, signup_form):
 
         print(type(birth_date))
 
-        # Create a new customer object
-        if user_type.lower() == 'manager':
-
-            role = signup_form.manager_role.data
-
-            new_customer = Manager(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                passcode=password,
-                since=datetime.now(),
-                role=role,
-                hash=True
-            )
-        else:  # Regular customer
-            new_customer = Customer(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                passcode=password,
-                birth_date=signup_form.birth_date.data,
-                hash=True
-            )
-
         try:
-            # Attempt to insert the new user into the database
-            new_customer.insert()
-            flash(
-                Markup('<strong>Success!</strong> Account created successfully!'),
-                'success'
-            )
+            # Create a new customer object
+            if user_type.lower() == 'manager':
 
-            return redirect(url_for('login'))  # Redirect to the login page
-        except Exception as e:  # Handle MySQL IntegrityError (e.g., duplicate email)
+                role = signup_form.manager_role.data
+
+                new_customer = Manager(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    passcode=password,
+                    since=datetime.now(),
+                    role=role,
+                    hash=True
+                )
+            else:
+                # Regular customer
+                new_customer = Customer(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    passcode=password,
+                    birth_date=signup_form.birth_date.data,
+                    hash=True
+                )
+
+                # Attempt to insert the new user into the database
+                new_customer.insert()
+                flash(
+                    Markup('<strong>Success!</strong> Account created successfully!'),
+                'success'
+                )
+
+                return redirect(url_for('login'))  # Redirect to the login page
+        except Exception as e:
+
+            # Handle MySQL IntegrityError (e.g., duplicate email)
 
             # Check if the exception is specifically for the duplicate email
-            if "Duplicate entry" in str(e.orig):
+            if "Duplicate entry" in str(e):
+                print("okok")
                 flash("Email already exists. Please use a different email address.", "danger")
             else:
-                flash(str(e.orig), "danger")
+                print("okok11")
+                flash(str(e), "danger")
 
             return render_template(
                 'Login.html',

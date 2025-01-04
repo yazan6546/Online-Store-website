@@ -17,8 +17,8 @@ class Customer(Person):
             birth_date = birth_date.date()
 
         # Check if birth_date is at least 5 years ago
-        if birth_date > date.today() - timedelta(days=5 * 365):
-            raise ValueError("Birth date must be at least 5 years ago.")
+        if birth_date > date.today() - timedelta(days=18 * 365):
+            raise ValueError("Birth date must be at least 18 years ago.")
 
         self.age = datetime.now().year - birth_date.year
     def insert(self):
