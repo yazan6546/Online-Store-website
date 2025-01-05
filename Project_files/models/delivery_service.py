@@ -2,7 +2,7 @@ from utils.db_utils import get_db_connection
 import utils.queries as q
 
 class DeliveryService:
-    def __init__(self, delivery_service_id, delivery_service_name, phone_number, email):
+    def __init__(self, delivery_service_id, delivery_service_name, phone_number):
         self.delivery_service_id = delivery_service_id
         self.delivery_service_name = delivery_service_name
         self.phone_number = phone_number

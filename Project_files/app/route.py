@@ -481,12 +481,6 @@ def admin_dashboard():
 def admin_shop():
     return render_template('admin_shop.html')
 
-# Shop for delivery Page
-@app.route('/delivery')
-def delivery():
-    return render_template('delivery.html')
-
-
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
 
@@ -594,18 +588,18 @@ def update_delivery(delivery_service_id):
             return jsonify(success=False, error="Name and phone are required.")
 
         # Fetch the supplier by ID and update its fields
-        supplier = DeliveryService.get_by_id(delivery_service_id)
-        if not supplier:
-            return jsonify(success=False, error="Supplier not found.")
+        delivery_service = DeliveryService.get_by_id(delivery_service_id)
+        if not delivery_service:
+            return jsonify(success=False, error="Delivery service not found.")
 
-        supplier.name = name
-        supplier.phone = phone
-        result = supplier.update()
+        delivery_service.delivery_service_name = name
+        delivery_service.phone_number = phone
+        result = delivery_service.update()
 
         if result:
             return jsonify(success=True)
         else:
-            return jsonify(success=False, error="Failed to update supplier.")
+            return jsonify(success=False, error="Failed to update delivery service.")
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
@@ -633,8 +627,8 @@ def search_delivery():
         # Fetch all suppliers and filter them by name or phone
         all_delivery_services = DeliveryService.get_all()
         filtered_delivery_services = [
-            delivery.to_dict() for delievry in all_delivery_services
-            if query.lower() in delievry.delivery_service_name.lower() or query in delievry.phone_number
+            delivery.to_dict() for delivery in all_delivery_services
+            if query.lower() in delivery.delivery_service_name.lower() or query in delivery.phone_number
         ]
 
         return jsonify(success=True, delivery_services=filtered_delivery_services)
