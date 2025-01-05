@@ -147,7 +147,7 @@
 
 #revenue-chart {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1020px;
 }
 
 #revenueChart {
@@ -155,6 +155,47 @@
   height: 250px;
 }
 
+#category-chart {
+  width: 100%;
+  max-width: 1020px;
+  height: 100%;
+}
+
+#categoryChart {
+  width: 100%; /* to ensure that the canvas adapts to the container size */
+  height: 250px;
+}
+
+#top-customers-chart {
+  width: 100%;
+  max-width: 1020px;
+  height: 100%;
+}
+
+#topCustomersChart {
+  width: 100%; /* to ensure that the canvas adapts to the container size */
+  height: 250px;
+}
+
+#colored-bar-chart {
+  width: 100%;
+  max-width: 1020px;
+  height: 100%;
+}
+
+#coloredBarChart {
+  width: 100%; /* to ensure that the canvas adapts to the container size */
+  height: 250px;
+}
+
+.charts2 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+}
 
 .table {
   flex: 1;
@@ -193,6 +234,8 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   font-family: 'Poppins', sans-serif;
+  width: 100%; /* to ensure that the canvas adapts to the container size */
+  max-width: 320px;
 }
 
 .top-products .header {

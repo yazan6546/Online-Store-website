@@ -138,19 +138,41 @@ const topCustomersChart = new Chart(ctxTopCustomers, {
         datasets: [{
             label: 'Amount Paid',
             data: [],
-            backgroundColor: colors1.slice(0, 10) // Use the first 10 colors
+            backgroundColor: colors1.slice(0, 10) // Use the first 10 colors for bars
         }]
     },
     options: {
         indexAxis: 'y',
         responsive: true,
+        plugins: {
+            legend: {
+                display: false // Disable the legend
+            }
+        },
         scales: {
             x: {
-                beginAtZero: true
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Amount Paid (USD)',
+                    color: '#0C356A',
+                    font: {
+                        size: 14,
+                        weight: 'normal'
+                    }
+                }
+            },
+            y: {
+                ticks: {
+                    font: {
+                        size: 12
+                    }
+                }
             }
         }
     }
 });
+
 
 async function fetchTopCustomersData() {
     try {
@@ -192,23 +214,43 @@ const coloredBarChart = new Chart(ctxBar, {
     data: {
         labels: [], // To be filled with the month of input data
         datasets: [{
-            label: 'Total Quantity Sold', // Customize the label as needed
+            label: 'Total Quantity Sold',
             data: [], // To be filled with the total_quantity_sold of input data
             backgroundColor: colors2 // Use the defined colors
         }]
     },
     options: {
+        indexAxis: 'x',
         responsive: true,
+        plugins: {
+            legend: {
+                display: false // Disable the legend
+            }
+        },
         scales: {
-            x: {
-                beginAtZero: true
-            },
             y: {
-                beginAtZero: true
+                beginAtZero: true, // Adjust the y-axis to start at zero
+                title: {
+                    display: true,
+                    text: 'Total Quantity Sold',
+                    color: '#0C356A',
+                    font: {
+                        size: 14,
+                        weight: 'normal'
+                    }
+                }
+            },
+            x: {
+                ticks: {
+                    font: {
+                        size: 12
+                    }
+                }
             }
         }
     }
 });
+
 
 // Function to process input data and update the chart
 async function fetchBestProductsByMonth() {
