@@ -124,7 +124,7 @@ function searchDelivery() {
                 response.delivery_services.forEach(function(delivery) {
                     var row = `
                         <tr id="row-${delivery.delivery_service_id}">
-                            <td>${delivery.delivery_id}</td>
+                            <td>${delivery.delivery_service_id}</td>
                             <td>
                                 <span id="name-${delivery.delivery_service_id}-text">${delivery.delivery_service_name}</span>
                                 <input type="text" id="name-${delivery.delivery_service_id}-input" value="${delivery.delivery_service_name}" style="display:none; width: 100px;">

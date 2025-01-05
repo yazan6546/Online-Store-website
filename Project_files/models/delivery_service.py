@@ -90,10 +90,17 @@ class DeliveryService:
 
     @staticmethod
     def from_dict(dict):
+
+        if dict["delivery_service_id"] is None:
+            return DeliveryService(
+                delivery_service_name=dict["delivery_service_name"],
+                phone_number = dict["phone_number"],
+            )
+
         return DeliveryService(
-            dict["delivery_service_id"],
-            dict["delivery_service_name"],
-            dict["phone_number"],
+            delivery_service_id=dict["delivery_service_id"],
+            delivery_service_name=dict["delivery_service_name"],
+            phone_number = dict["phone_number"],
         )
 
     @staticmethod
