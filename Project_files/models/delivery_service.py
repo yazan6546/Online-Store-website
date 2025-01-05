@@ -6,7 +6,6 @@ class DeliveryService:
         self.delivery_service_id = delivery_service_id
         self.delivery_service_name = delivery_service_name
         self.phone_number = phone_number
-        self.email = email
 
     def insert(self):
         conn = get_db_connection()
@@ -25,7 +24,6 @@ class DeliveryService:
         temp = {
             "delivery_service_name": self.delivery_service_name,
             "phone_number": self.phone_number,
-            "email": self.email,
         }
 
         if include_id:
@@ -89,7 +87,6 @@ class DeliveryService:
             dict["delivery_service_id"],
             dict["delivery_service_name"],
             dict["phone_number"],
-            dict["email"],
         )
 
     @staticmethod

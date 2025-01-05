@@ -1,0 +1,83 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+Suppliers
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+{% endblock %}
+
+
+{% block content %}
+<div id="wrapper">
+    <div class="card-heading">
+        <h1>Delivery Service</h1>
+    </div>
+
+    <div id="container_search_add">
+        <form id="search-form" onsubmit="event.preventDefault(); searchDelivery();">
+            <input type="text" id="search-query" placeholder="Search suppliers...">
+            <button type="submit" class="btn">Search</button>
+        </form>
+        <button onclick="openModal()" class="btn">Add Delivery Service</button>
+    </div>
+
+
+    <table id="table">
+        <thead>
+            <tr>
+                <th onclick="sortDelivery('delivery_service_id')">Delivery Service ID</th>
+                <th onclick="sortDelivery('delivery_service_name')">Name</th>
+                <th onclick="sortDelivery('phone_number')">Phone Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for delivery_service in delivery_services %}
+            <tr id="row-{{ delivery_service.delivery_service_id }}">
+                <td>{{ delivery_service.delivery_service_id }}</td>
+                <td>
+                    <span id="name-{{ supplier.supplier_id }}-text">{{ supplier.name }}</span>
+                    <input type="text" id="name-{{ supplier.supplier_id }}-input" value="{{ delivery_service.delivery_service_name }}" style="display:none; width: 100px;">
+                </td>
+                <td>
+                    <span id="phone-{{ delivery_service.supplier_id }}-text">{{ delivery_service.phone_number }}</span>
+                    <input type="text" id="phone-{{ delivery_service.delivery_service_id }}-input" value="{{ delivery_service.phone_number }}" style="display:none; width: 100px;">
+                </td>
+                <td class="action-buttons">
+                    <button id="edit-btn-{{ delivery_service.delivery_service_id }}" class="edit" onclick="enableEditDelivery({{ delivery_service.delivery_service_id }})">Edit</button>
+                    <button id="save-btn-{{ delivery_service.delivery_service_id }}" class="save" style="display:none;" onclick="saveEditDelivery({{ delivery_service.delivery_service_id }})">Save</button>
+                    <button class="delete" onclick="deleteDelivery({{ delivery_service.delivery_service_id }})">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+    <div id="add-delivery-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add Delivery Service</h2>
+            <form id="add-delivery-form" onsubmit="event.preventDefault(); addSupplier();">
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Enter delivery service name" required>
+                <label for="phone">Phone</label>
+                <input type="text" id="phone" placeholder="Enter delivery service phone" required>
+                <button type="submit" class="btn">Add Supplier</button>
+            </form>
+        </div>
+    </div>
+
+<div class="pagination">
+  <button id="prevPage" disabled>Previous</button>
+  <span id="currentPage">Page 1</span>
+  <button id="nextPage">Next</button>
+</div>
+
+<script src="{{ url_for('static', filename='js/delivery_service.js') }}"></script>
+{% endblock %}
+
+
+
