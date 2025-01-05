@@ -5,8 +5,8 @@ import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class CustomerOrder(Order):
-    def __init__(self, person_id, address_id, delivery_date, shipping_status, order_date=datetime.now(), order_id=None):
-        super().__init__(person_id, delivery_date, shipping_status, order_date, order_id)
+    def __init__(self, person_id, address_id, delivery_date, delivery_service_id, order_date=datetime.now(), order_id=None):
+        super().__init__(person_id, delivery_date, order_date, order_id, delivery_service_id)
         self.address_id = address_id
 
     def insert(self):
@@ -89,8 +89,8 @@ class CustomerOrder(Order):
                     person_id=order["person_id"],
                     address_id=order["address_id"],
                     delivery_date=order["delivery_date"],
-                    shipping_status=order["shipping_status"],
                     order_date=order["order_date"],
+                    delivery_service_id=order["delivery_service_id"],
                     order_id=order["order_id"]
                 )
 

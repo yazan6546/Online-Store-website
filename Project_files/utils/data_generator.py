@@ -105,9 +105,17 @@ def generate_category_data():
 
 def generate_product_data(num_records, category_ids, supplier_ids):
     data = []
+
+    used_names = set()
+
     for _ in range(num_records):
+        product_name = fake.word()
+        while product_name in used_names:
+            product_name = fake.word()
+        used_names.add(product_name)
+
         data.append({
-            'product_name': fake.word(),
+            'product_name': product_name,
             'product_description': fake.text(max_nb_chars=100),
             'price': round(random.uniform(50, 1000), 2),
             'photo': fake.image_url(),
@@ -122,19 +130,27 @@ def generate_product_data(num_records, category_ids, supplier_ids):
 
 def generate_supplier_data(num_records):
     data = []
+
+    used_names = set()
+
     for _ in range(num_records):
+        supplier_name = fake.company()
+        while supplier_name in used_names:
+            supplier_name = fake.word()
+        used_names.add(supplier_name)
+
 
         phone_number_pattern = f'{0}{5}#-###-####'
 
         data.append({
-            'supplier_name': fake.company(),
+            'supplier_name': supplier_name,
             'phone_number': fake.numerify(phone_number_pattern)
         })
     df = pd.DataFrame(data)
     df.to_csv('csv_files/Supplier.csv', index=False)
     return df
 
-def generate_customer_order_data(num_records, customer_ids, address_ids):
+def generate_customer_order_data(num_records, customer_ids, address_ids, delivery_service_ids):
     data = []
     for _ in range(num_records):
         data.append({
@@ -142,8 +158,8 @@ def generate_customer_order_data(num_records, customer_ids, address_ids):
             'address_id': random.choice(address_ids),
             'order_date': fake.date_between(start_date='-4y', end_date='today'),
             'delivery_date': fake.date_between(start_date='today', end_date='+10d'),
-            'order_status': random.choice(['IN_CART', 'PLACED']),
-            'shipping_status': random.choice(['Shipped', 'Delivered', 'Cancelled'])
+            'order_status': random.choice(['IN_CART', 'PLACED', 'COMPLETED']),
+            'delivery_service_id' : random.choice(delivery_service_ids)
         })
     df = pd.DataFrame(data)
     df.to_csv('csv_files/CustomerOrder.csv', index=False)
@@ -162,15 +178,37 @@ def generate_customer_order_line_data(num_records, order_ids, product_ids):
     df.to_csv('csv_files/CustomerOrderLine.csv', index=False)
     return df
 
-def generate_manager_order_data(num_records, manager_ids):
+def generate_delivery_service_data(num_records):
+    data = []
+
+    used_names = set()
+
+    for _ in range(num_records):
+        delivery_name = fake.company()
+        while delivery_name in used_names:
+            delivery_name = fake.word()
+        used_names.add(delivery_name)
+
+        phone_number_pattern = f'{0}{5}#-###-####'
+        data.append({
+            'delivery_service_id': _ + 1,
+            'delivery_service_name': delivery_name,
+            'phone_number': fake.numerify(phone_number_pattern),
+            'email': fake.email()
+        })
+    df = pd.DataFrame(data)
+    df.to_csv('csv_files/DeliveryService.csv', index=False)
+    return df
+
+def generate_manager_order_data(num_records, manager_ids, delivery_service_ids):
     data = []
     for i in range(num_records):
         data.append({
             'person_id': random.choice(manager_ids),
             'order_date': fake.date_between(start_date='-4y', end_date='today'),
             'delivery_date': fake.date_between(start_date='today', end_date='+10d'),
-            'order_status': random.choice(['IN_CART', 'PLACED']),
-            'shipping_status': random.choice(['Shipped', 'Delivered', 'Cancelled'])
+            'order_status': random.choice(['IN_CART', 'PLACED', 'COMPLETED']),
+            'delivery_service_id': random.choice(delivery_service_ids)
         })
     df = pd.DataFrame(data)
     df.to_csv('csv_files/ManagerOrder.csv', index=False)
@@ -203,17 +241,20 @@ if __name__ == '__main__':
     num_customer_order_line_records = 10000
     num_manager_order_records = 350
     num_manager_order_line_records = 600
+    num_delivery_service_records = 5
 
     num_manager_records = 4
+    #
     #
     df = generate_customer_data(num_customer_records)
     df['person_id'] = df['person_id'] + num_manager_records
 
-    generate_address_data(num_address_records, df['person_id'].tolist())
-    generate_category_data()
+    generate_delivery_service_data(num_delivery_service_records)
+    # generate_address_data(num_address_records, df['person_id'].tolist())
+    # generate_category_data()
     generate_product_data(num_product_records, list(range(1, num_category_records)), list(range(1, num_supplier_records)))
-    generate_manager_order_data(num_manager_order_records, list(range(1, num_manager_records)))
-    # generate_supplier_data(num_supplier_records)
-    generate_customer_order_data(num_customer_order_records, df['person_id'].tolist(), list(range(1, num_address_records)))
-    generate_customer_order_line_data(num_customer_order_line_records, list(range(1, num_customer_order_records+1)), list(range(1, num_product_records)))
-    generate_manager_order_line_data(num_manager_order_line_records, list(range(1, num_manager_order_records+1)), list(range(1, num_product_records+1)))
+    generate_manager_order_data(num_manager_order_records, list(range(1, num_manager_records)), list(range(1, num_delivery_service_records)))
+    generate_supplier_data(num_supplier_records)
+    generate_customer_order_data(num_customer_order_records, df['person_id'].tolist(), list(range(1, num_address_records)), list(range(1, num_delivery_service_records)))
+    # generate_customer_order_line_data(num_customer_order_line_records, list(range(1, num_customer_order_records+1)), list(range(1, num_product_records)))
+    # generate_manager_order_line_data(num_manager_order_line_records, list(range(1, num_manager_order_records+1)), list(range(1, num_product_records+1)))

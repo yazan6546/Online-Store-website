@@ -6,12 +6,13 @@ import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class Order:
-    def __init__(self, person_id, delivery_date, shipping_status, order_date=datetime.now(), order_id=None):
+    def __init__(self, person_id, delivery_date, order_status, delivery_service_id, order_date=datetime.now(), order_id=None):
         self.order_id = order_id
         self.person_id = person_id
         self.order_date = order_date
         self.delivery_date = delivery_date
-        self.shipping_status = shipping_status
+        self.delivery_service_id = delivery_service_id
+        self.order_status = order_status
         self.products = {}  # List of dictionaries to store products and their quantities
 
     def add_product(self, product_id, price_at_time_of_order, quantity):
@@ -33,7 +34,8 @@ class Order:
             "person_id": self.person_id,
             "order_date": self.order_date,
             "delivery_date": self.delivery_date,
-            "shipping_status": self.shipping_status
+            "order_status": self.order_status,
+            "delivery_service_id": self.delivery_service_id
         }
 
         if order_id:

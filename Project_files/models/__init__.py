@@ -8,6 +8,7 @@ from .data_analysis import *
 from .addresses import *
 from .suppliers import *
 from .category import *
+from .delivery_service import *
 
 __all__= ['customers',
           'manager',
@@ -18,4 +19,5 @@ __all__= ['customers',
           'data_analysis',
           'addresses',
           'suppliers',
-          'category']
+          'category',
+          'delivery_service']

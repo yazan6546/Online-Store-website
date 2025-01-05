@@ -49,7 +49,8 @@ def reset_db():
         "Address",
         "Customer",
         'Manager',
-        'Person'
+        'Person',
+        'DeliveryService'
     ]
 
     # Delete all records from each table

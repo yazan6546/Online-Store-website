@@ -43,14 +43,14 @@ create table Address(
 
 create table Category(
     category_id int not null auto_increment,
-    category_name varchar(20) not null,
+    category_name varchar(20) unique not null,
     category_description varchar(255),
     primary key (category_id)
 );
 
 create table Supplier(
     supplier_id int not null auto_increment,
-    supplier_name varchar(255) not null,
+    supplier_name varchar(255) not null UNIQUE,
     phone_number varchar(255) not null,
     primary key (supplier_id)
 );
@@ -58,7 +58,7 @@ create table Supplier(
 
 create table Product(
     product_id int auto_increment,
-    product_name varchar(255) not null,
+    product_name varchar(255) unique not null,
     product_description varchar(255) not null,
     brand varchar(30) not null,
     price decimal(10,2) not null,
@@ -73,14 +73,11 @@ create table Product(
 );
 
 
-
-
-create table Address_Order(
-    address_id int,
-    city varchar(255) not null,
-    street_address varchar(255) not null,
-    primary key (address_id)
-
+CREATE TABLE DeliveryService (
+    delivery_service_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for each delivery service
+    delivery_service_name VARCHAR(255) NOT NULL UNIQUE,                         -- Name of the delivery service (e.g., "DHL", "FedEx")
+    phone_number VARCHAR(15),                          -- Contact phone number for the delivery service
+    email VARCHAR(255)                         -- Contact email for the delivery service
 );
 
 create table Customer_Order(
@@ -89,10 +86,11 @@ create table Customer_Order(
     address_id int,
     order_date date,
     delivery_date date,
-    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED')),
-    shipping_status varchar(20) check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
+    delivery_service_id int not null,
+    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED', 'COMPLETED')),
     foreign key (person_id) references Customer(person_id) on delete cascade on update cascade,
     foreign key (address_id) references Address(address_id),
+    foreign key (delivery_service_id) references DeliveryService(delivery_service_id),
     primary key (order_id)
 );
 
@@ -101,7 +99,7 @@ create table Customer_Order_Line(
     product_id int not null,
     order_id int not null,
     price_at_time_of_order int not null,
-    quantity int not null,
+    quantity INT NOT NULL CHECK (quantity > 0),
     foreign key (order_id) references Customer_Order(order_id),
 	foreign key (product_id) references Product(product_id),
     primary key (order_line_id)
@@ -113,10 +111,12 @@ create table Manager_Order(
     person_id int not null,
     order_date date,
     delivery_date date,
-    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED')),
-    shipping_status varchar(20) check (shipping_status in ('Shipped', 'Delivered', 'Cancelled')),
+    delivery_service_id int not null,
+    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED', 'COMPLETED')),
     foreign key (person_id) references Manager(person_id),
+    foreign key (delivery_service_id) references DeliveryService(delivery_service_id),
     primary key (order_id)
+
 );
 
 create table Manager_Order_Line(
@@ -129,6 +129,7 @@ create table Manager_Order_Line(
 	foreign key (product_id) references Product(product_id),
     primary key (order_line_id)
 );
+
 
 
 
