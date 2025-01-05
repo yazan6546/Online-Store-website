@@ -217,7 +217,7 @@ function addSupplier() {
                         <td class="action-buttons">
                             <button id="edit-btn-${data.supplier.supplier_id}" class="edit" onclick="enableEditSupplier(${data.supplier.supplier_id})">Edit</button>
                             <button id="save-btn-${data.supplier.supplier_id}" class="save" style="display:none;" onclick="saveEditSupplier(${data.supplier.supplier_id})">Save</button>
-                            <button class="delete" onclick="deleteSupplier(${data.supplier.supplier_id})">Delete</button>
+                            <button class="delete" onclick="deleteSupplier(${supplier.supplier_id})">Delete</button>
                         </td>
                     </tr>`;
                 tableBody.insertAdjacentHTML('beforeend', newRow);
