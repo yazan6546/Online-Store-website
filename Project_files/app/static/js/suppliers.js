@@ -231,4 +231,66 @@ function addSupplier() {
         });
 }
 
+let currentPage = 1;
+const limit = 5; // Rows per page
+
+async function fetchSuppliers(page) {
+    try {
+        const response = await fetch(`/get_suppliers?page=${page}&limit=${limit}`);
+        const data = await response.json();
+
+        if (data.success) {
+            // Update the table
+            const tableBody = document.querySelector('#table tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            data.suppliers.forEach(supplier => {
+                const newRow = `
+                    <tr id="row-${supplier.supplier_id}">
+                        <td>${supplier.supplier_id}</td>
+                        <td>
+                            <span id="name-${supplier.supplier_id}-text">${supplier.name}</span>
+                            <input type="text" id="name-${supplier.supplier_id}-input" value="${supplier.name}" style="display:none; width: 100px;">
+                        </td>
+                        <td>
+                            <span id="phone-${supplier.supplier_id}-text">${supplier.phone}</span>
+                            <input type="text" id="phone-${supplier.supplier_id}-input" value="${supplier.phone}" style="display:none; width: 100px;">
+                        </td>
+                        <td class="action-buttons">
+                            <button id="edit-btn-${supplier.supplier_id}" class="edit" onclick="enableEditSupplier(${supplier.supplier_id})">Edit</button>
+                            <button id="save-btn-${supplier.supplier_id}" class="save" style="display:none;" onclick="saveEditSupplier(${supplier.supplier_id})">Save</button>
+                            <button class="delete" onclick="deleteSupplier(${supplier.supplier_id})">Delete</button>
+                        </td>
+                    </tr>`;
+                tableBody.innerHTML += newRow;
+            });
+
+            // Update pagination controls
+            document.getElementById('currentPage').innerText = `Page ${data.page}`;
+            document.getElementById('prevPage').disabled = data.page === 1;
+            document.getElementById('nextPage').disabled = data.page * limit >= data.total_count;
+        } else {
+            console.error('Error fetching suppliers:', data.error);
+        }
+    } catch (error) {
+        console.error('Error fetching suppliers:', error);
+    }
+}
+
+
+// Event Listeners for Pagination
+document.getElementById('prevPage').addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        fetchSuppliers(currentPage);
+    }
+});
+
+document.getElementById('nextPage').addEventListener('click', () => {
+    currentPage++;
+    fetchSuppliers(currentPage);
+});
+
+// Initial Fetch
+fetchSuppliers(currentPage);
 

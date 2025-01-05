@@ -130,24 +130,25 @@ Admin Dashboard
         <thead>
             <tr>
                 <th>#Order ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Order Date</th>
                 <th>Delivery Date</th>
                 <th>Order Status</th>
-                <th>Shipping Status</th>
             </tr>
         </thead>
         <tbody>
             {% for order in orders %}
             <tr>
                 <td>order_id</td>
+                <td>First Name</td>
+                <td>Last Name</td>
                 <td>order_date</td>
                 <td>delivery_date</td>
                 <td>
                     <span class="status {{ order.order_status|lower }}">{{ order.order_status }}</span>
                 </td>
-                <td>
-                    <span class="status {{ order.shipping_status|lower }}">{{ order.shipping_status }}</span>
-                </td>
+
             </tr>
             {% endfor %}
         </tbody>
