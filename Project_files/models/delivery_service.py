@@ -2,21 +2,27 @@ from utils.db_utils import get_db_connection
 import utils.queries as q
 
 class DeliveryService:
-    def __init__(self, delivery_service_id, delivery_service_name, phone_number):
+    def __init__(self,delivery_service_name, phone_number, delivery_service_id=None):
         self.delivery_service_id = delivery_service_id
         self.delivery_service_name = delivery_service_name
         self.phone_number = phone_number
 
     def insert(self):
         conn = get_db_connection()
-
+        result = None
         try:
-            conn.execute(q.delivery_service.ADD_DELIVERY_SERVICE, self.to_dict())
+            result = conn.execute(q.delivery_service.ADD_DELIVERY_SERVICE, self.to_dict())
+            self.delivery_service_id = result.lastrowid
+
             conn.commit()
-            return 1
+
+            if result is None:
+                raise Exception("Duplicate entry")
+
         except Exception as e:
-            print(f"Error: {e}")
-            return 0
+            print(f"Error in insert(): {e}")
+            conn.rollback()
+            raise e
         finally:
             conn.close()
 

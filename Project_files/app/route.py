@@ -572,6 +572,7 @@ def admin_dashboard_delivery():
 
     delivery_services = DeliveryService.get_all()
     delivery_services = [delivery_service.to_dict() for delivery_service in delivery_services]
+    print(delivery_services)
 
     return render_template('delivery_service.html', delivery_service=delivery_services)
 
@@ -664,6 +665,27 @@ def get_delivery():
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
+
+
+@app.route('/add_delivery', methods=['POST'])
+def add_delivery():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        name = data.get('name')
+        phone = data.get('phone')
+
+        # Validate inputs
+        if not name or not phone:
+            return jsonify(success=False, error="Name and phone are required.")
+
+        # Create and insert a new supplier
+        new_delivery = DeliveryService(delivery_service_name=name, phone_number=phone)
+        new_delivery.insert()
+
+        return jsonify(success=True, delivery_service=new_delivery.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
 
 
 

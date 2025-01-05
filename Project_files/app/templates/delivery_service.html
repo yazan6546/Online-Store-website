@@ -1,7 +1,7 @@
 {% extends "admin_base.html" %}
 
 {% block title %}
-Suppliers
+Delivery Service
 {% endblock %}
 
 {% block extra_css %}
@@ -17,7 +17,7 @@ Suppliers
 
     <div id="container_search_add">
         <form id="search-form" onsubmit="event.preventDefault(); searchDelivery();">
-            <input type="text" id="search-query" placeholder="Search suppliers...">
+            <input type="text" id="search-query" placeholder="Search delivery services...">
             <button type="submit" class="btn">Search</button>
         </form>
         <button onclick="openModal()" class="btn">Add Delivery Service</button>
@@ -38,11 +38,11 @@ Suppliers
             <tr id="row-{{ delivery_service.delivery_service_id }}">
                 <td>{{ delivery_service.delivery_service_id }}</td>
                 <td>
-                    <span id="name-{{ supplier.supplier_id }}-text">{{ supplier.name }}</span>
-                    <input type="text" id="name-{{ supplier.supplier_id }}-input" value="{{ delivery_service.delivery_service_name }}" style="display:none; width: 100px;">
+                    <span id="name-{{ deliver_service.delivery_service_id }}-text">{{ delivery_service.delivery_service_name }}</span>
+                    <input type="text" id="name-{{ deliver_service.delivery_service_id }}-input" value="{{ delivery_service.delivery_service_name }}" style="display:none; width: 100px;">
                 </td>
                 <td>
-                    <span id="phone-{{ delivery_service.supplier_id }}-text">{{ delivery_service.phone_number }}</span>
+                    <span id="phone-{{ delivery_service.delivery_service_id }}-text">{{ delivery_service.phone_number }}</span>
                     <input type="text" id="phone-{{ delivery_service.delivery_service_id }}-input" value="{{ delivery_service.phone_number }}" style="display:none; width: 100px;">
                 </td>
                 <td class="action-buttons">
@@ -60,12 +60,12 @@ Suppliers
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>Add Delivery Service</h2>
-            <form id="add-delivery-form" onsubmit="event.preventDefault(); addSupplier();">
+            <form id="add-delivery-form" onsubmit="event.preventDefault(); addDelivery();">
                 <label for="name">Name</label>
-                <input type="text" id="name" placeholder="Enter delivery service name" required>
+                <input type="text" id="delivery-name" placeholder="Enter delivery service name" required>
                 <label for="phone">Phone</label>
-                <input type="text" id="phone" placeholder="Enter delivery service phone" required>
-                <button type="submit" class="btn">Add Supplier</button>
+                <input type="text" id="delivery-phone" placeholder="Enter delivery service phone" required>
+                <button type="submit" class="btn">Add Delivery service</button>
             </form>
         </div>
     </div>
