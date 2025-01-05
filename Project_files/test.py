@@ -23,7 +23,3 @@ import datetime
 # x = Customer.get(1)
 # print(x)
 from models.delivery_service import DeliveryService
-x = DeliveryService.get_all()
-
-for i in x:
-    print(i)

@@ -31,11 +31,12 @@ class DeliveryService:
 
         return temp
 
-    def delete(self):
+    @staticmethod
+    def delete(delivery_service_id):
         conn = get_db_connection()
 
         try:
-            conn.execute(q.delivery_service.DELETE_DELIVERY_SERVICE, {"delivery_service_id": self.delivery_service_id})
+            conn.execute(q.delivery_service.DELETE_DELIVERY_SERVICE, {"delivery_service_id": delivery_service_id})
             conn.commit()
             return 1
         except Exception as e:
