@@ -367,7 +367,7 @@ def get_suppliers():
     try:
         # Fetch page and limit parameters from the query string
         page = int(request.args.get('page', 1))  # Default to page 1
-        limit = int(request.args.get('limit', 5))  # Default to 5 rows per page
+        limit = int(request.args.get('limit', 8))  # Default to 8 rows per page
         offset = (page - 1) * limit
 
         # Fetch all suppliers

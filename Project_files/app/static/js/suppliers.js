@@ -177,64 +177,11 @@ function closeModal() {
     modal.classList.remove("show");
 }
 
-// Add supplier
-function addSupplier() {
-    const name = document.getElementById('supplier-name').value;
-    const phone = document.getElementById('supplier-phone').value;
-
-    // Validate inputs
-    if (!name || !phone) {
-        alert('Please fill in all fields.');
-        return;
-    }
-
-    // Send data to the server via AJAX
-    fetch('/add_supplier', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, phone }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Supplier added successfully!');
-                closeModal();
-                // Optionally, update the table dynamically
-                const tableBody = document.querySelector('#table tbody');
-                const newRow = `
-                    <tr id="row-${data.supplier.supplier_id}">
-                        <td>${data.supplier.supplier_id}</td>
-                        <td>
-                            <span id="name-${data.supplier.supplier_id}-text">${data.supplier.name}</span>
-                            <input type="text" id="name-${data.supplier.supplier_id}-input" value="${data.supplier.name}" style="display:none; width: 100px;">
-                        </td>
-                        <td>
-                            <span id="phone-${data.supplier.supplier_id}-text">${data.supplier.phone}</span>
-                            <input type="text" id="phone-${data.supplier.supplier_id}-input" value="${data.supplier.phone}" style="display:none; width: 100px;">
-                        </td>
-                        <td class="action-buttons">
-                            <button id="edit-btn-${data.supplier.supplier_id}" class="edit" onclick="enableEditSupplier(${data.supplier.supplier_id})">Edit</button>
-                            <button id="save-btn-${data.supplier.supplier_id}" class="save" style="display:none;" onclick="saveEditSupplier(${data.supplier.supplier_id})">Save</button>
-                            <button class="delete" onclick="deleteSupplier(${supplier.supplier_id})">Delete</button>
-                        </td>
-                    </tr>`;
-                tableBody.insertAdjacentHTML('beforeend', newRow);
-            } else {
-                alert('Error adding supplier: ' + data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while adding the supplier.');
-        });
-}
-
 let currentPage = 1;
-const limit = 5; // Rows per page
+const limit = 8; // Rows per page
 
-async function fetchSuppliers(page) {
+// Fetch suppliers and update the table
+async function fetchSuppliers(page = 1) {
     try {
         const response = await fetch(`/get_suppliers?page=${page}&limit=${limit}`);
         const data = await response.json();
@@ -277,6 +224,40 @@ async function fetchSuppliers(page) {
     }
 }
 
+// Add supplier and refresh the table
+function addSupplier() {
+    const name = document.getElementById('supplier-name').value;
+    const phone = document.getElementById('supplier-phone').value;
+
+    // Validate inputs
+    if (!name || !phone) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    // Send data to the server
+    fetch('/add_supplier', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, phone }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Supplier added successfully!');
+                closeModal(); // Close the modal
+                fetchSuppliers(currentPage); // Refresh the current page
+            } else {
+                alert('Error adding supplier: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while adding the supplier.');
+        });
+}
 
 // Event Listeners for Pagination
 document.getElementById('prevPage').addEventListener('click', () => {
@@ -293,4 +274,5 @@ document.getElementById('nextPage').addEventListener('click', () => {
 
 // Initial Fetch
 fetchSuppliers(currentPage);
+
 
