@@ -64,7 +64,6 @@ def get_best_customers():
         df = pd.read_sql(da.best_customers, conn)
         return df.to_dict(orient='records')
 
-        return df
     except Exception as e:
         print(f"Error: {e}")
         return []

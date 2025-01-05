@@ -38,6 +38,7 @@ def generate_customer_data(num_records):
             'first_name': fake.first_name(),
             'last_name': fake.last_name(),
             'email': email,
+            'birth_date' : fake.date_of_birth(minimum_age=18, maximum_age=65),
             'passcode': fake.password()
         })
 
@@ -209,8 +210,8 @@ if __name__ == '__main__':
     df['person_id'] = df['person_id'] + num_manager_records
 
     generate_address_data(num_address_records, df['person_id'].tolist())
-    # generate_category_data()
-    # generate_product_data(num_product_records, list(range(1, num_category_records)), list(range(1, num_supplier_records)))
+    generate_category_data()
+    generate_product_data(num_product_records, list(range(1, num_category_records)), list(range(1, num_supplier_records)))
     generate_manager_order_data(num_manager_order_records, list(range(1, num_manager_records)))
     # generate_supplier_data(num_supplier_records)
     generate_customer_order_data(num_customer_order_records, df['person_id'].tolist(), list(range(1, num_address_records)))

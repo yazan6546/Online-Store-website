@@ -1,6 +1,9 @@
+from datetime import date
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField
 from wtforms.fields.choices import RadioField, SelectField
+from wtforms.fields.datetime import DateField
 from wtforms.fields.simple import PasswordField
 from wtforms.validators import DataRequired, Email
 from wtforms.validators import Regexp
@@ -33,12 +36,12 @@ class CustomerForm(FlaskForm):
     email = StringField(
         'Email',
         validators=[DataRequired(), Email()],
-        render_kw={"placeholder": "Email", "class": "form-control"}
+        render_kw={"placeholder": "Email", "class": "form-control", "id": "signup_email"}
     )
     password = PasswordField(
         'Password',
         validators=[DataRequired()],
-        render_kw={"placeholder": "Password", "class": "form-control"}
+        render_kw={"placeholder": "Password", "class": "form-control", "id": "signup_password"}
     )
 
     # Radio field for user type
@@ -47,6 +50,13 @@ class CustomerForm(FlaskForm):
         choices=[('manager', 'Manager'), ('customer', 'Customer')],
         validators=[DataRequired()],
         render_kw={"class": "form-check"}  # Optional: Add styling class if needed
+    )
+
+    birth_date = DateField(
+        'Birth Date',
+        default=date(2000, 1, 1),  # Set a default value
+        validators=[DataRequired()],
+        render_kw={"class": "form-control"}
     )
 
 
@@ -70,12 +80,12 @@ class LoginForm(FlaskForm):
     email = StringField(
         'Email',
         validators=[DataRequired(), Email()],
-        render_kw={"placeholder": "Email", "class": "form-control"}  # Placeholder and styling
+        render_kw={"placeholder": "Email", "class": "form-control", "id":"signin_email"}  # Placeholder and styling
     )
     password = PasswordField(
         'Password',
         validators=[DataRequired()],
-        render_kw={"placeholder": "Password", "class": "form-control"}  # Placeholder and styling
+        render_kw={"placeholder": "Password", "class": "form-control", "id":"signin_password"}  # Placeholder and styling
     )
     submit_signin = SubmitField(
         'Sign in',

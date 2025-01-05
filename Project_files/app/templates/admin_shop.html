@@ -43,14 +43,54 @@ Admin Dashboard
       <div class="filter-box">
         <h3>Category</h3>
         <ul>
-          <li><input type="checkbox"> Home Appliances</li>
-          <li><input type="checkbox"> Television</li>
-          <li><input type="checkbox"> Small Appliances</li>
-          <li><input type="checkbox"> Computers & Tablets</li>
-          <li><input type="checkbox"> Mobiles & Audio</li>
-          <li><input type="checkbox"> Beauty Care</li>
-          <li><input type="checkbox"> Office Supplies</li>
-          <li><input type="checkbox"> Heating & Cooling</li>
+          <li>
+            <label>
+              <input type="radio" name="category" value="Home Appliances">
+              Home Appliances
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" name="category" value="Television">
+              Television
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" name="category" value="Small Appliances">
+              Small Appliances
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" name="category" value="Computers & Tablets">
+              Computers & Tablets
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" name="category" value="Mobiles & Audio">
+              Mobiles & Audio
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" name="category" value="Beauty Care">
+              Beauty Care
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" name="category" value="Office Supplies">
+              Office Supplies
+            </label>
+          </li>
+          <li>
+            <label>
+              <input type="radio" name="category" value="Heating & Cooling">
+              Heating & Cooling
+            </label>
+          </li>
         </ul>
       </div>
 
@@ -76,27 +116,64 @@ Admin Dashboard
     </div>
 
   <!-- Shopping Products Section -->
-  <div class="product-container">
     <div class="product-card">
-      <img src="../static/img/p9-d-removebg-preview.png" alt="">
-      <h3>Product Name</h3>
-      <p class="price">$20</p>
-      <p class="description">Description of the product...</p>
-      <button class="add-to-cart">Add to Cart</button>
+      <!-- Upper Section -->
+      <div class="product-image-section">
+        <img src="../static/img/p9-d-removebg-preview.png" alt="Product Image">
+        <div class="circle-btn" id="open-modal-btn">
+          <i class="bx bx-plus"></i>
+        </div>
+
+      </div>
+      <!-- Lower Section -->
+      <div class="product-info-section">
+        <h5>AirPods Max offer high-fidelity audio, 20-hour battery life, USB-C charging, in fresh green color.</h5>
+        <p class="price">$220</p>
+      </div>
     </div>
 
-    <div class="product-card">
-      <img src="#" alt="">
-      <h3>Product Name</h3>
-      <p class="price">$30</p>
-      <p class="description">Description of the product...</p>
-      <button class="add-to-cart">Add to Cart</button>
+    <!-- Modal -->
+    <div id="blank-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Product Details</h2>
+        <div class="modal-body">
+          <!-- Left Section: Image -->
+          <div class="modal-image-section">
+            <img src="../static/img/p9-d-removebg-preview.png" alt="Product Image">
+          </div>
+          <!-- Right Section: Details -->
+          <div class="modal-description-section">
+            <h5>AirPods Max offer high-fidelity audio, 20-hour battery life, USB-C charging, in fresh green color.</h5>
+            <p class="price"> Price: $220</p>
+            <p>Description:
+The ultimate over-ear personal listening experience — now in fresh new colors. AirPods Max deliver stunningly detailed, high-fidelity audio. Personalized Spatial Audio with dynamic head tracking for sound that surrounds you. Footnote ⁴ Pro-level Active Noise Cancellation to remove unwanted sound. Footnote ³ Transparency mode to comfortably hear the world around you. Up to 20 hours of battery life on a single charge. Footnote ¹⁵ Effortless setup and on-head detection for a magical listening experience. Now with USB-C for easy charging.</p>
+
+
+            <div class="quantity-cart-container">
+              <div class="quantity-selector">
+                <button class="qty-btn" id="decrease-qty">-</button>
+                <span id="quantity">1</span>
+                <button class="qty-btn" id="increase-qty">+</button>
+              </div>
+              <button class="add-to-cart">Add to Cart</button>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Repeat the structure for more products -->
+
+<!-- finish of shopping products section -->
+
+
   </div>
 
 
 </div>
-</div>
+
+<script src="{{ url_for('static', filename='js/manager_shop.js') }}"></script>
+
 {% endblock %}

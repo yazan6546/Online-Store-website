@@ -1,20 +1,21 @@
 from sqlalchemy import text
 
 INSERT_CUSTOMERS_TABLE = text("""
-                                INSERT INTO Customer (person_id) 
-                                VALUES (:person_id);
+                                INSERT INTO Customer (person_id, birth_date) 
+                                VALUES (:person_id, :birth_date);
                             """)
 
 GET_ALL_CUSTOMERS = text("""
-                            SELECT
-                            c.person_id AS person_id,
-                            p.first_name AS first_name,
-                            p.last_name AS last_name,
-                            p.email AS email,
-                            p.passcode AS passcode
-                            FROM Customer c
-                            JOIN Person p
-                            on c.person_id = p.person_id;
+                            SELECT 
+                                c.person_id AS person_id,
+                                p.first_name AS first_name,
+                                p.last_name AS last_name,
+                                p.email AS email,
+                                p.passcode AS passcode,
+                                c.birth_date AS birth_date
+                                FROM Customer c
+                                JOIN Person p
+                                on c.person_id = p.person_id
                         """)
 
 SELECT_CUSTOMER_BY_ID = text("""
@@ -23,7 +24,8 @@ SELECT_CUSTOMER_BY_ID = text("""
                                 p.first_name AS first_name,
                                 p.last_name AS last_name,
                                 p.email AS email,
-                                p.passcode AS passcode
+                                p.passcode AS passcode,
+                                c.birth_date AS birth_date
                                 FROM Customer c
                                 JOIN Person p
                                 on c.person_id = p.person_id
@@ -36,7 +38,8 @@ SELECT_CUSTOMER_BY_EMAIL = text("""
                                 p.first_name AS first_name,
                                 p.last_name AS last_name,
                                 p.email AS email,
-                                p.passcode AS passcode
+                                p.passcode AS passcode,
+                                c.birth_date AS birth_date
                                 FROM Customer c
                                 JOIN Person p
                                 on c.person_id = p.person_id
@@ -68,7 +71,8 @@ SEARCH_CUSTOMERS = text("""
                             p.first_name AS first_name,
                             p.last_name AS last_name,
                             p.email AS email,
-                            p.passcode AS passcode
+                            p.passcode AS passcode,
+                            c.birth_date AS birth_date
                             FROM Customer c
                             JOIN Person p on c.person_id = p.person_id
                             WHERE p.first_name like :name or p.last_name like :name;

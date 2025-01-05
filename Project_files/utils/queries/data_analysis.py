@@ -102,7 +102,7 @@ GROUP BY
     p.first_name, p.last_name
 ORDER BY
     total_paid DESC
-LIMIT 5;
+LIMIT 10;
 """
 
 customer_demographics = """
@@ -164,5 +164,28 @@ TOTAL_REVENUE = text("""
     JOIN Customer_Order ON Customer_Order.order_id = Customer_Order_Line.order_id
     WHERE order_status = 'COMPLETED';
 """)
+
+CUSTOMER_RECENT_ORDERS = text("""
+        SELECT 
+            co.order_id,
+            p.first_name,
+            p.last_name,
+            co.order_date,
+            co.delivery_date,
+            co.order_status,
+            co.shipping_status
+        FROM 
+            Customer_Order co
+        JOIN 
+            Customer c ON co.person_id = c.person_id
+        JOIN 
+            Person p ON c.person_id = p.person_id
+        WHERE 
+            co.order_status = 'PLACED'
+        ORDER BY 
+            co.order_date DESC
+        LIMIT 5;
+""")
+
 
 

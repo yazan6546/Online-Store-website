@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta, date
+
 from models.person import Person
 import utils.queries as q
 from utils.db_utils import get_db_connection
@@ -5,28 +7,38 @@ from models.addresses import Address
 
 
 class Customer(Person):
-    def __init__(self, first_name, last_name, email, passcode, person_id=None, hash=False):
+    def __init__(self, first_name, last_name, email, passcode, birth_date, person_id=None, hash=False):
         super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
         self.addresses = []  # List of Address objects
+        self.birth_date = birth_date
 
+        # Ensure birth_date is a date object
+        if isinstance(birth_date, datetime):
+            birth_date = birth_date.date()
+
+        # Check if birth_date is at least 5 years ago
+        if birth_date > date.today() - timedelta(days=18 * 365):
+            raise ValueError("Birth date must be at least 18 years ago.")
+
+        self.age = datetime.now().year - birth_date.year
     def insert(self):
+
         conn = get_db_connection()
 
         try:
 
             result = conn.execute(q.person.INSERT_PERSON_TABLE, self.to_dict())
-            conn.commit()
             self.person_id = result.lastrowid
-
-            result = conn.execute(q.customer.INSERT_CUSTOMERS_TABLE, {"person_id": self.person_id})
-            conn.commit()
+            result = conn.execute(q.customer.INSERT_CUSTOMERS_TABLE, {"person_id": self.person_id, "birth_date": self.birth_date})
             for address in self.addresses:
                 address.person_id = self.person_id
                 address.insert()
 
             if result is None:
                 raise Exception("Duplicate entry")
+
             conn.commit()
+
         except Exception as e:
             print(f"Error in insert(): {e}")  # Debugging purposes only
             conn.rollback()  # Roll back the transaction to maintain database integrity
@@ -148,6 +160,7 @@ class Customer(Person):
         if address:
             temp["addresses"] = [address.to_dict(address_id=True) for address in self.addresses]
 
+        temp["birth_date"] = self.birth_date.strftime('%Y-%m-%d')
         return temp
 
     def __str__(self):

@@ -112,6 +112,8 @@ def filter_customers():
     ]
     return jsonify({"success": True, "customers": customers})
 
+
+
 # the following routes are for the address section
 
 @app.route('/add_address/<int:customer_id>', methods=['POST'])
@@ -359,15 +361,32 @@ def search_supplier():
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
-# get all suppliers
+
 @app.route('/get_suppliers', methods=['GET'])
 def get_suppliers():
     try:
-        # Use the get_all class method of the Supplier class
-        suppliers = Supplier.get_all()
-        suppliers_dicts = [supplier.to_dict() for supplier in suppliers]
+        # Fetch page and limit parameters from the query string
+        page = int(request.args.get('page', 1))  # Default to page 1
+        limit = int(request.args.get('limit', 8))  # Default to 8 rows per page
+        offset = (page - 1) * limit
 
-        return jsonify(success=True, suppliers=suppliers_dicts)
+        # Fetch all suppliers
+        suppliers = Supplier.get_all()
+
+        # Slice the suppliers list based on the page and limit
+        paginated_suppliers = suppliers[offset:offset + limit]
+        suppliers_dicts = [supplier.to_dict() for supplier in paginated_suppliers]
+
+        # Calculate total suppliers count
+        total_suppliers = len(suppliers)
+
+        return jsonify(
+            success=True,
+            suppliers=suppliers_dicts,
+            total_count=total_suppliers,
+            page=page,
+            limit=limit
+        )
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
@@ -461,6 +480,11 @@ def admin_dashboard():
 def admin_shop():
     return render_template('admin_shop.html')
 
+# Shop for delivery Page
+@app.route('/delivery')
+def delivery():
+    return render_template('delivery.html')
+
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
@@ -540,5 +564,10 @@ def get_best_selling_products_by_month():
 # def get_best_customers():
 #     best_customers = da.get_best_customers()
 #     return jsonify(best_customers)
+
+
+
+
+
 
 
