@@ -67,6 +67,7 @@ Admin Dashboard
     <div class="top-products">
       <div class="header">
         <h3>Top 5 Products</h3>
+        <a href="{{ url_for('admin_dashboard_products') }}" class="see-all-link">See All</a>
       </div>
       <ul class="product-list">
         <li>
@@ -117,6 +118,43 @@ Admin Dashboard
       </div>
     </div>
 </section>
+
+<section class="charts">
+  <div class="recent-orders">
+      <div class="header">
+        <h3>Recent Orders for Customers</h3>
+        <a href="" class="see-all">See all</a>
+      </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#Order ID</th>
+                <th>Order Date</th>
+                <th>Delivery Date</th>
+                <th>Order Status</th>
+                <th>Shipping Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>order_id</td>
+                <td>order_date</td>
+                <td>delivery_date</td>
+                <td>
+                    <span class="status {{ order.order_status|lower }}">{{ order.order_status }}</span>
+                </td>
+                <td>
+                    <span class="status {{ order.shipping_status|lower }}">{{ order.shipping_status }}</span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</section>
+
 
 
 

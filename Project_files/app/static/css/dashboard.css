@@ -197,36 +197,6 @@
   margin: 0 auto;
 }
 
-.table {
-  flex: 1;
-  margin-left: 20px;
-}
-
-.table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
-
-.table th {
-  background-color: #B4D4FF;
-  color: #176B87;
-}
-
-.table td {
-  background-color: #FFF;
-}
-
-.table tr:nth-child(even) {
-  background-color: #F9F9F9;
-}
-
 
 .top-products {
   background-color: #ffffff;
@@ -316,4 +286,129 @@
   font-weight: 600;
   margin: 0;
   color: #373A40; /* Black text for the number */
+}
+
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.see-all-link {
+  color: #9AA6B2;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.see-all-link:hover {
+  color: #0C356A; /* Hover effect */
+}
+
+
+
+.recent-orders {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.recent-orders .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.recent-orders .header h3 {
+  font-size: 18px;
+  color: #176B87;
+}
+
+.recent-orders .header .see-all {
+  color: #9AA6B2;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.see-all:hover {
+  color: #0C356A !important;
+}
+
+
+.recent-orders table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.recent-orders table thead {
+    background-color: #176B87;
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+}
+
+.recent-orders table thead th {
+    padding: 10px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.recent-orders table tbody tr {
+    border-bottom: 1px solid #eee;
+}
+
+.recent-orders table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.recent-orders table tbody td {
+    padding: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.recent-orders table tbody .status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.recent-orders table tbody .status.in_cart {
+    background-color: #ffeb3b;
+    color: #856404;
+}
+
+.recent-orders table tbody .status.placed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.recent-orders table tbody .status.shipped {
+    background-color: #f7d794;
+    color: #7f6000;
+}
+
+.recent-orders table tbody .status.delivered {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.recent-orders table tbody .status.cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
 }
