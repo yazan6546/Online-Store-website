@@ -65,7 +65,7 @@ ORDER BY
     """)
 
 
-all_revenues = """
+all_revenues = text("""
     SELECT
         YEAR(co.order_date) AS year,
         MONTH(co.order_date) AS month,
@@ -80,10 +80,10 @@ all_revenues = """
         YEAR(co.order_date), MONTH(co.order_date)
     ORDER BY
         year, month;
-    """
+    """)
 
 
-best_customers = """
+best_customers = text("""
 SELECT
     p.first_name,
     p.last_name,
@@ -103,9 +103,9 @@ GROUP BY
 ORDER BY
     total_paid DESC
 LIMIT 10;
-"""
+""")
 
-customer_demographics = """
+customer_demographics = text("""
 SELECT
     a.city,
     COUNT(c.person_id) AS customer_count
@@ -117,10 +117,10 @@ GROUP BY
     a.city
 ORDER BY
     customer_count DESC;
-"""
+""")
 
 
-best_selling_product_by_month = """
+best_selling_product_by_month = text("""
 SELECT
     month,
     product_name,
@@ -144,7 +144,7 @@ FROM (
 ) subquery
 WHERE rn = 1
 ORDER BY month;
-"""
+""")
 
 
 COUNT_CUSTOMERS = text("""
@@ -172,8 +172,7 @@ CUSTOMER_RECENT_ORDERS = text("""
             p.last_name,
             co.order_date,
             co.delivery_date,
-            co.order_status,
-            co.shipping_status
+            co.order_status
         FROM 
             Customer_Order co
         JOIN 
@@ -181,7 +180,7 @@ CUSTOMER_RECENT_ORDERS = text("""
         JOIN 
             Person p ON c.person_id = p.person_id
         WHERE 
-            co.order_status = 'PLACED'
+            co.order_status = 'COMPLETED'
         ORDER BY 
             co.order_date DESC
         LIMIT 5;

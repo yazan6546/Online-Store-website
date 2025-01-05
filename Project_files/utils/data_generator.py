@@ -105,9 +105,17 @@ def generate_category_data():
 
 def generate_product_data(num_records, category_ids, supplier_ids):
     data = []
+
+    used_names = set()
+
     for _ in range(num_records):
+        product_name = fake.word()
+        while product_name in used_names:
+            product_name = fake.word()
+        used_names.add(product_name)
+
         data.append({
-            'product_name': fake.word(),
+            'product_name': product_name,
             'product_description': fake.text(max_nb_chars=100),
             'price': round(random.uniform(50, 1000), 2),
             'photo': fake.image_url(),
@@ -122,12 +130,20 @@ def generate_product_data(num_records, category_ids, supplier_ids):
 
 def generate_supplier_data(num_records):
     data = []
+
+    used_names = set()
+
     for _ in range(num_records):
+        supplier_name = fake.company()
+        while supplier_name in used_names:
+            supplier_name = fake.word()
+        used_names.add(supplier_name)
+
 
         phone_number_pattern = f'{0}{5}#-###-####'
 
         data.append({
-            'supplier_name': fake.company(),
+            'supplier_name': supplier_name,
             'phone_number': fake.numerify(phone_number_pattern)
         })
     df = pd.DataFrame(data)
@@ -164,11 +180,19 @@ def generate_customer_order_line_data(num_records, order_ids, product_ids):
 
 def generate_delivery_service_data(num_records):
     data = []
-    phone_number_pattern = f'{0}{5}#-###-####'
+
+    used_names = set()
+
     for _ in range(num_records):
+        delivery_name = fake.company()
+        while delivery_name in used_names:
+            delivery_name = fake.word()
+        used_names.add(delivery_name)
+
+        phone_number_pattern = f'{0}{5}#-###-####'
         data.append({
             'delivery_service_id': _ + 1,
-            'delivery_service_name': fake.company(),
+            'delivery_service_name': delivery_name,
             'phone_number': fake.numerify(phone_number_pattern),
             'email': fake.email()
         })
@@ -228,9 +252,9 @@ if __name__ == '__main__':
     generate_delivery_service_data(num_delivery_service_records)
     # generate_address_data(num_address_records, df['person_id'].tolist())
     # generate_category_data()
-    # generate_product_data(num_product_records, list(range(1, num_category_records)), list(range(1, num_supplier_records)))
+    generate_product_data(num_product_records, list(range(1, num_category_records)), list(range(1, num_supplier_records)))
     generate_manager_order_data(num_manager_order_records, list(range(1, num_manager_records)), list(range(1, num_delivery_service_records)))
-    # generate_supplier_data(num_supplier_records)
+    generate_supplier_data(num_supplier_records)
     generate_customer_order_data(num_customer_order_records, df['person_id'].tolist(), list(range(1, num_address_records)), list(range(1, num_delivery_service_records)))
     # generate_customer_order_line_data(num_customer_order_line_records, list(range(1, num_customer_order_records+1)), list(range(1, num_product_records)))
     # generate_manager_order_line_data(num_manager_order_line_records, list(range(1, num_manager_order_records+1)), list(range(1, num_product_records+1)))

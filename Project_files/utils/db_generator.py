@@ -74,6 +74,7 @@ if __name__ == "__main__":
     # Hardcoded mapping between CSV file paths and table names
     csv_table_mapping = {
         "csv_files/Address.csv": "Address",
+        "csv_files/DeliveryService.csv": "DeliveryService",
         "csv_files/Category.csv": "Category",
         "csv_files/Supplier.csv": "Supplier",
         "csv_files/Product.csv": "Product",

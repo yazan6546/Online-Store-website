@@ -2,11 +2,11 @@ from utils.db_utils import get_db_connection
 import utils.queries as q
 
 class DeliveryService:
-    def __init__(self, delivery_service_id, name, contact_phone, contact_email):
+    def __init__(self, delivery_service_id, delivery_service_name, phone_number, email):
         self.delivery_service_id = delivery_service_id
-        self.name = name
-        self.contact_phone = contact_phone
-        self.contact_email = contact_email
+        self.delivery_service_name = delivery_service_name
+        self.phone_number = phone_number
+        self.email = email
 
     def insert(self):
         conn = get_db_connection()
@@ -23,9 +23,9 @@ class DeliveryService:
 
     def to_dict(self, include_id=True):
         temp = {
-            "name": self.name,
-            "contact_phone": self.contact_phone,
-            "contact_email": self.contact_email,
+            "delivery_service_name": self.delivery_service_name,
+            "phone_number": self.phone_number,
+            "email": self.email,
         }
 
         if include_id:
@@ -87,7 +87,7 @@ class DeliveryService:
     def from_dict(dict):
         return DeliveryService(
             dict["delivery_service_id"],
-            dict["name"],
-            dict["contact_phone"],
-            dict["contact_email"],
+            dict["delivery_service_name"],
+            dict["phone_number"],
+            dict["email"],
         )
