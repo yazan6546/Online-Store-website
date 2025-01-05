@@ -155,6 +155,38 @@
   height: 250px;
 }
 
+#category-chart {
+  width: 100%;
+  max-width: 1020px;
+  height: 100%;
+}
+
+#categoryChart {
+  width: 100%; /* to ensure that the canvas adapts to the container size */
+  height: 250px;
+}
+
+#top-customers-chart {
+  width: 100%;
+  max-width: 1020px;
+  height: 100%;
+}
+
+#topCustomersChart {
+  width: 100%; /* to ensure that the canvas adapts to the container size */
+  height: 250px;
+}
+
+#colored-bar-chart {
+  width: 100%;
+  max-width: 1020px;
+  height: 100%;
+}
+
+#coloredBarChart {
+  width: 100%; /* to ensure that the canvas adapts to the container size */
+  height: 250px;
+}
 
 .table {
   flex: 1;
