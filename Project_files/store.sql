@@ -77,6 +77,7 @@ CREATE TABLE DeliveryService (
     delivery_service_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for each delivery service
     delivery_service_name VARCHAR(255) NOT NULL UNIQUE,                         -- Name of the delivery service (e.g., "DHL", "FedEx")
     phone_number VARCHAR(15)                        -- Contact phone number for the delivery service
+
 );
 
 create table Customer_Order(

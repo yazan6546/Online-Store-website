@@ -23,6 +23,7 @@ class DeliveryService:
             print(f"Error in insert(): {e}")
             conn.rollback()
             raise e
+
         finally:
             conn.close()
 
@@ -30,6 +31,7 @@ class DeliveryService:
         temp = {
             "delivery_service_name": self.delivery_service_name,
             "phone_number": self.phone_number,
+
         }
 
         if include_id:
@@ -43,6 +45,7 @@ class DeliveryService:
 
         try:
             conn.execute(q.delivery_service.DELETE_DELIVERY_SERVICE, {"delivery_service_id": delivery_service_id})
+
             conn.commit()
             return 1
         except Exception as e:
@@ -101,6 +104,7 @@ class DeliveryService:
             delivery_service_id=dict["delivery_service_id"],
             delivery_service_name=dict["delivery_service_name"],
             phone_number = dict["phone_number"],
+
         )
 
     @staticmethod
@@ -130,3 +134,4 @@ class DeliveryService:
             return None
         finally:
             conn.close()
+

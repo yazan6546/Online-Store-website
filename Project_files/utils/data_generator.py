@@ -194,6 +194,7 @@ def generate_delivery_service_data(num_records):
             'delivery_service_id': _ + 1,
             'delivery_service_name': delivery_name,
             'phone_number': fake.numerify(phone_number_pattern),
+
         })
     df = pd.DataFrame(data)
     df.to_csv('csv_files/DeliveryService.csv', index=False)
@@ -245,15 +246,18 @@ if __name__ == '__main__':
     num_manager_records = 4
 
     #
+    #
     df = generate_customer_data(num_customer_records)
     df['person_id'] = df['person_id'] + num_manager_records
 
     generate_delivery_service_data(num_delivery_service_records)
     generate_address_data(num_address_records, df['person_id'].tolist())
     generate_category_data()
+
     generate_product_data(num_product_records, list(range(1, num_category_records)), list(range(1, num_supplier_records)))
     generate_manager_order_data(num_manager_order_records, list(range(1, num_manager_records)), list(range(1, num_delivery_service_records)))
     generate_supplier_data(num_supplier_records)
     generate_customer_order_data(num_customer_order_records, df['person_id'].tolist(), list(range(1, num_address_records)), list(range(1, num_delivery_service_records)))
     generate_customer_order_line_data(num_customer_order_line_records, list(range(1, num_customer_order_records+1)), list(range(1, num_product_records)))
     generate_manager_order_line_data(num_manager_order_line_records, list(range(1, num_manager_order_records+1)), list(range(1, num_product_records+1)))
+
