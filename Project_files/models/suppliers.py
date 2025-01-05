@@ -40,8 +40,8 @@ class Supplier:
         finally:
             conn.close()
 
-    @classmethod
-    def delete(cls, supplier_id):
+    @staticmethod
+    def delete(supplier_id):
         conn = get_db_connection()
 
         try:
