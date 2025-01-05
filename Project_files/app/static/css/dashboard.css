@@ -315,6 +315,7 @@
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .recent-orders .header {
@@ -338,14 +339,24 @@
   transition: color 0.3s ease;
 }
 
+.see-all:hover {
+  color: #0C356A !important;
+}
+
+
 .recent-orders table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .recent-orders table thead {
     background-color: #176B87;
     color: #fff;
+    border-radius: 8px 8px 0 0;
 }
 
 .recent-orders table thead th {

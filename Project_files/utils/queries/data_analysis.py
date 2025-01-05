@@ -165,4 +165,27 @@ TOTAL_REVENUE = text("""
     WHERE order_status = 'PLACED';
 """)
 
+CUSTOMER_RECENT_ORDERS = text("""
+        SELECT 
+            co.order_id,
+            p.first_name,
+            p.last_name,
+            co.order_date,
+            co.delivery_date,
+            co.order_status,
+            co.shipping_status
+        FROM 
+            Customer_Order co
+        JOIN 
+            Customer c ON co.person_id = c.person_id
+        JOIN 
+            Person p ON c.person_id = p.person_id
+        WHERE 
+            co.order_status = 'PLACED'
+        ORDER BY 
+            co.order_date DESC
+        LIMIT 5;
+""")
+
+
 
