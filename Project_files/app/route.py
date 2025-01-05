@@ -594,7 +594,7 @@ def update_delivery(delivery_service_id):
             return jsonify(success=False, error="Name and phone are required.")
 
         # Fetch the supplier by ID and update its fields
-        supplier = DeliveryService.get_by_supplier_id(supplier_id)
+        supplier = DeliveryService.get_by_id(delivery_service_id)
         if not supplier:
             return jsonify(success=False, error="Supplier not found.")
 
@@ -654,7 +654,7 @@ def get_delivery():
         delivery_services = DeliveryService.get_all()
 
         # Slice the suppliers list based on the page and limit
-        paginated_delivery = suppliers[offset:offset + limit]
+        paginated_delivery = delivery_services[offset:offset + limit]
         delivery_dicts = [delivery.to_dict() for delivery in paginated_delivery]
 
         # Calculate total suppliers count

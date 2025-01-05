@@ -29,3 +29,9 @@ UPDATE_DELIVERY_SERVICE = text("""
 DELETE_DELIVERY_SERVICE = text("""
     DELETE FROM DeliveryService WHERE delivery_service_id = :delivery_service_id;
 """)
+
+
+SELECT_DELIVERY_BY_DELIVERY_ID = text("""
+                                SELECT * FROM DeliveryService
+                                WHERE delivery_service_id = :delivery_service_id;
+                            """)
