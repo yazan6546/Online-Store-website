@@ -14,14 +14,14 @@ GET_DELIVERY_SERVICE_BY_ID = text("""
 
 # Query to add a new delivery service
 ADD_DELIVERY_SERVICE = text("""
-    INSERT INTO DeliveryService (name, contact_phone, contact_email)
-    VALUES (:name, :contact_phone, :contact_email);
+    INSERT INTO DeliveryService (delivery_service_name, phone_number, email)
+    VALUES (:delivery_service_name, :phone_number, :email);
 """)
 
 # Query to update an existing delivery service
 UPDATE_DELIVERY_SERVICE = text("""
     UPDATE DeliveryService
-    SET name = :name, contact_phone = :contact_phone, contact_email = :contact_email
+    SET delivery_service_name = :delivery_service_name, phone_number = :phone_number, email = :email
     WHERE delivery_service_id = :delivery_service_id;
 """)
 

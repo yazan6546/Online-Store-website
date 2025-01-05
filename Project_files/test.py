@@ -17,8 +17,13 @@ import datetime
 #
 # test_customer_insert()
 
-x = Customer.get_by_email('minifoldrat11@gmail.com')
-c = Customer.get_all()
+# x = Customer.get_by_email('minifoldrat11@gmail.com')
+# c = Customer.get_all()
+#
+# x = Customer.get(1)
+# print(x)
+from models.delivery_service import DeliveryService
+x = DeliveryService.get_all()
 
-x = Customer.get(1)
-print(x)
+for i in x:
+    print(i)

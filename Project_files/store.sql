@@ -50,7 +50,7 @@ create table Category(
 
 create table Supplier(
     supplier_id int not null auto_increment,
-    supplier_name varchar(255) not null,
+    supplier_name varchar(255) not null UNIQUE,
     phone_number varchar(255) not null,
     primary key (supplier_id)
 );

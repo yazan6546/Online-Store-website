@@ -120,7 +120,7 @@ ORDER BY
 """)
 
 
-best_selling_product_by_month = text("""
+best_selling_product_by_month = ("""
 SELECT
     month,
     product_name,

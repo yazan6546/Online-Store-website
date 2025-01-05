@@ -91,3 +91,19 @@ class DeliveryService:
             dict["phone_number"],
             dict["email"],
         )
+
+    @staticmethod
+    def get_all():
+        conn = get_db_connection()
+
+        try:
+            services = conn.execute(q.delivery_service.GET_ALL_DELIVERY_SERVICES).fetchall()
+            return [DeliveryService.from_dict(service._mapping) for service in services]
+        except Exception as e:
+            print(f"Error: {e}")
+            return []
+        finally:
+            conn.close()
+
+    def __str__(self):
+        return f"DeliveryService: {self.delivery_service_name}"
