@@ -1,0 +1,38 @@
+/* static/css/404.css */
+.error-page {
+    text-align: center;
+    padding: 50px;
+}
+
+.error-page h1 {
+    font-size: 100px;
+    margin-bottom: 20px;
+}
+
+.error-page p {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.error-page .btn {
+    font-size: 18px;
+    padding: 10px 20px;
+}
+
+/* Manager-specific styles */
+.error-page.manager {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Customer-specific styles */
+.error-page.customer {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Guest-specific styles */
+.error-page.guest {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
