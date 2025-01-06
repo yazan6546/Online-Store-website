@@ -3,6 +3,7 @@ from datetime import datetime
 from models.order import Order
 import utils.queries as q
 from utils.db_utils import get_db_connection
+from models.cart import Cart
 
 class ManagerOrder(Order):
     def __init__(self, person_id, order_status, delivery_date, delivery_service_id, order_date=datetime.now(), order_id=None):
@@ -122,3 +123,39 @@ class ManagerOrder(Order):
     def to_dict(self, status=False, order_id=True):
         order_dict = super().to_dict(order_id)
         return order_dict
+
+    def cart_to_manager_order_with_stock(cart : Cart, person_id : int, delivery_date : datetime, delivery_service_id : int) -> Order:
+        """
+        Converts a Cart object into a ManagerOrder object and updates product stock.
+
+        Args:
+            cart (Cart): The Cart object to convert.
+            person_id (int): The person placing the order.
+            delivery_date (datetime): The delivery date for the order.
+            delivery_service_id (int): The delivery service ID.
+
+        Returns:
+            ManagerOrder: A ManagerOrder object populated with the cart's data.
+        """
+        order_status = "COMPLETED"  # Example order status
+        manager_order = ManagerOrder(
+            person_id=person_id,
+            order_status=order_status,
+            delivery_date=delivery_date,
+            delivery_service_id=delivery_service_id,
+        )
+
+        # Connect to the database
+        conn = get_db_connection()
+
+        manager_order.products = cart.items
+
+        try:
+            manager_order.insert()
+
+        except Exception as e:
+            conn.rollback()
+            print(f"Error in cart_to_manager_order_with_stock: {e}")
+            raise
+        finally:
+            conn.close()

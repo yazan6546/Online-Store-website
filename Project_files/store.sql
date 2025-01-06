@@ -131,6 +131,46 @@ create table Manager_Order_Line(
 );
 
 
+DELIMITER $$
+
+CREATE TRIGGER after_order_completed
+AFTER UPDATE ON Customer_Order
+FOR EACH ROW
+BEGIN
+    -- Check if the order status changed to COMPLETED
+    IF NEW.order_status = 'COMPLETED' AND OLD.order_status != 'COMPLETED' THEN
+        -- Increment stock for each product in the order
+        UPDATE Product p
+        JOIN Customer_Order_Line col ON p.product_id = col.product_id
+        SET p.stock_quantity = p.stock_quantity + col.quantity
+        WHERE col.order_id = NEW.order_id;
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER after_order_completed_insert
+AFTER INSERT ON Customer_Order
+FOR EACH ROW
+BEGIN
+    -- Check if the new order is inserted with the status COMPLETED
+    IF NEW.order_status = 'COMPLETED' THEN
+        -- Increment stock for each product in the order
+        UPDATE Product p
+        JOIN Customer_Order_Line col ON p.product_id = col.product_id
+        SET p.stock_quantity = p.stock_quantity + col.quantity
+        WHERE col.order_id = NEW.order_id;
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+
+
+
 
 
    -- Trigger for Customer table
@@ -166,71 +206,16 @@ create table Manager_Order_Line(
    DELIMITER ;
 
 
-select * from Person;
-
-select * from Customer;
-
-SELECT
-                            c.person_id AS person_id,
-                            p.first_name AS first_name,
-                            p.last_name AS last_name,
-                            p.email AS email
-                            FROM Customer c
-                            JOIN Person p on c.person_id = p.person_id
-                            WHERE p.first_name like 'IBRAHIM1' or p.last_name like '%IBRAHIM1%';
-
-select * from Person;
-
-select * from Manager;
-
-select * from Address;
-
-delete from Person where person_id > 20;
-
-select * from Category;
-
-delete from Category;
-
-delete from Customer;
-delete from Person;
-select * from Customer;
-select * from Manager;
-select * from Person;
-
-delete from Address;
-select COUNT(*) from Customer;
-select COUNT(*) from Address;
-
-select * from Category;
-select * from Supplier;
-
-select * from Customer_Order;
-
-SELECT p.product_id, p.product_name, SUM(col.quantity) AS total_quantity_sold
-    FROM Product p
-    JOIN Customer_Order_Line col ON p.product_id = col.product_id
-    JOIN Customer_Order co ON col.order_id = co.order_id
-    WHERE co.order_status = 'PLACED'
-    GROUP BY p.product_id, p.product_name
-    ORDER BY total_quantity_sold DESC
-    LIMIT 10;
 
 
-SELECT COUNT(DISTINCT c.person_id) AS customers_with_address
-FROM Customer c
-JOIN Address a ON c.person_id = a.person_id;
-
-
-select * from Customer;
-
-SELECT
-    c.person_id AS person_id,
-    p.first_name AS first_name,
-    p.last_name AS last_name,
-    p.email AS email,
-    p.passcode AS passcode,
-    c.birth_date AS birth_date
-FROM Customer c
-JOIN Person p
-ON c.person_id = p.person_id
-WHERE p.email = :email;
+# SELECT
+#     c.person_id AS person_id,
+#     p.first_name AS first_name,
+#     p.last_name AS last_name,
+#     p.email AS email,
+#     p.passcode AS passcode,
+#     c.birth_date AS birth_date
+# FROM Customer c
+# JOIN Person p
+# ON c.person_id = p.person_id
+# WHERE p.email = :email;
