@@ -6,6 +6,7 @@ Managers
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -15,12 +16,10 @@ Managers
     </div>
     <div id="container_search_add">
         <form id="search-form" onsubmit="event.preventDefault(); searchManagers();">
-             <label for="search-query"></label><input type="text" id="search-query" placeholder="Search managers...">
+            <label for="search-query"></label><input type="text" id="search-query" placeholder="Search managers...">
             <button type="submit" class="btn">Search</button>
         </form>
-
         <button onclick="openModalManager()" class="btn">Add Manager</button>
-
     </div>
 
     <table id="table">
@@ -64,9 +63,13 @@ Managers
                     </select>
                 </td>
                 <td class="action-buttons">
-                    <button id="edit-btn-{{ manager.person_id }}" class="edit" onclick="enableEdit({{ manager.person_id }})">Edit</button>
-                    <button id="save-btn-{{ manager.person_id }}" class="save" style="display:none;" onclick="saveEdit({{ manager.person_id }})">Save</button>
-                    <button class="delete" onclick="deleteManager({{ manager.person_id }})">Delete</button>
+                    <div class="dropdown">
+                        <button class="dropbtn">⋮</button>
+                        <div class="dropdown-content">
+                            <a href="#" onclick="enableEdit({{ manager.person_id }})">Edit</a>
+                            <a href="#" onclick="deleteManager({{ manager.person_id }})">Delete</a>
+                        </div>
+                    </div>
                 </td>
             </tr>
             {% endfor %}

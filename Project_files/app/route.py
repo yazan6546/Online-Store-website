@@ -691,9 +691,6 @@ def add_delivery():
         return jsonify(success=False, error=str(e))
 
 
-
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     role = session.get('role', 'guest')  # Default to 'guest' if not logged in
