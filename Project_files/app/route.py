@@ -667,6 +667,9 @@ def get_delivery():
 
 
 
+
+
+
 @app.route('/add_delivery', methods=['POST'])
 def add_delivery():
     try:
@@ -691,5 +694,8 @@ def add_delivery():
 
 
 
-
+@app.errorhandler(404)
+def page_not_found(e):
+    role = session.get('role', 'guest')  # Default to 'guest' if not logged in
+    return render_template('404.html', role=role), 404
 
