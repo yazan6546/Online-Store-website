@@ -411,7 +411,7 @@ def admin_dashboard_products():
         return redirect(url_for('login'))
 
     products = Product.get_all()
-    products = [product.to_dict() for product in products]
+    products = [product.to_print() for product in products]
 
     return render_template('products.html', products=products)  # Replace with render_template if applicable
 
@@ -527,17 +527,18 @@ def search_product():
         # Get the search query from the request
         query = request.args.get('query', '').strip()
 
+        print(query)
         # Fetch all products and filter them by name or category
         all_products = Product.get_all()
         products = [product.to_dict() for product in all_products]
 
         filtered_products = [
             product for product in products
-            if query.lower() in product['product_name'].lower()
-               or query.lower() in product['brand'].lower()
-               or query.lower() in product['product_description'].lower()
-               or query in product.get('category_id', '').lower()
-               or query in product.get('supplier_id', '').lower()
+            if query.lower() in product['product_name']
+               or query.lower() in product.get(['brand'])
+               or query.lower() in product['product_description']
+               or query in product['category_id']
+               or query in product['supplier_id']
         ]
 
         return jsonify(success=True, products=filtered_products)
@@ -558,7 +559,7 @@ def get_products():
 
         # Slice the products list based on the page and limit
         paginated_products = products[offset:offset + limit]
-        products_dicts = [product.to_dict() for product in paginated_products]
+        products_dicts = [product.to_print() for product in paginated_products]
 
         # Calculate total products count
         total_products = len(products)

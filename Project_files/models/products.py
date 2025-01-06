@@ -83,6 +83,8 @@ class Product:
         category_name = conn.execute(q.category.GET_CATEGORY_NAME, {"category_id": self.category_id}).fetchone()[0]
         supplier_name = conn.execute(q.supplier.GET_SUPPLIER_NAME, {"supplier_id": self.supplier_id}).fetchone()[0]
 
+
+
         conn.close()
         # print(category_name)
         # print(supplier_name)
@@ -96,6 +98,10 @@ class Product:
             "category_id": category_name,
             "supplier_id": supplier_name,
         }
+
+        if self.product_id is not None:
+            temp["product_id"] = self.product_id
+
         return temp
 
 
@@ -121,6 +127,7 @@ class Product:
         try:
             result = conn.execute(q.product.GET_PRODUCTS_TABLE).fetchall()
             products = [cls(**product._mapping) for product in result]
+            print(products[0])
             return products
         except Exception as e:
             print(f"Error: {e}")
@@ -171,3 +178,6 @@ class Product:
             return 0
         finally:
             conn.close()
+
+    def __str__(self):
+        return f"Product: {self.product_name} - {self.product_description} - {self.brand} - {self.price} - {self.photo} - {self.stock_quantity} - {self.category_id} - {self.supplier_id} - {self.product_id}"

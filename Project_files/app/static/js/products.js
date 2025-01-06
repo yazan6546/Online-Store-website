@@ -231,7 +231,7 @@ function deleteProduct(product_id) {
     });
 }
 
-// ------------------- SEARCH ------------------- //
+//------------------- SEARCH ------------------- //
 function searchProducts() {
     console.log('Searching products');
     var query = $('#search-query').val(); // Use jQuery to get the query value
@@ -304,49 +304,72 @@ function searchProducts() {
         }
     });
 }
+//------------------- SEARCH ------------------- //
+// ------------------- SEARCH ------------------- //
 // function searchProducts() {
-//     const query = $('#search-query').val(); // Get the search query
+//     const query = document.getElementById('search-query').value;
 //     console.log('Searching products with query:', query);
 //
-//     // If query is empty, avoid making unnecessary AJAX calls and keep the current table content
-//     if (!query.trim()) {
-//         console.log('Empty search query. No action performed.');
-//         return;
-//     }
-//
-//     // Perform AJAX search when there is a query
 //     $.ajax({
 //         url: '/search_product',
 //         type: 'GET',
 //         data: { query: query },
 //         success: function (response) {
 //             if (response.success) {
-//                 const tableBody = $('#table tbody');
-//                 tableBody.empty(); // Clear existing rows
+//                 const tableBody = document.querySelector('#table tbody');
+//                 tableBody.innerHTML = '';
+//
 //                 response.products.forEach(function (product) {
-//                     const row = `
-//                         <tr id="row-${product.product_id}">
-//                             <td>${product.product_id}</td>
-//                             <td>
-//                                 <div class="product-name-photo">
-//                                     <img src="${product.photo}" alt="Product Image">
-//                                     <div class="product-name">
-//                                         <span id="name-${product.product_id}-text">${product.product_name}</span>
-//                                     </div>
-//                                 </div>
-//                             </td>
-//                             <td>${product.category_id}</td>
-//                             <td>${product.supplier_id}</td>
-//                             <td>${product.brand}</td>
-//                             <td>${product.price}</td>
-//                             <td>${product.stock_quantity}</td>
-//                             <td>${product.product_description}</td>
-//                             <td class="action-buttons">
-//                                 <button onclick="enableEditProduct(${product.product_id})">Edit</button>
-//                                 <button onclick="deleteProduct(${product.product_id})">Delete</button>
-//                             </td>
-//                         </tr>`;
-//                     tableBody.append(row);
+//                     const row =`
+//                     <tr id="row-${product.product_id}">
+//                         <td>${product.product_id}</td>
+//                         <td>
+//                             <span id="name-${product.product_id}-text">${product.product_name}</span>
+//                             <input type="text" id="name-${product.product_id}-input"
+//                                    value="${product.product_name}" style="display:none; width: 100px;">
+//                         </td>
+//                         <td>
+//                             <span id="brand-${product.product_id}-text">${product.brand}</span>
+//                             <input type="text" id="brand-${product.product_id}-input"
+//                                    value="${product.brand}" style="display:none; width: 100px;">
+//                         </td>
+//                         <td>
+//                             <span id="price-${product.product_id}-text">${product.price}</span>
+//                             <input type="number" step="0.01"
+//                                    id="price-${product.product_id}-input" value="${product.price}"
+//                                    style="display:none; width: 100px;">
+//                         </td>
+//                         <td>
+//                             <span id="stock-${product.product_id}-text">${product.stock_quantity}</span>
+//                             <input type="number"
+//                                    id="stock-${product.product_id}-input" value="${product.stock_quantity}"
+//                                    style="display:none; width: 100px;">
+//                         </td>
+//                         <td>
+//                             <img src="${product.photo}" alt="Product Image" style="width: 50px; height: auto;">
+//                         </td>
+//                         <td>
+//                             <button onclick="showDescription('${product.product_description}')">
+//                                 Show Description
+//                             </button>
+//                         </td>
+//                         <td class="action-buttons">
+//                             <button id="edit-btn-${product.product_id}" class="edit"
+//                                     onclick="enableEditProduct(${product.product_id})">
+//                                 Edit
+//                             </button>
+//                             <button id="save-btn-${product.product_id}" class="save"
+//                                     style="display:none;"
+//                                     onclick="saveEditProduct(${product.product_id})">
+//                                 Save
+//                             </button>
+//                             <button class="delete"
+//                                     onclick="deleteProduct(${product.product_id})">
+//                                 Delete
+//                             </button>
+//                         </td>
+//                     </tr>`;
+//                     tableBody.insertAdjacentHTML('beforeend', row);
 //                 });
 //             } else {
 //                 alert('Error searching products: ' + response.error);
@@ -354,9 +377,12 @@ function searchProducts() {
 //         },
 //         error: function (xhr, status, error) {
 //             alert('Error searching products: ' + xhr.responseText);
-//         },
+//         }
 //     });
 // }
+
+
+
 
 
 // ------------------- ADD PRODUCT ------------------- //
@@ -423,7 +449,53 @@ async function fetchProducts(page = 1) {
             tableBody.innerHTML = '';
 
             data.products.forEach(product => {
-                const rowHTML = createTableRow(product);
+                const rowHTML = `
+                        <tr id="row-${product.product_id}">
+                            <td>${product.product_id}</td>
+                            <td>
+                                <div class="product-name-photo">
+                                    <img src="${product.photo}" alt="Product Image">
+                                    <div class="product-name">
+                                        <span id="name-${product.product_id}-text">${product.product_name}</span>
+                                        <input type="text" id="name-${product.product_id}-input" value="${product.product_name}" style="display:none; width: 100px;">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span id="category-${product.product_id}-text">${product.category_id}</span>
+                                <input type="number" id="category-${product.product_id}-input" value="${product.category_id}" style="display:none; width: 100px;">
+                            </td>
+                            <td>
+                                <span id="supplier-${product.product_id}-text">${product.supplier_id}</span>
+                                <input type="number" id="supplier-${product.product_id}-input" value="${product.supplier_id}" style="display:none; width: 100px;">
+                            </td>
+                            <td>
+                                <span id="brand-${product.product_id}-text">${product.brand}</span>
+                                <input type="text" id="brand-${product.product_id}-input" value="${product.brand}" style="display:none; width: 100px;">
+                            </td>
+                            <td>
+                                <span id="price-${product.product_id}-text">${product.price}</span>
+                                <input type="number" step="0.01" id="price-${product.product_id}-input" value="${product.price}" style="display:none; width: 100px;">
+                            </td>
+                            <td>
+                                <span id="stock-${product.product_id}-text">${product.stock_quantity}</span>
+                                <input type="number" id="stock-${product.product_id}-input" value="${product.stock_quantity}" style="display:none; width: 100px;">
+                            </td>
+                            <td>
+                                <div>
+                                    <span id="description-${product.product_id}-text">${product.product_description}</span>
+                                    <span class="pencil-icon" id="desc-edit-icon-${product.product_id}" onclick="enableDescriptionEdit(${product.product_id})">✏️</span>
+                                </div>
+                                <div class="description-edit-container" id="description-edit-container-${product.product_id}" style="display:none; margin-top: 8px;">
+                                    <textarea id="description-${product.product_id}-input" placeholder="Write your new description here..."></textarea>
+                                </div>
+                            </td>
+                            <td class="action-buttons">
+                                <button id="edit-btn-${product.product_id}" class="edit" onclick="enableEditProduct(${product.product_id})">Edit</button>
+                                <button id="save-btn-${product.product_id}" class="save" style="display:none;" onclick="saveEditProduct(${product.product_id})">Save</button>
+                                <button class="delete" onclick="deleteProduct(${product.product_id})">Delete</button>
+                            </td>
+                        </tr>`;
                 tableBody.insertAdjacentHTML('beforeend', rowHTML);
             });
 
