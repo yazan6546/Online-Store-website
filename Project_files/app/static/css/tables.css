@@ -315,6 +315,87 @@
 
 
 
+
+
+
+
+
+
+
+
+
+/* Styling the modal form elements specifically */
+#add-delivery-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#add-delivery-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #176B87;
+}
+
+#delivery-name,
+#delivery-phone,
+#address-street,
+#address-city,
+#address-zip
+{
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #176B87;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+#delivery-name:focus,
+#delivery-phone:focus,
+#address-street:focus,
+#address-city:focus,
+#address-zip:focus
+{
+    border-color: #0B4F5F;
+    box-shadow: 0 0 5px rgba(23, 107, 135, 0.6);
+    outline: none;
+}
+
+#add-delivery-form button {
+    background-color: #176B87;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease-in-out;
+}
+
+#add-delivery-form button:hover {
+    background-color: #0B4F5F;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#add-delivery-form button:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 #add-manager-form {
     display: flex;
     flex-direction: column;
@@ -407,6 +488,11 @@ select.form-control:focus {
         transform: scale(1);
         opacity: 1;
     }
+}
+
+h1 {
+  font-size: 24px;
+  color: #333;
 }
 
 .card-heading {

@@ -76,8 +76,7 @@ create table Product(
 CREATE TABLE DeliveryService (
     delivery_service_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for each delivery service
     delivery_service_name VARCHAR(255) NOT NULL UNIQUE,                         -- Name of the delivery service (e.g., "DHL", "FedEx")
-    phone_number VARCHAR(15),                          -- Contact phone number for the delivery service
-    email VARCHAR(255)                         -- Contact email for the delivery service
+    phone_number VARCHAR(15)                        -- Contact phone number for the delivery service
 );
 
 create table Customer_Order(
@@ -87,7 +86,7 @@ create table Customer_Order(
     order_date date,
     delivery_date date,
     delivery_service_id int not null,
-    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED', 'COMPLETED')),
+    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED', 'COMPLETED', 'CANCELLED')),
     foreign key (person_id) references Customer(person_id) on delete cascade on update cascade,
     foreign key (address_id) references Address(address_id),
     foreign key (delivery_service_id) references DeliveryService(delivery_service_id),
@@ -112,7 +111,7 @@ create table Manager_Order(
     order_date date,
     delivery_date date,
     delivery_service_id int not null,
-    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED', 'COMPLETED')),
+    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED', 'COMPLETED', 'CANCELLED')),
     foreign key (person_id) references Manager(person_id),
     foreign key (delivery_service_id) references DeliveryService(delivery_service_id),
     primary key (order_id)
@@ -234,3 +233,4 @@ FROM Customer c
 JOIN Person p
 ON c.person_id = p.person_id
 WHERE p.email = :email;
+

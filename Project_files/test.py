@@ -24,22 +24,4 @@ import datetime
 # x = Customer.get(1)
 # print(x)
 
-# Fetch all products and filter them by name or category
-all_products = Product.get_all()
-products = [product.to_print() for product in all_products]
 
-for i in products:
-    print(type(i))
-
-query = 'mobile'
-
-filtered_products = [
-    product for product in products
-    if query.lower() in product['product_name']
-       or query.lower() in product.get(['brand'])
-       or query.lower() in product['product_description']
-       or query in product['category_id']
-       or query in product['supplier_id']
-]
-
-print(filtered_products)

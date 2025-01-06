@@ -6,6 +6,7 @@ from wtforms.validators import email
 from app import app
 from app.forms import *
 import app.auth as auth
+from models import DeliveryService
 from models.addresses import Address
 from models.customers import Customer
 from models.manager import Manager
@@ -678,11 +679,10 @@ def admin_shop():
     return render_template('admin_shop.html')
 
 
-# Shop for delivery Page
-@app.route('/delivery')
-def delivery():
-    return render_template('delivery.html')
-
+# Cart for manager Page
+@app.route('/admin_cart')
+def admin_cart():
+    return render_template('admin_cart.html')
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
@@ -758,3 +758,143 @@ def get_best_selling_products_by_month():
 # def get_best_customers():
 #     best_customers = da.get_best_customers()
 #     return jsonify(best_customers)
+
+
+
+
+############################################################################################################
+@app.route('/admin_dashboard/delivery')
+def admin_dashboard_delivery():
+    if 'user' not in session.keys() or session.get('role') != 'manager':
+        flash("You must be logged in as manager to access the admin dashboard.", "warning")
+        return redirect(url_for('login'))
+
+    delivery_services = DeliveryService.get_all()
+    delivery_services = [delivery_service.to_dict() for delivery_service in delivery_services]
+    print(delivery_services)
+
+    return render_template('delivery_service.html', delivery_service=delivery_services)
+
+# update
+@app.route('/update_delivery/<int:delivery_service_id>', methods=['POST'])
+def update_delivery(delivery_service_id):
+    try:
+        # Extract data from the request
+        name = request.form.get('name')
+        phone = request.form.get('phone')
+
+        # Validate inputs
+        if not name or not phone:
+            return jsonify(success=False, error="Name and phone are required.")
+
+        # Fetch the supplier by ID and update its fields
+        delivery_service = DeliveryService.get_by_id(delivery_service_id)
+        if not delivery_service:
+            return jsonify(success=False, error="Delivery service not found.")
+
+        delivery_service.delivery_service_name = name
+        delivery_service.phone_number = phone
+        result = delivery_service.update()
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to update delivery service.")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+# Delete
+@app.route('/delete_delivery/<int:delivery_service_id>', methods=['POST'])
+def delete_delivery(delivery_service_id):
+    try:
+        # Call the delete method of the Supplier class
+        result = DeliveryService.delete(delivery_service_id)
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to delete delivery service from that database")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+# search
+@app.route('/search_delivery', methods=['GET'])
+def search_delivery():
+    try:
+        # Get the search query from the request
+        query = request.args.get('query', '')
+
+        # Fetch all suppliers and filter them by name or phone
+        all_delivery_services = DeliveryService.get_all()
+        filtered_delivery_services = [
+            delivery.to_dict() for delivery in all_delivery_services
+            if query.lower() in delivery.delivery_service_name.lower() or query in delivery.phone_number
+        ]
+
+        return jsonify(success=True, delivery_services=filtered_delivery_services)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+@app.route('/get_delivery', methods=['GET'])
+def get_delivery():
+    try:
+        # Fetch page and limit parameters from the query string
+        page = int(request.args.get('page', 1))  # Default to page 1
+        limit = int(request.args.get('limit', 8))  # Default to 8 rows per page
+        offset = (page - 1) * limit
+
+        # Fetch all suppliers
+        delivery_services = DeliveryService.get_all()
+
+        # Slice the suppliers list based on the page and limit
+        paginated_delivery = delivery_services[offset:offset + limit]
+        delivery_dicts = [delivery.to_dict() for delivery in paginated_delivery]
+
+        # Calculate total suppliers count
+        total_delivery = len(delivery_services)
+
+        return jsonify(
+            success=True,
+            delivery_services=delivery_dicts,
+            total_count=total_delivery,
+            page=page,
+            limit=limit
+        )
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+
+
+
+
+@app.route('/add_delivery', methods=['POST'])
+def add_delivery():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        name = data.get('name')
+        phone = data.get('phone')
+
+        # Validate inputs
+        if not name or not phone:
+            return jsonify(success=False, error="Name and phone are required.")
+
+        # Create and insert a new supplier
+        new_delivery = DeliveryService(delivery_service_name=name, phone_number=phone)
+        new_delivery.insert()
+
+        return jsonify(success=True, delivery_service=new_delivery.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    role = session.get('role', 'guest')  # Default to 'guest' if not logged in
+    return render_template('404.html', role=role), 404
+

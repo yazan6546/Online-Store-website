@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/404.css') }}">
+</head>
+<body>
+    <header>
+        <!-- Your header content here -->
+    </header>
+    <div class="error-page {% if role == 'manager' %}manager{% elif role == 'customer' %}customer{% else %}guest{% endif %}">
+        <h1>404</h1>
+        <p>Sorry, the page you are looking for does not exist.</p>
+        {% if role == 'manager' %}
+            <p>As a manager, you can go to the <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>.</p>
+        {% elif role == 'customer' %}
+            <p>As a customer, you can go to the <a href="{{ url_for('index') }}">Home Page</a>.</p>
+        {% else %}
+            <p>Please <a href="{{ url_for('login') }}">log in</a> to access more features.</p>
+        {% endif %}
+    </div>
+    <script src="{{ url_for('static', filename='js/admin_custom.js') }}"></script>
+</body>
+</html>

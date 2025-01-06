@@ -2,22 +2,28 @@ from utils.db_utils import get_db_connection
 import utils.queries as q
 
 class DeliveryService:
-    def __init__(self, delivery_service_id, delivery_service_name, phone_number, email):
+    def __init__(self,delivery_service_name, phone_number, delivery_service_id=None):
         self.delivery_service_id = delivery_service_id
         self.delivery_service_name = delivery_service_name
         self.phone_number = phone_number
-        self.email = email
 
     def insert(self):
         conn = get_db_connection()
-
+        result = None
         try:
-            conn.execute(q.delivery_service.ADD_DELIVERY_SERVICE, self.to_dict())
+            result = conn.execute(q.delivery_service.ADD_DELIVERY_SERVICE, self.to_dict())
+            self.delivery_service_id = result.lastrowid
+
             conn.commit()
-            return 1
+
+            if result is None:
+                raise Exception("Duplicate entry")
+
         except Exception as e:
-            print(f"Error: {e}")
-            return 0
+            print(f"Error in insert(): {e}")
+            conn.rollback()
+            raise e
+
         finally:
             conn.close()
 
@@ -25,7 +31,7 @@ class DeliveryService:
         temp = {
             "delivery_service_name": self.delivery_service_name,
             "phone_number": self.phone_number,
-            "email": self.email,
+
         }
 
         if include_id:
@@ -33,11 +39,13 @@ class DeliveryService:
 
         return temp
 
-    def delete(self):
+    @staticmethod
+    def delete(delivery_service_id):
         conn = get_db_connection()
 
         try:
-            conn.execute(q.delivery_service.DELETE_DELIVERY_SERVICE, {"delivery_service_id": self.delivery_service_id})
+            conn.execute(q.delivery_service.DELETE_DELIVERY_SERVICE, {"delivery_service_id": delivery_service_id})
+
             conn.commit()
             return 1
         except Exception as e:
@@ -85,11 +93,18 @@ class DeliveryService:
 
     @staticmethod
     def from_dict(dict):
+
+        if dict["delivery_service_id"] is None:
+            return DeliveryService(
+                delivery_service_name=dict["delivery_service_name"],
+                phone_number = dict["phone_number"],
+            )
+
         return DeliveryService(
-            dict["delivery_service_id"],
-            dict["delivery_service_name"],
-            dict["phone_number"],
-            dict["email"],
+            delivery_service_id=dict["delivery_service_id"],
+            delivery_service_name=dict["delivery_service_name"],
+            phone_number = dict["phone_number"],
+
         )
 
     @staticmethod
@@ -107,3 +122,16 @@ class DeliveryService:
 
     def __str__(self):
         return f"DeliveryService: {self.delivery_service_name}"
+
+    def get_by_id(delivery_service_id):
+        conn = get_db_connection()
+
+        try:
+            service = conn.execute(q.delivery_service.SELECT_DELIVERY_BY_DELIVERY_ID, {"delivery_service_id": delivery_service_id}).fetchone()
+            return DeliveryService.from_dict(service._mapping) if service else None
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
+
