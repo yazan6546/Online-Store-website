@@ -481,6 +481,11 @@ def admin_dashboard():
 def admin_shop():
     return render_template('admin_shop.html')
 
+# Cart for manager Page
+@app.route('/admin_cart')
+def admin_cart():
+    return render_template('admin_cart.html')
+
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
 

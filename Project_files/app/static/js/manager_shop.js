@@ -42,3 +42,18 @@ increaseQtyBtn.addEventListener('click', () => {
   quantity++;
   quantityDisplay.textContent = quantity;
 });
+
+
+// Add event listener for the "Add to Cart" button
+document.querySelector('.add-to-cart').addEventListener('click', function () {
+    // Get the notification element
+    const notification = document.getElementById('notification');
+
+    // Show the notification by adding the "show" class
+    notification.classList.add('show');
+
+    // Hide the notification after 3 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+});

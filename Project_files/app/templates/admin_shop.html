@@ -15,6 +15,9 @@ Admin Dashboard
     </div>
 
   <!-- SORT SECTION -->
+  <div class="top-section">
+        <button class="view-cart-btn" onclick="window.location.href='{{ url_for('admin_cart') }}'">View Cart</button>
+
   <div class="sort-container">
     <div class="sort-box">
       <label for="sort-options">Sort by:</label>
@@ -31,6 +34,9 @@ Admin Dashboard
       <span class="product-count"># of products</span>
     </div>
   </div>
+  </div>
+
+
 
 <!-- FILTER SECTION -->
   <div class="heading">
@@ -156,6 +162,7 @@ The ultimate over-ear personal listening experience — now in fresh new colors.
                 <span id="quantity">1</span>
                 <button class="qty-btn" id="increase-qty">+</button>
               </div>
+              <div id="notification" class="notification">ADDED TO YOUR CART</div>
               <button class="add-to-cart">Add to Cart</button>
             </div>
 
