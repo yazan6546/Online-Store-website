@@ -18,6 +18,20 @@ SELECT_CATEGORY_BY_ID = text("""
     WHERE category_id = :category_id;
 """)
 
+GET_CATEGORY_NAME = text("""
+    SELECT category_name FROM Category
+    WHERE category_id = :category_id;
+""")
+
+GET_CAteGory_NAMES = text("""
+    SELECT category_name FROM Category;
+""")
+
+GET_ID_BY_NAME = text("""
+    SELECT category_id FROM Category
+    WHERE category_name = :category_name;
+""")
+
 DELETE_FROM_CATEGORY = text("""
     DELETE FROM Category
     WHERE category_id = :category_id;

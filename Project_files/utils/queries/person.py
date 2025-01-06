@@ -12,7 +12,7 @@ INSERT_PERSON_TABLE = text("""
 #                            """)
 
 GET_PERSON_TABLE = text("""
-                            SELECT * FROM Manager ORDER BY 1 DESC;
+                            SELECT * FROM Manager ORDER BY 1;
 """)
 
 SELECT_PERSON_BY_ID = text("""

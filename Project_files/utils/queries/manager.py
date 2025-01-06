@@ -7,7 +7,7 @@ INSERT_MANAGER_TABLE = text("""
                             """)
 
 GET_MANAGER_TABLE = text("""
-                            SELECT * FROM Manager ORDER BY 1 DESC;
+                            SELECT * FROM Manager ORDER BY 1 ;
 """)
 
 GET_ALL_MANAGERS = text("""

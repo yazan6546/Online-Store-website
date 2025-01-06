@@ -1,3 +1,4 @@
+from models import Product
 from models.customers import Customer
 import datetime
 
@@ -22,10 +23,5 @@ import datetime
 #
 # x = Customer.get(1)
 # print(x)
-from models.delivery_service import DeliveryService
 
-
-delivery = DeliveryService(delivery_service_name="Test", phone_number="123456789")
-delivery.delivery_service_id=3
-print(delivery.to_dict())
 
