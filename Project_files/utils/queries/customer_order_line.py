@@ -7,7 +7,7 @@ INSERT_CUSTOMER_ORDER_LINE_TABLE = text("""
                             """)
 
 GET_CUSTOMER_ORDER_LINE_TABLE = text("""
-                            SELECT * FROM Manager_Order ORDER BY 1 DESC;
+                            SELECT * FROM Manager_Order ORDER BY 1 ;
 """)
 
 SELECT_CUSTOMER_ORDER_BY_ID = text("""

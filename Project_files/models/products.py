@@ -78,6 +78,33 @@ class Product:
         finally:
             conn.close()
 
+    def to_print(self):
+        conn = get_db_connection()
+        category_name = conn.execute(q.category.GET_CATEGORY_NAME, {"category_id": self.category_id}).fetchone()[0]
+        supplier_name = conn.execute(q.supplier.GET_SUPPLIER_NAME, {"supplier_id": self.supplier_id}).fetchone()[0]
+
+
+
+        conn.close()
+        # print(category_name)
+        # print(supplier_name)
+        temp = {
+            "product_name": self.product_name,
+            "product_description": self.product_description,
+            "brand": self.brand,
+            "price": self.price,
+            "photo": self.photo,
+            "stock_quantity": self.stock_quantity,
+            "category_id": category_name,
+            "supplier_id": supplier_name,
+        }
+
+        if self.product_id is not None:
+            temp["product_id"] = self.product_id
+
+        return temp
+
+
     def to_dict(self, product_id=True):
         temp =  {
             "product_name": self.product_name,
@@ -87,7 +114,7 @@ class Product:
             "photo": self.photo,
             "stock_quantity": self.stock_quantity,
             "category_id": self.category_id,
-            "supplier_id": self.supplier_id
+            "supplier_id": self.supplier_id,
         }
 
         if product_id:
@@ -150,3 +177,6 @@ class Product:
             return 0
         finally:
             conn.close()
+
+    def __str__(self):
+        return f"Product: {self.product_name} - {self.product_description} - {self.brand} - {self.price} - {self.photo} - {self.stock_quantity} - {self.category_id} - {self.supplier_id} - {self.product_id}"

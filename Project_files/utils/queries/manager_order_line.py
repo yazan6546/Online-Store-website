@@ -7,7 +7,7 @@ INSERT_MANAGER_ORDER_LINE_TABLE = text("""
                             """)
 
 GET_MANAGER_ORDER_TABLE = text("""
-                            SELECT * FROM Manager_Order_Line ORDER BY 1 DESC;
+                            SELECT * FROM Manager_Order_Line ORDER BY 1;
 """)
 
 SELECT_MANAGER_ORDER_Line_BY_ID = text("""

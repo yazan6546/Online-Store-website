@@ -6,7 +6,7 @@ INSERT_CUSTOMER_ORDER_TABLE = text("""
                             """)
 
 GET_CUSTOMER_ORDER_TABLE = text("""
-                            SELECT * FROM Customer_Order ORDER BY 1 DESC;
+                            SELECT * FROM Customer_Order ORDER BY 1 ;
 """)
 
 SELECT_CUSTOMER_ORDER_BY_ID = text("""

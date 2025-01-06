@@ -83,6 +83,30 @@ class Category:
         finally:
             conn.close()
 
+    @classmethod
+    def get_id_by_name(cls, category_name):
+        conn = get_db_connection()
+        try:
+            result = conn.execute(q.category.GET_ID_BY_NAME, {'category_name': category_name}).fetchone()
+            return result[0]
+        except Exception as e:
+            print(f"Error in get_id_by_name(): {e}")
+            return None
+        finally:
+            conn.close()
+
+    @classmethod
+    def get_names(cls):
+        conn = get_db_connection()
+        try:
+            result = conn.execute(q.category.GET_CAteGory_NAMES).fetchall()
+            return [row[0] for row in result]
+        except Exception as e:
+            print(f"Error in get_names(): {e}")
+            return None
+        finally:
+            conn.close()
+
     @staticmethod
     def delete_all():
         conn = get_db_connection()

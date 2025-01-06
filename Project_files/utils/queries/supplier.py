@@ -6,22 +6,32 @@ INSERT_SUPPLIER_TABLE = text("""
                             """)
 
 GET_SUPPLIER_TABLE = text("""
-                            SELECT * FROM Supplier ORDER BY 1 ASC;
+                            SELECT * FROM Supplier ORDER BY 1 ;
                             """)
 
 SELECT_SUPPLIER_BY_SUPPLIER_ID = text("""
                                 SELECT * FROM Supplier
                                 WHERE supplier_id = :id;
                             """)
+GET_SUPPLIER_NAME = text("""
+                            SELECT supplier_name FROM Supplier
+                            WHERE supplier_id = :supplier_id;
+                        """)
+
+GET_ID_BY_SUPPLIER_NAME = text("""
+                            SELECT supplier_id FROM Supplier
+                            WHERE supplier_name = :name;
+                            """)
+
+GET_SUPPLIER_NAMES = text("""
+                            SELECT supplier_name FROM Supplier;
+                        """)
 
 UPDATE_SUPPLIER_TABLE = text("""
                                 UPDATE Supplier
                                 SET supplier_name = :name, phone_number = :phone
                                 WHERE supplier_id = :supplier_id;
                             """)
-
-
-
 
 Create_SUPPLIER_TABLE = text("""
                             CREATE TABLE Supplier (
@@ -44,6 +54,3 @@ DROP_SUPPLIER_TABLE = text("""
 DELETE_ALL_FROM_SUPPLIER = text("""
     DELETE FROM Supplier;
 """)
-
-
-

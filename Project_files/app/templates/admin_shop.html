@@ -115,69 +115,19 @@ Admin Dashboard
       <div class="filter-box">
         <h3>Availability</h3>
         <ul>
-          <li><input type="checkbox"> In Stock</li>
-          <li><input type="checkbox"> Out of Stock</li>
+          <li><input type="radio" name="availability" id="in-stock" value="in-stock"> <label for="in-stock">In Stock</label></li>
+          <li><input type="radio" name="availability" id="out-of-stock" value="out-of-stock"> <label for="out-of-stock">Out of Stock</label></li>
         </ul>
       </div>
+
     </div>
-
-  <!-- Shopping Products Section -->
-    <div class="product-card">
-      <!-- Upper Section -->
-      <div class="product-image-section">
-        <img src="../static/img/p9-d-removebg-preview.png" alt="Product Image">
-        <div class="circle-btn" id="open-modal-btn">
-          <i class="bx bx-plus"></i>
-        </div>
-
-      </div>
-      <!-- Lower Section -->
-      <div class="product-info-section">
-        <h5>AirPods Max offer high-fidelity audio, 20-hour battery life, USB-C charging, in fresh green color.</h5>
-        <p class="price">$220</p>
-      </div>
-    </div>
-
-    <!-- Modal -->
-    <div id="blank-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Product Details</h2>
-        <div class="modal-body">
-          <!-- Left Section: Image -->
-          <div class="modal-image-section">
-            <img src="../static/img/p9-d-removebg-preview.png" alt="Product Image">
-          </div>
-          <!-- Right Section: Details -->
-          <div class="modal-description-section">
-            <h5>AirPods Max offer high-fidelity audio, 20-hour battery life, USB-C charging, in fresh green color.</h5>
-            <p class="price"> Price: $220</p>
-            <p>Description:
-The ultimate over-ear personal listening experience — now in fresh new colors. AirPods Max deliver stunningly detailed, high-fidelity audio. Personalized Spatial Audio with dynamic head tracking for sound that surrounds you. Footnote ⁴ Pro-level Active Noise Cancellation to remove unwanted sound. Footnote ³ Transparency mode to comfortably hear the world around you. Up to 20 hours of battery life on a single charge. Footnote ¹⁵ Effortless setup and on-head detection for a magical listening experience. Now with USB-C for easy charging.</p>
-
-
-            <div class="quantity-cart-container">
-              <div class="quantity-selector">
-                <button class="qty-btn" id="decrease-qty">-</button>
-                <span id="quantity">1</span>
-                <button class="qty-btn" id="increase-qty">+</button>
-              </div>
-              <div id="notification" class="notification">ADDED TO YOUR CART</div>
-              <button class="add-to-cart">Add to Cart</button>
-            </div>
-
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-<!-- finish of shopping products section -->
+  <!-- Main Product Section -->
+  <div class="product-container">
+    <!-- Products will be dynamically rendered here -->
+  </div>
 
 
   </div>
-
 
 </div>
 

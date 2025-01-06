@@ -178,7 +178,7 @@ function closeModal() {
 }
 
 let currentPage = 1;
-const limit = 8; // Rows per page
+const limit = 10; // Rows per page
 
 // Fetch suppliers and update the table
 async function fetchSuppliers(page = 1) {
