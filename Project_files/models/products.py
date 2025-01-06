@@ -127,7 +127,6 @@ class Product:
         try:
             result = conn.execute(q.product.GET_PRODUCTS_TABLE).fetchall()
             products = [cls(**product._mapping) for product in result]
-            print(products[0])
             return products
         except Exception as e:
             print(f"Error: {e}")

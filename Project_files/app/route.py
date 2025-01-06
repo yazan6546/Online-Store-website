@@ -530,19 +530,23 @@ def search_product():
         print(query)
         # Fetch all products and filter them by name or category
         all_products = Product.get_all()
-        products = [product.to_dict() for product in all_products]
+        products = [product.to_print() for product in all_products]
+
 
         filtered_products = [
             product for product in products
-            if query.lower() in product['product_name']
-               or query.lower() in product.get(['brand'])
-               or query.lower() in product['product_description']
+            if query.lower() in product['product_name'].lower()
+               or query.lower() in product.get('brand').lower()
+               or query.lower() in product['product_description'].lower()
                or query in product['category_id']
                or query in product['supplier_id']
         ]
 
+
         return jsonify(success=True, products=filtered_products)
     except Exception as e:
+        print("loooser")
+        print(e)
         return jsonify(success=False, error=str(e))
 
 
