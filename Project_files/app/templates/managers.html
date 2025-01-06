@@ -9,6 +9,8 @@ Managers
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}">
 {% endblock %}
 
+<body onload="initializeDropdowns()">
+
 {% block content %}
 <div id="wrapper">
     <div class="card-heading">
@@ -70,6 +72,8 @@ Managers
                             <a href="#" onclick="deleteManager({{ manager.person_id }})">Delete</a>
                         </div>
                     </div>
+                    <button class="save-btn" id="save-btn-{{ manager.person_id }}" style="display:none;" onclick="saveManager({{ manager.person_id }})">Save</button>
+
                 </td>
             </tr>
             {% endfor %}
@@ -77,32 +81,28 @@ Managers
     </table>
 </div>
 
-    <div id="add-manager-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModalManager()">&times;</span>
-            <h2>Add Manager</h2>
-            <form id="add-manager-form" onsubmit="event.preventDefault(); addManager();">
-
-                <label for="manager-firstName">First Name</label>
-                <input type="text" id="manager-firstName" placeholder="Enter manager First Name" required>
-
-                <label for="manager-lastName">Last Name</label>
-                <input type="text" id="manager-lastName" placeholder="Enter manager Last Name" required>
-
-                <label for="manager-email">Email</label>
-                <input type="text" id="manager-email" placeholder="Enter manager Email" required>
-
-                <label for="manager-role">Role</label>
-                <select id="manager-role" name="role" class="form-control">
-                    <option value="Financial Manager">Financial Manager</option>
-                    <option value="Assistant Manager">Assistant Manager</option>
-                    <option value="Regional Manager">Regional Manager</option>
-                </select>
-
-                <button type="submit" class="btn">Add Manager</button>
-            </form>
-        </div>
+<div id="add-manager-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModalManager()">&times;</span>
+        <h2>Add Manager</h2>
+        <form id="add-manager-form" onsubmit="event.preventDefault(); addManager();">
+            <label for="manager-firstName">First Name</label>
+            <input type="text" id="manager-firstName" placeholder="Enter manager First Name" required>
+            <label for="manager-lastName">Last Name</label>
+            <input type="text" id="manager-lastName" placeholder="Enter manager Last Name" required>
+            <label for="manager-email">Email</label>
+            <input type="text" id="manager-email" placeholder="Enter manager Email" required>
+            <label for="manager-role">Role</label>
+            <select id="manager-role" name="role" class="form-control">
+                <option value="Financial Manager">Financial Manager</option>
+                <option value="Assistant Manager">Assistant Manager</option>
+                <option value="Regional Manager">Regional Manager</option>
+            </select>
+            <button type="submit" class="btn">Add Manager</button>
+        </form>
     </div>
+</div>
 
 <script src="{{ url_for('static', filename='js/managers.js') }}"></script>
+    <script src={{ url_for('static', filename='js/dropdown.js') }}></script>
 {% endblock %}
