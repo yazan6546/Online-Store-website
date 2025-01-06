@@ -1,0 +1,13 @@
+.content-wrapper {
+  position: relative;
+  margin-left: 250px; /* Default sidebar width */
+  transition: margin-left 0.3s ease; /* Smooth transition */
+  padding: 30px;
+  background-color: #f6f5ff;
+  min-height: 100vh; /* Full height */
+}
+
+.sidebar.close ~ .content-wrapper {
+  margin-left: 88px; /* Adjust when sidebar is collapsed */
+}
+

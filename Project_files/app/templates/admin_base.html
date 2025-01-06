@@ -63,12 +63,6 @@
                 </li>
 
                 <li class="nav-link">
-                    <a href="{{ url_for('admin_dashboard_customer_orders') }}">
-                        <i class='bx bx-cart icon'></i>
-                        <span class="text nav-text">Customer's Orders</span>
-                    </a>
-                </li>
-                <li class="nav-link">
                     <a href="{{ url_for('admin_dashboard_managers_orders') }}">
                         <i class='bx bx-list-check icon'></i>
                         <span class="text nav-text">Manager's Orders</span>
@@ -79,6 +73,13 @@
                     <a href="{{ url_for('admin_shop') }}">
                         <i class='bx bx-shopping-bag icon'></i>
                         <span class="text nav-text">Shop</span>
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                    <a href="{{ url_for('admin_cart') }}">
+                        <i class='bx bx-cart icon'></i>
+                        <span class="text nav-text">My Cart</span>
                     </a>
                 </li>
 
