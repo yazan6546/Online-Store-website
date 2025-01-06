@@ -483,3 +483,63 @@ select.form-control:focus {
     margin: 0 10px;
 }
 
+
+/* Example styles for the 3-dots button, dropdown, and pencil icon */
+  .product-name-photo {
+      display: flex;
+      align-items: center;
+  }
+  .product-name-photo img {
+      width: 50px;
+      height: auto;
+      margin-right: 8px;
+  }
+  .pencil-icon {
+      cursor: pointer;
+      margin-left: 8px;
+      color: #666;
+  }
+  .action-buttons {
+      position: relative;
+  }
+  .three-dots-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+  }
+  .dropdown {
+      display: inline-block;
+      position: relative;
+  }
+  .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 60px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 999;
+  }
+  .dropdown-content a {
+      display: block;
+      padding: 4px 8px;
+      text-decoration: none;
+      color: #333;
+      cursor: pointer;
+  }
+  .dropdown-content a:hover {
+      background-color: #ddd;
+  }
+  .dropdown.show .dropdown-content {
+      display: block;
+  }
+  /* Hide the save button by default */
+  .save {
+      display: none;
+  }
+  /* Simple example for a resizable textarea */
+  .description-edit-container textarea {
+      width: 100%;
+      min-height: 80px;
+      resize: vertical;
+  }

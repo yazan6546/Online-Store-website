@@ -1,4 +1,5 @@
-
+import os
+from werkzeug.utils import secure_filename
 from flask import render_template, request, jsonify, session, flash, redirect, url_for
 from wtforms.validators import email
 
@@ -11,11 +12,10 @@ from models.manager import Manager
 from models.suppliers import Supplier
 import models.data_analysis as da
 from models.products import Product
-
-
-
+from models.category import Category
 
 app.first_request_handled = False
+
 
 #
 # @app.before_request
@@ -36,7 +36,6 @@ app.first_request_handled = False
 # Route for the Specialists page
 @app.route('/admin_dashboard/customers')
 def admin_dashboard_customers():
-
     if 'user' not in session.keys() or session.get('role') != 'manager':
         flash("You must be logged in as manager to access the admin dashboard.", "warning")
         return redirect(url_for('login'))
@@ -44,9 +43,7 @@ def admin_dashboard_customers():
     customers = Customer.get_all()
     customers = [customer.to_dict(address=True) for customer in customers]
 
-
-
-    #print(customers[0]['addresses'][0]['address_id'])
+    # print(customers[0]['addresses'][0]['address_id'])
     return render_template('customers.html', customers=customers)  # Replace with render_template if applicable
 
 
@@ -88,17 +85,18 @@ def update_customer(person_id):
     else:
         return jsonify({"success": False, "error": "An error occurred while updating the customer"})
 
+
 @app.route('/search_customer', methods=['GET'])
 def search_customer():
-
     name = request.args.get('query')
 
     customers = Customer.search(name)
-    if customers or customers==[]:
+    if customers or customers == []:
         customers = [customer.to_dict(address=True) for customer in customers]
         return jsonify({"success": True, "customers": customers})
 
     return jsonify({"success": False, "error": "An error occurred while searching for customers"})
+
 
 @app.route('/filter_customers', methods=['GET'])
 def filter_customers():
@@ -111,7 +109,6 @@ def filter_customers():
         {"person_id": 5, "addresses": "654 Cedar Street, North Haverbrook"}
     ]
     return jsonify({"success": True, "customers": customers})
-
 
 
 # the following routes are for the address section
@@ -136,8 +133,8 @@ def add_address(customer_id):
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
-
     # return jsonify(success=True, address=address.to_dict())
+
 
 @app.route('/delete_address/<int:address_id>', methods=['POST'])
 def delete_address(address_id):
@@ -147,6 +144,7 @@ def delete_address(address_id):
         return jsonify({"success": True})
     else:
         return jsonify({"success": False, "error": "An error occured while deleting the address."})
+
 
 @app.route('/edit_address/<int:address_id>', methods=['POST'])
 def edit_address(address_id):
@@ -170,9 +168,6 @@ def edit_address(address_id):
         return jsonify({"success": False, "error": "An error occurred while updating the address."})
 
 
-
-
-
 ############################################################################################################
 # Managers Section
 ############################################################################################################
@@ -181,7 +176,6 @@ def edit_address(address_id):
 # Route for the managers page
 @app.route('/admin_dashboard/managers')
 def admin_dashboard_managers():
-
     if 'user' not in session.keys() or session.get('role') != 'manager':
         flash("You must be logged in as manager to access the admin dashboard.", "warning")
         return redirect(url_for('login'))
@@ -190,28 +184,6 @@ def admin_dashboard_managers():
     managers = [manager.to_dict() for manager in managers]
 
     return render_template('managers.html', managers=managers)  # Replace with render_template if applicable
-
-
-@app.route('/add_supplier', methods=['POST'])
-def add_supplier():
-    try:
-        # Extract data from the request
-        data = request.get_json()
-        name = data.get('name')
-        phone = data.get('phone')
-
-        # Validate inputs
-        if not name or not phone:
-            return jsonify(success=False, error="Name and phone are required.")
-
-        # Create and insert a new supplier
-        new_supplier = Supplier(supplier_name=name, phone_number=phone)
-        new_supplier.insert()
-
-        return jsonify(success=True, supplier=new_supplier.to_dict())
-    except Exception as e:
-        return jsonify(success=False, error=str(e))
-
 
 
 @app.route('/delete_manager/<int:person_id>', methods=['POST'])
@@ -248,18 +220,19 @@ def update_manager(person_id):
     else:
         return jsonify({"success": False, "error": "An error occurred while updating the customer"})
 
+
 @app.route('/search_manager', methods=['GET'])
 def search_manager():
-
     name = request.args.get('query')
 
     managers = Manager.search(name)
 
-    if managers or managers==[]:
+    if managers or managers == []:
         managers = [manager.to_dict() for manager in managers]
         return jsonify({"success": True, "managers": managers})
 
     return jsonify({"success": False, "error": "An error occurred while searching for managers"})
+
 
 # add manager
 @app.route('/add_manager', methods=['POST'])
@@ -272,7 +245,6 @@ def add_manager():
         email = data.get('email')
         role = data.get('role')
 
-
         # Validate inputs
         if not first_name or not last_name or not email or not role:
             return jsonify(success=False, error="firstName, lastName, email, and role are required.")
@@ -284,7 +256,6 @@ def add_manager():
         return jsonify(success=True, manager=new_manager.to_dict())
     except Exception as e:
         return jsonify(success=False, error=str(e))
-
 
 
 ############################################################################################################
@@ -300,6 +271,28 @@ def admin_dashboard_suppliers():
     suppliers = [supplier.to_dict() for supplier in suppliers]
 
     return render_template('suppliers.html', suppliers=suppliers)
+
+
+@app.route('/add_supplier', methods=['POST'])
+def add_supplier():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        name = data.get('name')
+        phone = data.get('phone')
+
+        # Validate inputs
+        if not name or not phone:
+            return jsonify(success=False, error="Name and phone are required.")
+
+        # Create and insert a new supplier
+        new_supplier = Supplier(supplier_name=name, phone_number=phone)
+        new_supplier.insert()
+
+        return jsonify(success=True, supplier=new_supplier.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
 
 # update
 @app.route('/update_supplier/<int:supplier_id>', methods=['POST'])
@@ -329,6 +322,7 @@ def update_supplier(supplier_id):
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
+
 # Delete
 @app.route('/delete_supplier/<int:supplier_id>', methods=['POST'])
 def delete_supplier(supplier_id):
@@ -342,6 +336,7 @@ def delete_supplier(supplier_id):
             return jsonify(success=False, error="Failed to delete supplier from that database")
     except Exception as e:
         return jsonify(success=False, error=str(e))
+
 
 # search
 @app.route('/search_supplier', methods=['GET'])
@@ -391,10 +386,196 @@ def get_suppliers():
         return jsonify(success=False, error=str(e))
 
 
+@app.route('/fetch_suppliers', methods=['GET'])
+def fetch_suppliers():
+    try:
+        suppliers = Supplier.get_names()  # Retrieve supplier names from the database.
+
+        if not suppliers:
+            return jsonify(success=False, error="No suppliers found.")
+
+        return jsonify(success=True, suppliers=suppliers)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
 
 
 ############################################################################################################
-#Category section
+# Products section
+############################################################################################################
+@app.route('/admin_dashboard/products')
+def admin_dashboard_products():
+    if 'user' not in session.keys() or session.get('role') != 'manager':
+        flash("You must be logged in as manager to access the admin dashboard.", "warning")
+        return redirect(url_for('login'))
+
+    products = Product.get_all()
+    products = [product.to_dict() for product in products]
+
+    return render_template('products.html', products=products)  # Replace with render_template if applicable
+
+
+@app.route('/add_product')
+def add_product():
+    return render_template('add_product.html')
+
+
+@app.route('/add_product/upload', methods=['POST'])
+def add_product_upload():
+    try:
+        # Get form data
+        product_name = request.form['product_name']
+        category_name = request.form['category_id']
+        brand = request.form['brand']
+        supplier_name = request.form['supplier_id']
+        price = request.form['price']
+        stock_quantity = request.form['stock_quantity']
+        description = request.form['description']
+
+        # Handle single file upload
+        image = request.files.get('image')  # Expecting the file under the 'image' key
+        if not image:
+            return jsonify(success=False, error="No image file provided")
+
+        # Save the image to /static/img
+        filename = secure_filename(image.filename)
+        upload_folder = os.path.join(app.root_path, 'static', 'img')  # Ensure path exists
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)  # Create folder if it doesn't exist
+        filepath = os.path.join(upload_folder, filename)
+        image.save(filepath)
+
+        category_id = Category.get_id_by_name(category_name)
+        supplier_id = Supplier.get_id_by_name(supplier_name)
+
+        print (category_id)
+        print("-----------------")
+        print (supplier_id)
+
+        # Save product data and image path to the database
+        product = Product(
+            product_name=product_name,
+            category_id=category_id,
+            brand=brand,
+            supplier_id=supplier_id,
+            price=price,
+            stock_quantity=stock_quantity,
+            product_description=description,
+            photo=f'/static/img/{filename}'  # Save relative path or URL
+        )
+
+        # Insert the product into the database
+        product.insert()
+
+        return jsonify(success=True)
+
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+@app.route('/update_product/<int:product_id>', methods=['POST'])
+def update_product(product_id):
+    try:
+        # Extract data from the request
+        name = request.form.get('name')
+        price = request.form.get('price')
+        category = request.form.get('category')
+        supplier_id = request.form.get('supplier_id')
+
+        # Validate inputs
+        if not name or not price or not category or not supplier_id:
+            return jsonify(success=False, error="Name, price, category, and supplier_id are required.")
+
+        # Fetch the product by ID and update its fields
+        product = Product.get_by_product_id(product_id)
+        if not product:
+            return jsonify(success=False, error="Product not found.")
+
+        product.name = name
+        product.price = price
+        product.category = category
+        product.supplier_id = supplier_id
+        result = product.update()
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to update product.")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+@app.route('/delete_product/<int:product_id>', methods=['POST'])
+def delete_product(product_id):
+    try:
+        # Call the delete method of the Product class
+        print(product_id)
+        result = Product.delete(product_id)
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to delete product from that database")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+@app.route('/search_product', methods=['GET'])
+def search_product():
+    try:
+        # Get the search query from the request
+        query = request.args.get('query', '').strip()
+
+        # Fetch all products and filter them by name or category
+        all_products = Product.get_all()
+        products = [product.to_dict() for product in all_products]
+
+        filtered_products = [
+            product for product in products
+            if query.lower() in product['product_name'].lower()
+               or query.lower() in product['brand'].lower()
+               or query.lower() in product['product_description'].lower()
+               or query in product.get('category_id', '').lower()
+               or query in product.get('supplier_id', '').lower()
+        ]
+
+        return jsonify(success=True, products=filtered_products)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+@app.route('/get_products', methods=['GET'])
+def get_products():
+    try:
+        # Fetch page and limit parameters from the query string
+        page = int(request.args.get('page', 1))  # Default to page 1
+        limit = int(request.args.get('limit', 8))  # Default to 8 rows per page
+        offset = (page - 1) * limit
+
+        # Fetch all products
+        products = Product.get_all()
+
+        # Slice the products list based on the page and limit
+        paginated_products = products[offset:offset + limit]
+        products_dicts = [product.to_dict() for product in paginated_products]
+
+        # Calculate total products count
+        total_products = len(products)
+
+        return jsonify(
+            success=True,
+            products=products_dicts,
+            total_count=total_products,
+            page=page,
+            limit=limit
+        )
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+############################################################################################################
+# Category section
 ############################################################################################################
 
 # Route for the Parents page
@@ -403,10 +584,18 @@ def admin_dashboard_categories():
     return "<h1>Categories Page</h1>"  # Replace with render_template if applicable
 
 
-# Route for the Register Parent and Child page
-@app.route('/admin_dashboard/products')
-def admin_dashboard_products():
-    return "<h1>Products page</h1>"  # Replace with render_template if applicable
+@app.route('/fetch_categories', methods=['GET'])
+def fetch_categories():
+    try:
+        categories = Category.get_names()
+        if not categories:
+            return jsonify(success=False, error="No categories found.")
+        return jsonify(success=True, categories=categories)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+
 
 ############################################################################################################
 # Customer's orders section
@@ -416,7 +605,6 @@ def admin_dashboard_products():
 @app.route('/admin_dashboard/customer_orders')
 def admin_dashboard_customer_orders():
     return "<h1>customer's orders</h1>"  # Replace with render_template if applicable
-
 
 
 ############################################################################################################
@@ -432,6 +620,7 @@ def admin_dashboard_managers_orders():
 def index():
     return render_template('index.html')
 
+
 # About Page
 @app.route('/about')
 def about():
@@ -442,6 +631,7 @@ def about():
 @app.route('/shop')
 def shop():
     return render_template('shop.html')
+
 
 # Shop Single/Product Page
 @app.route('/shop-single')
@@ -457,15 +647,16 @@ def customer():
 
     return render_template('index.html')
 
+
 @app.route('/logout')
 def logout():
     session.clear()
     flash("You have been logged out successfully.", "success")
     return redirect(url_for('login'))
 
+
 @app.route('/admin_dashboard')
 def admin_dashboard():
-
     if 'user' not in session.keys() or session.get('role') != 'manager':
         flash("You must be logged in as manager to access the admin dashboard.", "warning")
         print('ok loser')
@@ -475,10 +666,12 @@ def admin_dashboard():
     admin = session['user']
     return render_template('admin_dashboard.html', admin=admin, stats=dict_stats)
 
+
 # Shop for manager Page
 @app.route('/admin_shop')
 def admin_shop():
     return render_template('admin_shop.html')
+
 
 # Shop for delivery Page
 @app.route('/delivery')
@@ -488,7 +681,6 @@ def delivery():
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
-
     customer_form = CustomerForm()
     print(customer_form.first_name.data)
     print(request.method)
@@ -510,20 +702,16 @@ def add_customer():
 # Login Page
 @app.route('/Login', methods=['GET', 'POST'])
 def login():
-
     signup_form = CustomerForm()
     login_form = LoginForm()
-
 
     if 'submit_login' in request.form.keys():
         return auth.validate_login(login_form, signup_form)  # Possible redirection after login logic
 
-    elif'submit_signup' in request.form.keys():
+    elif 'submit_signup' in request.form.keys():
         return auth.validate_signup(login_form, signup_form)
 
     return render_template('Login.html', signup_form=signup_form, login_form=login_form)
-
-
 
 
 @app.route("/orders")
@@ -554,6 +742,7 @@ def get_best_customers():
     best_customers = da.get_best_customers()
     return jsonify(best_customers)
 
+
 @app.route('/api/best_selling_products_by_month', methods=['GET'])
 def get_best_selling_products_by_month():
     # year = request.args.get('year')
@@ -564,10 +753,3 @@ def get_best_selling_products_by_month():
 # def get_best_customers():
 #     best_customers = da.get_best_customers()
 #     return jsonify(best_customers)
-
-
-
-
-
-
-

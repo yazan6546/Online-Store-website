@@ -97,6 +97,33 @@ class Supplier:
         finally:
             conn.close()
 
+    @classmethod
+    def get_names(cls):
+        conn = get_db_connection()
+
+        try:
+            suppliers = conn.execute(q.supplier.GET_SUPPLIER_NAMES).fetchall()
+            suppliers = [supplier[0] for supplier in suppliers]
+            return suppliers
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
+
+    @classmethod
+    def get_id_by_name(cls, name):
+        conn = get_db_connection()
+
+        try:
+            supplier_id = conn.execute(q.supplier.GET_ID_BY_SUPPLIER_NAME, {"name": name}).fetchone()[0]
+            return supplier_id
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
+
 
     def to_dict(self, supplier_id=True):
         temp = {

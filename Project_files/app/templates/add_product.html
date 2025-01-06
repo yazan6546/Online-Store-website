@@ -1,10 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>Add Product</title>
+     <script src="{{ url_for('static', filename='js/jquery-1.11.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-migrate-1.2.1.min.js') }}"></script>
+    <style>
+      .container {
+          display: flex;
+          gap: 20px;
+          margin: 20px;
+      }
+      .upload-section, .form-section {
+          flex: 1;
+          border: 1px solid #ccc;
+          padding: 16px;
+          border-radius: 4px;
+      }
+      .upload-area {
+          border: 2px dashed #aaa;
+          border-radius: 8px;
+          text-align: center;
+          padding: 20px;
+          margin-bottom: 10px;
+      }
+      .uploaded-files {
+          margin-top: 10px;
+      }
+      .uploaded-file {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin: 4px 0;
+          background: #f7f7f7;
+          padding: 8px;
+          border-radius: 4px;
+      }
+      .form-group {
+          margin-bottom: 10px;
+      }
+      label {
+          display: block;
+          margin-bottom: 4px;
+          font-weight: bold;
+      }
+      input[type="text"], input[type="number"], textarea, select {
+          width: 100%;
+          padding: 6px;
+          box-sizing: border-box;
+      }
+      .buttons {
+          margin-top: 20px;
+      }
+      .btn {
+          padding: 6px 12px;
+          margin-right: 8px;
+          cursor: pointer;
+      }
+    </style>
 </head>
 <body>
-$END$
-</body>
-</html>
+
+<h1 style="margin-left:20px;">Add Product</h1>
+<div class="container">
+    <!-- Upload Images Section -->
+    <div class="upload-section">
+        <h3>Add Images</h3>
+        <!-- This area handles drag-and-drop or browse selection -->
+        <div id="upload-area" class="upload-area">
+            <p>Drop your files here, or
+               <span style="color:blue; cursor:pointer;" onclick="browseFile()">Browse</span>
+            </p>
+            <input type="file"
+                   id="file-input"
+                   style="display:none;"
+                   multiple
+                   accept="image/*"
+                   onchange="handleFiles(this.files)">
+        </div>
+        <div class="uploaded-files" id="uploaded-files"></div>
+    </div>
+
+    <!-- Form Fields Section -->
+    <div class="form-section">
+        <!-- Product Name -->
+        <div class="form-group">
+            <label for="product_name">Product Name</label>
+            <input type="text" id="product_name" placeholder="E.g. Navy Blue Sneakers Shoe" required>
+        </div>
+
+        <!-- Category (Dropdown) -->
+        <div class="form-group">
+            <label for="category_select">Category</label>
+            <select id="category_select" required>
+                <option value="">Select Category...</option>
+                <!-- Options are populated dynamically via JS -->
+            </select>
+        </div>
+
+        <!-- Sub Category -->
+        <div class="form-group">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" placeholder="E.g. Shoe">
+        </div>
+
+        <!-- Supplier (Dropdown) -->
+        <div class="form-group">
+            <label for="supplier_select">Supplier</label>
+            <select id="supplier_select" required>
+                <option value="">Select Supplier...</option>
+                <!-- Options are populated dynamically via JS -->
+            </select>
+        </div>
+
+        <!-- Price -->
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" id="price" step="0.01" placeholder="E.g. 175">
+        </div>
+
+        <!-- Stock Quantity -->
+        <div class="form-group">
+            <label for="stock_quantity">Stock Quantity</label>
+            <input type="number" id="stock_quantity" placeholder="Enter stock quantity" required>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" rows="4"
+                placeholder="Add a detailed description of the product here..."></textarea>
+        </div>
+
+        <div class="buttons">
+            <button class="btn" onclick="saveProduct()">Save Product</button>
+            <button class="btn" onclick="cancelAdd()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/add_product.js') }}"></script>
