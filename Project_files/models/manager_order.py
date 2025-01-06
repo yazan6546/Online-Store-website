@@ -10,17 +10,26 @@ class ManagerOrder(Order):
         super().__init__(person_id, delivery_date, order_status, delivery_service_id, order_date, order_id)
 
     def insert(self):
-        if self.insert_order() and self.insert_order_lines():
+
+        conn = get_db_connection()
+        if self.insert_order(conn=conn) and self.insert_order_lines(conn=conn):
+
+            conn.commit()
             return 1
         else:
             print("Error in insert()")
             return 0
 
-    def insert_order(self):
-        conn = get_db_connection()
+    def insert_order(self, commit=False, conn=None):
+
+        if conn is None:
+            conn = get_db_connection()
+
         try:
             result = conn.execute(q.INSERT_MANAGER_ORDER_TABLE, self.to_dict())
-            conn.commit()
+
+            if commit:
+                conn.commit()
             self.order_id = result.lastrowid
             return 1
 
@@ -31,11 +40,13 @@ class ManagerOrder(Order):
         finally:
             conn.close()
 
-    def insert_order_lines(self):
+    def insert_order_lines(self, commit=False, conn=None):
         """
         Insert multiple order lines with one query.
         """
-        conn = get_db_connection()
+
+        if conn is None:
+            conn = get_db_connection()
         try:
             conn.execute(
                 q.manager_order_line.INSERT_MANAGER_ORDER_LINE_TABLE,
@@ -49,7 +60,9 @@ class ManagerOrder(Order):
                     for product_id, details in self.products.items()
                 ]
             )
-            conn.commit()
+
+            if commit:
+                conn.commit()
             return 1
         except Exception as e:
             print(f"Error in insert_order_lines(): {e}")

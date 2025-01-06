@@ -25,3 +25,17 @@ import datetime
 # print(x)
 
 
+from models.cart import Cart
+from models.manager_order import ManagerOrder
+
+cart = Cart()
+cart.add_item(1, 2, 10)
+cart.add_item(2, 3, 50)
+cart.add_item(3, 4, 200)
+cart.add_item(4, 5, 100)
+
+
+order = ManagerOrder(1, 'COMPLETED', datetime.datetime.now(), 1)
+order.products = cart.items
+
+order.insert()
