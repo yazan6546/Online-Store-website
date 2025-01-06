@@ -490,6 +490,11 @@ select.form-control:focus {
     }
 }
 
+h1 {
+  font-size: 24px;
+  color: #333;
+}
+
 .card-heading {
     background-color: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
