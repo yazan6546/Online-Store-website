@@ -161,7 +161,8 @@ h1 {
 
 .summary-details .total {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
+  color: #333;
 }
 
 .checkout-btn {
@@ -184,3 +185,42 @@ hr {
   margin: 20px 0;
 }
 
+.forDelivery h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #78B3CE;
+}
+
+#delivery-dropdown {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  font-size: 16px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 30px;
+}
+
+#delivery-dropdown:hover,
+#delivery-dropdown:focus {
+  border-color: #176B87;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#delivery-dropdown option {
+  font-size: 14px;
+  padding: 5px;
+}
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
