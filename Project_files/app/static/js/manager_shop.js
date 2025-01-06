@@ -25,23 +25,22 @@ window.addEventListener("click", function (e) {
 });
 
 
-const decreaseQtyBtn = document.getElementById('decrease-qty');
-const increaseQtyBtn = document.getElementById('increase-qty');
-const quantityDisplay = document.getElementById('quantity');
+const decreaseBtn = document.getElementById('decrease-qty');
+const increaseBtn = document.getElementById('increase-qty');
+const quantityValue = document.querySelector('.quantity-value');
 
-let quantity = 1;
-
-decreaseQtyBtn.addEventListener('click', () => {
-  if (quantity > 1) {
-    quantity--;
-    quantityDisplay.textContent = quantity;
+decreaseBtn.addEventListener('click', () => {
+  let currentValue = parseInt(quantityValue.textContent);
+  if (currentValue > 1) {
+    quantityValue.textContent = currentValue - 1;
   }
 });
 
-increaseQtyBtn.addEventListener('click', () => {
-  quantity++;
-  quantityDisplay.textContent = quantity;
+increaseBtn.addEventListener('click', () => {
+  let currentValue = parseInt(quantityValue.textContent);
+  quantityValue.textContent = currentValue + 1;
 });
+
 
 
 // Add event listener for the "Add to Cart" button

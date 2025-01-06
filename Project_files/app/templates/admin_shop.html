@@ -115,10 +115,11 @@ Admin Dashboard
       <div class="filter-box">
         <h3>Availability</h3>
         <ul>
-          <li><input type="checkbox"> In Stock</li>
-          <li><input type="checkbox"> Out of Stock</li>
+          <li><input type="radio" name="availability" id="in-stock" value="in-stock"> <label for="in-stock">In Stock</label></li>
+          <li><input type="radio" name="availability" id="out-of-stock" value="out-of-stock"> <label for="out-of-stock">Out of Stock</label></li>
         </ul>
       </div>
+
     </div>
 
   <!-- Shopping Products Section -->
@@ -157,11 +158,13 @@ The ultimate over-ear personal listening experience — now in fresh new colors.
 
 
             <div class="quantity-cart-container">
+
               <div class="quantity-selector">
-                <button class="qty-btn" id="decrease-qty">-</button>
-                <span id="quantity">1</span>
-                <button class="qty-btn" id="increase-qty">+</button>
+                <button class="quantity-btn" id="decrease-qty">−</button>
+                <span class="quantity-value">1</span>
+                <button class="quantity-btn" id="increase-qty">+</button>
               </div>
+
               <div id="notification" class="notification">ADDED TO YOUR CART</div>
               <button class="add-to-cart">Add to Cart</button>
             </div>
