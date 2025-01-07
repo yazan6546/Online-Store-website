@@ -28,4 +28,4 @@ import datetime
 from models.cart import Cart
 from models.manager_order import ManagerOrder
 
-print(ManagerOrder.get_products_by_person_id(2))
+print(ManagerOrder.get_all()[4].products)

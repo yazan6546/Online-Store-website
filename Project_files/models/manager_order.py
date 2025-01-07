@@ -105,7 +105,7 @@ class ManagerOrder(Order):
             conn.close()
 
     @staticmethod
-    def get_all(cls):
+    def get_all():
         conn = get_db_connection()
 
         try:
@@ -116,7 +116,7 @@ class ManagerOrder(Order):
             manager_orders = [manager_order._mapping for manager_order in manager_orders]
 
             for manager_order in manager_orders:
-                manager_object = cls(**manager_order)  # Mapping the dictionary to the class constructor
+                manager_object = ManagerOrder(**manager_order)  # Mapping the dictionary to the class constructor
                 manager_object.products = ManagerOrder.get_products_by_person_id(manager_object.order_id)
 
                 manager_order_objects.append(manager_object)
@@ -135,7 +135,11 @@ class ManagerOrder(Order):
             products = conn.execute(q.manager_order.GET_PRODUCTS_FROM_ORDER, {"order_id": order_id}).fetchall()
             conn.commit()
             products = [product._mapping for product in products]
-            return products
+            product_dict = {
+                product['product_id']: {"price": product['price_at_time_of_order'], "quantity": product['quantity']} for
+                product in products
+            }
+            return product_dict
         except Exception as e:
             print(f"Error in get_products_by_person_id(): {e}")
             return []
