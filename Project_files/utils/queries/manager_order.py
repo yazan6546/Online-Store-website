@@ -2,8 +2,8 @@ from sqlalchemy import text
 
 
 INSERT_MANAGER_ORDER_TABLE = text("""
-                                INSERT INTO Manager_Order (person_id, order_date, delivery_date, order_status) 
-                                VALUES (:person_id, :order_date, :delivery_date, :order_status);
+                                INSERT INTO Manager_Order (person_id, order_date, delivery_date, order_status, delivery_service_id) 
+                                VALUES (:person_id, :order_date, :delivery_date, :order_status, :delivery_service_id);
                             """)
 
 GET_MANAGER_ORDER_TABLE = text("""
@@ -28,6 +28,7 @@ UPDATE_MANAGER_ORDER_TABLE = text("""
                             order_date=:order_date
                             WHERE order_id = :order_id;
                             """)
+
 
 CREATE_MANAGER_ORDER_TABLE = text("""
                             CREATE TABLE IF NOT EXISTS Manager_Order(

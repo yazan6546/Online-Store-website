@@ -29,6 +29,7 @@ class Order:
         total_price = sum(product['price_at_time_of_order'] * product['quantity'] for product in self.products.values())
         return total_price
 
+
     def to_dict(self, order_id=True):
         temp = {
             "person_id": self.person_id,

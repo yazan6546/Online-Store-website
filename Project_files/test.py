@@ -1,4 +1,4 @@
-from models import Product
+from models import Product, Manager, ManagerOrder
 from models.customers import Customer
 import datetime
 
@@ -25,3 +25,16 @@ import datetime
 # print(x)
 
 
+from models.cart import Cart
+from models.manager_order import ManagerOrder
+
+cart = Cart()
+cart.add_item(1, 2, 10)
+cart.add_item(2, 3, 50)
+cart.add_item(3, 4, 200)
+cart.add_item(4, 5, 100)
+
+
+order = ManagerOrder.cart_to_manager_order_with_stock(cart, 1, datetime.datetime.now(), 1)
+
+order.insert()

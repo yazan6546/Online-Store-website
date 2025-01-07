@@ -9,6 +9,7 @@ from .addresses import *
 from .suppliers import *
 from .category import *
 from .delivery_service import *
+from .cart import Cart
 
 __all__= ['customers',
           'manager',
@@ -20,4 +21,5 @@ __all__= ['customers',
           'addresses',
           'suppliers',
           'category',
-          'delivery_service']
+          'delivery_service',
+          'cart']
