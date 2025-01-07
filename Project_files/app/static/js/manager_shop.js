@@ -1,9 +1,65 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Hide all modals on page load
-  document.querySelectorAll(".modal").forEach(modal => {
-    modal.style.display = "none";
-  });
+  // Fetch products from the server
+  fetch('/api/products')
+    .then(response => response.json())
+    .then(products => {
+      const productContainer = document.querySelector(".product-container");
 
+      products.forEach(product => {
+        const productCard = `
+          <div class="product-card" data-id="${product.product_id}">
+            <!-- Upper Section -->
+            <div class="product-image-section">
+              <img src="${product.photo}" alt="${product.product_name}">
+              <div class="circle-btn open-modal-btn" data-id="${product.product_id}">
+                <i class="bx bx-plus"></i>
+              </div>
+            </div>
+            <!-- Lower Section -->
+            <div class="product-info-section">
+              <h5>${product.product_name}</h5>
+              <p class="price">$${product.price}</p>
+            </div>
+          </div>
+          <!-- Modal for ${product.product_id} -->
+          <div id="modal-${product.product_id}" class="modal">
+            <div class="modal-content">
+              <span class="close-btn" data-id="${product.product_id}">&times;</span>
+              <h2>Product Details</h2>
+              <div class="modal-body">
+                <!-- Left Section: Image -->
+                <div class="modal-image-section">
+                  <img src="${product.photo}" alt="${product.product_name}">
+                </div>
+                <!-- Right Section: Details -->
+                <div class="modal-description-section">
+                  <h5>${product.product_name}</h5>
+                  <p class="price">Price: $${product.price}</p>
+                  <p>Description: ${product.product_description}</p>
+                  <div class="quantity-cart-container">
+                    <div class="quantity-selector">
+                      <button class="quantity-btn decrease-qty" data-id="${product.product_id}">−</button>
+                      <span class="quantity-value" data-id="${product.product_id}">1</span>
+                      <button class="quantity-btn increase-qty" data-id="${product.product_id}">+</button>
+                    </div>
+                    <div id="notification-${product.product_id}" class="notification">ADDED TO YOUR CART</div>
+                    <button class="add-to-cart" data-id="${product.product_id}">Add to Cart</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        productContainer.insertAdjacentHTML("beforeend", productCard);
+      });
+
+      // Add event listeners for modals and quantity buttons
+      addEventListeners();
+    })
+    .catch(error => console.error('Error fetching products:', error));
+});
+
+function addEventListeners() {
   // Open modal for the clicked product
   document.querySelectorAll(".circle-btn").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -59,120 +115,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 3000);
     });
   });
-});
-
-
-////////////////////////////////////////////////////////
-const products = [
-  {
-    id: "product1",
-    name: "AirPods Max",
-    price: 220,
-    description: `The ultimate over-ear personal listening experience — now in fresh new colors. AirPods Max deliver stunningly detailed, high-fidelity audio. Personalized Spatial Audio with dynamic head tracking for sound that surrounds you. Pro-level Active Noise Cancellation to remove unwanted sound. Transparency mode to comfortably hear the world around you. Up to 20 hours of battery life on a single charge. Effortless setup and on-head detection for a magical listening experience. Now with USB-C for easy charging.`,
-    image: "../static/img/p9-d-removebg-preview.png",
-  },
-  {
-    id: "product2",
-    name: "AirPods Max",
-    price: 220,
-    description: `The ultimate over-ear personal listening experience — now in fresh new colors. AirPods Max deliver stunningly detailed, high-fidelity audio. Personalized Spatial Audio with dynamic head tracking for sound that surrounds you. Pro-level Active Noise Cancellation to remove unwanted sound. Transparency mode to comfortably hear the world around you. Up to 20 hours of battery life on a single charge. Effortless setup and on-head detection for a magical listening experience. Now with USB-C for easy charging.`,
-    image: "../static/img/p9-d-removebg-preview.png",
-  },
-  {
-    id: "product3",
-    name: "AirPods Max",
-    price: 220,
-    description: `The ultimate over-ear personal listening experience — now in fresh new colors. AirPods Max deliver stunningly detailed, high-fidelity audio. Personalized Spatial Audio with dynamic head tracking for sound that surrounds you. Pro-level Active Noise Cancellation to remove unwanted sound. Transparency mode to comfortably hear the world around you. Up to 20 hours of battery life on a single charge. Effortless setup and on-head detection for a magical listening experience. Now with USB-C for easy charging.`,
-    image: "../static/img/p9-d-removebg-preview.png",
-  },
-  {
-    id: "product4",
-    name: "AirPods Max",
-    price: 220,
-    description: `The ultimate over-ear personal listening experience — now in fresh new colors. AirPods Max deliver stunningly detailed, high-fidelity audio. Personalized Spatial Audio with dynamic head tracking for sound that surrounds you. Pro-level Active Noise Cancellation to remove unwanted sound. Transparency mode to comfortably hear the world around you. Up to 20 hours of battery life on a single charge. Effortless setup and on-head detection for a magical listening experience. Now with USB-C for easy charging.`,
-    image: "../static/img/p9-d-removebg-preview.png",
-  },
-
-    {
-    id: "product4",
-    name: "AirPods Max",
-    price: 220,
-    description: `The ultimate over-ear personal listening experience — now in fresh new colors. AirPods Max deliver stunningly detailed, high-fidelity audio. Personalized Spatial Audio with dynamic head tracking for sound that surrounds you. Pro-level Active Noise Cancellation to remove unwanted sound. Transparency mode to comfortably hear the world around you. Up to 20 hours of battery life on a single charge. Effortless setup and on-head detection for a magical listening experience. Now with USB-C for easy charging.`,
-    image: "../static/img/p9-d-removebg-preview.png",
-  },
-
-    {
-    id: "product4",
-    name: "AirPods Max",
-    price: 220,
-    description: `The ultimate over-ear personal listening experience — now in fresh new colors. AirPods Max deliver stunningly detailed, high-fidelity audio. Personalized Spatial Audio with dynamic head tracking for sound that surrounds you. Pro-level Active Noise Cancellation to remove unwanted sound. Transparency mode to comfortably hear the world around you. Up to 20 hours of battery life on a single charge. Effortless setup and on-head detection for a magical listening experience. Now with USB-C for easy charging.`,
-    image: "../static/img/p9-d-removebg-preview.png",
-  },
-
-    {
-    id: "product4",
-    name: "AirPods Max",
-    price: 220,
-    description: `The ultimate over-ear personal listening experience — now in fresh new colors. AirPods Max deliver stunningly detailed, high-fidelity audio. Personalized Spatial Audio with dynamic head tracking for sound that surrounds you. Pro-level Active Noise Cancellation to remove unwanted sound. Transparency mode to comfortably hear the world around you. Up to 20 hours of battery life on a single charge. Effortless setup and on-head detection for a magical listening experience. Now with USB-C for easy charging.`,
-    image: "../static/img/p9-d-removebg-preview.png",
-  },
-
-    {
-    id: "product4",
-    name: "AirPods Max",
-    price: 220,
-    description: `The ultimate over-ear personal listening experience — now in fresh new colors. AirPods Max deliver stunningly detailed, high-fidelity audio. Personalized Spatial Audio with dynamic head tracking for sound that surrounds you. Pro-level Active Noise Cancellation to remove unwanted sound. Transparency mode to comfortably hear the world around you. Up to 20 hours of battery life on a single charge. Effortless setup and on-head detection for a magical listening experience. Now with USB-C for easy charging.`,
-    image: "../static/img/p9-d-removebg-preview.png",
-  },
-
-];
-
-const productContainer = document.querySelector(".product-container");
-
-products.forEach((product) => {
-  const productCard = `
-    <div class="product-card" data-id="${product.id}">
-      <!-- Upper Section -->
-      <div class="product-image-section">
-        <img src="${product.image}" alt="${product.name}">
-        <div class="circle-btn open-modal-btn" data-id="${product.id}">
-          <i class="bx bx-plus"></i>
-        </div>
-      </div>
-      <!-- Lower Section -->
-      <div class="product-info-section">
-        <h5>${product.name} offer high-fidelity audio, 20-hour battery life, USB-C charging, in fresh green color.</h5>
-        <p class="price">$${product.price}</p>
-      </div>
-    </div>
-    <!-- Modal for ${product.id} -->
-    <div id="modal-${product.id}" class="modal">
-      <div class="modal-content">
-        <span class="close-btn" data-id="${product.id}">&times;</span>
-        <h2>Product Details</h2>
-        <div class="modal-body">
-          <!-- Left Section: Image -->
-          <div class="modal-image-section">
-            <img src="${product.image}" alt="${product.name}">
-          </div>
-          <!-- Right Section: Details -->
-          <div class="modal-description-section">
-            <h5>${product.name} offer high-fidelity audio, 20-hour battery life, USB-C charging, in fresh green color.</h5>
-            <p class="price">Price: $${product.price}</p>
-            <p>Description: ${product.description}</p>
-            <div class="quantity-cart-container">
-              <div class="quantity-selector">
-                <button class="quantity-btn decrease-qty" data-id="${product.id}">−</button>
-                <span class="quantity-value" data-id="${product.id}">1</span>
-                <button class="quantity-btn increase-qty" data-id="${product.id}">+</button>
-              </div>
-              <div id="notification-${product.id}" class="notification">ADDED TO YOUR CART</div>
-              <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-  productContainer.insertAdjacentHTML("beforeend", productCard);
-});
+}

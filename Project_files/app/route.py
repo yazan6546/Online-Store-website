@@ -918,6 +918,48 @@ def add_delivery():
         return jsonify(success=False, error=str(e))
 
 
+@app.route('/api/products', methods=['GET'])
+def get_all_products():
+    # products = Product.get_all()
+    # products = [product.to_dict() for product in products]
+
+    products = [{
+        "brand": "Oconnor, Kelly and B",
+        "category_id": 14,
+        "photo": "https://placekitten.com/471/743",
+        "price": "196.70",
+        "product_description": "Down I card. Unit want manage option treat. It simple base land final itself scientist.",
+        "product_id": 1,
+        "product_name": "me",
+        "stock_quantity": 0,
+        "supplier_id": 3
+    },
+    {
+        "brand": "Nolan-Munoz",
+        "category_id": 4,
+        "photo": "https://placekitten.com/20/882",
+        "price": "285.67",
+        "product_description": "Six truth despite debate table bag. Score west write could leg. Word save energy including.",
+        "product_id": 2,
+        "product_name": "myself",
+        "stock_quantity": 29,
+        "supplier_id": 2
+    },
+    {
+        "brand": "Robbins Ltd",
+        "category_id": 9,
+        "photo": "https://placekitten.com/496/646",
+        "price": "642.04",
+        "product_description": "Thousand beautiful general skin. Appear interview decade lawyer. Production rule successful she.",
+        "product_id": 3,
+        "product_name": "trial",
+        "stock_quantity": 97,
+        "supplier_id": 8
+    }]
+
+    return jsonify(products)
+
+
 
 
 
