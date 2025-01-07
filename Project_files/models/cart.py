@@ -2,7 +2,7 @@ class Cart:
     def __init__(self):
         self.items = {}
 
-    def add_item(self, product_id, price, quantity):
+    def add_item(self, product_id, price, quantity, product_name):
         product_id = str(product_id)
 
         if product_id in self.items:
@@ -12,7 +12,7 @@ class Cart:
         else:
             self.items[product_id] = {
                 'price_at_time_of_order': price,
-                'quantity': quantity
+                'quantity': quantity,
             }
 
     def remove_item(self, product_id):
@@ -40,7 +40,6 @@ class Cart:
             print("Product not in cart.")
 
     def to_dict(self):
-
         return self.items
 
     @staticmethod
@@ -53,3 +52,4 @@ class Cart:
 
     def __str__(self):
         return str(self.items)
+

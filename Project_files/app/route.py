@@ -1,4 +1,6 @@
 import os
+from itertools import product
+
 from werkzeug.utils import secure_filename
 from flask import render_template, request, jsonify, session, flash, redirect, url_for
 from wtforms.validators import email
@@ -715,9 +717,8 @@ def admin_cart():
     delivery_services = DeliveryService.get_all()
     delivery_services = [delivery_services.to_dict() for delivery_services in delivery_services]
 
-    print(session['cart'])
-
-    return render_template('admin_cart.html', delivery_services=delivery_services, products=session['cart'].items.items())
+    products = Product.products_from_cart(Cart.from_dict(session['cart']))
+    return render_template('admin_cart.html', delivery_services=delivery_services, products=products)
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
@@ -929,6 +930,7 @@ def add_delivery():
 def add_to_cart(product_id:int):
 
     try:
+
         product_id = str(product_id)
         data = request.get_json()
         cart = session.get('cart', {})
@@ -937,7 +939,7 @@ def add_to_cart(product_id:int):
         price = float(data.get('price'))
         quantity = int(data.get('quantity'))
 
-        cart.add_item(product_id=product_id, price=price, quantity=quantity)
+        cart.add_item(product_id=product_id, price=price, quantity=quantity, product_name = name)
         session['cart'] = cart.to_dict()
         print('Added the product successfully')
         print(session['cart'])
