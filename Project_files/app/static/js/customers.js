@@ -377,103 +377,14 @@ function addAddress() {
     }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-
-document.getElementById('add-address-btn').addEventListener('click', function() {
-    // Show the row for adding a new address
-    document.getElementById('new-address-row').style.display = 'table-row';
-
-    // Make sure the "Save" button is visible
-    document.querySelector('#new-address-row .save').style.display = 'inline-block';
-    document.querySelector('#new-address-row .cancel').style.display = 'inline-block';
-});
-
-
-
-// Open Address Modal
-function showAddresses(customerId) {
-  const modal = document.getElementById('address-modal');
-  const addressTableBody = document.getElementById('address-table-body');
-
-  // Clear existing rows
-  addressTableBody.innerHTML = '';
-
-  // Fetch addresses dynamically (assuming a fetchAddresses function is defined)
-  fetchAddresses(customerId).then(addresses => {
-    addresses.forEach(address => {
-      const row = `
-        <tr id="address-row-${address.address_id}">
-          <td>${address.street}</td>
-          <td>${address.city}</td>
-          <td>${address.zip_code}</td>
-          <td>
-            <button class="edit" onclick="enableEditAddress(${address.address_id})">Edit</button>
-            <button class="delete" onclick="deleteAddress(${address.address_id})">Delete</button>
-          </td>
-        </tr>
-      `;
-      addressTableBody.insertAdjacentHTML('beforeend', row);
-    });
-  });
-
-  modal.style.display = 'block';
+    function openAddAddressModal(customerId) {
+    document.getElementById('add-address-modal').style.display = 'block';
+    document.getElementById('customer-id').value = customerId;
 }
 
-// Close Modal
-document.querySelector('.close-btn').addEventListener('click', () => {
-  document.getElementById('address-modal').style.display = 'none';
-});
-
-function cancelNewAddress() {
-    document.getElementById('new-street').value = '';
-    document.getElementById('new-city').value = '';
-    document.getElementById('new-zip').value = '';
-    document.getElementById('new-address-row').style.display = 'none';
-}
-
-function saveNewAddress() {
-    const street = document.getElementById('new-street').value;
-    const city = document.getElementById('new-city').value;
-    const zip = document.getElementById('new-zip').value;
-
-    // Validate inputs
-    if (!street || !city || !zip) {
-        alert('Please fill in all fields.');
-        return;
-    }
-
-    const customerId = document.getElementById('customer-id').value;
-
-    // Send the new address to the backend
-    $.ajax({
-        url: `/add_address/${customerId}`,
-        type: 'POST',
-        data: JSON.stringify({ street, city, zip }),
-        contentType: 'application/json',
-        success: function(response) {
-            if (response.success) {
-                alert('Address added successfully!');
-                // Update the address table with the new row
-                const addressesTable = document.querySelector(`#row-${customerId} .address-subtable tbody`);
-                const newRow = `
-                    <tr id="address-row-${response.address.address_id}">
-                        <td>${response.address.street}</td>
-                        <td>${response.address.city}</td>
-                        <td>${response.address.zip}</td>
-                        <td class="action-buttons">
-                            <button class="edit" onclick="enableEditAddress(${response.address.address_id})">Edit</button>
-                            <button class="delete" onclick="deleteAddress(${response.address.address_id})">Delete</button>
-                        </td>
-                    </tr>`;
-                addressesTable.insertAdjacentHTML('beforeend', newRow);
-                // Hide the input row after saving
-                document.getElementById('new-address-row').style.display = 'none';
-            } else {
-                alert('Error adding address: ' + response.error);
-            }
-        },
-        error: function(xhr) {
-            alert('Error adding address: ' + xhr.responseText);
-        }
-    });
+function closeAddAddressModal() {
+    document.getElementById('add-address-modal').style.display = 'none';
+    document.getElementById('street').value = '';
+    document.getElementById('city').value = '';
+    document.getElementById('zip').value = '';
 }
