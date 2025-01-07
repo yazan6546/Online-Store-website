@@ -60,13 +60,22 @@ class Category:
     @staticmethod
     def get_all():
         conn = get_db_connection()
+
         try:
-            result = conn.execute(q.category.GET_CATEGORY_TABLE).fetchall()
-            categories = [Category(category_id=row['category_id'], category_name=row['category_name'], category_description=row['category_description']) for row in result]
-            return categories
+            category_objects = []
+            categories = conn.execute(q.category.GET_CATEGORY_TABLE).fetchall()
+            categories = [category._mapping for category in categories]
+            conn.commit()
+
+            for category in categories:
+                category_objects.append(Category(
+                    **category
+                ))
+
+            return category_objects
         except Exception as e:
-            print(f"Error in get_all(): {e}")
-            return None
+            print(f"Error: {e}")
+            return 0
         finally:
             conn.close()
 

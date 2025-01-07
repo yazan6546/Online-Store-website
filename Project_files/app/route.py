@@ -676,13 +676,20 @@ def admin_dashboard():
 # Shop for manager Page
 @app.route('/admin_shop')
 def admin_shop():
-    return render_template('admin_shop.html')
+
+    categories = Category.get_all()
+    categories = [category.to_dict() for category in categories]
+
+    return render_template('admin_shop.html', categories=categories)
 
 
 # Cart for manager Page
 @app.route('/admin_cart')
 def admin_cart():
-    return render_template('admin_cart.html')
+
+    delivery_services = DeliveryService.get_all()
+    delivery_services = [delivery_services.to_dict() for delivery_services in delivery_services]
+    return render_template('admin_cart.html', delivery_services=delivery_services)
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
