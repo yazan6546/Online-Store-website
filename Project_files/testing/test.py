@@ -1,4 +1,4 @@
-from models import Product, Manager, ManagerOrder, Category
+from models import Product, Manager, ManagerOrder, Category, Address
 from models.customers import Customer
 import datetime
 
@@ -28,6 +28,7 @@ import datetime
 from models.cart import Cart
 from models.manager_order import ManagerOrder
 
-categories = Category.get_all()
+addresses = Address.get_by_person_id(5)
+addresses = [address.to_dict() for address in addresses]
 
-print(categories)
+print(addresses)

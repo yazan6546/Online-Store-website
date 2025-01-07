@@ -918,7 +918,13 @@ def add_delivery():
         return jsonify(success=False, error=str(e))
 
 
+@app.route('/api/get_addresses/<int:person_id>', methods=['GET'])
+def get_addresses(person_id):
+    addresses = Address.get_by_person_id(person_id)
+    addresses = [address.to_dict() for address in addresses]
 
+
+    return jsonify(addresses)
 
 
 @app.errorhandler(404)
