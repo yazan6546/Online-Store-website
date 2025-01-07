@@ -68,7 +68,7 @@ h1 {
 }
 
 .action-buttons .save {
-  background-color: #FFC436;
+  background-color: #176B87;
 }
 
 .action-buttons .delete {
@@ -78,11 +78,6 @@ h1 {
 .action-buttons button:hover {
   opacity: 0.8;
 }
-
-.action-buttons .cancel {
-  background-color: #A31D1D;
-}
-
 
 /*search and add section*/
 #container_search_add {
@@ -640,5 +635,3 @@ h1 {
       min-height: 80px;
       resize: vertical;
   }
-
-/*********************************************************************************************/
