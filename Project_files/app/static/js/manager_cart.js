@@ -1,21 +1,21 @@
-/////////////////////////////////QUANTITY SELECTION//////////////////////////////////////////
-document.querySelectorAll('.quantity-selector').forEach(selector => {
-  const decreaseBtn = selector.querySelector('.quantity-btn.decrease-qty');
-  const increaseBtn = selector.querySelector('.quantity-btn.increase-qty');
-  const quantityValue = selector.querySelector('.quantity-value');
-
-  decreaseBtn.addEventListener('click', () => {
-    let currentValue = parseInt(quantityValue.textContent);
-    if (currentValue > 1) {
-      quantityValue.textContent = currentValue - 1;
-    }
-  });
-
-  increaseBtn.addEventListener('click', () => {
-    let currentValue = parseInt(quantityValue.textContent);
-    quantityValue.textContent = currentValue + 1;
-  });
-});
+// /////////////////////////////////QUANTITY SELECTION//////////////////////////////////////////
+// document.querySelectorAll('.quantity-selector').forEach(selector => {
+//   const decreaseBtn = selector.querySelector('.quantity-btn.decrease-qty');
+//   const increaseBtn = selector.querySelector('.quantity-btn.increase-qty');
+//   const quantityValue = selector.querySelector('.quantity-value');
+//
+//   decreaseBtn.addEventListener('click', () => {
+//     let currentValue = parseInt(quantityValue.textContent);
+//     if (currentValue > 1) {
+//       quantityValue.textContent = currentValue - 1;
+//     }
+//   });
+//
+//   increaseBtn.addEventListener('click', () => {
+//     let currentValue = parseInt(quantityValue.textContent);
+//     quantityValue.textContent = currentValue + 1;
+//   });
+// });
 
 
 
@@ -86,20 +86,26 @@ function updateCartSummary(amountToSubtract) {
 }
 
 
-
-function updateQuantity(productId, action) {
+function updateQuantityCart(productId, action) {
   const quantityValue = document.querySelector(`.quantity-value[data-id="${productId}"]`);
+  const priceElement = document.querySelector(`.item-price[data-id="${productId}"]`);
   let currentValue = parseInt(quantityValue.textContent);
+  const unitPrice = parseFloat(priceElement.getAttribute('data-unit-price'));
 
   if (action === 'decrease' && currentValue > 1) {
-    quantityValue.textContent = currentValue - 1;
+      console.log("ok")
     currentValue -= 1;
+      updateCartSummaryQuantity("decrement");
   } else if (action === 'increase') {
-    quantityValue.textContent = currentValue + 1;
     currentValue += 1;
+        updateCartSummaryQuantity("increment");
   } else {
     return; // Exit if no valid action
   }
+
+  quantityValue.textContent = currentValue;
+  const newPrice = unitPrice * currentValue;
+  priceElement.textContent = `$${newPrice.toFixed(2)}`;
 
   // Send request to the server with the updated quantity
   fetch(`/api/cart/update_quantity/${productId}`, {
@@ -124,3 +130,34 @@ function updateQuantity(productId, action) {
 }
 
 
+function updateCartSummaryQuantity(option) {
+  const totalElement = document.getElementById('total');
+  const subTotalElement = document.getElementById('sub-total');
+  let total = 0;
+  let subTotal = 0;
+
+  if (option === "increment"){  // Increment the total and sub-total
+      document.querySelectorAll('.item-price').forEach(priceElement => {
+          const price = parseFloat(priceElement.textContent.replace('$', ''));
+          console.log(price)
+          total += price;
+          subTotal += price; // Adjust this if sub-total calculation differs
+      });
+  }
+
+  else if (option === "decrement") { // Decrement the total and sub-total
+        document.querySelectorAll('.item-price').forEach(priceElement => {
+            const price = parseFloat(priceElement.textContent.replace('$', ''));
+            total -= price;
+            subTotal -= price; // Adjust this if sub-total calculation differs
+        });
+    }
+
+  else {
+      console.error('Invalid option:', option);
+      return;
+  }
+
+  totalElement.textContent = `$${total.toFixed(2)}`;
+  subTotalElement.textContent = `$${subTotal.toFixed(2)}`;
+}

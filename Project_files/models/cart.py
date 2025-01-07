@@ -36,7 +36,7 @@ class Cart:
         else:
             return 0
 
-    def update_item_quantity(self, product_id, quantity):
+    def update_quantity(self, product_id, quantity):
 
         if quantity < 1:
             quantity = 1

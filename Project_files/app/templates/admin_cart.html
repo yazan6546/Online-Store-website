@@ -26,14 +26,14 @@ Admin Dashboard
           <div class="cart-item-details">
             <p class="item-title">{{ product.product_name }}</p>
             <div class="quantity-selector">
-              <button class="quantity-btn decrease-qty" onclick="updateQuantity({{ product.id }}, 'decrease')">−</button>
-              <span class="quantity-value">{{ product.stock_quantity }}</span>
-              <button class="quantity-btn increase-qty" onclick="updateQuantity({{ product.id }}, 'increase')">+</button>
+              <button class="quantity-btn decrease-qty" onclick="updateQuantityCart({{ product.product_id }}, 'decrease')">−</button>
+                <span id="quantity-value-{{ product.product_id }}" class="quantity-value" data-id="{{ product.product_id }}">{{ product.stock_quantity }}</span>
+                <button class="quantity-btn increase-qty" onclick="updateQuantityCart({{ product.product_id }}, 'increase')">+</button>
             </div>
           </div>
           <div class="item-actions">
-            <p class="item-price">${{ product.price * product.stock_quantity }}</p>
-            <i class="bi bi-trash remove-icon" onclick="removeProduct({{ product.product_id }})"></i>
+            <p id="item-price-{{ product.product_id }}" class="item-price" data-id="{{ product.product_id }}">${{ product.price * product.stock_quantity }}</p>
+              <i class="bi bi-trash remove-icon" onclick="removeProduct({{ product.product_id }})"></i>
           </div>
         </div>
         {% endfor %}
@@ -58,7 +58,7 @@ Admin Dashboard
         <div class="center-container">
           <select id="delivery-dropdown">
               {% for service in delivery_services %}
-                  <option value="{{ service.id }}">{{ service.delivery_service_name }} ({{ service.phone_number }})</option>
+                  <option value="{{ service.delivery_service_id }}">{{ service.delivery_service_name }} ({{ service.phone_number }})</option>
               {% endfor %}
           </select>
         </div>
