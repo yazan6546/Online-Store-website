@@ -59,46 +59,46 @@ function enableEdit(person_id) {
         document.getElementById('edit-btn-' + person_id).style.display = 'none';
     }
 
-    function saveEdit(person_id) {
-        console.log('Saving edit for manager ID:', person_id);
-        var first_name = $('#first_name-' + person_id + '-input').val();
-        var last_name = $('#last_name-' + person_id + '-input').val();
-        var email = $('#email-' + person_id + '-input').val();
-        var since = $('#since-' + person_id + '-input').val();
-        var role = $('#role-' + person_id + '-input').val();
-        $.ajax({
-            url: '/update_manager/' + person_id,
-            type: 'POST',
-            data: {
-                first_name: first_name,
-                last_name: last_name,
-                email: email,
-                since: since,
-                role: role
-            },
-            success: function(response) {
-                if (response.success) {
-                    $('#first_name-' + person_id + '-text').text(first_name).show();
-                    $('#first_name-' + person_id + '-input').hide();
-                    $('#last_name-' + person_id + '-text').text(last_name).show();
-                    $('#last_name-' + person_id + '-input').hide();
-                    $('#email-' + person_id + '-text').text(email).show();
-                    $('#email-' + person_id + '-input').hide();
-                    $('#since-' + person_id + '-text').text(since).show();
-                    $('#since-' + person_id + '-input').hide();
-                    $('#role-' + person_id + '-text').text(role).show();
-                    $('#role-' + person_id + '-input').hide();
-                    $('#edit-btn-' + person_id).show();
-                    $('#save-btn-' + person_id).hide();
-                } else {
-                    alert('Error updating manager: ' + response.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                alert('Error updating manager: ' + xhr.responseText);
+ function saveEdit(person_id) {
+    console.log('Saving edit for manager ID:', person_id);
+    var first_name = $('#first_name-' + person_id + '-input').val();
+    var last_name = $('#last_name-' + person_id + '-input').val();
+    var email = $('#email-' + person_id + '-input').val();
+    var since = $('#since-' + person_id + '-input').val();
+    var role = $('#role-' + person_id + '-input').val();
+    $.ajax({
+        url: '/update_manager/' + person_id,
+        type: 'POST',
+        data: {
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            since: since,
+            role: role
+        },
+        success: function(response) {
+            if (response.success) {
+                $('#first_name-' + person_id + '-text').text(first_name).show();
+                $('#first_name-' + person_id + '-input').hide();
+                $('#last_name-' + person_id + '-text').text(last_name).show();
+                $('#last_name-' + person_id + '-input').hide();
+                $('#email-' + person_id + '-text').text(email).show();
+                $('#email-' + person_id + '-input').hide();
+                $('#since-' + person_id + '-text').text(since).show();
+                $('#since-' + person_id + '-input').hide();
+                $('#role-' + person_id + '-text').text(role).show();
+                $('#role-' + person_id + '-input').hide();
+                $('#edit-btn-' + person_id).show();
+                $('#save-btn-' + person_id).hide();
+            } else {
+                alert('Error updating manager: ' + response.error);
             }
-        });
-    }
+        },
+        error: function(xhr, status, error) {
+            alert('Error updating manager: ' + xhr.responseText);
+        }
+    });
+}
 
 
     function deleteManager(person_id) {
