@@ -7,8 +7,6 @@ Admin Dashboard
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/manager_cart.css') }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
-
 {% endblock %}
 
 {% block content %}
@@ -20,46 +18,25 @@ Admin Dashboard
     <div class="cart-container">
       <!-- Cart Items -->
       <div class="cart-items">
-        <h3># item(s) in your cart</h3>
+        <h3>{{ products|length }} item(s) in your cart</h3>
 
+        {% for product in products %}
         <div class="cart-item">
-          <img src="#" alt="">
+          <img src="{{ product.photo }}" alt="{{ product.product_name }}">
           <div class="cart-item-details">
-            <p class="item-title">Universal Air Fryer 1500W, Capacity 10 Liter, Black Color.</p>
+            <p class="item-title">{{ product.product_name }}</p>
             <div class="quantity-selector">
-              <button class="quantity-btn decrease-qty">−</button>
-              <span class="quantity-value">1</span>
-              <button class="quantity-btn increase-qty">+</button>
+              <button class="quantity-btn decrease-qty" onclick="updateQuantity({{ product.id }}, 'decrease')">−</button>
+              <span class="quantity-value">{{ product.quantity }}</span>
+              <button class="quantity-btn increase-qty" onclick="updateQuantity({{ product.id }}, 'increase')">+</button>
             </div>
-
           </div>
           <div class="item-actions">
-            <p class="item-price">₪#</p>
-            <i class="bi bi-trash remove-icon"></i>
-
+            <p class="item-price">₪{{ product.price }}</p>
+            <i class="bi bi-trash remove-icon" onclick="removeProduct({{ product.product_id }})"></i>
           </div>
         </div>
-
-
-        <hr />
-
-        <div class="cart-item">
-          <img src="#" alt="">
-          <div class="cart-item-details">
-            <p class="item-title">Universal Air Fryer 1500W, Capacity 10 Liter, Black Color.</p>
-            <div class="quantity-selector">
-              <button class="quantity-btn decrease-qty">−</button>
-              <span class="quantity-value">1</span>
-              <button class="quantity-btn increase-qty">+</button>
-            </div>
-
-          </div>
-          <div class="item-actions">
-            <p class="item-price">₪#</p>
-            <i class="bi bi-trash remove-icon"></i>
-
-          </div>
-        </div>
+        {% endfor %}
 
       </div>
 
@@ -67,16 +44,15 @@ Admin Dashboard
       <div class="order-summary">
         <h3>Checkout Overview</h3>
 
-
         <div class="summary-details">
-          <p><span>Sub-Total:</span> <span>₪#</span></p>
-          <p class="total"><span>Total:</span> <span>₪#</span></p>
+          <p><span>Sub-Total:</span> <span>₪{{ sub_total }}</span></p>
+          <p class="total"><span>Total:</span> <span>₪{{ total }}</span></p>
         </div>
 
         <hr />
 
         <div class="forDelivery">
-           <h3 >Select Delivery Service:</h3>
+           <h3>Select Delivery Service:</h3>
         </div>
 
         <div class="center-container">
@@ -94,5 +70,4 @@ Admin Dashboard
 </div>
 
 <script src="{{ url_for('static', filename='js/manager_cart.js') }}"></script>
-
 {% endblock %}

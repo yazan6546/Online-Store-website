@@ -25,7 +25,11 @@ import datetime
 # print(x)
 
 
-from models.cart import Cart
-from models.manager_order import ManagerOrder
+# from models.cart import Cart
+# from models.manager_order import ManagerOrder
+#
+# managers = ManagerOrder.get_all()
+# x = managers[20]
+# print(x.products)
 
-print(ManagerOrder.get_all()[4].products)
+print(type(1))

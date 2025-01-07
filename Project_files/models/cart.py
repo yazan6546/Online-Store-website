@@ -3,8 +3,12 @@ class Cart:
         self.items = {}
 
     def add_item(self, product_id, price, quantity):
+        product_id = str(product_id)
+
         if product_id in self.items:
+            print('ahahhha')
             self.items[product_id]['quantity'] += quantity
+            self.items[product_id]['price_at_time_of_order'] = price
         else:
             self.items[product_id] = {
                 'price_at_time_of_order': price,
@@ -36,11 +40,14 @@ class Cart:
             print("Product not in cart.")
 
     def to_dict(self):
+
         return self.items
 
     @staticmethod
     def from_dict(dict):
         cart = Cart()
+
+        cart.items = {str(k): v for k, v in dict.items()}
         cart.items = dict
         return cart
 
