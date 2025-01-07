@@ -63,7 +63,7 @@ create table Product(
     brand varchar(30) not null,
     price decimal(10,2) not null,
     photo varchar(100),
-    stock_quantity int not null,
+    stock_quantity int not null check ( stock_quantity >= 0),
     category_id int not null,
     supplier_id int not null,
     foreign key (category_id) references Category(category_id),
@@ -178,10 +178,14 @@ BEGIN
     -- Check if the new order is inserted with the status COMPLETED
     IF NEW.order_status = 'COMPLETED' THEN
         -- Increment stock for each product in the order
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order is marked as COMPLETED';
         UPDATE Product p
         JOIN Manager_Order_Line col ON p.product_id = col.product_id
         SET p.stock_quantity = p.stock_quantity + col.quantity
         WHERE col.order_id = NEW.order_id;
+
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order status is not COMPLETED';
     END IF;
 END $$
 
@@ -197,11 +201,15 @@ FOR EACH ROW
 BEGIN
     -- Check if the order status changed to COMPLETED
     IF NEW.order_status = 'COMPLETED' AND OLD.order_status != 'COMPLETED' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order is marked as COMPLETED';
         -- Increment stock for each product in the order
         UPDATE Product p
         JOIN Manager_Order_Line col ON p.product_id = col.product_id
-        SET p.stock_quantity = p.stock_quantity - col.quantity
+        SET p.stock_quantity = p.stock_quantity + col.quantity
         WHERE col.order_id = NEW.order_id;
+
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order status is not COMPLETED';
     END IF;
 END $$
 
@@ -245,8 +253,8 @@ DELIMITER ;
    DELIMITER ;
 
 
-# delete from Manager_Order_Line;
-# delete from Manager_Order;
+delete from Manager_Order_Line;
+delete from Manager_Order;
 
 # SELECT
 #     c.person_id AS person_id,
@@ -259,3 +267,9 @@ DELIMITER ;
 # JOIN Person p
 # ON c.person_id = p.person_id
 # WHERE p.email = :email;
+
+
+UPDATE Product p
+JOIN Manager_Order_Line col ON p.product_id = col.product_id
+SET p.stock_quantity = p.stock_quantity + col.quantity
+WHERE col.order_id = 351;

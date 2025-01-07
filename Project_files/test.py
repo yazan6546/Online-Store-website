@@ -35,7 +35,12 @@ cart.add_item(3, 4, 200)
 cart.add_item(4, 5, 100)
 
 
-order = ManagerOrder(1, 'COMPLETED', datetime.datetime.now(), 1)
+order = ManagerOrder(1, 'PLACED', datetime.datetime.now(), 1)
 order.products = cart.items
 
 order.insert()
+
+# order = ManagerOrder.get(1)
+
+order.order_status = 'COMPLETED'
+order.update_order()

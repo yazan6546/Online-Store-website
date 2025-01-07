@@ -29,6 +29,7 @@ UPDATE_MANAGER_ORDER_TABLE = text("""
                             WHERE order_id = :order_id;
                             """)
 
+
 CREATE_MANAGER_ORDER_TABLE = text("""
                             CREATE TABLE IF NOT EXISTS Manager_Order(
                             order_id int NOT NULL,

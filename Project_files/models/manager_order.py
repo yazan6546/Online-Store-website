@@ -177,3 +177,36 @@ class ManagerOrder(Order):
             raise
         finally:
             conn.close()
+
+    @staticmethod
+    def get_by_id(order_id):
+        conn = get_db_connection()
+        try:
+            order_details_result = conn.execute(q.manager_order.SELECT_MANAGER_ORDER_BY_ID, {"id": order_id}).fetchall()
+            order_details = [order._mapping for order in order_details_result]
+
+            orders = []
+            for order in order_details:
+                order_obj = ManagerOrder(
+                    person_id=order["person_id"],
+                    delivery_date=order["delivery_date"],
+                    order_status=order["order_status"],
+                    order_date=order["order_date"],
+                    order_id=order["order_id"]
+                )
+
+                order_obj.products = {
+                    order["product_id"]: {
+                        "price_at_time_of_order": order["price_at_time_of_order"],
+                        "quantity": order["quantity"]
+                    }
+                }
+                orders.append(order_obj)
+
+            return orders
+
+        except Exception as e:
+            print(f"Error in get_by_id(): {e}")
+            return None
+        finally:
+            conn.close()
