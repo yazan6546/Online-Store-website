@@ -17,12 +17,12 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <!-- Lower Section -->
             <div class="product-info-section">
-              <h5>${product.product_name}</h5>
+              <h5>${product.product_name} offer high-fidelity audio, 20-hour battery life, USB-C charging, in fresh green color.</h5>
               <p class="price">$${product.price}</p>
             </div>
           </div>
           <!-- Modal for ${product.product_id} -->
-          <div id="modal-${product.product_id}" class="modal">
+          <div id="modal-${product.product_id}" class="modal" style="display: none;">
             <div class="modal-content">
               <span class="close-btn" data-id="${product.product_id}">&times;</span>
               <h2>Product Details</h2>
@@ -51,9 +51,13 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         `;
         productContainer.insertAdjacentHTML("beforeend", productCard);
+
+        // Explicitly hide the modal after it's added to the DOM
+        const modal = document.getElementById(`modal-${product.product_id}`);
+        modal.style.display = "none";
       });
 
-      // Add event listeners for modals and quantity buttons
+      // Add event listeners for modals and quantity buttons after products are added to the DOM
       addEventListeners();
     })
     .catch(error => console.error('Error fetching products:', error));
