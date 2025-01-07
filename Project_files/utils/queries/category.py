@@ -23,7 +23,7 @@ GET_CATEGORY_NAME = text("""
     WHERE category_id = :category_id;
 """)
 
-GET_CAteGory_NAMES = text("""
+GET_CATEGORY_NAMES = text("""
     SELECT category_name FROM Category;
 """)
 

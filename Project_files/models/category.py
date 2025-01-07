@@ -57,18 +57,29 @@ class Category:
         finally:
             conn.close()
 
-    @staticmethod
-    def get_all():
+    @classmethod
+    def get_all(cls):
         conn = get_db_connection()
         try:
+            categories_objects = []
             result = conn.execute(q.category.GET_CATEGORY_TABLE).fetchall()
-            categories = [Category(category_id=row['category_id'], category_name=row['category_name'], category_description=row['category_description']) for row in result]
-            return categories
+            if not result:  # Check if the query result is empty
+                print("Getting categories failed")
+                return []
+            categories = [row._mapping for row in result]
+
+            for cat in categories:
+                category_object = cls(**cat)  # Initialize the class with the supplier data
+                categories_objects.append(category_object)
+
+            return categories_objects
+
         except Exception as e:
             print(f"Error in get_all(): {e}")
-            return None
+            return []
         finally:
             conn.close()
+
 
     @staticmethod
     def get_by_id(category_id):
@@ -99,7 +110,7 @@ class Category:
     def get_names(cls):
         conn = get_db_connection()
         try:
-            result = conn.execute(q.category.GET_CAteGory_NAMES).fetchall()
+            result = conn.execute(q.category.GET_CATEGORY_NAMES).fetchall()
             return [row[0] for row in result]
         except Exception as e:
             print(f"Error in get_names(): {e}")
