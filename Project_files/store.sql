@@ -251,8 +251,6 @@ DELIMITER ;
    DELIMITER ;
 
 
-delete from Manager_Order_Line;
-delete from Manager_Order;
 
 # SELECT
 #     c.person_id AS person_id,
