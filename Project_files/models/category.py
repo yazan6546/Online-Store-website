@@ -57,8 +57,8 @@ class Category:
         finally:
             conn.close()
 
-    @staticmethod
-    def get_all():
+    @classmethod
+    def get_all(cls):
         conn = get_db_connection()
 
         try:
@@ -76,8 +76,10 @@ class Category:
         except Exception as e:
             print(f"Error: {e}")
             return 0
+
         finally:
             conn.close()
+
 
     @staticmethod
     def get_by_id(category_id):
@@ -108,7 +110,7 @@ class Category:
     def get_names(cls):
         conn = get_db_connection()
         try:
-            result = conn.execute(q.category.GET_CAteGory_NAMES).fetchall()
+            result = conn.execute(q.category.GET_CATEGORY_NAMES).fetchall()
             return [row[0] for row in result]
         except Exception as e:
             print(f"Error in get_names(): {e}")

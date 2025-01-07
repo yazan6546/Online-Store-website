@@ -68,7 +68,7 @@ function enableEditProduct(product_id) {
     // Hide the 3-dots dropdown
     document.getElementById(`three-dots-${product_id}`).style.display = 'none';
     // Show the Save button
-    document.getElementById(`save-btn-${product_id}`).style.display = 'inline';
+    document.getElementById(`save-btn-${product_id}`).style.display = 'inline-block';
 
     // Name
     document.getElementById(`name-${product_id}-text`).style.display = 'none';
@@ -76,11 +76,11 @@ function enableEditProduct(product_id) {
 
     // Category
     document.getElementById(`category-${product_id}-text`).style.display = 'none';
-    document.getElementById(`category-${product_id}-input`).style.display = 'inline';
+    document.getElementById(`category-${product_id}-input`).style.display = 'inline-block';
 
     // Supplier
     document.getElementById(`supplier-${product_id}-text`).style.display = 'none';
-    document.getElementById(`supplier-${product_id}-input`).style.display = 'inline';
+    document.getElementById(`supplier-${product_id}-input`).style.display = 'inline-block';
 
     // Brand
     document.getElementById(`brand-${product_id}-text`).style.display = 'none';
@@ -244,55 +244,15 @@ function searchProducts() {
                 var tableBody = $('#table tbody'); // Use jQuery to select the table body
                 tableBody.empty(); // Clear the current table rows
 
+                console.log(response.suppliers);
+                console.log(response.categories);
+
                 // Iterate over the response products and append each as a new row
                 response.products.forEach(function(product) {
-                    var row = `
-                        <tr id="row-${product.product_id}">
-                            <td>${product.product_id}</td>
-                            <td>
-                                <div class="product-name-photo">
-                                    <img src="${product.photo}" alt="Product Image">
-                                    <div class="product-name">
-                                        <span id="name-${product.product_id}-text">${product.product_name}</span>
-                                        <input type="text" id="name-${product.product_id}-input" value="${product.product_name}" style="display:none; width: 100px;">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <span id="category-${product.product_id}-text">${product.category_id}</span>
-                                <input type="number" id="category-${product.product_id}-input" value="${product.category_id}" style="display:none; width: 100px;">
-                            </td>
-                            <td>
-                                <span id="supplier-${product.product_id}-text">${product.supplier_id}</span>
-                                <input type="number" id="supplier-${product.product_id}-input" value="${product.supplier_id}" style="display:none; width: 100px;">
-                            </td>
-                            <td>
-                                <span id="brand-${product.product_id}-text">${product.brand}</span>
-                                <input type="text" id="brand-${product.product_id}-input" value="${product.brand}" style="display:none; width: 100px;">
-                            </td>
-                            <td>
-                                <span id="price-${product.product_id}-text">${product.price}</span>
-                                <input type="number" step="0.01" id="price-${product.product_id}-input" value="${product.price}" style="display:none; width: 100px;">
-                            </td>
-                            <td>
-                                <span id="stock-${product.product_id}-text">${product.stock_quantity}</span>
-                                <input type="number" id="stock-${product.product_id}-input" value="${product.stock_quantity}" style="display:none; width: 100px;">
-                            </td>
-                            <td>
-                                <div>
-                                    <span id="description-${product.product_id}-text">${product.product_description}</span>
-                                    <span class="pencil-icon" id="desc-edit-icon-${product.product_id}" onclick="enableDescriptionEdit(${product.product_id})">✏️</span>
-                                </div>
-                                <div class="description-edit-container" id="description-edit-container-${product.product_id}" style="display:none; margin-top: 8px;">
-                                    <textarea id="description-${product.product_id}-input" placeholder="Write your new description here..."></textarea>
-                                </div>
-                            </td>
-                            <td class="action-buttons">
-                                <button id="edit-btn-${product.product_id}" class="edit" onclick="enableEditProduct(${product.product_id})">Edit</button>
-                                <button id="save-btn-${product.product_id}" class="save" style="display:none;" onclick="saveEditProduct(${product.product_id})">Save</button>
-                                <button class="delete" onclick="deleteProduct(${product.product_id})">Delete</button>
-                            </td>
-                        </tr>`;
+                    console.log(product);
+                    console.log(response.suppliers);
+                    console.log(response.categories);
+                    var row = generateRow(product, response.categories, response.suppliers);
                     tableBody.append(row); // Append the new row to the table body
                 });
             } else {
@@ -304,8 +264,6 @@ function searchProducts() {
         }
     });
 }
-
-
 
 
 // ------------------- ADD PRODUCT ------------------- //
@@ -362,63 +320,151 @@ function addProduct() {
 let currentPage = 1;
 const limit = 10; // rows per page
 
+function generateRow(product, categories, suppliers) {
+    console.log(product);
+    console.log(categories);
+    console.log(suppliers);
+    return `
+        <tr id="row-${product.product_id}">
+        <!-- Product ID -->
+        <td>${product.product_id}</td>
+        
+        <!-- Name + Photo in same cell -->
+        <td>
+            <div class="product-name-photo">
+                <img src="${product.photo}" alt="Product Image">
+                <div class="product-name">
+                    <span id="name-${product.product_id}-text">${product.product_name}</span>
+                    <input type="text" id="name-${product.product_id}-input"
+                           value="${product.product_name}" style="display:none; width: 100px;">
+                </div>
+            </div>
+        </td>
+
+       <!-- Category ID -->
+      <td>
+        <!-- Non-edit mode text -->
+        <span id="category-${product['product_id']}-text">
+          ${product['category_id']}
+        </span>
+
+        <!-- Dropdown for edit mode -->
+        <select
+          id="category-${product['product_id']}-input"
+          style="display: none; width: 150px;"
+        >
+          ${categories.map(cat => `
+            <option
+              value="${cat['category_id']}"
+              ${cat['category_name'] === product['category_id'] ? 'selected' : ''}
+            >
+              ${cat['category_name']}
+            </option>
+          `).join('')}
+        </select>
+      </td>
+
+      <!-- Supplier ID -->
+      <td>
+        <!-- Non-edit mode text -->
+        <span id="supplier-${product['product_id']}-text">
+          ${product.supplier_id}
+        </span>
+
+        <!-- Dropdown for edit mode -->
+        <select
+          id="supplier-${product['product_id']}-input"
+          style="display: none; width: 150px;"
+        >
+          ${suppliers.map(sup => `
+            <option
+              value="${sup['supplier_id']}"
+              ${sup['name'] === product['supplier_id'] ? 'selected' : ''}
+            >
+              ${sup['name']}
+            </option>
+          `).join('')}
+        </select>
+      </td>
+        
+        <!-- Brand -->
+        <td>
+            <span id="brand-${product.product_id}-text">${product.brand}</span>
+            <input type="text" id="brand-${product.product_id}-input" value="${product.brand}"
+                   style="display:none; width: 100px;">
+        </td>
+
+        <!-- Price -->
+        <td>
+            <span id="price-${product.product_id}-text">${product.price}</span>
+            <input type="number" step="0.01" id="price-${product.product_id}-input"
+                   value="${product.price}" style="display:none; width: 100px;">
+        </td>
+
+        <!-- Stock -->
+        <td>
+            <span id="stock-${product.product_id}-text">${product.stock_quantity}</span>
+            <input type="number" id="stock-${product.product_id}-input"
+                   value="${product.stock_quantity}" style="display:none; width: 100px;">
+        </td>
+
+        <!-- Description with pencil icon to trigger edit -->
+        <td>
+            <div>
+                <span id="description-${product.product_id}-text"> ${product.product_description}</span>
+                <span class="pencil-icon"
+                      id="desc-edit-icon-${product.product_id}"
+                      onclick="enableDescriptionEdit(${product.product_id})">✏️  </span>
+            </div>
+
+            <!-- Hidden textarea for editing the description -->
+            <div class="description-edit-container" id="description-edit-container-${product.product_id}"
+                 style="display:none; margin-top: 8px;">
+            <textarea>id="description-${product.product_id}-input"
+                    placeholder="Write your new description here...">
+            </textarea>
+            </div>
+        </td>
+
+        <!-- Actions: 3 vertical dots dropdown + Save button -->
+        <td class="action-buttons">
+            <!-- Three-dots dropdown -->
+            <div class="dropdown" id="three-dots-${product.product_id}">
+                <!-- Replace "..." with the vertical ellipsis character -->
+                <button class="three-dots-btn" onclick="toggleDropdown(${product.product_id})">
+                    ⋮
+                </button>
+                <div class="dropdown-content">
+                    <a onclick="enableEditProduct(${product.product_id})">Edit</a>
+                    <a onclick="deleteProduct(${product.product_id})">Make Unavailable</a>
+                </div>
+            </div>
+        
+            <!-- Save button (hidden by default) -->
+            <button id="save-btn-${product.product_id}"
+                    class="save"
+                    style="display: none;"
+                    onclick="saveEditProduct(${product.product_id})">
+                Save
+            </button>
+        </td>
+    </tr>`;
+}
+
+
 async function fetchProducts(page = 1) {
     try {
         const response = await fetch(`/get_products?page=${page}&limit=${limit}`);
         const data = await response.json();
+        // console.log(data.categories);
+        // console.log(data.suppliers);
 
         if (data.success) {
             const tableBody = document.querySelector('#table tbody');
             tableBody.innerHTML = '';
 
             data.products.forEach(product => {
-                const rowHTML = `
-                        <tr id="row-${product.product_id}">
-                            <td>${product.product_id}</td>
-                            <td>
-                                <div class="product-name-photo">
-                                    <img src="${product.photo}" alt="Product Image">
-                                    <div class="product-name">
-                                        <span id="name-${product.product_id}-text">${product.product_name}</span>
-                                        <input type="text" id="name-${product.product_id}-input" value="${product.product_name}" style="display:none; width: 100px;">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <span id="category-${product.product_id}-text">${product.category_id}</span>
-                                <input type="number" id="category-${product.product_id}-input" value="${product.category_id}" style="display:none; width: 100px;">
-                            </td>
-                            <td>
-                                <span id="supplier-${product.product_id}-text">${product.supplier_id}</span>
-                                <input type="number" id="supplier-${product.product_id}-input" value="${product.supplier_id}" style="display:none; width: 100px;">
-                            </td>
-                            <td>
-                                <span id="brand-${product.product_id}-text">${product.brand}</span>
-                                <input type="text" id="brand-${product.product_id}-input" value="${product.brand}" style="display:none; width: 100px;">
-                            </td>
-                            <td>
-                                <span id="price-${product.product_id}-text">${product.price}</span>
-                                <input type="number" step="0.01" id="price-${product.product_id}-input" value="${product.price}" style="display:none; width: 100px;">
-                            </td>
-                            <td>
-                                <span id="stock-${product.product_id}-text">${product.stock_quantity}</span>
-                                <input type="number" id="stock-${product.product_id}-input" value="${product.stock_quantity}" style="display:none; width: 100px;">
-                            </td>
-                            <td>
-                                <div>
-                                    <span id="description-${product.product_id}-text">${product.product_description}</span>
-                                    <span class="pencil-icon" id="desc-edit-icon-${product.product_id}" onclick="enableDescriptionEdit(${product.product_id})">✏️</span>
-                                </div>
-                                <div class="description-edit-container" id="description-edit-container-${product.product_id}" style="display:none; margin-top: 8px;">
-                                    <textarea id="description-${product.product_id}-input" placeholder="Write your new description here..."></textarea>
-                                </div>
-                            </td>
-                            <td class="action-buttons">
-                                <button id="edit-btn-${product.product_id}" class="edit" onclick="enableEditProduct(${product.product_id})">Edit</button>
-                                <button id="save-btn-${product.product_id}" class="save" style="display:none;" onclick="saveEditProduct(${product.product_id})">Save</button>
-                                <button class="delete" onclick="deleteProduct(${product.product_id})">Delete</button>
-                            </td>
-                        </tr>`;
+                const rowHTML = generateRow(product, data.categories, data.suppliers);
                 tableBody.insertAdjacentHTML('beforeend', rowHTML);
             });
 

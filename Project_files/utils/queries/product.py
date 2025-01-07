@@ -40,7 +40,8 @@ UPDATE_PRODUCTS_TABLE = text("""
 
 
 DELETE_FROM_PRODUCTS = text("""
-                                DELETE FROM Product 
+                                UPDATE Product 
+                                SET stock_quantity = 0 
                                 WHERE product_id = :product_id;
                             """)
 
