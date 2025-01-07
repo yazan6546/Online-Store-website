@@ -413,8 +413,11 @@ def admin_dashboard_products():
 
     products = Product.get_all()
     products = [product.to_print() for product in products]
-
-    return render_template('products.html', products=products)  # Replace with render_template if applicable
+    suppliers = Supplier.get_names()
+    categories = Category.get_names()
+    # for cat in categories:
+    #     print(cat['category_name'])
+    return render_template('products.html', products=products,suppliers=suppliers,categories=categories)  # Replace with render_template if applicable
 
 
 @app.route('/add_product')
@@ -542,9 +545,10 @@ def search_product():
                or query in product['category_id']
                or query in product['supplier_id']
         ]
+        suppliers = Supplier.get_names()
+        categories = Category.get_names()
 
-
-        return jsonify(success=True, products=filtered_products)
+        return jsonify(success=True, products=filtered_products, suppliers=suppliers, categories=categories)
     except Exception as e:
         print("loooser")
         print(e)
@@ -561,6 +565,11 @@ def get_products():
 
         # Fetch all products
         products = Product.get_all()
+        suppliers = Supplier.get_names()
+        categories = Category.get_names()
+
+        # for cat in categories:
+        #     print(cat['category_name'])
 
         # Slice the products list based on the page and limit
         paginated_products = products[offset:offset + limit]
@@ -572,6 +581,8 @@ def get_products():
         return jsonify(
             success=True,
             products=products_dicts,
+            suppliers=suppliers,
+            categories=categories,
             total_count=total_products,
             page=page,
             limit=limit

@@ -60,16 +60,48 @@
 
                 <!-- Category ID -->
                 <td>
-                    <span id="category-{{ product.product_id }}-text">{{ product.category_id }}</span>
-                    <input type="number" id="category-{{ product.product_id }}-input"
-                           value="{{ product.category_id }}" style="display:none; width: 100px;">
+                  <!-- Display text for non-edit mode -->
+                  <span id="category-{{ product.product_id }}-text">
+                    {{ product.category_id }}
+                  </span>
+
+                  <!-- Dropdown for edit mode -->
+                  <select
+                      id="category-{{ product.product_id }}-input"
+                      style="display: none; width: 150px;"
+                  >
+                    {% for cat in categories %}
+                      <option
+                        value="{{ cat.category_id }}"
+                        {% if cat.category_id == product.category_id %}selected{% endif %}
+                      >
+                          {{ cat.category_name }}
+                      </option>
+                    {% endfor %}
+                  </select>
                 </td>
 
                 <!-- Supplier ID -->
                 <td>
-                    <span id="supplier-{{ product.product_id }}-text">{{ product.supplier_id }}</span>
-                    <input type="number" id="supplier-{{ product.product_id }}-input"
-                           value="{{ product.supplier_id }}" style="display:none; width: 100px;">
+                  <!-- Display text for non-edit mode -->
+                  <span id="supplier-{{ product.product_id }}-text">
+                    {{ product.supplier_id }}
+                  </span>
+
+                  <!-- Dropdown for edit mode -->
+                  <select
+                      id="supplier-{{ product.product_id }}-input"
+                      style="display: none; width: 150px;"
+                  >
+                    {% for sup in suppliers %}
+                      <option
+                        value="{{ sup.supplier_id }}"
+                        {% if sup.supplier_id == product.supplier_id %}selected{% endif %}
+                      >
+                        {{sup.name}}
+                      </option>
+                    {% endfor %}
+                  </select>
                 </td>
 
                 <!-- Brand -->

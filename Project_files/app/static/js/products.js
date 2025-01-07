@@ -68,7 +68,7 @@ function enableEditProduct(product_id) {
     // Hide the 3-dots dropdown
     document.getElementById(`three-dots-${product_id}`).style.display = 'none';
     // Show the Save button
-    document.getElementById(`save-btn-${product_id}`).style.display = 'inline';
+    document.getElementById(`save-btn-${product_id}`).style.display = 'inline-block';
 
     // Name
     document.getElementById(`name-${product_id}-text`).style.display = 'none';
@@ -76,11 +76,11 @@ function enableEditProduct(product_id) {
 
     // Category
     document.getElementById(`category-${product_id}-text`).style.display = 'none';
-    document.getElementById(`category-${product_id}-input`).style.display = 'inline';
+    document.getElementById(`category-${product_id}-input`).style.display = 'inline-block';
 
     // Supplier
     document.getElementById(`supplier-${product_id}-text`).style.display = 'none';
-    document.getElementById(`supplier-${product_id}-input`).style.display = 'inline';
+    document.getElementById(`supplier-${product_id}-input`).style.display = 'inline-block';
 
     // Brand
     document.getElementById(`brand-${product_id}-text`).style.display = 'none';
@@ -244,6 +244,8 @@ function searchProducts() {
                 var tableBody = $('#table tbody'); // Use jQuery to select the table body
                 tableBody.empty(); // Clear the current table rows
 
+
+
                 // Iterate over the response products and append each as a new row
                 response.products.forEach(function(product) {
                     var row = `
@@ -264,18 +266,50 @@ function searchProducts() {
                         </td>
         
                         <!-- Category ID -->
-                        <td>
-                            <span id="category-${ product.product_id }-text">${ product.category_id }</span>
-                            <input type="number" id="category-${ product.product_id }-input"
-                                   value="${ product.category_id }" style="display:none; width: 100px;">
-                        </td>
-        
-                        <!-- Supplier ID -->
-                        <td>
-                            <span id="supplier-${ product.product_id }-text">${ product.supplier_id }</span>
-                            <input type="number" id="supplier-${ product.product_id }-input"
-                                   value="${ product.supplier_id }" style="display:none; width: 100px;">
-                        </td>
+                      <td>
+                        <!-- Non-edit mode text -->
+                        <span id="category-${product.product_id}-text">
+                          ${product.category_id}
+                        </span>
+                
+                        <!-- Dropdown for edit mode -->
+                        <select
+                          id="category-${product.product_id}-input"
+                          style="display: none; width: 150px;"
+                        >
+                          ${response.categories.map(cat => `
+                            <option
+                              value="${cat.category_id}"
+                              ${cat.category_id === product.category_id ? 'selected' : ''}
+                            >
+                              ${cat.category_name}
+                            </option>
+                          `).join('')}
+                        </select>
+                      </td>
+                
+                      <!-- Supplier ID -->
+                      <td>
+                        <!-- Non-edit mode text -->
+                        <span id="supplier-${product.product_id}-text">
+                          ${product.supplier_id}
+                        </span>
+                
+                        <!-- Dropdown for edit mode -->
+                        <select
+                          id="supplier-${product.product_id}-input"
+                          style="display: none; width: 150px;"
+                        >
+                          ${response.suppliers.map(sup => `
+                            <option
+                              value="${sup.supplier_id}"
+                              ${sup.supplier_id === product.supplier_id ? 'selected' : ''}
+                            >
+                              ${sup.supplier_name}
+                            </option>
+                          `).join('')}
+                        </select>
+                      </td>
         
                         <!-- Brand -->
                         <td>
@@ -410,6 +444,8 @@ async function fetchProducts(page = 1) {
     try {
         const response = await fetch(`/get_products?page=${page}&limit=${limit}`);
         const data = await response.json();
+        // console.log(data.categories);
+        // console.log(data.suppliers);
 
         if (data.success) {
             const tableBody = document.querySelector('#table tbody');
@@ -433,20 +469,52 @@ async function fetchProducts(page = 1) {
                             </div>
                         </td>
         
-                        <!-- Category ID -->
-                        <td>
-                            <span id="category-${ product.product_id }-text">${ product.category_id }</span>
-                            <input type="number" id="category-${ product.product_id }-input"
-                                   value="${ product.category_id }" style="display:none; width: 100px;">
-                        </td>
-        
-                        <!-- Supplier ID -->
-                        <td>
-                            <span id="supplier-${ product.product_id }-text">${ product.supplier_id }</span>
-                            <input type="number" id="supplier-${ product.product_id }-input"
-                                   value="${ product.supplier_id }" style="display:none; width: 100px;">
-                        </td>
-        
+                       <!-- Category ID -->
+                      <td>
+                        <!-- Non-edit mode text -->
+                        <span id="category-${product.product_id}-text">
+                          ${product.category_id}
+                        </span>
+                
+                        <!-- Dropdown for edit mode -->
+                        <select
+                          id="category-${product.product_id}-input"
+                          style="display: none; width: 150px;"
+                        >
+                          ${data.categories.map(cat => `
+                            <option
+                              value="${cat['category_id']}"
+                              ${cat.category_id === product.category_id ? 'selected' : ''}
+                            >
+                              ${cat['category_name']}
+                            </option>
+                          `).join('')}
+                        </select>
+                      </td>
+                
+                      <!-- Supplier ID -->
+                      <td>
+                        <!-- Non-edit mode text -->
+                        <span id="supplier-${product.product_id}-text">
+                          ${product.supplier_id}
+                        </span>
+                
+                        <!-- Dropdown for edit mode -->
+                        <select
+                          id="supplier-${product.product_id}-input"
+                          style="display: none; width: 150px;"
+                        >
+                          ${data.suppliers.map(sup => `
+                            <option
+                              value="${sup['supplier_id']}"
+                              ${sup.supplier_id === product.supplier_id ? 'selected' : ''}
+                            >
+                              ${sup['supplier_name']}
+                            </option>
+                          `).join('')}
+                        </select>
+                      </td>
+                        
                         <!-- Brand -->
                         <td>
                             <span id="brand-${ product.product_id }-text">${ product.brand }</span>
