@@ -33,9 +33,10 @@ const addressModal = document.getElementById('address-modal');
 const closeModalBtn = addressModal.querySelector('.close-btn');
 
 // Function to show addresses in the modal
-function showAddresses(personId) {
+async function showAddresses(personId) {
     // Fetch addresses dynamically (you can replace this with an AJAX call if needed)
-    const customerAddresses = mockGetAddresses(personId); // Replace with backend call
+    const customerAddresses = await mockGetAddresses(personId); // Replace with backend call
+    console.log(customerAddresses)
 
     const addressTableBody = document.getElementById('address-table-body');
     addressTableBody.innerHTML = ''; // Clear existing rows
