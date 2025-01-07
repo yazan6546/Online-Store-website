@@ -142,7 +142,7 @@ BEGIN
         -- Increment stock for each product in the order
         UPDATE Product p
         JOIN Customer_Order_Line col ON p.product_id = col.product_id
-        SET p.stock_quantity = p.stock_quantity + col.quantity
+        SET p.stock_quantity = p.stock_quantity - col.quantity
         WHERE col.order_id = NEW.order_id;
     END IF;
 END $$
@@ -160,6 +160,26 @@ BEGIN
         -- Increment stock for each product in the order
         UPDATE Product p
         JOIN Customer_Order_Line col ON p.product_id = col.product_id
+        SET p.stock_quantity = p.stock_quantity - col.quantity
+        WHERE col.order_id = NEW.order_id;
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_order_manager_completed_insert
+AFTER INSERT ON Manager_Order
+FOR EACH ROW
+BEGIN
+    -- Check if the new order is inserted with the status COMPLETED
+    IF NEW.order_status = 'COMPLETED' THEN
+        -- Increment stock for each product in the order
+        UPDATE Product p
+        JOIN Manager_Order_Line col ON p.product_id = col.product_id
         SET p.stock_quantity = p.stock_quantity + col.quantity
         WHERE col.order_id = NEW.order_id;
     END IF;
@@ -167,6 +187,25 @@ END $$
 
 DELIMITER ;
 
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_order_manager_completed
+AFTER UPDATE ON Manager_Order
+FOR EACH ROW
+BEGIN
+    -- Check if the order status changed to COMPLETED
+    IF NEW.order_status = 'COMPLETED' AND OLD.order_status != 'COMPLETED' THEN
+        -- Increment stock for each product in the order
+        UPDATE Product p
+        JOIN Manager_Order_Line col ON p.product_id = col.product_id
+        SET p.stock_quantity = p.stock_quantity - col.quantity
+        WHERE col.order_id = NEW.order_id;
+    END IF;
+END $$
+
+DELIMITER ;
 
 
 
@@ -206,7 +245,8 @@ DELIMITER ;
    DELIMITER ;
 
 
-
+# delete from Manager_Order_Line;
+# delete from Manager_Order;
 
 # SELECT
 #     c.person_id AS person_id,

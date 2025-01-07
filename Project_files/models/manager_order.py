@@ -15,8 +15,10 @@ class ManagerOrder(Order):
         if self.insert_order(conn=conn) and self.insert_order_lines(conn=conn):
 
             conn.commit()
+            conn.close()
             return 1
         else:
+            conn.close()
             print("Error in insert()")
             return 0
 
@@ -30,6 +32,7 @@ class ManagerOrder(Order):
 
             if commit:
                 conn.commit()
+
             self.order_id = result.lastrowid
             return 1
 
@@ -38,7 +41,8 @@ class ManagerOrder(Order):
             conn.rollback()
             return 0
         finally:
-            conn.close()
+            if commit:
+                conn.close()
 
     def insert_order_lines(self, commit=False, conn=None):
         """
@@ -69,7 +73,8 @@ class ManagerOrder(Order):
             conn.rollback()
             return 0
         finally:
-            conn.close()
+            if commit:
+                conn.close()
 
     def update_order(self):
         conn = get_db_connection()
