@@ -148,12 +148,12 @@
                             <!-- Three-dots dropdown -->
                             <div class="dropdown" id="three-dots-${ product.product_id }">
                                 <!-- Replace "..." with the vertical ellipsis character -->
-                                <button class="three-dots-btn" onclick="toggleDropdown(${ product.product_id })">
+                                <button class="three-dots-btn" onclick="toggleDropdown(${{ product.product_id }})">
                                     ⋮
                                 </button>
                                 <div class="dropdown-content">
-                                    <a onclick="enableEditProduct(${ product.product_id })">Edit</a>
-                                    <a onclick="deleteProduct(${ product.product_id })">Make Unavailable</a>
+                                    <a onclick="enableEditProduct(${{ product.product_id }})">Edit</a>
+                                    <a onclick="deleteProduct(${{ product.product_id }})">Make Unavailable</a>
                                 </div>
                             </div>
 
@@ -161,7 +161,7 @@
                             <button id="save-btn-${ product.product_id }"
                                     class="save"
                                     style="display: none;"
-                                    onclick="saveEditProduct(${ product.product_id })">
+                                    onclick="saveEditProduct(${{ product.product_id }})">
                                 Save
                             </button>
                         </td>

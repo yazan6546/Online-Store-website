@@ -6,7 +6,8 @@ from wtforms.validators import email
 from app import app
 from app.forms import *
 import app.auth as auth
-from models import DeliveryService
+from models.delivery_service import DeliveryService
+from models.cart import Cart
 from models.addresses import Address
 from models.customers import Customer
 from models.manager import Manager
@@ -701,7 +702,10 @@ def admin_shop():
     categories = Category.get_all()
     categories = [category.to_dict() for category in categories]
 
-    return render_template('admin_shop.html', categories=categories)
+    products = Product.get_all()
+    products = [product.to_dict() for product in products]
+
+    return render_template('admin_shop.html', categories=categories, products=products)
 
 
 # Cart for manager Page
@@ -916,6 +920,26 @@ def add_delivery():
         return jsonify(success=True, delivery_service=new_delivery.to_dict())
     except Exception as e:
         return jsonify(success=False, error=str(e))
+
+
+@app.route('/api/cart/add/<int:product_id>', methods=['POST'])
+def add_to_cart(product_id):
+
+    try:
+
+        data = request.get_json()
+        cart = session.get('cart', {})
+        cart = Cart.from_dict(cart)
+        price = data.get('price')
+        quantity = data.get('quantity')
+
+        cart.add_item(product_id=product_id, price=price, quantity=quantity)
+        print('Added the product successfully')
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
 
 
 

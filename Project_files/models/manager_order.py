@@ -2,6 +2,7 @@ from __future__ import annotations  # Enables modern type hinting for forward re
 
 from datetime import datetime
 
+from models import Manager
 from models.order import Order
 import utils.queries as q
 from utils.db_utils import get_db_connection
@@ -92,7 +93,7 @@ class ManagerOrder(Order):
     def update_order(self):
         conn = get_db_connection()
         try:
-            conn.execute(q.manager_order.UPDATE_MANAGER_ORDER_TABLE, self.to_dict(status=True))
+            conn.execute(q.manager_order.UPDATE_MANAGER_ORDER_TABLE, self.to_dict())
             conn.commit()
             return 1
 
@@ -104,36 +105,58 @@ class ManagerOrder(Order):
             conn.close()
 
     @staticmethod
-    def get_all_orders():
+    def get_all():
+        conn = get_db_connection()
+
+        try:
+            manager_order_objects = []
+            manager_orders = conn.execute(q.manager_order.GET_MANAGER_ORDER_TABLE).fetchall()
+
+            # Convert rows to dictionaries using `dict()` for proper mapping
+            manager_orders = [manager_order._mapping for manager_order in manager_orders]
+
+            for manager_order in manager_orders:
+                manager_object = ManagerOrder(**manager_order)  # Mapping the dictionary to the class constructor
+                manager_object.products = ManagerOrder.get_products_by_person_id(manager_object.order_id)
+
+                manager_order_objects.append(manager_object)
+
+            return manager_order_objects
+        except Exception as e:
+            print(f"Error: {e}")
+            return []  # Returning an empty list instead of 0 to indicate failure
+        finally:
+            conn.close()
+
+    @staticmethod
+    def get_products_by_person_id(order_id):
         conn = get_db_connection()
         try:
-            order_details_result = conn.execute(q.GET_MANAGER_ORDER_TABLE).fetchall()
-            order_details = [order._mapping for order in order_details_result]
-
-            orders = []
-            for order in order_details:
-                order_obj = ManagerOrder(
-                    person_id=order["person_id"],
-                    delivery_date=order["delivery_date"],
-                    order_status=order["order_status"],
-                    order_date=order["order_date"],
-                    order_id=order["order_id"],
-                    delivery_service_id=order["delivery_service_id"]
-                )
-
-                order_obj.products = {
-                    order["product_id"]: {
-                        "price_at_time_of_order": order["price_at_time_of_order"],
-                        "quantity": order["quantity"]
-                    }
-                }
-                orders.append(order_obj)
-
-            return orders
-
+            products = conn.execute(q.manager_order.GET_PRODUCTS_FROM_ORDER, {"order_id": order_id}).fetchall()
+            conn.commit()
+            products = [product._mapping for product in products]
+            product_dict = {
+                product['product_id']: {"price": product['price_at_time_of_order'], "quantity": product['quantity']} for
+                product in products
+            }
+            return product_dict
         except Exception as e:
-            print(f"Error in get_all_orders(): {e}")
-            return None
+            print(f"Error in get_products_by_person_id(): {e}")
+            return []
+        finally:
+            conn.close()
+
+    def get_products(self):
+        conn = get_db_connection()
+        try:
+            products = conn.execute(q.manager_order.GET_PRODUCTS_FROM_ORDER, {"order_id": self.order_id}).fetchall()
+            conn.commit()
+            print(products)
+            products = [product._mapping for product in products]
+            return products
+        except Exception as e:
+            print(f"Error in get_products(): {e}")
+            return []
         finally:
             conn.close()
 
@@ -173,9 +196,6 @@ class ManagerOrder(Order):
             delivery_date=delivery_date,
             delivery_service_id=delivery_service_id,
         )
-
-        # Connect to the database
-        conn = get_db_connection()
 
         manager_order.products = cart.items
 
