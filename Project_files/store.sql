@@ -87,7 +87,7 @@ create table Customer_Order(
     order_date date,
     delivery_date date,
     delivery_service_id int not null,
-    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED', 'COMPLETED', 'CANCELLED')),
+    order_status varchar(20) not null check (order_status in ('PLACED', 'COMPLETED', 'CANCELLED')),
     foreign key (person_id) references Customer(person_id) on delete cascade on update cascade,
     foreign key (address_id) references Address(address_id),
     foreign key (delivery_service_id) references DeliveryService(delivery_service_id),

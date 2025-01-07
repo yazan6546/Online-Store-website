@@ -207,7 +207,7 @@ def generate_manager_order_data(num_records, manager_ids, delivery_service_ids):
             'person_id': random.choice(manager_ids),
             'order_date': fake.date_between(start_date='-4y', end_date='today'),
             'delivery_date': fake.date_between(start_date='today', end_date='+10d'),
-            'order_status': random.choice(['IN_CART', 'PLACED', 'COMPLETED']),
+            'order_status': random.choice(['CANCELLED', 'PLACED', 'COMPLETED']),
             'delivery_service_id': random.choice(delivery_service_ids)
         })
     df = pd.DataFrame(data)
