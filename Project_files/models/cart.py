@@ -1,8 +1,11 @@
+from logging import exception
+
+
 class Cart:
     def __init__(self):
         self.items = {}
 
-    def add_item(self, product_id, price, quantity, product_name):
+    def add_item(self, product_id, price, quantity):
         product_id = str(product_id)
 
         if product_id in self.items:
@@ -19,7 +22,7 @@ class Cart:
         if product_id in self.items:
             del self.items[product_id]
         else:
-            print("Product not in cart.")
+            raise exception("Product not in cart.")
 
     def get_total(self):
         return sum([details['price_at_time_of_order'] * details['quantity'] for details in self.items.values()])
@@ -34,6 +37,10 @@ class Cart:
             return 0
 
     def update_item_quantity(self, product_id, quantity):
+
+        if quantity < 1:
+            quantity = 1
+
         if product_id in self.items:
             self.items[product_id]['quantity'] = quantity
         else:

@@ -203,7 +203,7 @@ class Product:
         products = []
         for key in dict:
             product = Product.get_by_product_id(key)
-            product.price = dict[key]["price"]
+            product.price = dict[key]["price_at_time_of_order"]
             product.stock_quantity = dict[key]["quantity"]
             products.append(product)
 

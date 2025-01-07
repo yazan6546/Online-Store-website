@@ -717,8 +717,10 @@ def admin_cart():
     delivery_services = DeliveryService.get_all()
     delivery_services = [delivery_services.to_dict() for delivery_services in delivery_services]
 
-    products = Product.products_from_cart(Cart.from_dict(session['cart']))
-    return render_template('admin_cart.html', delivery_services=delivery_services, products=products)
+    cart = Cart.from_dict(session['cart'])
+    products = Product.products_from_cart(cart)
+    total = cart.get_total()
+    return render_template('admin_cart.html', delivery_services=delivery_services, products=products, total=total)
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
@@ -939,7 +941,7 @@ def add_to_cart(product_id:int):
         price = float(data.get('price'))
         quantity = int(data.get('quantity'))
 
-        cart.add_item(product_id=product_id, price=price, quantity=quantity, product_name = name)
+        cart.add_item(product_id=product_id, price=price, quantity=quantity)
         session['cart'] = cart.to_dict()
         print('Added the product successfully')
         print(session['cart'])
@@ -951,6 +953,41 @@ def add_to_cart(product_id:int):
 
 
 
+@app.route('/api/cart/remove/<int:product_id>', methods=['DELETE'])
+def remove_from_cart(product_id:int):
+
+    try:
+        product_id = str(product_id)
+        cart = session.get('cart', {})
+        cart = Cart.from_dict(cart)
+
+        cart.remove_item(product_id)
+        session['cart'] = cart.to_dict()
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+@app.route('/api/cart/update_quantity/<int:product_id>', methods=['POST'])
+def update_cart_quantity(product_id:int):
+
+    try:
+        product_id = str(product_id)
+        data = request.get_json()
+        cart = session.get('cart', {})
+        cart = Cart.from_dict(cart)
+
+        quantity = int(data.get('quantity'))
+
+        cart.update_quantity(product_id, quantity)
+        session['cart'] = cart.to_dict()
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
 
 
 @app.errorhandler(404)

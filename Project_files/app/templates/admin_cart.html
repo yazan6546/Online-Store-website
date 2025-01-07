@@ -21,18 +21,18 @@ Admin Dashboard
         <h3>{{ products|length }} item(s) in your cart</h3>
 
         {% for product in products %}
-        <div class="cart-item">
+        <div class="cart-item" data-product-id="{{ product.product_id }}">
           <img src="{{ product.photo }}" alt="{{ product.product_name }}">
           <div class="cart-item-details">
             <p class="item-title">{{ product.product_name }}</p>
             <div class="quantity-selector">
               <button class="quantity-btn decrease-qty" onclick="updateQuantity({{ product.id }}, 'decrease')">−</button>
-              <span class="quantity-value">{{ product.quantity }}</span>
+              <span class="quantity-value">{{ product.stock_quantity }}</span>
               <button class="quantity-btn increase-qty" onclick="updateQuantity({{ product.id }}, 'increase')">+</button>
             </div>
           </div>
           <div class="item-actions">
-            <p class="item-price">₪{{ product.price }}</p>
+            <p class="item-price">${{ product.price * product.stock_quantity }}</p>
             <i class="bi bi-trash remove-icon" onclick="removeProduct({{ product.product_id }})"></i>
           </div>
         </div>
@@ -45,8 +45,8 @@ Admin Dashboard
         <h3>Checkout Overview</h3>
 
         <div class="summary-details">
-          <p><span>Sub-Total:</span> <span>₪{{ sub_total }}</span></p>
-          <p class="total"><span>Total:</span> <span>₪{{ total }}</span></p>
+            <p><span>Sub-Total:</span> <span id="sub-total">${{ total }}</span></p>
+            <p class="total"><span>Total:</span> <span id="total">${{ total + 3 }}</span></p>
         </div>
 
         <hr />
