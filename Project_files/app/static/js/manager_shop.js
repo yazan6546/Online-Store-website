@@ -19,13 +19,23 @@ function updateQuantity(productId, action) {
 
 function addToCart(productId) {
   const notification = document.querySelector(`#notification-${productId}`);
+  const quantity = document.querySelector(`.quantity-value[data-id="${productId}"]`).textContent;
+  const price = document.querySelector(`.product-card[data-id="${productId}"] .price`).textContent.replace('$', '');
+
+  console.log('Product ID:', productId);
+  console.log('Quantity:', quantity);
+  console.log('Price:', price)
 
   // Send request to the server to add the product to the cart
   fetch(`/api/cart/add/${productId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+    body: JSON.stringify({
+      quantity: parseInt(quantity),
+      price: parseFloat(price)
+    })
   })
   .then(response => {
     if (!response.ok) {
