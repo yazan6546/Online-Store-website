@@ -83,11 +83,10 @@ window.addEventListener('click', (e) => {
 
 // Mock function to simulate address data
 function mockGetAddresses(personId) {
-    // Replace this with an actual API call to fetch addresses
-    return [
-        { address_id: 1, street: '123 Main St', city: 'Springfield', zip_code: '12345' },
-        { address_id: 2, street: '456 Elm St', city: 'Shelbyville', zip_code: '67890' },
-    ];
+
+    const response = fetch(`/api/get_addresses/${personId}`);
+    const data = response.json();
+    return data;
 }
 
 ///////////////////////////////////////////////////////////
