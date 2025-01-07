@@ -105,7 +105,7 @@ def generate_category_data():
 
 def generate_product_data(num_records, category_ids, supplier_ids):
     data = []
-
+    max_brand = 20
     used_names = set()
 
     for _ in range(num_records):
@@ -115,11 +115,11 @@ def generate_product_data(num_records, category_ids, supplier_ids):
         used_names.add(product_name)
 
         data.append({
-            'product_name': product_name,
+            'product_name': product_name[0:max_brand],
             'product_description': fake.text(max_nb_chars=100),
             'price': round(random.uniform(50, 1000), 2),
             'photo': fake.image_url(),
-            'brand': fake.company(),
+            'brand': fake.company()[0:max_brand],
             'stock_quantity': random.randint(1, 100),
             'supplier_id': random.choice(supplier_ids),
             'category_id': random.choice(category_ids)
@@ -158,7 +158,7 @@ def generate_customer_order_data(num_records, customer_ids, address_ids, deliver
             'address_id': random.choice(address_ids),
             'order_date': fake.date_between(start_date='-4y', end_date='today'),
             'delivery_date': fake.date_between(start_date='today', end_date='+10d'),
-            'order_status': random.choice(['IN_CART', 'PLACED', 'COMPLETED']),
+            'order_status': random.choice(['CANCELLED', 'PLACED', 'COMPLETED']),
             'delivery_service_id' : random.choice(delivery_service_ids)
         })
     df = pd.DataFrame(data)
