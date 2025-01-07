@@ -178,14 +178,13 @@ BEGIN
     -- Check if the new order is inserted with the status COMPLETED
     IF NEW.order_status = 'COMPLETED' THEN
         -- Increment stock for each product in the order
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order is marked as COMPLETED';
+#         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order is marked as COMPLETED';
         UPDATE Product p
         JOIN Manager_Order_Line col ON p.product_id = col.product_id
         SET p.stock_quantity = p.stock_quantity + col.quantity
         WHERE col.order_id = NEW.order_id;
 
-    ELSE
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order status is not COMPLETED';
+#         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order status is not COMPLETED';
     END IF;
 END $$
 
@@ -201,15 +200,14 @@ FOR EACH ROW
 BEGIN
     -- Check if the order status changed to COMPLETED
     IF NEW.order_status = 'COMPLETED' AND OLD.order_status != 'COMPLETED' THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order is marked as COMPLETED';
+#         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order is marked as COMPLETED';
         -- Increment stock for each product in the order
         UPDATE Product p
         JOIN Manager_Order_Line col ON p.product_id = col.product_id
         SET p.stock_quantity = p.stock_quantity + col.quantity
         WHERE col.order_id = NEW.order_id;
 
-    ELSE
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order status is not COMPLETED';
+#         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order status is not COMPLETED';
     END IF;
 END $$
 

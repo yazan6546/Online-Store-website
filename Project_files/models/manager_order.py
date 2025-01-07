@@ -1,9 +1,12 @@
+from __future__ import annotations  # Enables modern type hinting for forward references
+
 from datetime import datetime
 
 from models.order import Order
 import utils.queries as q
 from utils.db_utils import get_db_connection
 from models.cart import Cart
+from models.order import Order
 
 class ManagerOrder(Order):
     def __init__(self, person_id, order_status, delivery_date, delivery_service_id, order_date=datetime.now(), order_id=None):
@@ -11,11 +14,21 @@ class ManagerOrder(Order):
 
     def insert(self):
 
+        flag = False
+
+        if self.order_status == 'COMPLETED':
+            self.order_status = 'PLACED'
+            flag = True
+
         conn = get_db_connection()
         if self.insert_order(conn=conn) and self.insert_order_lines(conn=conn):
 
             conn.commit()
             conn.close()
+
+            if flag:
+                self.order_status = 'COMPLETED'
+                self.update_order()
             return 1
         else:
             conn.close()
@@ -104,7 +117,8 @@ class ManagerOrder(Order):
                     delivery_date=order["delivery_date"],
                     order_status=order["order_status"],
                     order_date=order["order_date"],
-                    order_id=order["order_id"]
+                    order_id=order["order_id"],
+                    delivery_service_id=order["delivery_service_id"]
                 )
 
                 order_obj.products = {
@@ -142,7 +156,7 @@ class ManagerOrder(Order):
         order_dict = super().to_dict(order_id)
         return order_dict
 
-    def cart_to_manager_order_with_stock(cart : Cart, person_id : int, delivery_date : datetime, delivery_service_id : int) -> Order:
+    def cart_to_manager_order_with_stock(cart : Cart, person_id : int, delivery_date : datetime, delivery_service_id : int) -> ManagerOrder:
         """
         Converts a Cart object into a ManagerOrder object and updates product stock.
 
@@ -168,45 +182,4 @@ class ManagerOrder(Order):
 
         manager_order.products = cart.items
 
-        try:
-            manager_order.insert()
-
-        except Exception as e:
-            conn.rollback()
-            print(f"Error in cart_to_manager_order_with_stock: {e}")
-            raise
-        finally:
-            conn.close()
-
-    @staticmethod
-    def get_by_id(order_id):
-        conn = get_db_connection()
-        try:
-            order_details_result = conn.execute(q.manager_order.SELECT_MANAGER_ORDER_BY_ID, {"id": order_id}).fetchall()
-            order_details = [order._mapping for order in order_details_result]
-
-            orders = []
-            for order in order_details:
-                order_obj = ManagerOrder(
-                    person_id=order["person_id"],
-                    delivery_date=order["delivery_date"],
-                    order_status=order["order_status"],
-                    order_date=order["order_date"],
-                    order_id=order["order_id"]
-                )
-
-                order_obj.products = {
-                    order["product_id"]: {
-                        "price_at_time_of_order": order["price_at_time_of_order"],
-                        "quantity": order["quantity"]
-                    }
-                }
-                orders.append(order_obj)
-
-            return orders
-
-        except Exception as e:
-            print(f"Error in get_by_id(): {e}")
-            return None
-        finally:
-            conn.close()
+        return manager_order

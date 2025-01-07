@@ -1,4 +1,4 @@
-from models import Product
+from models import Product, Manager, ManagerOrder
 from models.customers import Customer
 import datetime
 
@@ -35,12 +35,6 @@ cart.add_item(3, 4, 200)
 cart.add_item(4, 5, 100)
 
 
-order = ManagerOrder(1, 'PLACED', datetime.datetime.now(), 1)
-order.products = cart.items
+order = ManagerOrder.cart_to_manager_order_with_stock(cart, 1, datetime.datetime.now(), 1)
 
 order.insert()
-
-# order = ManagerOrder.get(1)
-
-order.order_status = 'COMPLETED'
-order.update_order()
