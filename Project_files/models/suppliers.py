@@ -85,7 +85,6 @@ class Supplier:
             # Safely convert rows to dictionaries
             suppliers = [supplier._mapping for supplier in suppliers]
 
-
             for supplier in suppliers:
                 suppliers_object = cls(**supplier)  # Initialize the class with the supplier data
                 suppliers_objects.append(suppliers_object)
