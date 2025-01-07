@@ -413,8 +413,12 @@ def admin_dashboard_products():
 
     products = Product.get_all()
     products = [product.to_print() for product in products]
-    suppliers = Supplier.get_names()
-    categories = Category.get_names()
+    suppliers = Supplier.get_all()
+    categories = Category.get_all()
+
+    categories = [cat.to_dict() for cat in categories]  # [{'category_id': 1, 'category_name': 'Electronics'}, ...]
+    suppliers = [sup.to_dict() for sup in suppliers]  # [{'supplier_id': 1, 'name': 'Amazon'}, ...]
+    #print("Categories:", categories)
     # for cat in categories:
     #     print(cat['category_name'])
     return render_template('products.html', products=products,suppliers=suppliers,categories=categories)  # Replace with render_template if applicable
@@ -542,11 +546,14 @@ def search_product():
             if query.lower() in product['product_name'].lower()
                or query.lower() in product.get('brand').lower()
                or query.lower() in product['product_description'].lower()
-               or query in product['category_id']
-               or query in product['supplier_id']
+               or query in product['category_id'].lower()
+               or query in product['supplier_id'].lower()
         ]
-        suppliers = Supplier.get_names()
-        categories = Category.get_names()
+        suppliers = Supplier.get_all()
+        categories = Category.get_all()
+
+        categories = [cat.to_dict() for cat in categories]  # [{'category_id': 1, 'category_name': 'Electronics'}, ...]
+        suppliers = [sup.to_dict() for sup in suppliers]  # [{'supplier_id': 1, 'name': 'Amazon'}, ...]
 
         return jsonify(success=True, products=filtered_products, suppliers=suppliers, categories=categories)
     except Exception as e:
@@ -565,8 +572,11 @@ def get_products():
 
         # Fetch all products
         products = Product.get_all()
-        suppliers = Supplier.get_names()
-        categories = Category.get_names()
+        suppliers = Supplier.get_all()
+        categories = Category.get_all()
+
+        categories = [cat.to_dict() for cat in categories]  # [{'category_id': 1, 'category_name': 'Electronics'}, ...]
+        suppliers = [sup.to_dict() for sup in suppliers]  # [{'supplier_id': 1, 'name': 'Amazon'}, ...]
 
         # for cat in categories:
         #     print(cat['category_name'])
