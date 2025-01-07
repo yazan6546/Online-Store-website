@@ -152,9 +152,6 @@ class ManagerOrder(Order):
         finally:
             conn.close()
 
-    def to_dict(self, status=False, order_id=True):
-        order_dict = super().to_dict(order_id)
-        return order_dict
 
     def cart_to_manager_order_with_stock(cart : Cart, person_id : int, delivery_date : datetime, delivery_service_id : int) -> ManagerOrder:
         """
