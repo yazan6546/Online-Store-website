@@ -49,54 +49,16 @@ Admin Dashboard
       <div class="filter-box">
         <h3>Category</h3>
         <ul>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Home Appliances">
-              Home Appliances
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Television">
-              Television
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Small Appliances">
-              Small Appliances
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Computers & Tablets">
-              Computers & Tablets
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Mobiles & Audio">
-              Mobiles & Audio
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Beauty Care">
-              Beauty Care
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Office Supplies">
-              Office Supplies
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Heating & Cooling">
-              Heating & Cooling
-            </label>
-          </li>
+
+            {% for category in categories %}
+        <li>
+        <label>
+        <input type="radio" name="category" value="{{ category.category_name }}">
+        {{ category.category_name }}
+        </label>
+        </li>
+        {% endfor %}
+
         </ul>
       </div>
 

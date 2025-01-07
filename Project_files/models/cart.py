@@ -35,5 +35,14 @@ class Cart:
         else:
             print("Product not in cart.")
 
+    def to_dict(self):
+        return self.items
+
+    @staticmethod
+    def from_dict(dict):
+        cart = Cart()
+        cart.items = dict
+        return cart
+
     def __str__(self):
         return str(self.items)
