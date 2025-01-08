@@ -493,16 +493,13 @@ def update_product(product_id):
         brand = data.get('brand')
         price = data.get('price')
         stock_quantity = data.get('stock_quantity')
-
-        category_id=Category.get_id_by_name(category_id)
-        supplier_id=Supplier.get_id_by_name(supplier_id)
-
         product_description = Product.get_desc_by_id(product_id)
 
-
+        print("------------------")
         print(product_description)
         print(supplier_id)
         print(category_id)
+        print("------------------")
 
         product = Product(
             product_id=product_id,
