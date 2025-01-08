@@ -47,7 +47,6 @@
                     <td>{{ product.product_id }}</td>
 
 
-
                     <!-- Name + Photo in same cell -->
                     <td>
                         <div class="product-name-photo">
@@ -156,94 +155,85 @@
                     </td>
 
 
-                    <!-- Actions: 3 vertical dots dropdown + Save button -->
+                        <!-- Actions: 3 vertical dots dropdown + Save button -->
                     <td class="action-buttons">
                         <!-- Three-dots dropdown -->
                         <div class="dropdown" id="three-dots-${ product.product_id }">
                             <!-- Replace "..." with the vertical ellipsis character -->
                             <button class="three-dots-btn" onclick="toggleDropdown(${ product.product_id })">
                                 ⋮
-=======
-                  <!-- Dropdown for edit mode -->
-                  <select
-                      id="supplier-{{ product.product_id }}-input"
-                      style="display: none; width: 150px;"
-                  >
-                    {% for sup in suppliers %}
-                      <option
-                        value="{{ sup.supplier_id }}"
-                        {% if sup.supplier_id == product.supplier_id %}selected{% endif %}
-                      >
-                        {{sup.name}}
-                      </option>
-                    {% endfor %}
-                  </select>
-                </td>
+                                </button>
+                            <div class="dropdown-content">
+                                <a onclick="enableEditProduct(${product.product_id})">Edit</a>
+                                <a onclick="deleteProduct(${product.product_id})">Make Unavailable</a>
+                            </div>
+                        </div>
+                                <!-- Dropdown for edit mode -->
+                                <select
+                                        id="supplier-{{ product.product_id }}-input"
+                                        style="display: none; width: 150px;"
+                                >
+                                    {% for sup in suppliers %}
+                                        <option
+                                                value="{{ sup.supplier_id }}"
+                                                {% if sup.supplier_id == product.supplier_id %}selected{% endif %}
+                                        >
+                                            {{ sup.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                    </td>
 
-                <!-- Brand -->
-                <td>
-                    <span id="brand-{{ product.product_id }}-text">{{ product.brand }}</span>
-                    <input type="text" id="brand-{{ product.product_id }}-input" value="{{ product.brand }}"
-                           style="display:none; width: 100px;">
-                </td>
+                    <!-- Brand -->
+                    <td>
+                        <span id="brand-{{ product.product_id }}-text">{{ product.brand }}</span>
+                        <input type="text" id="brand-{{ product.product_id }}-input" value="{{ product.brand }}"
+                               style="display:none; width: 100px;">
+                    </td>
 
-                <!-- Price -->
-                <td>
-                    <span id="price-{{ product.product_id }}-text">{{ product.price }}</span>
-                    <input type="number" step="0.01" id="price-{{ product.product_id }}-input"
-                           value="{{ product.price }}" style="display:none; width: 100px;">
-                </td>
+                    <!-- Price -->
+                    <td>
+                        <span id="price-{{ product.product_id }}-text">{{ product.price }}</span>
+                        <input type="number" step="0.01" id="price-{{ product.product_id }}-input"
+                               value="{{ product.price }}" style="display:none; width: 100px;">
+                    </td>
 
-                <!-- Stock -->
-                <td>
-                    <span id="stock-{{ product.product_id }}-text">{{ product.stock_quantity }}</span>
-                    <input type="number" id="stock-{{ product.product_id }}-input"
-                           value="{{ product.stock_quantity }}" style="display:none; width: 100px;">
-                </td>
+                    <!-- Stock -->
+                    <td>
+                        <span id="stock-{{ product.product_id }}-text">{{ product.stock_quantity }}</span>
+                        <input type="number" id="stock-{{ product.product_id }}-input"
+                               value="{{ product.stock_quantity }}" style="display:none; width: 100px;">
+                    </td>
 
-                <!-- Description with pencil icon to trigger edit -->
-                <td>
-                    <div>
-                        <span id="description-{{ product.product_id }}-text"> {{ product.product_description }}</span>
-                        <span class="pencil-icon"
-                              id="desc-edit-icon-{{ product.product_id }}"
-                              onclick="enableDescriptionEdit({{ product.product_id }})">✏️  </span>
-                    </div>
+                    <!-- Description with pencil icon to trigger edit -->
+                    <td>
+                        <div>
+                            <span id="description-{{ product.product_id }}-text"> {{ product.product_description }}</span>
+                            <span class="pencil-icon"
+                                  id="desc-edit-icon-{{ product.product_id }}"
+                                  onclick="enableDescriptionEdit({{ product.product_id }})">✏️  </span>
+                        </div>
 
-                    <!-- Hidden textarea for editing the description -->
-                    <div class="description-edit-container" id="description-edit-container-{{ product.product_id }}"
-                         style="display:none; margin-top: 8px;">
+                        <!-- Hidden textarea for editing the description -->
+                        <div class="description-edit-container" id="description-edit-container-{{ product.product_id }}"
+                             style="display:none; margin-top: 8px;">
                     <textarea>id="description-{{ product.product_id }}-input"
                             placeholder="Write your new description here...">
                     </textarea>
-                    </div>
-                </td>
+                        </div>
+                    </td>
 
-                <!-- Actions: 3 vertical dots dropdown + Save button -->
-                        <td class="action-buttons">
-                            <!-- Three-dots dropdown -->
-                            <div class="dropdown" id="three-dots-${ product.product_id }">
-                                <!-- Replace "..." with the vertical ellipsis character -->
-                                <button class="three-dots-btn" onclick="toggleDropdown(${{ product.product_id }})">
-                                    ⋮
-                                </button>
-                                <div class="dropdown-content">
-                                    <a onclick="enableEditProduct(${{ product.product_id }})">Edit</a>
-                                    <a onclick="deleteProduct(${{ product.product_id }})">Make Unavailable</a>
-                                </div>
-                            </div>
-
-                            <!-- Save button (hidden by default) -->
-                            <button id="save-btn-${ product.product_id }"
-                                    class="save"
-                                    style="display: none;"
-                                    onclick="saveEditProduct(${{ product.product_id }})">
-                                Save
-
+                    <!-- Actions: 3 vertical dots dropdown + Save button -->
+                    <td class="action-buttons">
+                        <!-- Three-dots dropdown -->
+                        <div class="dropdown" id="three-dots-${ product.product_id }">
+                            <!-- Replace "..." with the vertical ellipsis character -->
+                            <button class="three-dots-btn" onclick="toggleDropdown(${{ product.product_id }})">
+                                ⋮
                             </button>
                             <div class="dropdown-content">
-                                <a onclick="enableEditProduct(${ product.product_id })">Edit</a>
-                                <a onclick="deleteProduct(${ product.product_id })">Make Unavailable</a>
+                                <a onclick="enableEditProduct(${{ product.product_id }})">Edit</a>
+                                <a onclick="deleteProduct(${{ product.product_id }})">Make Unavailable</a>
                             </div>
                         </div>
 
@@ -251,15 +241,29 @@
                         <button id="save-btn-${ product.product_id }"
                                 class="save"
                                 style="display: none;"
-                                onclick="saveEditProduct(${ product.product_id })">
+                                onclick="saveEditProduct(${product.product_id})">
                             Save
+
                         </button>
-                    </td>
+                        <div class="dropdown-content">
+                            <a onclick="enableEditProduct(${ product.product_id })">Edit</a>
+                            <a onclick="deleteProduct(${ product.product_id })">Make Unavailable</a>
+                        </div>
+                </div>
+
+                <!-- Save button (hidden by default) -->
+                <button id="save-btn-${ product.product_id }"
+                        class="save"
+                        style="display: none;"
+                        onclick="saveEditProduct(${ product.product_id })">
+                    Save
+                </button>
+                </td>
                 </tr>
             {% endfor %}
 
-            </tbody>
-        </table>
+    </tbody>
+    </table>
     </div>
 
     {#    <!-- Add Product Modal -->#}
@@ -357,7 +361,7 @@
 
 
 
-    
+
     <!-- Pagination -->
     <div class="pagination">
         <button id="prevPage" disabled>Previous</button>

@@ -34,6 +34,10 @@ class Product:
             if result is None:
                 raise Exception("Duplicate entry")
 
+        except MySQLdb.IntegrittError as e:
+            print(f"Error in insert(): {e}")
+            conn.rollback()
+
         except Exception as e:
             print(f"Error in insert(): {e}")
             conn.rollback()

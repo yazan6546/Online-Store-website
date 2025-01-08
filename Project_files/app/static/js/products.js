@@ -3,6 +3,7 @@ let currentSortOrder = 'asc';
 let products = []; // Global list of products
 
 
+
 // $(document).ready(function () {
 //     // Trigger searchProducts() with an empty query on page load
 //     searchProducts('');
@@ -128,80 +129,7 @@ function enableEditProduct(product_id) {
 // }
 
 // ------------------- SAVE EDIT ------------------- //
-function saveEditProduct(product_id) {
-    console.log('Saving edit for product ID:', product_id);
 
-    // Gather new values
-    //const product_name = document.getElementById(`name-${product_id}-input`).value;
-    const product_name = document.getElementById(`name-${product_id}-input`).value;
-    const category_id = document.getElementById(`category-${product_id}-input`).value;
-    const supplier_id = document.getElementById(`supplier-${product_id}-input`).value;
-    const brand = document.getElementById(`brand-${product_id}-input`).value;
-    const price = document.getElementById(`price-${product_id}-input`).value;
-    const stock_quantity = document.getElementById(`stock-${product_id}-input`).value;
-    //const descContainer = document.getElementById(`description-edit-container-${product_id}`);
-
-    // For description
-    // let newDescription = null;
-    if (descContainer.style.display === 'block') {
-        newDescription = document.getElementById(`description-${product_id}-input`).value;
-    }
-
-    // Example: Make an AJAX call to update on the server
-    // (Using fetch as an example)
-    fetch(`/update_product/${product_id}`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            product_name,
-            category_id,
-            supplier_id,
-            brand,
-            price,
-            stock_quantity,
-        }),
-    })
-        .then(res => res.json())
-        .then(response => {
-            if (response.success) {
-                // Update text spans
-                document.getElementById(`name-${product_id}-text`).innerText = product_name;
-                document.getElementById(`category-${product_id}-text`).innerText = category_id;
-                document.getElementById(`supplier-${product_id}-text`).innerText = supplier_id;
-                document.getElementById(`brand-${product_id}-text`).innerText = brand;
-                document.getElementById(`price-${product_id}-text`).innerText = price;
-                document.getElementById(`stock-${product_id}-text`).innerText = stock_quantity;
-
-
-
-                // Hide input fields, show text
-                document.getElementById(`name-${product_id}-input`).style.display = 'none';
-                document.getElementById(`category-${product_id}-input`).style.display = 'none';
-                document.getElementById(`supplier-${product_id}-input`).style.display = 'none';
-                document.getElementById(`brand-${product_id}-input`).style.display = 'none';
-                document.getElementById(`price-${product_id}-input`).style.display = 'none';
-                document.getElementById(`stock-${product_id}-input`).style.display = 'none';
-
-                document.getElementById(`name-${product_id}-text`).style.display = 'inline';
-                document.getElementById(`category-${product_id}-text`).style.display = 'inline';
-                document.getElementById(`supplier-${product_id}-text`).style.display = 'inline';
-                document.getElementById(`brand-${product_id}-text`).style.display = 'inline';
-                document.getElementById(`price-${product_id}-text`).style.display = 'inline';
-                document.getElementById(`stock-${product_id}-text`).style.display = 'inline';
-
-
-
-                // Show the 3-dots again, hide the Save button
-                document.getElementById(`three-dots-${product_id}`).style.display = 'inline-block';
-                document.getElementById(`save-btn-${product_id}`).style.display = 'none';
-            } else {
-                alert('Error updating product: ' + response.error);
-            }
-        })
-        .catch(error => {
-            alert('Error updating product: ' + error);
-        });
-}
 
 // ------------------- TOGGLE 3-DOTS DROPDOWN ------------------- //
 function toggleDropdown(product_id) {
@@ -424,8 +352,6 @@ function generateRow(product, categories, suppliers) {
         
          
          
-       
-
         <!-- Actions: 3 vertical dots dropdown + Save button -->
         <td class="action-buttons">
             <!-- Three-dots dropdown -->
@@ -479,6 +405,14 @@ async function fetchProducts(page = 1) {
     }
 }
 
+document.getElementById('nextPage').addEventListener('click', () => {
+    currentPage++;
+    fetchProducts(currentPage);
+});
+
+
+// Initial fetch
+fetchProducts(currentPage);
 // Pagination buttons
 document.getElementById('prevPage').addEventListener('click', () => {
     if (currentPage > 1) {
@@ -486,13 +420,98 @@ document.getElementById('prevPage').addEventListener('click', () => {
         fetchProducts(currentPage);
     }
 });
-document.getElementById('nextPage').addEventListener('click', () => {
-    currentPage++;
-    fetchProducts(currentPage);
-});
 
-// Initial fetch
-fetchProducts(currentPage);
+
+function saveEditProduct(product_id) {
+    console.log('Saving edit for product ID:', product_id);
+
+    // Gather new values
+    //const product_name = document.getElementById(`name-${product_id}-input`).value;
+    const product_name = document.getElementById(`name-${product_id}-input`).value;
+    const category_id = document.getElementById(`category-${product_id}-input`).value;
+    const supplier_id = document.getElementById(`supplier-${product_id}-input`).value;
+    const brand = document.getElementById(`brand-${product_id}-input`).value;
+    const price = document.getElementById(`price-${product_id}-input`).value;
+    const stock_quantity = document.getElementById(`stock-${product_id}-input`).value;
+    //const descContainer = document.getElementById(`description-edit-container-${product_id}`);
+    console.log("--------------------");
+    console.log(product_name);
+    console.log(category_id);
+    console.log(supplier_id);
+    console.log(brand);
+    console.log(price);
+    console.log(stock_quantity);
+    console.log("--------------------");
+
+    // For description
+    // let newDescription = null;
+    // if (descContainer.style.display === 'block') {
+    //     newDescription = document.getElementById(`description-${product_id}-input`).value;
+    // }
+
+    // Example: Make an AJAX call to update on the server
+    // (Using fetch as an example)
+    fetch(`/update_product/${product_id}`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            product_name,
+            category_id,
+            supplier_id,
+            brand,
+            price,
+            stock_quantity,
+        }),
+    })
+        .then(res => res.json())
+        .then(response => {
+            if (response.success) {
+                // Update text spans
+                document.getElementById(`name-${product_id}-text`).innerText = product_name;
+                document.getElementById(`category-${product_id}-text`).innerText = category_id;
+                document.getElementById(`supplier-${product_id}-text`).innerText = supplier_id;
+                document.getElementById(`brand-${product_id}-text`).innerText = brand;
+                document.getElementById(`price-${product_id}-text`).innerText = price;
+                document.getElementById(`stock-${product_id}-text`).innerText = stock_quantity;
+
+
+
+                // Hide input fields, show text
+                document.getElementById(`name-${product_id}-input`).style.display = 'none';
+                document.getElementById(`category-${product_id}-input`).style.display = 'none';
+                document.getElementById(`supplier-${product_id}-input`).style.display = 'none';
+                document.getElementById(`brand-${product_id}-input`).style.display = 'none';
+                document.getElementById(`price-${product_id}-input`).style.display = 'none';
+                document.getElementById(`stock-${product_id}-input`).style.display = 'none';
+
+                document.getElementById(`name-${product_id}-text`).style.display = 'inline';
+                document.getElementById(`category-${product_id}-text`).style.display = 'inline';
+                document.getElementById(`supplier-${product_id}-text`).style.display = 'inline';
+                document.getElementById(`brand-${product_id}-text`).style.display = 'inline';
+                document.getElementById(`price-${product_id}-text`).style.display = 'inline';
+                document.getElementById(`stock-${product_id}-text`).style.display = 'inline';
+
+
+
+                // Show the 3-dots again, hide the Save button
+                document.getElementById(`three-dots-${product_id}`).style.display = 'inline-block';
+                document.getElementById(`save-btn-${product_id}`).style.display = 'none';
+                fet
+            } else {
+                alert('Error updating product: ' + response.error);
+            }
+        })
+        .catch(error => {
+            alert('Error updating product: ' + error);
+        });
+}
+
+
+
+
+
+
+
 
 // ------------------- MODALS ------------------- //
 function openDescriptionModal(button) {
@@ -586,16 +605,5 @@ function saveDescriptionEdit() {
 }
 
 
-
-
-function openAddModal() {
-    document.getElementById('add-product-modal').classList.add('show');
-}
-
-function closeAddModal() {
-    document.getElementById('add-product-modal').classList.remove('show');
-    // Clear the form if desired
-    document.getElementById('add-product-form').reset();
-}
 
 
