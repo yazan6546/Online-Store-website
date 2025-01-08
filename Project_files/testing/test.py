@@ -37,13 +37,19 @@ import datetime
 # print(x.products)
 # Initialize Faker
 from models.manager_order import ManagerOrder
+#
+# cart = Cart()
+# cart.add_item(1, 30, 5)
+# cart.add_item(2, 30, 5)
+# cart.add_item(1, 30, 5)
+#
+# manager_order = ManagerOrder.cart_to_manager_order_with_stock(cart, 1, datetime.datetime.today(), 1)
+# manager_order.order_id = 5001
+# manager_order.insert()
+# print(manager_order.order_id)
+from models.customer_order import CustomerOrder
 
-cart = Cart()
-cart.add_item(1, 30, 5)
-cart.add_item(2, 30, 5)
-cart.add_item(1, 30, 5)
-
-manager_order = ManagerOrder.cart_to_manager_order_with_stock(cart, 1, datetime.datetime.today(), 1)
-manager_order.order_id = 5001
-manager_order.insert()
-print(manager_order.order_id)
+customers = CustomerOrder.get_all()
+x = customers[0]
+print(x.person_id)
+print(x.products)

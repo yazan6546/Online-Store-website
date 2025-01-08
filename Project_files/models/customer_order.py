@@ -5,7 +5,7 @@ import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class CustomerOrder(Order):
-    def __init__(self, person_id, address_id, delivery_date, delivery_service_id, order_date=datetime.now(), order_id=None):
+    def __init__(self, person_id, order_status, delivery_date, delivery_service_id, address_id, order_date=datetime.now(), order_id=None):
         super().__init__(person_id, delivery_date, order_date, order_id, delivery_service_id)
         self.address_id = address_id
 
@@ -115,7 +115,7 @@ class CustomerOrder(Order):
 
             for customer_order in customer_orders:
                 customer_object = CustomerOrder(**customer_order)  # Mapping the dictionary to the class constructor
-                customer_object.products = CustomerOrder.get_products_by_person_id(customer_object.order_id)
+                customer_object.products = CustomerOrder.get_products_by_order_id(customer_object.order_id)
 
                 customer_order_objects.append(customer_object)
 
@@ -127,7 +127,7 @@ class CustomerOrder(Order):
             conn.close()
 
     @staticmethod
-    def get_products_by_person_id(order_id):
+    def get_products_by_order_id(order_id):
         conn = get_db_connection()
         try:
             products = conn.execute(q.customer_order.GET_PRODUCTS_FROM_ORDER, {"order_id": order_id}).fetchall()
