@@ -123,12 +123,24 @@ class DeliveryService:
     def __str__(self):
         return f"DeliveryService: {self.delivery_service_name}"
 
+    @staticmethod
     def get_by_id(delivery_service_id):
         conn = get_db_connection()
 
         try:
             service = conn.execute(q.delivery_service.SELECT_DELIVERY_BY_DELIVERY_ID, {"delivery_service_id": delivery_service_id}).fetchone()
             return DeliveryService.from_dict(service._mapping) if service else None
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
+    @staticmethod
+    def get_id_by_name(delivery_service_name):
+        conn = get_db_connection()
+        try:
+            service = conn.execute(q.delivery_service.GET_ID_BY_NAME, {'delivery_service_name' : delivery_service_name}).fetchone()
+            return service[0]
         except Exception as e:
             print(f"Error: {e}")
             return None

@@ -1,4 +1,8 @@
 import os
+from datetime import datetime, timedelta
+from itertools import product
+
+from faker import Faker
 from werkzeug.utils import secure_filename
 from flask import render_template, request, jsonify, session, flash, redirect, url_for
 from wtforms.validators import email
@@ -6,6 +10,7 @@ from wtforms.validators import email
 from app import app
 from app.forms import *
 import app.auth as auth
+from models import ManagerOrder
 from models.delivery_service import DeliveryService
 from models.cart import Cart
 from models.addresses import Address
@@ -683,9 +688,9 @@ def admin_dashboard_customer_orders():
 # Manager's orders section
 ############################################################################################################
 
-@app.route('/admin_dashboard/managers_orders')
-def admin_dashboard_managers_orders():
-    return "<h1>manager's orders</h1>"  # Replace with render_template if applicable
+@app.route('/managers_orders')
+def managers_orders():
+    return render_template('managers_orders.html')
 
 
 @app.route('/')
@@ -758,7 +763,11 @@ def admin_cart():
 
     delivery_services = DeliveryService.get_all()
     delivery_services = [delivery_services.to_dict() for delivery_services in delivery_services]
-    return render_template('admin_cart.html', delivery_services=delivery_services)
+
+    cart = Cart.from_dict(session.get('cart', {}))
+    products = Product.products_from_cart(cart)
+    total = cart.get_total()
+    return render_template('admin_cart.html', delivery_services=delivery_services, products=products, total=total)
 
 
 @app.route('/add_customer', methods=['GET', 'POST'])
@@ -967,18 +976,22 @@ def add_delivery():
 
 
 @app.route('/api/cart/add/<int:product_id>', methods=['POST'])
-def add_to_cart(product_id):
+def add_to_cart(product_id:int):
 
     try:
 
+        product_id = str(product_id)
         data = request.get_json()
         cart = session.get('cart', {})
         cart = Cart.from_dict(cart)
-        price = data.get('price')
-        quantity = data.get('quantity')
+
+        price = float(data.get('price'))
+        quantity = int(data.get('quantity'))
 
         cart.add_item(product_id=product_id, price=price, quantity=quantity)
+        session['cart'] = cart.to_dict()
         print('Added the product successfully')
+        print(session['cart'])
 
         return jsonify({"success": True})
 
@@ -987,7 +1000,73 @@ def add_to_cart(product_id):
 
 
 
+@app.route('/api/cart/remove/<int:product_id>', methods=['DELETE'])
+def remove_from_cart(product_id:int):
 
+    try:
+        product_id = str(product_id)
+        cart = session.get('cart', {})
+        cart = Cart.from_dict(cart)
+
+        cart.remove_item(product_id)
+        session['cart'] = cart.to_dict()
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+@app.route('/api/cart/update_quantity/<int:product_id>', methods=['POST'])
+def update_cart_quantity(product_id:int):
+
+    try:
+        product_id = str(product_id)
+        data = request.get_json()
+        cart = session.get('cart', {})
+        cart = Cart.from_dict(cart)
+
+        quantity = int(data.get('quantity'))
+
+        cart.update_quantity(product_id, quantity)
+        session['cart'] = cart.to_dict()
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+@app.route('/api/placeorder', methods=['POST'])
+def place_order():
+
+    try:
+        person_id = session['user']['person_id']
+        data = request.get_json()
+        delivery_service_id = data.get('delivery_service_name')
+        # delivery_service_id = DeliveryService.get_id_by_name(delivery_service_name)
+
+        cart = Cart.from_dict(session['cart'])
+
+        # Initialize Faker
+        faker = Faker()
+
+        # Get tomorrow's date and the date two weeks from now
+        tomorrow = datetime.now() + timedelta(days=1)
+        two_weeks_from_now = datetime.now() + timedelta(days=14)
+
+        # Generate a random date within the range
+        random_date = faker.date_between(start_date=tomorrow, end_date=two_weeks_from_now)
+
+        order = ManagerOrder.cart_to_manager_order_with_stock(cart, person_id, random_date, delivery_service_id=delivery_service_id)
+        if not order.insert():
+            return jsonify({"success": False, "error": "Failed to place order."})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+    session['cart'] = Cart().to_dict()
+    return jsonify({"success": True})
 
 
 @app.errorhandler(404)
