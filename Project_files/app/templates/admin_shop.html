@@ -49,54 +49,16 @@ Admin Dashboard
       <div class="filter-box">
         <h3>Category</h3>
         <ul>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Home Appliances">
-              Home Appliances
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Television">
-              Television
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Small Appliances">
-              Small Appliances
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Computers & Tablets">
-              Computers & Tablets
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Mobiles & Audio">
-              Mobiles & Audio
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Beauty Care">
-              Beauty Care
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Office Supplies">
-              Office Supplies
-            </label>
-          </li>
-          <li>
-            <label>
-              <input type="radio" name="category" value="Heating & Cooling">
-              Heating & Cooling
-            </label>
-          </li>
+
+            {% for category in categories %}
+        <li>
+        <label>
+        <input type="radio" name="category" value="{{ category.category_name }}">
+        {{ category.category_name }}
+        </label>
+        </li>
+        {% endfor %}
+
         </ul>
       </div>
 
@@ -123,8 +85,51 @@ Admin Dashboard
     </div>
   <!-- Main Product Section -->
   <div class="product-container">
-    <!-- Products will be dynamically rendered here -->
-  </div>
+  {% for product in products %}
+    <div class="product-card" data-id="{{ product.product_id }}">
+      <!-- Upper Section -->
+      <div class="product-image-section">
+        <img src="{{ product.photo }}" alt="{{ product.product_name }}">
+        <div class="circle-btn open-modal-btn" data-id="{{ product.product_id }}" onclick="openModal('{{ product.product_id }}')">
+          <i class="bx bx-plus"></i>
+        </div>
+      </div>
+      <!-- Lower Section -->
+      <div class="product-info-section">
+        <h5>{{ product.product_name }}</h5>
+        <p class="price">${{ product.price }}</p>
+      </div>
+    </div>
+    <!-- Modal for {{ product.product_id }} -->
+    <div id="modal-{{ product.product_id }}" class="modal" style="display: none;">
+      <div class="modal-content">
+        <span class="close-btn" data-id="{{ product.product_id }}" onclick="closeModal('{{ product.product_id }}')">&times;</span>
+        <h2>Product Details</h2>
+        <div class="modal-body">
+          <!-- Left Section: Image -->
+          <div class="modal-image-section">
+            <img src="{{ product.photo }}" alt="{{ product.product_name }}">
+          </div>
+          <!-- Right Section: Details -->
+          <div class="modal-description-section">
+            <h5>{{ product.product_name }}</h5>
+            <p class="price">Price: ${{ product.price }}</p>
+            <p>Description: {{ product.product_description }}</p>
+            <div class="quantity-cart-container">
+              <div class="quantity-selector">
+                <button class="quantity-btn decrease-qty" data-id="{{ product.product_id }}" onclick="updateQuantity('{{ product.product_id }}', 'decrease')">−</button>
+                <span class="quantity-value" data-id="{{ product.product_id }}">1</span>
+                <button class="quantity-btn increase-qty" data-id="{{ product.product_id }}" onclick="updateQuantity('{{ product.product_id }}', 'increase')">+</button>
+              </div>
+              <div id="notification-{{ product.product_id }}" class="notification">ADDED TO YOUR CART</div>
+              <button class="add-to-cart" data-id="{{ product.product_id }}" onclick="addToCart('{{ product.product_id }}')">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
 
 
   </div>

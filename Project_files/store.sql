@@ -63,7 +63,7 @@ create table Product(
     brand varchar(30) not null,
     price decimal(10,2) not null,
     photo varchar(100),
-    stock_quantity int not null,
+    stock_quantity int not null check ( stock_quantity >= 0),
     category_id int not null,
     supplier_id int not null,
     foreign key (category_id) references Category(category_id),
@@ -77,6 +77,7 @@ CREATE TABLE DeliveryService (
     delivery_service_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique identifier for each delivery service
     delivery_service_name VARCHAR(255) NOT NULL UNIQUE,                         -- Name of the delivery service (e.g., "DHL", "FedEx")
     phone_number VARCHAR(15)                        -- Contact phone number for the delivery service
+
 );
 
 create table Customer_Order(
@@ -86,7 +87,7 @@ create table Customer_Order(
     order_date date,
     delivery_date date,
     delivery_service_id int not null,
-    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED', 'COMPLETED', 'CANCELLED')),
+    order_status varchar(20) not null check (order_status in ('PLACED', 'COMPLETED', 'CANCELLED')),
     foreign key (person_id) references Customer(person_id) on delete cascade on update cascade,
     foreign key (address_id) references Address(address_id),
     foreign key (delivery_service_id) references DeliveryService(delivery_service_id),
@@ -111,7 +112,7 @@ create table Manager_Order(
     order_date date,
     delivery_date date,
     delivery_service_id int not null,
-    order_status varchar(20) not null check (order_status in ('IN_CART', 'PLACED', 'COMPLETED', 'CANCELLED')),
+    order_status varchar(20) not null check (order_status in ('PLACED', 'COMPLETED', 'CANCELLED')),
     foreign key (person_id) references Manager(person_id),
     foreign key (delivery_service_id) references DeliveryService(delivery_service_id),
     primary key (order_id)
@@ -128,6 +129,91 @@ create table Manager_Order_Line(
 	foreign key (product_id) references Product(product_id),
     primary key (order_line_id)
 );
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_order_completed
+AFTER UPDATE ON Customer_Order
+FOR EACH ROW
+BEGIN
+    -- Check if the order status changed to COMPLETED
+    IF NEW.order_status = 'COMPLETED' AND OLD.order_status != 'COMPLETED' THEN
+        -- Increment stock for each product in the order
+        UPDATE Product p
+        JOIN Customer_Order_Line col ON p.product_id = col.product_id
+        SET p.stock_quantity = p.stock_quantity - col.quantity
+        WHERE col.order_id = NEW.order_id;
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER after_order_completed_insert
+AFTER INSERT ON Customer_Order
+FOR EACH ROW
+BEGIN
+    -- Check if the new order is inserted with the status COMPLETED
+    IF NEW.order_status = 'COMPLETED' THEN
+        -- Increment stock for each product in the order
+        UPDATE Product p
+        JOIN Customer_Order_Line col ON p.product_id = col.product_id
+        SET p.stock_quantity = p.stock_quantity - col.quantity
+        WHERE col.order_id = NEW.order_id;
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_order_manager_completed_insert
+AFTER INSERT ON Manager_Order
+FOR EACH ROW
+BEGIN
+    -- Check if the new order is inserted with the status COMPLETED
+    IF NEW.order_status = 'COMPLETED' THEN
+        -- Increment stock for each product in the order
+#         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order is marked as COMPLETED';
+        UPDATE Product p
+        JOIN Manager_Order_Line col ON p.product_id = col.product_id
+        SET p.stock_quantity = p.stock_quantity + col.quantity
+        WHERE col.order_id = NEW.order_id;
+
+#         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order status is not COMPLETED';
+    END IF;
+END $$
+
+DELIMITER ;
+
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_order_manager_completed
+AFTER UPDATE ON Manager_Order
+FOR EACH ROW
+BEGIN
+    -- Check if the order status changed to COMPLETED
+    IF NEW.order_status = 'COMPLETED' AND OLD.order_status != 'COMPLETED' THEN
+#         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order is marked as COMPLETED';
+        -- Increment stock for each product in the order
+        UPDATE Product p
+        JOIN Manager_Order_Line col ON p.product_id = col.product_id
+        SET p.stock_quantity = p.stock_quantity + col.quantity
+        WHERE col.order_id = NEW.order_id;
+
+#         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Order status is not COMPLETED';
+    END IF;
+END $$
+
+DELIMITER ;
+
+
 
 
 
@@ -165,72 +251,25 @@ create table Manager_Order_Line(
    DELIMITER ;
 
 
-select * from Person;
 
-select * from Customer;
-
-SELECT
-                            c.person_id AS person_id,
-                            p.first_name AS first_name,
-                            p.last_name AS last_name,
-                            p.email AS email
-                            FROM Customer c
-                            JOIN Person p on c.person_id = p.person_id
-                            WHERE p.first_name like 'IBRAHIM1' or p.last_name like '%IBRAHIM1%';
-
-select * from Person;
-
-select * from Manager;
-
-select * from Address;
-
-delete from Person where person_id > 20;
-
-select * from Category;
-
-delete from Category;
-
-delete from Customer;
-delete from Person;
-select * from Customer;
-select * from Manager;
-select * from Person;
-
-delete from Address;
-select COUNT(*) from Customer;
-select COUNT(*) from Address;
-
-select * from Category;
-select * from Supplier;
-
-select * from Customer_Order;
-
-SELECT p.product_id, p.product_name, SUM(col.quantity) AS total_quantity_sold
-    FROM Product p
-    JOIN Customer_Order_Line col ON p.product_id = col.product_id
-    JOIN Customer_Order co ON col.order_id = co.order_id
-    WHERE co.order_status = 'PLACED'
-    GROUP BY p.product_id, p.product_name
-    ORDER BY total_quantity_sold DESC
-    LIMIT 10;
+# SELECT
+#     c.person_id AS person_id,
+#     p.first_name AS first_name,
+#     p.last_name AS last_name,
+#     p.email AS email,
+#     p.passcode AS passcode,
+#     c.birth_date AS birth_date
+# FROM Customer c
+# JOIN Person p
+# ON c.person_id = p.person_id
+# WHERE p.email = :email;
 
 
-SELECT COUNT(DISTINCT c.person_id) AS customers_with_address
-FROM Customer c
-JOIN Address a ON c.person_id = a.person_id;
+UPDATE Product p
+JOIN Manager_Order_Line col ON p.product_id = col.product_id
+SET p.stock_quantity = p.stock_quantity + col.quantity
+WHERE col.order_id = 351;
 
 
-select * from Customer;
-
-SELECT
-    c.person_id AS person_id,
-    p.first_name AS first_name,
-    p.last_name AS last_name,
-    p.email AS email,
-    p.passcode AS passcode,
-    c.birth_date AS birth_date
-FROM Customer c
-JOIN Person p
-ON c.person_id = p.person_id
-WHERE p.email = :email;
-
+delete from Product
+where product_id > 101;

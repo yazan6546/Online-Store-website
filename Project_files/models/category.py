@@ -60,23 +60,23 @@ class Category:
     @classmethod
     def get_all(cls):
         conn = get_db_connection()
+
         try:
-            categories_objects = []
-            result = conn.execute(q.category.GET_CATEGORY_TABLE).fetchall()
-            if not result:  # Check if the query result is empty
-                print("Getting categories failed")
-                return []
-            categories = [row._mapping for row in result]
+            category_objects = []
+            categories = conn.execute(q.category.GET_CATEGORY_TABLE).fetchall()
+            categories = [category._mapping for category in categories]
+            conn.commit()
 
-            for cat in categories:
-                category_object = cls(**cat)  # Initialize the class with the supplier data
-                categories_objects.append(category_object)
+            for category in categories:
+                category_objects.append(Category(
+                    **category
+                ))
 
-            return categories_objects
-
+            return category_objects
         except Exception as e:
-            print(f"Error in get_all(): {e}")
-            return []
+            print(f"Error: {e}")
+            return 0
+
         finally:
             conn.close()
 

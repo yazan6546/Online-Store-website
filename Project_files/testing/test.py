@@ -1,4 +1,4 @@
-from models import Product
+from models import Product, Manager, ManagerOrder, Category
 from models.customers import Customer
 import datetime
 
@@ -25,3 +25,7 @@ import datetime
 # print(x)
 
 
+from models.cart import Cart
+from models.manager_order import ManagerOrder
+
+print(ManagerOrder.get_all()[4].products)

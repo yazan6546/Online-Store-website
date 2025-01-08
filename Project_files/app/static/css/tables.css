@@ -11,6 +11,11 @@
   margin-left: 88px; /* Adjust when sidebar is collapsed */
 }
 
+h1 {
+  font-size: 24px;
+  color: #333;
+}
+
 #table {
   width: 100%;
   border-collapse: collapse;
@@ -577,7 +582,7 @@ h1 {
   }
   .product-name-photo img {
       width: 50px;
-      height: auto;
+      height: 50px;
       margin-right: 8px;
   }
   .pencil-icon {
