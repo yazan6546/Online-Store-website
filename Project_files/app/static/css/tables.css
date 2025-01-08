@@ -632,6 +632,6 @@ h1 {
   /* Simple example for a resizable textarea */
   .description-edit-container textarea {
       width: 100%;
-      min-height: 80px;
+      min-height: 160px;
       resize: vertical;
   }
