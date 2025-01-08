@@ -1,0 +1,55 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+Customers
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/actions.css') }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+    <div class="card-heading">
+        <h1>Managers' Orders</h1>
+    </div>
+
+    <div id="container_search_add">
+        <form id="search-form" onsubmit="event.preventDefault(); searchManagersOrders();">
+            <input type="text" id="search-query" placeholder="Search managers' orders...">
+            <button type="submit" class="btn">Search</button>
+        </form>
+        <button onclick="window.location.href='{{ url_for('admin_shop') }}'" class="btn">Insert Order</button>
+    </div>
+
+    <table id="table">
+        <thead>
+            <tr>
+                <th onclick="sortOrders('order_id')">Order ID</th>
+                <th onclick="sortOrders('manager_email')">Manager Email</th>
+                <th onclick="sortOrders('order_date')">Order Date</th>
+                <th onclick="sortOrders('delivery_date')">Delivery Date</th>
+                <th onclick="sortOrders('delivery_service_name')">Delivery Service Name</th>
+                <th onclick="sortOrders('order_status')">Order Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+
+<div class="pagination">
+  <button id="prevPage" disabled>Previous</button>
+  <span id="currentPage">Page 1</span>
+  <button id="nextPage">Next</button>
+</div>
+
+
+<script src="{{ url_for('static', filename='js/managers_orders.js') }}"></script>
+<script src="{{ url_for('static', filename='js/actions.js') }}"></script>
+
+
+{% endblock %}

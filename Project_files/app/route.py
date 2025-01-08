@@ -691,9 +691,9 @@ def admin_dashboard_customer_orders():
 # Manager's orders section
 ############################################################################################################
 
-@app.route('/admin_dashboard/managers_orders')
-def admin_dashboard_managers_orders():
-    return "<h1>manager's orders</h1>"  # Replace with render_template if applicable
+@app.route('/managers_orders')
+def managers_orders():
+    return render_template('managers_orders.html')
 
 
 @app.route('/')
