@@ -42,7 +42,7 @@ class ManagerOrder(Order):
             conn = get_db_connection()
 
         try:
-            result = conn.execute(q.INSERT_MANAGER_ORDER_TABLE, self.to_dict())
+            result = conn.execute(q.manager_order.INSERT_MANAGER_ORDER_TABLE, self.to_dict())
 
             if commit:
                 conn.commit()
@@ -117,7 +117,7 @@ class ManagerOrder(Order):
 
             for manager_order in manager_orders:
                 manager_object = ManagerOrder(**manager_order)  # Mapping the dictionary to the class constructor
-                manager_object.products = ManagerOrder.get_products_by_person_id(manager_object.order_id)
+                manager_object.products = ManagerOrder.get_products_by_order_id(manager_object.order_id)
 
                 manager_order_objects.append(manager_object)
 
@@ -129,7 +129,7 @@ class ManagerOrder(Order):
             conn.close()
 
     @staticmethod
-    def get_products_by_person_id(order_id):
+    def get_products_by_order_id(order_id):
         conn = get_db_connection()
         try:
             products = conn.execute(q.manager_order.GET_PRODUCTS_FROM_ORDER, {"order_id": order_id}).fetchall()
