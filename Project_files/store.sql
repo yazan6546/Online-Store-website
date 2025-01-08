@@ -251,8 +251,6 @@ DELIMITER ;
    DELIMITER ;
 
 
-delete from Manager_Order_Line;
-delete from Manager_Order;
 
 # SELECT
 #     c.person_id AS person_id,
@@ -271,3 +269,7 @@ UPDATE Product p
 JOIN Manager_Order_Line col ON p.product_id = col.product_id
 SET p.stock_quantity = p.stock_quantity + col.quantity
 WHERE col.order_id = 351;
+
+
+delete from Product
+where product_id > 101;

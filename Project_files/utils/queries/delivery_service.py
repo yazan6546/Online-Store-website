@@ -2,6 +2,8 @@
 
 from sqlalchemy import text
 
+from utils.queries import GET_ID_BY_NAME
+
 # Query to get all delivery services
 GET_ALL_DELIVERY_SERVICES = text("""
     SELECT * FROM DeliveryService;
@@ -30,6 +32,10 @@ UPDATE_DELIVERY_SERVICE = text("""
 # Query to delete a delivery service by ID
 DELETE_DELIVERY_SERVICE = text("""
     DELETE FROM DeliveryService WHERE delivery_service_id = :delivery_service_id;
+""")
+GET_ID_BY_NAME = text("""
+    SELECT delivery_service_id FROM DeliveryService
+    WHERE delivery_service_name = :delivery_service_name;
 """)
 
 

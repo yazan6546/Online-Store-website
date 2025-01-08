@@ -1,11 +1,13 @@
 // Keep track of sort order
 let currentSortOrder = 'asc';
+let products = []; // Global list of products
 
 
 // $(document).ready(function () {
 //     // Trigger searchProducts() with an empty query on page load
 //     searchProducts('');
 // });
+
 
 
 // ------------------- SORTING ------------------- //
@@ -27,8 +29,8 @@ function sortProducts(column) {
         let bValue = b.querySelector(`td:nth-child(${colIndex})`).innerText.trim();
 
         // If numeric sorting is needed
-        if (['product_id','price','stock_quantity','category_id','supplier_id']
-             .includes(column)) {
+        if (['product_id', 'price', 'stock_quantity', 'category_id', 'supplier_id']
+            .includes(column)) {
             aValue = parseFloat(aValue) || 0;
             bValue = parseFloat(bValue) || 0;
         }
@@ -49,15 +51,23 @@ function getColumnIndex(column) {
     // Adjust based on your table columns
     // 1-based indexing in querySelector(`td:nth-child(x)`)
     switch (column) {
-        case 'product_id':     return 1;
-        case 'product_name':   return 2;
-        case 'category_id':    return 3;
-        case 'supplier_id':    return 4;
-        case 'brand':          return 5;
-        case 'price':          return 6;
-        case 'stock_quantity': return 7;
+        case 'product_id':
+            return 1;
+        case 'product_name':
+            return 2;
+        case 'category_id':
+            return 3;
+        case 'supplier_id':
+            return 4;
+        case 'brand':
+            return 5;
+        case 'price':
+            return 6;
+        case 'stock_quantity':
+            return 7;
         // description = 8, actions = 9
-        default: return 1;
+        default:
+            return 1;
     }
 }
 
@@ -99,39 +109,40 @@ function enableEditProduct(product_id) {
 }
 
 // ------------------- ENABLE DESCRIPTION EDIT ONLY ------------------- //
-function enableDescriptionEdit(product_id) {
-    console.log('Enabling description edit for product ID:', product_id);
-    // Hide the static text
-    document.getElementById(`description-${product_id}-text`).style.display = 'none';
-    // Hide the pencil
-    document.getElementById(`desc-edit-icon-${product_id}`).style.display = 'none';
-    // Show the textarea
-    document.getElementById(`description-edit-container-${product_id}`).style.display = 'block';
-
-    // Pre-fill the textarea with existing text
-    const descValue = document.getElementById(`description-${product_id}-text`).innerText;
-    document.getElementById(`description-${product_id}-input`).value = descValue;
-
-    // Also hide the 3-dots & show Save button if not in "edit" mode
-    document.getElementById(`three-dots-${product_id}`).style.display = 'none';
-    document.getElementById(`save-btn-${product_id}`).style.display = 'inline';
-}
+// function enableDescriptionEdit(product_id) {
+//     console.log('Enabling description edit for product ID:', product_id);
+//     // Hide the static text
+//     document.getElementById(`description-${product_id}-text`).style.display = 'none';
+//     // Hide the pencil
+//     document.getElementById(`desc-edit-icon-${product_id}`).style.display = 'none';
+//     // Show the textarea
+//     document.getElementById(`description-edit-container-${product_id}`).style.display = 'block';
+//
+//     // Pre-fill the textarea with existing text
+//     const descValue = document.getElementById(`description-${product_id}-text`).innerText;
+//     document.getElementById(`description-${product_id}-input`).value = descValue;
+//
+//     // Also hide the 3-dots & show Save button if not in "edit" mode
+//     document.getElementById(`three-dots-${product_id}`).style.display = 'none';
+//     document.getElementById(`save-btn-${product_id}`).style.display = 'inline';
+// }
 
 // ------------------- SAVE EDIT ------------------- //
 function saveEditProduct(product_id) {
     console.log('Saving edit for product ID:', product_id);
 
     // Gather new values
-    const product_name   = document.getElementById(`name-${product_id}-input`).value;
-    const category_id    = document.getElementById(`category-${product_id}-input`).value;
-    const supplier_id    = document.getElementById(`supplier-${product_id}-input`).value;
-    const brand          = document.getElementById(`brand-${product_id}-input`).value;
-    const price          = document.getElementById(`price-${product_id}-input`).value;
+    //const product_name = document.getElementById(`name-${product_id}-input`).value;
+    const product_name = document.getElementById(`name-${product_id}-input`).value;
+    const category_id = document.getElementById(`category-${product_id}-input`).value;
+    const supplier_id = document.getElementById(`supplier-${product_id}-input`).value;
+    const brand = document.getElementById(`brand-${product_id}-input`).value;
+    const price = document.getElementById(`price-${product_id}-input`).value;
     const stock_quantity = document.getElementById(`stock-${product_id}-input`).value;
+    //const descContainer = document.getElementById(`description-edit-container-${product_id}`);
 
     // For description
-    let newDescription = null;
-    const descContainer = document.getElementById(`description-edit-container-${product_id}`);
+    // let newDescription = null;
     if (descContainer.style.display === 'block') {
         newDescription = document.getElementById(`description-${product_id}-input`).value;
     }
@@ -140,7 +151,7 @@ function saveEditProduct(product_id) {
     // (Using fetch as an example)
     fetch(`/update_product/${product_id}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             product_name,
             category_id,
@@ -148,56 +159,48 @@ function saveEditProduct(product_id) {
             brand,
             price,
             stock_quantity,
-            product_description: newDescription // only if changed
         }),
     })
-    .then(res => res.json())
-    .then(response => {
-        if (response.success) {
-            // Update text spans
-            document.getElementById(`name-${product_id}-text`).innerText = product_name;
-            document.getElementById(`category-${product_id}-text`).innerText = category_id;
-            document.getElementById(`supplier-${product_id}-text`).innerText = supplier_id;
-            document.getElementById(`brand-${product_id}-text`).innerText = brand;
-            document.getElementById(`price-${product_id}-text`).innerText = price;
-            document.getElementById(`stock-${product_id}-text`).innerText = stock_quantity;
+        .then(res => res.json())
+        .then(response => {
+            if (response.success) {
+                // Update text spans
+                document.getElementById(`name-${product_id}-text`).innerText = product_name;
+                document.getElementById(`category-${product_id}-text`).innerText = category_id;
+                document.getElementById(`supplier-${product_id}-text`).innerText = supplier_id;
+                document.getElementById(`brand-${product_id}-text`).innerText = brand;
+                document.getElementById(`price-${product_id}-text`).innerText = price;
+                document.getElementById(`stock-${product_id}-text`).innerText = stock_quantity;
 
-            if (newDescription !== null) {
-                document.getElementById(`description-${product_id}-text`).innerText = newDescription;
+
+
+                // Hide input fields, show text
+                document.getElementById(`name-${product_id}-input`).style.display = 'none';
+                document.getElementById(`category-${product_id}-input`).style.display = 'none';
+                document.getElementById(`supplier-${product_id}-input`).style.display = 'none';
+                document.getElementById(`brand-${product_id}-input`).style.display = 'none';
+                document.getElementById(`price-${product_id}-input`).style.display = 'none';
+                document.getElementById(`stock-${product_id}-input`).style.display = 'none';
+
+                document.getElementById(`name-${product_id}-text`).style.display = 'inline';
+                document.getElementById(`category-${product_id}-text`).style.display = 'inline';
+                document.getElementById(`supplier-${product_id}-text`).style.display = 'inline';
+                document.getElementById(`brand-${product_id}-text`).style.display = 'inline';
+                document.getElementById(`price-${product_id}-text`).style.display = 'inline';
+                document.getElementById(`stock-${product_id}-text`).style.display = 'inline';
+
+
+
+                // Show the 3-dots again, hide the Save button
+                document.getElementById(`three-dots-${product_id}`).style.display = 'inline-block';
+                document.getElementById(`save-btn-${product_id}`).style.display = 'none';
+            } else {
+                alert('Error updating product: ' + response.error);
             }
-
-            // Hide input fields, show text
-            document.getElementById(`name-${product_id}-input`).style.display = 'none';
-            document.getElementById(`category-${product_id}-input`).style.display = 'none';
-            document.getElementById(`supplier-${product_id}-input`).style.display = 'none';
-            document.getElementById(`brand-${product_id}-input`).style.display = 'none';
-            document.getElementById(`price-${product_id}-input`).style.display = 'none';
-            document.getElementById(`stock-${product_id}-input`).style.display = 'none';
-
-            document.getElementById(`name-${product_id}-text`).style.display = 'inline';
-            document.getElementById(`category-${product_id}-text`).style.display = 'inline';
-            document.getElementById(`supplier-${product_id}-text`).style.display = 'inline';
-            document.getElementById(`brand-${product_id}-text`).style.display = 'inline';
-            document.getElementById(`price-${product_id}-text`).style.display = 'inline';
-            document.getElementById(`stock-${product_id}-text`).style.display = 'inline';
-
-            // Hide the description-edit container if it was open
-            if (descContainer.style.display === 'block') {
-                descContainer.style.display = 'none';
-                document.getElementById(`desc-edit-icon-${product_id}`).style.display = 'inline';
-                document.getElementById(`description-${product_id}-text`).style.display = 'inline';
-            }
-
-            // Show the 3-dots again, hide the Save button
-            document.getElementById(`three-dots-${product_id}`).style.display = 'inline-block';
-            document.getElementById(`save-btn-${product_id}`).style.display = 'none';
-        } else {
-            alert('Error updating product: ' + response.error);
-        }
-    })
-    .catch(error => {
-        alert('Error updating product: ' + error);
-    });
+        })
+        .catch(error => {
+            alert('Error updating product: ' + error);
+        });
 }
 
 // ------------------- TOGGLE 3-DOTS DROPDOWN ------------------- //
@@ -206,6 +209,7 @@ function toggleDropdown(product_id) {
     dropdown.classList.toggle('show');
     // You may want to close it when user clicks outside, etc.
 }
+
 
 // ------------------- DELETE ------------------- //
 function deleteProduct(product_id) {
@@ -218,14 +222,14 @@ function deleteProduct(product_id) {
     $.ajax({
         url: `/delete_product/${product_id}`,
         type: 'POST',
-        success: function(response) {
+        success: function (response) {
             if (response.success) {
                 document.getElementById(`row-${product_id}`).remove();
             } else {
                 alert('Error deleting product: ' + response.error);
             }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             alert('Error deleting product: ' + xhr.responseText);
         }
     });
@@ -238,20 +242,20 @@ function searchProducts() {
     $.ajax({
         url: '/search_product',
         type: 'GET',
-        data: { query: query },
-        success: function(response) {
+        data: {query: query},
+        success: function (response) {
             if (response.success) {
                 var tableBody = $('#table tbody'); // Use jQuery to select the table body
                 tableBody.empty(); // Clear the current table rows
 
-                console.log(response.suppliers);
-                console.log(response.categories);
+                // console.log(response.suppliers);
+                // console.log(response.categories);
 
                 // Iterate over the response products and append each as a new row
-                response.products.forEach(function(product) {
-                    console.log(product);
-                    console.log(response.suppliers);
-                    console.log(response.categories);
+                response.products.forEach(function (product) {
+                    // console.log(product);
+                    // console.log(response.suppliers);
+                    // console.log(response.categories);
                     var row = generateRow(product, response.categories, response.suppliers);
                     tableBody.append(row); // Append the new row to the table body
                 });
@@ -259,12 +263,11 @@ function searchProducts() {
                 alert('Error searching products: ' + response.error);
             }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             alert('Error searching products: ' + xhr.responseText);
         }
     });
 }
-
 
 // ------------------- ADD PRODUCT ------------------- //
 function addProduct() {
@@ -287,7 +290,7 @@ function addProduct() {
     // Send data to server
     fetch('/add_product', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             product_name,
             product_brand,
@@ -299,21 +302,21 @@ function addProduct() {
             product_description
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Product added successfully!');
-            closeAddModal();
-            // Refresh the table
-            fetchProducts(currentPage);
-        } else {
-            alert('Error adding product: ' + data.error);
-        }
-    })
-    .catch(error => {
-        console.error(error);
-        alert('An error occurred while adding the product.');
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Product added successfully!');
+                closeAddModal();
+                // Refresh the table
+                fetchProducts(currentPage);
+            } else {
+                alert('Error adding product: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            alert('An error occurred while adding the product.');
+        });
 }
 
 // ------------------- PAGINATION ------------------- //
@@ -321,9 +324,9 @@ let currentPage = 1;
 const limit = 10; // rows per page
 
 function generateRow(product, categories, suppliers) {
-    console.log(product);
-    console.log(categories);
-    console.log(suppliers);
+    // console.log(product);
+    // console.log(categories);
+    // console.log(suppliers);
     return `
         <tr id="row-${product.product_id}">
         <!-- Product ID -->
@@ -409,22 +412,19 @@ function generateRow(product, categories, suppliers) {
         </td>
 
         <!-- Description with pencil icon to trigger edit -->
+        
+       
         <td>
-            <div>
-                <span id="description-${product.product_id}-text"> ${product.product_description}</span>
-                <span class="pencil-icon"
-                      id="desc-edit-icon-${product.product_id}"
-                      onclick="enableDescriptionEdit(${product.product_id})">✏️  </span>
-            </div>
-
-            <!-- Hidden textarea for editing the description -->
-            <div class="description-edit-container" id="description-edit-container-${product.product_id}"
-                 style="display:none; margin-top: 8px;">
-            <textarea>id="description-${product.product_id}-input"
-                    placeholder="Write your new description here...">
-            </textarea>
-            </div>
-        </td>
+            <button class="btn"
+                    data-product='${JSON.stringify(product)}'
+                    onclick="openDescriptionModal(this)">
+                Show Description
+            </button>
+                </td>
+        
+         
+         
+       
 
         <!-- Actions: 3 vertical dots dropdown + Save button -->
         <td class="action-buttons">
@@ -495,9 +495,103 @@ document.getElementById('nextPage').addEventListener('click', () => {
 fetchProducts(currentPage);
 
 // ------------------- MODALS ------------------- //
+function openDescriptionModal(button) {
+    // Set the description in the modal's <p>
+    const product = JSON.parse(button.getAttribute('data-product'));
+
+    products=[product]
+    console.log(products);
+
+    console.log(product.product_id);
+    console.log(product.product_description);
+    document.getElementById('description-modal-text').innerText = product.product_description;
+
+    // Store the product in the Save button's data-product attribute
+    const saveButton = document.getElementById('save-description-btn');
+    saveButton.setAttribute('data-product', JSON.stringify(product));
+
+    // Reset the textarea in case it was used before
+    document.getElementById('description-textarea').value = '';
+
+    // Ensure the edit area is hidden and the default buttons are visible
+    document.getElementById('edit-description-area').style.display = 'none';
+    document.getElementById('edit-description-btn').style.display = 'inline-block';
+
+    // Show the modal
+    document.getElementById('description-modal').style.display = 'block';
+}
+
+function closeDescriptionModal() {
+
+        // Hide the modal
+    document.getElementById('description-modal').style.display = 'none';
+
+    // Clear the textarea and other fields in the modal
+    document.getElementById('description-textarea').value = '';
+    document.getElementById('description-modal-text').innerText = '';
+}
+
+
+function enableEditDescription() {
+    // Hide the <p> and "Edit Description" button
+    document.getElementById('description-modal-text').style.display = 'none';
+    document.getElementById('edit-description-btn').style.display = 'none';
+    document.getElementById('save-description-btn').style.display = 'block';
+
+    // Populate the textarea with the current description
+    const currentDesc = document.getElementById('description-modal-text').innerText;
+    document.getElementById('description-textarea').value = currentDesc;
+
+
+    // Show the textarea and Save button
+    document.getElementById('edit-description-area').style.display = 'block';
+}
+
+function saveDescriptionEdit() {
+    // Parse the product data from the Save button's data-product attribute
+
+    // Get the updated description from the textarea
+    const updatedDescription = document.getElementById('description-textarea').value;
+
+    // Update the product object with the new description
+    //products[0].product_description = updatedDescription;
+    products[0].product_description = updatedDescription;
+
+    // Send the updated product to the server
+    fetch(`/update_description/${products[0].product_id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(products[0]),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Description updated successfully!');
+
+                // Update the table row with the new description
+                document.getElementById(`row-${products[0].product_id}`)
+                    .querySelector('.btn[data-product]')
+                    .setAttribute('data-product', JSON.stringify(products[0]));
+
+                // Close the modal
+                closeDescriptionModal();
+            } else {
+                alert('Error updating description: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating the description.');
+        });
+}
+
+
+
+
 function openAddModal() {
     document.getElementById('add-product-modal').classList.add('show');
 }
+
 function closeAddModal() {
     document.getElementById('add-product-modal').classList.remove('show');
     // Clear the form if desired

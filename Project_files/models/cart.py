@@ -1,21 +1,28 @@
+from logging import exception
+
+
 class Cart:
     def __init__(self):
         self.items = {}
 
     def add_item(self, product_id, price, quantity):
+        product_id = str(product_id)
+
         if product_id in self.items:
+            print('ahahhha')
             self.items[product_id]['quantity'] += quantity
+            self.items[product_id]['price_at_time_of_order'] = price
         else:
             self.items[product_id] = {
                 'price_at_time_of_order': price,
-                'quantity': quantity
+                'quantity': quantity,
             }
 
     def remove_item(self, product_id):
         if product_id in self.items:
             del self.items[product_id]
         else:
-            print("Product not in cart.")
+            raise exception("Product not in cart.")
 
     def get_total(self):
         return sum([details['price_at_time_of_order'] * details['quantity'] for details in self.items.values()])
@@ -29,7 +36,11 @@ class Cart:
         else:
             return 0
 
-    def update_item_quantity(self, product_id, quantity):
+    def update_quantity(self, product_id, quantity):
+
+        if quantity < 1:
+            quantity = 1
+
         if product_id in self.items:
             self.items[product_id]['quantity'] = quantity
         else:
@@ -41,8 +52,11 @@ class Cart:
     @staticmethod
     def from_dict(dict):
         cart = Cart()
+
+        cart.items = {str(k): v for k, v in dict.items()}
         cart.items = dict
         return cart
 
     def __str__(self):
         return str(self.items)
+
