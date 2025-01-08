@@ -400,8 +400,6 @@ def fetch_suppliers():
         return jsonify(success=False, error=str(e))
 
 
-
-
 ############################################################################################################
 # Products section
 ############################################################################################################
@@ -418,10 +416,11 @@ def admin_dashboard_products():
 
     categories = [cat.to_dict() for cat in categories]  # [{'category_id': 1, 'category_name': 'Electronics'}, ...]
     suppliers = [sup.to_dict() for sup in suppliers]  # [{'supplier_id': 1, 'name': 'Amazon'}, ...]
-    #print("Categories:", categories)
+    # print("Categories:", categories)
     # for cat in categories:
     #     print(cat['category_name'])
-    return render_template('products.html', products=products,suppliers=suppliers,categories=categories)  # Replace with render_template if applicable
+    return render_template('products.html', products=products, suppliers=suppliers,
+                           categories=categories)  # Replace with render_template if applicable
 
 
 @app.route('/add_product')
@@ -457,9 +456,9 @@ def add_product_upload():
         category_id = Category.get_id_by_name(category_name)
         supplier_id = Supplier.get_id_by_name(supplier_name)
 
-        print (category_id)
+        print(category_id)
         print("-----------------")
-        print (supplier_id)
+        print(supplier_id)
 
         # Save product data and image path to the database
         product = Product(
@@ -486,24 +485,75 @@ def add_product_upload():
 def update_product(product_id):
     try:
         # Extract data from the request
-        name = request.form.get('name')
-        price = request.form.get('price')
-        category = request.form.get('category')
-        supplier_id = request.form.get('supplier_id')
+        data = request.get_json()
+        product_name = data.get('product_name')
+        category_id = data.get('category_id')
+        supplier_id = data.get('supplier_id')
+        brand = data.get('brand')
+        price = data.get('price')
+        stock_quantity = data.get('stock_quantity')
 
-        # Validate inputs
-        if not name or not price or not category or not supplier_id:
-            return jsonify(success=False, error="Name, price, category, and supplier_id are required.")
+        category_id=Category.get_id_by_name(category_id)
+        supplier_id=Supplier.get_id_by_name(supplier_id)
 
-        # Fetch the product by ID and update its fields
-        product = Product.get_by_product_id(product_id)
-        if not product:
-            return jsonify(success=False, error="Product not found.")
+        product_description = Product.get_desc_by_id(product_id)
 
-        product.name = name
-        product.price = price
-        product.category = category
-        product.supplier_id = supplier_id
+
+        print(product_description)
+        print(supplier_id)
+        print(category_id)
+
+        product = Product(
+            product_id=product_id,
+            product_name=product_name,
+            product_description=product_description,
+            brand=brand,
+            price=price,
+            photo="",
+            stock_quantity=stock_quantity,
+            category_id=category_id,
+            supplier_id=supplier_id
+        )
+        result = product.update()
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to update product.")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+@app.route('/update_description/<int:product_id>', methods=['POST'])
+def update_description(product_id):
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        # Now you can access the data fields, for example:
+        product_id = data.get('product_id')
+        product_name = data.get('product_name')
+        category_id = data.get('category_id')
+        supplier_id = data.get('supplier_id')
+        brand = data.get('brand')
+        price = data.get('price')
+        stock_quantity = data.get('stock_quantity')
+        product_description = data.get('product_description')
+
+        print(product_description)
+        print(supplier_id)
+        print(category_id)
+
+        product = Product(
+            product_id=product_id,
+            product_name=product_name,
+            product_description=product_description,
+            brand=brand,
+            price=price,
+            photo="",
+            stock_quantity=stock_quantity,
+            category_id=Category.get_id_by_name(category_id),
+            supplier_id=Supplier.get_id_by_name(supplier_id)
+        )
         result = product.update()
 
         if result:
@@ -539,7 +589,6 @@ def search_product():
         # Fetch all products and filter them by name or category
         all_products = Product.get_all()
         products = [product.to_print() for product in all_products]
-
 
         filtered_products = [
             product for product in products
@@ -620,8 +669,6 @@ def fetch_categories():
         return jsonify(success=True, categories=categories)
     except Exception as e:
         return jsonify(success=False, error=str(e))
-
-
 
 
 ############################################################################################################
@@ -705,6 +752,7 @@ def admin_shop():
 def admin_cart():
     return render_template('admin_cart.html')
 
+
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
     customer_form = CustomerForm()
@@ -775,12 +823,11 @@ def get_best_selling_products_by_month():
     best_selling_products = da.get_best_selling_product_by_month(2023)
     return jsonify(best_selling_products)
 
+
 # @app.route('/api/best_customers', methods=['GET'])
 # def get_best_customers():
 #     best_customers = da.get_best_customers()
 #     return jsonify(best_customers)
-
-
 
 
 ############################################################################################################
@@ -795,6 +842,7 @@ def admin_dashboard_delivery():
     print(delivery_services)
 
     return render_template('delivery_service.html', delivery_service=delivery_services)
+
 
 # update
 @app.route('/update_delivery/<int:delivery_service_id>', methods=['POST'])
@@ -824,6 +872,7 @@ def update_delivery(delivery_service_id):
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
+
 # Delete
 @app.route('/delete_delivery/<int:delivery_service_id>', methods=['POST'])
 def delete_delivery(delivery_service_id):
@@ -837,6 +886,7 @@ def delete_delivery(delivery_service_id):
             return jsonify(success=False, error="Failed to delete delivery service from that database")
     except Exception as e:
         return jsonify(success=False, error=str(e))
+
 
 # search
 @app.route('/search_delivery', methods=['GET'])
@@ -886,10 +936,6 @@ def get_delivery():
         return jsonify(success=False, error=str(e))
 
 
-
-
-
-
 @app.route('/add_delivery', methods=['POST'])
 def add_delivery():
     try:
@@ -911,11 +957,7 @@ def add_delivery():
         return jsonify(success=False, error=str(e))
 
 
-
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     role = session.get('role', 'guest')  # Default to 'guest' if not logged in
     return render_template('404.html', role=role), 404
-

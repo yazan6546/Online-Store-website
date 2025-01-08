@@ -9,203 +9,277 @@
 {% endblock %}
 
 {% block content %}
-<div id="wrapper">
-    <div class="card-heading">
-        <h1>Products</h1>
-    </div>
+    <div id="wrapper">
+        <div class="card-heading">
+            <h1>Products</h1>
+        </div>
 
-    <div id="container_search_add">
-        <!-- Search form -->
-        <form id="search-form" onsubmit="event.preventDefault(); searchProducts();">
-            <input type="text" id="search-query" placeholder="Search products...">
-            <button type="submit" class="btn">Search</button>
-        </form>
+        <div id="container_search_add">
+            <!-- Search form -->
+            <form id="search-form" onsubmit="event.preventDefault(); searchProducts();">
+                <input type="text" id="search-query" placeholder="Search products...">
+                <button type="submit" class="btn">Search</button>
+            </form>
 
-        <!-- Add product button -->
-        <button onclick="window.location.href='{{ url_for('add_product') }}'" class="btn">Add Product</button>
-    </div>
+            <!-- Add product button -->
+            <button onclick="window.location.href='{{ url_for('add_product') }}'" class="btn">Add Product</button>
+        </div>
 
-    <!-- Products table -->
-    <table id="table">
-        <thead>
-        <tr>
-            <th onclick="sortProducts('product_id')">Product ID</th>
-            <th onclick="sortProducts('product_name')">Name</th>
-            <th onclick="sortProducts('category_id')">Category</th>
-            <th onclick="sortProducts('supplier_id')">Supplier</th>
-            <th onclick="sortProducts('brand')">Brand</th>
-            <th onclick="sortProducts('price')">Price</th>
-            <th onclick="sortProducts('stock_quantity')">Stock</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
-            <tr id="row-{{ product.product_id }}">
-                <!-- Product ID -->
-                <td>{{ product.product_id }}</td>
+        <!-- Products table -->
+        <table id="table">
+            <thead>
+            <tr>
+                <th onclick="sortProducts('product_id')">Product ID</th>
+                <th onclick="sortProducts('product_name')">Name</th>
+                <th onclick="sortProducts('category_id')">Category</th>
+                <th onclick="sortProducts('supplier_id')">Supplier</th>
+                <th onclick="sortProducts('brand')">Brand</th>
+                <th onclick="sortProducts('price')">Price</th>
+                <th onclick="sortProducts('stock_quantity')">Stock</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+                <tr id="row-{{ product.product_id }}">
+                    <!-- Product ID -->
+                    <td>{{ product.product_id }}</td>
 
-                <!-- Name + Photo in same cell -->
-                <td>
-                    <div class="product-name-photo">
-                        <img src="{{ product.photo }}" alt="Product Image">
-                        <div class="product-name">
-                            <span id="name-{{ product.product_id }}-text">{{ product.product_name }}</span>
-                            <input type="text" id="name-{{ product.product_id }}-input"
-                                   value="{{ product.product_name }}" style="display:none; width: 100px;">
+
+
+                    <!-- Name + Photo in same cell -->
+                    <td>
+                        <div class="product-name-photo">
+                            <img src="{{ product.photo }}" alt="Product Image">
+                            <div class="product-name">
+                                <span id="name-{{ product.product_id }}-text">{{ product.product_name }}</span>
+                                <input type="text" id="name-{{ product.product_id }}-input"
+                                       value="{{ product.product_name }}" style="display:none; width: 100px;">
+                            </div>
                         </div>
-                    </div>
-                </td>
+                    </td>
 
-                <!-- Category ID -->
-                <td>
-                  <!-- Display text for non-edit mode -->
-                  <span id="category-{{ product.product_id }}-text">
+                    <!-- Category ID -->
+                    <td>
+                        <!-- Display text for non-edit mode -->
+                        <span id="category-{{ product.product_id }}-text">
                     {{ product.category_id }}
                   </span>
 
-                  <!-- Dropdown for edit mode -->
-                  <select
-                      id="category-{{ product.product_id }}-input"
-                      style="display: none; width: 150px;"
-                  >
-                    {% for cat in categories %}
-                      <option
-                        value="{{ cat.category_id }}"
-                        {% if cat.category_id == product.category_id %}selected{% endif %}
-                      >
-                          {{ cat.category_name }}
-                      </option>
-                    {% endfor %}
-                  </select>
-                </td>
+                        <!-- Dropdown for edit mode -->
+                        <select
+                                id="category-{{ product.product_id }}-input"
+                                style="display: none; width: 150px;"
+                        >
+                            {% for cat in categories %}
+                                <option
+                                        value="{{ cat.category_id }}"
+                                        {% if cat.category_id == product.category_id %}selected{% endif %}
+                                >
+                                    {{ cat.category_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
 
-                <!-- Supplier ID -->
-                <td>
-                  <!-- Display text for non-edit mode -->
-                  <span id="supplier-{{ product.product_id }}-text">
+                    <!-- Supplier ID -->
+                    <td>
+                        <!-- Display text for non-edit mode -->
+                        <span id="supplier-{{ product.product_id }}-text">
                     {{ product.supplier_id }}
                   </span>
 
-                  <!-- Dropdown for edit mode -->
-                  <select
-                      id="supplier-{{ product.product_id }}-input"
-                      style="display: none; width: 150px;"
-                  >
-                    {% for sup in suppliers %}
-                      <option
-                        value="{{ sup.supplier_id }}"
-                        {% if sup.supplier_id == product.supplier_id %}selected{% endif %}
-                      >
-                        {{sup.name}}
-                      </option>
-                    {% endfor %}
-                  </select>
-                </td>
+                        <!-- Dropdown for edit mode -->
+                        <select
+                                id="supplier-{{ product.product_id }}-input"
+                                style="display: none; width: 150px;"
+                        >
+                            {% for sup in suppliers %}
+                                <option
+                                        value="{{ sup.supplier_id }}"
+                                        {% if sup.supplier_id == product.supplier_id %}selected{% endif %}
+                                >
+                                    {{ sup.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
 
-                <!-- Brand -->
-                <td>
-                    <span id="brand-{{ product.product_id }}-text">{{ product.brand }}</span>
-                    <input type="text" id="brand-{{ product.product_id }}-input" value="{{ product.brand }}"
-                           style="display:none; width: 100px;">
-                </td>
+                    <!-- Brand -->
+                    <td>
+                        <span id="brand-{{ product.product_id }}-text">{{ product.brand }}</span>
+                        <input type="text" id="brand-{{ product.product_id }}-input" value="{{ product.brand }}"
+                               style="display:none; width: 100px;">
+                    </td>
 
-                <!-- Price -->
-                <td>
-                    <span id="price-{{ product.product_id }}-text">{{ product.price }}</span>
-                    <input type="number" step="0.01" id="price-{{ product.product_id }}-input"
-                           value="{{ product.price }}" style="display:none; width: 100px;">
-                </td>
+                    <!-- Price -->
+                    <td>
+                        <span id="price-{{ product.product_id }}-text">{{ product.price }}</span>
+                        <input type="number" step="0.01" id="price-{{ product.product_id }}-input"
+                               value="{{ product.price }}" style="display:none; width: 100px;">
+                    </td>
 
-                <!-- Stock -->
-                <td>
-                    <span id="stock-{{ product.product_id }}-text">{{ product.stock_quantity }}</span>
-                    <input type="number" id="stock-{{ product.product_id }}-input"
-                           value="{{ product.stock_quantity }}" style="display:none; width: 100px;">
-                </td>
+                    <!-- Stock -->
+                    <td>
+                        <span id="stock-{{ product.product_id }}-text">{{ product.stock_quantity }}</span>
+                        <input type="number" id="stock-{{ product.product_id }}-input"
+                               value="{{ product.stock_quantity }}" style="display:none; width: 100px;">
+                    </td>
 
-                <!-- Description with pencil icon to trigger edit -->
-                <td>
-                    <div>
-                        <span id="description-{{ product.product_id }}-text"> {{ product.product_description }}</span>
-                        <span class="pencil-icon"
-                              id="desc-edit-icon-{{ product.product_id }}"
-                              onclick="enableDescriptionEdit({{ product.product_id }})">✏️  </span>
-                    </div>
+                    {#                <!-- Description with pencil icon to trigger edit -->#}
+                    {#                <td>#}
+                    {#                    <div>#}
+                    {#                        <span id="description-{{ product.product_id }}-text"> {{ product.product_description }}</span>#}
+                    {#                        <span class="pencil-icon"#}
+                    {#                              id="desc-edit-icon-{{ product.product_id }}"#}
+                    {#                              onclick="enableDescriptionEdit({{ product.product_id }})">✏️  </span>#}
+                    {#                    </div>#}
+                    {##}
+                    {#                    <!-- Hidden textarea for editing the description -->#}
+                    {#                    <div class="description-edit-container" id="description-edit-container-{{ product.product_id }}"#}
+                    {#                         style="display:none; margin-top: 8px;">#}
+                    {#                    <textarea>id="description-{{ product.product_id }}-input"#}
+                    {#                            placeholder="Write your new description here...">#}
+                    {#                    </textarea>#}
+                    {#                    </div>#}
+                    {#                </td>#}
+                    <!-- Description Column -->
 
-                    <!-- Hidden textarea for editing the description -->
-                    <div class="description-edit-container" id="description-edit-container-{{ product.product_id }}"
-                         style="display:none; margin-top: 8px;">
-                    <textarea>id="description-{{ product.product_id }}-input"
-                            placeholder="Write your new description here...">
-                    </textarea>
-                    </div>
-                </td>
+                    <td>
+                        <button class="btn"
+                                data-product='{{ product | tojson | safe }}'
+                                onclick="openDescriptionModal(this)">
+                            Show Description
+                        </button>
+                    </td>
 
-                <!-- Actions: 3 vertical dots dropdown + Save button -->
-                        <td class="action-buttons">
-                            <!-- Three-dots dropdown -->
-                            <div class="dropdown" id="three-dots-${ product.product_id }">
-                                <!-- Replace "..." with the vertical ellipsis character -->
-                                <button class="three-dots-btn" onclick="toggleDropdown(${ product.product_id })">
-                                    ⋮
-                                </button>
-                                <div class="dropdown-content">
-                                    <a onclick="enableEditProduct(${ product.product_id })">Edit</a>
-                                    <a onclick="deleteProduct(${ product.product_id })">Make Unavailable</a>
-                                </div>
-                            </div>
 
-                            <!-- Save button (hidden by default) -->
-                            <button id="save-btn-${ product.product_id }"
-                                    class="save"
-                                    style="display: none;"
-                                    onclick="saveEditProduct(${ product.product_id })">
-                                Save
+                    <!-- Actions: 3 vertical dots dropdown + Save button -->
+                    <td class="action-buttons">
+                        <!-- Three-dots dropdown -->
+                        <div class="dropdown" id="three-dots-${ product.product_id }">
+                            <!-- Replace "..." with the vertical ellipsis character -->
+                            <button class="three-dots-btn" onclick="toggleDropdown(${ product.product_id })">
+                                ⋮
                             </button>
-                        </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+                            <div class="dropdown-content">
+                                <a onclick="enableEditProduct(${ product.product_id })">Edit</a>
+                                <a onclick="deleteProduct(${ product.product_id })">Make Unavailable</a>
+                            </div>
+                        </div>
 
-    <!-- Add Product Modal -->
-    <div id="add-product-modal" class="modal">
+                        <!-- Save button (hidden by default) -->
+                        <button id="save-btn-${ product.product_id }"
+                                class="save"
+                                style="display: none;"
+                                onclick="saveEditProduct(${ product.product_id })">
+                            Save
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    {#    <!-- Add Product Modal -->#}
+    {#    <div id="add-product-modal" class="modal">#}
+    {#        <div class="modal-content">#}
+    {#            <span class="close" onclick="closeAddModal()">&times;</span>#}
+    {#            <h2>Add Product</h2>#}
+    {#            <form id="add-product-form" onsubmit="event.preventDefault(); addProduct();">#}
+    {#                <label for="product_name">Name</label>#}
+    {#                <input type="text" id="product_name" placeholder="Enter product name" required>#}
+    {##}
+    {#                <label for="product_brand">Brand</label>#}
+    {#                <input type="text" id="product_brand" placeholder="Enter brand" required>#}
+    {##}
+    {#                <label for="product_price">Price</label>#}
+    {#                <input type="number" step="0.01" id="product_price" placeholder="Enter product price" required>#}
+    {##}
+    {#                <label for="product_stock">Stock Quantity</label>#}
+    {#                <input type="number" id="product_stock" placeholder="Enter stock quantity" required>#}
+    {##}
+    {#                <label for="product_photo">Photo URL</label>#}
+    {#                <input type="text" id="product_photo" placeholder="Enter photo URL">#}
+    {##}
+    {#                <label for="product_category">Category ID</label>#}
+    {#                <input type="number" id="product_category" placeholder="Enter category ID" required>#}
+    {##}
+    {#                <label for="product_supplier">Supplier ID</label>#}
+    {#                <input type="number" id="product_supplier" placeholder="Enter supplier ID" required>#}
+    {##}
+    {#                <label for="product_description">Description</label>#}
+    {#                <textarea id="product_description" placeholder="Enter product description" required></textarea>#}
+    {##}
+    {#                <button type="submit" class="btn">Add Product</button>#}
+    {#            </form>#}
+    {#        </div>#}
+    {#    </div>#}
+    {##}
+
+    <!-- Show Description Modal -->
+    <div id="description-modal" class="modal" style="display: none;">
         <div class="modal-content">
-            <span class="close" onclick="closeAddModal()">&times;</span>
-            <h2>Add Product</h2>
-            <form id="add-product-form" onsubmit="event.preventDefault(); addProduct();">
-                <label for="product_name">Name</label>
-                <input type="text" id="product_name" placeholder="Enter product name" required>
+            <!-- Close Modal (X) -->
+            <span class="close" onclick="closeDescriptionModal()">&times;</span>
 
-                <label for="product_brand">Brand</label>
-                <input type="text" id="product_brand" placeholder="Enter brand" required>
+            <h2>Product Description</h2>
 
-                <label for="product_price">Price</label>
-                <input type="number" step="0.01" id="product_price" placeholder="Enter product price" required>
+            <!-- The paragraph that displays the description -->
+            <p id="description-modal-text">Here goes the product description...</p>
 
-                <label for="product_stock">Stock Quantity</label>
-                <input type="number" id="product_stock" placeholder="Enter stock quantity" required>
+            <!-- Buttons below the description -->
+            <div id="description-modal-buttons">
+                <!-- Edit Description button (visible by default) -->
+                <button id="edit-description-btn" onclick="enableEditDescription()">
+                    Edit Description
+                </button>
 
-                <label for="product_photo">Photo URL</label>
-                <input type="text" id="product_photo" placeholder="Enter photo URL">
+                <!-- Cancel button (always visible to close the modal) -->
+                <button id="cancel-description-btn" onclick="closeDescriptionModal()">
+                    Cancel
+                </button>
+            </div>
 
-                <label for="product_category">Category ID</label>
-                <input type="number" id="product_category" placeholder="Enter category ID" required>
 
-                <label for="product_supplier">Supplier ID</label>
-                <input type="number" id="product_supplier" placeholder="Enter supplier ID" required>
+            <!-- Hidden edit area (textarea + Save button) -->
+            <div id="edit-description-area" style="display: none;">
+                <textarea id="description-textarea" rows="5" cols="50"></textarea>
+                <br>
+                <button
+                        id="save-description-btn"
+                        class="save"
+                        style="display: none;"
+                        onclick="saveDescriptionEdit()">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
 
-                <label for="product_description">Description</label>
-                <textarea id="product_description" placeholder="Enter product description" required></textarea>
 
-                <button type="submit" class="btn">Add Product</button>
+
+    <div id="add-supplier-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add Supplier</h2>
+
+            <form id="add-supplier-form" onsubmit="event.preventDefault(); addSupplier();">
+                <label for="supplier-name">Name</label>
+                <input type="text" id="supplier-name" placeholder="Enter supplier name" required>
+                <label for="supplier-phone">Phone</label>
+                <input type="text" id="supplier-phone" placeholder="Enter supplier phone" required>
+                <button type="submit" class="btn">Add Supplier</button>
             </form>
         </div>
     </div>
 
+
+
+    
     <!-- Pagination -->
     <div class="pagination">
         <button id="prevPage" disabled>Previous</button>

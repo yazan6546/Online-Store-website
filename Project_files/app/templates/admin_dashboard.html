@@ -1,160 +1,160 @@
 {% extends "admin_base.html" %}
 
 {% block title %}
-Admin Dashboard
+    Admin Dashboard
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
-  <header class="dashboard-header">
-    <h1>
-      Welcome back, {{ admin.first_name }}! <span class="waving-icon">👋</span>
-    </h1>
-  </header>
+    <header class="dashboard-header">
+        <h1>
+            Welcome back, {{ admin.first_name }}! <span class="waving-icon">👋</span>
+        </h1>
+    </header>
 
-<!-- STATS CARDS-->
-<section class="stats">
-  <div class="card">
-    <div class="icon">
-      <i class="bx bx-user"></i>
-    </div>
-    <div class="content">
-      <h4 id="count_customers">{{ stats.count_customers }}</h4>
-      <span>Total Customers</span>
-    </div>
-  </div>
-  <div class="card">
-    <div class="icon">
-      <i class="bx bx-package"></i>
-    </div>
-    <div class="content">
-      <h4 id="count_products">{{ stats.count_products }}</h4>
-      <span>Total Products</span>
-    </div>
-  </div>
-  <div class="card">
-    <div class="icon">
-      <i class="bx bx-cart"></i>
-    </div>
-    <div class="content">
-      <h4 id="count_orders">{{ stats.count_orders }}</h4>
-      <span>Total Orders</span>
-    </div>
-  </div>
-  <div class="card">
-    <div class="icon">
-      <i class="bx bx-dollar-circle"></i>
-    </div>
-    <div class="content">
-        <h4><span id="dollar_sign">$ </span><span id="total_revenue">{{ stats.total_revenue }}</span></h4>
-      <span>Total Revenue</span>
-    </div>
-  </div>
-</section>
+    <!-- STATS CARDS-->
+    <section class="stats">
+        <div class="card">
+            <div class="icon">
+                <i class="bx bx-user"></i>
+            </div>
+            <div class="content">
+                <h4 id="count_customers">{{ stats.count_customers }}</h4>
+                <span>Total Customers</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="icon">
+                <i class="bx bx-package"></i>
+            </div>
+            <div class="content">
+                <h4 id="count_products">{{ stats.count_products }}</h4>
+                <span>Total Products</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="icon">
+                <i class="bx bx-cart"></i>
+            </div>
+            <div class="content">
+                <h4 id="count_orders">{{ stats.count_orders }}</h4>
+                <span>Total Orders</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="icon">
+                <i class="bx bx-dollar-circle"></i>
+            </div>
+            <div class="content">
+                <h4><span id="dollar_sign">$ </span><span id="total_revenue">{{ stats.total_revenue }}</span></h4>
+                <span>Total Revenue</span>
+            </div>
+        </div>
+    </section>
 
 
-<!-- CHARTS-->
-  <section class="charts">
-    <div class="chart" id="revenue-chart">
-      <h2>Revenue</h2>
-      <canvas id="revenueChart"></canvas>
-    </div>
+    <!-- CHARTS-->
+    <section class="charts">
+        <div class="chart" id="revenue-chart">
+            <h2>Revenue</h2>
+            <canvas id="revenueChart"></canvas>
+        </div>
 
-    <!--TABLES-->
-    <div class="top-products">
-      <div class="header">
-        <h3>Top 5 Products</h3>
-        <a href="{{ url_for('admin_dashboard_products') }}" class="see-all-link">See All</a>
-      </div>
-      <ul class="product-list">
-        <li>
-          <img src="#" class="product-image">
-          <div class="product-details">
-            <span class="product-name">asus laptop</span>
-            <span class="product-category">Computers & Tablets</span>
-          </div>
-          <span class="product-price">$1,428</span>
-        </li>
-        <li>
-          <img src="#" class="product-image">
-          <div class="product-details">
-            <span class="product-name">asus laptop</span>
-            <span class="product-category">Computers & Tablets</span>
-          </div>
-          <span class="product-price">$1,428</span>
-        </li>
-        <li>
-          <img src="#" class="product-image">
-          <div class="product-details">
-            <span class="product-name">asus laptop</span>
-            <span class="product-category">Computers & Tablets</span>
-          </div>
-          <span class="product-price">$1,428</span>
-        </li>
-      </ul>
-    </div>
+        <!--TABLES-->
+        <div class="top-products">
+            <div class="header">
+                <h3>Top 5 Products</h3>
+                <a href="{{ url_for('admin_dashboard_products') }}" class="see-all-link">See All</a>
+            </div>
+            <ul class="product-list">
+                <li>
+                    <img src="#" class="product-image">
+                    <div class="product-details">
+                        <span class="product-name">asus laptop</span>
+                        <span class="product-category">Computers & Tablets</span>
+                    </div>
+                    <span class="product-price">$1,428</span>
+                </li>
+                <li>
+                    <img src="#" class="product-image">
+                    <div class="product-details">
+                        <span class="product-name">asus laptop</span>
+                        <span class="product-category">Computers & Tablets</span>
+                    </div>
+                    <span class="product-price">$1,428</span>
+                </li>
+                <li>
+                    <img src="#" class="product-image">
+                    <div class="product-details">
+                        <span class="product-name">asus laptop</span>
+                        <span class="product-category">Computers & Tablets</span>
+                    </div>
+                    <span class="product-price">$1,428</span>
+                </li>
+            </ul>
+        </div>
 
-  </section>
+    </section>
 
-  <section class="charts">
+    <section class="charts">
 
-    <div class="chart" id="category-chart">
-    <h2>Product Categories</h2>
-    <canvas id="categoryChart"></canvas>
-    </div>
+        <div class="chart" id="category-chart">
+            <h2>Product Categories</h2>
+            <canvas id="categoryChart"></canvas>
+        </div>
 
-    <div class="charts2">
+        <div class="charts2">
 
-      <div class="chart" id="top-customers-chart">
-        <h2>Top 10 Customers</h2>
-        <canvas id="topCustomersChart"></canvas>
-      </div>
-      <div class="chart" id="colored-bar-chart">
-        <h2>Best selling products by month in 2023</h2>
-        <canvas id="coloredBarChart"></canvas>
-      </div>
-    </div>
-</section>
+            <div class="chart" id="top-customers-chart">
+                <h2>Top 10 Customers</h2>
+                <canvas id="topCustomersChart"></canvas>
+            </div>
+            <div class="chart" id="colored-bar-chart">
+                <h2>Best selling products by month in 2023</h2>
+                <canvas id="coloredBarChart"></canvas>
+            </div>
+        </div>
+    </section>
 
-<section class="charts">
-  <div class="recent-orders">
-      <div class="header">
-        <h3>Recent Orders for Customers</h3>
-        <a href="" class="see-all">See all</a>
-      </div>
+    <section class="charts">
+        <div class="recent-orders">
+            <div class="header">
+                <h3>Recent Orders for Customers</h3>
+                <a href="" class="see-all">See all</a>
+            </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>#Order ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Order Date</th>
-                <th>Delivery Date</th>
-                <th>Order Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for order in orders %}
-            <tr>
-                <td>order_id</td>
-                <td>First Name</td>
-                <td>Last Name</td>
-                <td>order_date</td>
-                <td>delivery_date</td>
-                <td>
-                    <span class="status {{ order.order_status|lower }}">{{ order.order_status }}</span>
-                </td>
+            <table>
+                <thead>
+                <tr>
+                    <th>#Order ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Order Date</th>
+                    <th>Delivery Date</th>
+                    <th>Order Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>order_id</td>
+                        <td>First Name</td>
+                        <td>Last Name</td>
+                        <td>order_date</td>
+                        <td>delivery_date</td>
+                        <td>
+                            <span class="status {{ order.order_status|lower }}">{{ order.order_status }}</span>
+                        </td>
 
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-</section>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
 
 
 
