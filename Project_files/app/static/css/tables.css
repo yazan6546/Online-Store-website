@@ -258,18 +258,21 @@ h1 {
 
 
 /* Styling the modal form elements specifically */
+#add-category-form,
 #add-supplier-form {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
-
+#add-category-form,
 #add-supplier-form label {
     font-weight: bold;
     margin-bottom: 5px;
     color: #176B87;
 }
 
+#category-name,
+#category-description ,
 #supplier-name,
 #supplier-phone,
 #address-street,
@@ -285,6 +288,8 @@ h1 {
     transition: all 0.3s ease-in-out;
 }
 
+
+
 #supplier-name:focus,
 #supplier-phone:focus,
 #address-street:focus,
@@ -296,6 +301,7 @@ h1 {
     outline: none;
 }
 
+#add-category-form,
 #add-supplier-form button {
     background-color: #176B87;
     color: white;
@@ -306,13 +312,13 @@ h1 {
     font-size: 16px;
     transition: all 0.2s ease-in-out;
 }
-
+#add-category-form,
 #add-supplier-form button:hover {
     background-color: #0B4F5F;
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-
+#add-category-form,
 #add-supplier-form button:active {
     transform: scale(0.95);
     box-shadow: none;
