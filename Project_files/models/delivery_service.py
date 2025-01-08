@@ -39,6 +39,17 @@ class DeliveryService:
 
         return temp
 
+    def get_name_by_id(self, delivery_service_id):
+        conn = get_db_connection()
+        try:
+            service = conn.execute(q.delivery_service.GET_NAME_BY_ID, {'delivery_service_id': delivery_service_id}).fetchone()
+            return service[0]
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
+
     @staticmethod
     def delete(delivery_service_id):
         conn = get_db_connection()
