@@ -34,7 +34,6 @@ class Product:
             if result is None:
                 raise Exception("Duplicate entry")
 
-
         except Exception as e:
             print(f"Error in insert(): {e}")
             conn.rollback()
