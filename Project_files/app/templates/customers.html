@@ -22,7 +22,7 @@ Customers
             <input type="text" id="search-query" placeholder="Search customers...">
             <button type="submit" class="btn">Search</button>
         </form>
-        <button onclick="window.location.href='{{ url_for('add_customer') }}'" class="btn">Add Customer</button>
+        <button onclick="openModalCustomer()" class="btn">Add Customer</button>
     </div>
 
     <table id="table">
@@ -72,6 +72,32 @@ Customers
         </tbody>
     </table>
 </div>
+
+<div id="add-customer-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModalCustomer()">&times;</span>
+        <h2>Add Customer</h2>
+        <form id="add-customer-form" onsubmit="event.preventDefault(); addCustomer();">
+
+            <!-- First Name -->
+            <label for="customer-firstName">First Name</label>
+            <input type="text" id="customer-firstName" placeholder="Enter customer First Name" required>
+
+            <!-- Last Name -->
+            <label for="customer-lastName">Last Name</label>
+            <input type="text" id="customer-lastName" placeholder="Enter customer Last Name" required>
+
+            <!-- Email -->
+            <label for="customer-email">Email</label>
+            <input type="email" id="customer-email" placeholder="Enter customer Email" required>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn">Add Customer</button>
+        </form>
+    </div>
+</div>
+
+
 <!-- Modal for Address Table -->
 <div id="address-modal" class="modal">
   <div class="modal-content">

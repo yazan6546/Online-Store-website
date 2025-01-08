@@ -111,6 +111,9 @@ def filter_customers():
     ]
     return jsonify({"success": True, "customers": customers})
 
+###########################################################################################
+
+###########################################################################################
 
 # the following routes are for the address section
 
