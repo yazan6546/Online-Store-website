@@ -6,13 +6,27 @@ INSERT_CUSTOMER_ORDER_TABLE = text("""
                             """)
 
 GET_CUSTOMER_ORDER_TABLE = text("""
-                            SELECT * FROM Customer_Order ORDER BY 1 ;
+                            SELECT 
+                            order_id as order_id,
+                            person_id as person_id,
+                            order_status as order_status,
+                            address_id as address_id,
+                            delivery_service_id as delivery_service_id,
+                            order_date as order_date,
+                            delivery_date as delivery_date
+                            FROM Customer_Order ORDER BY 1 ;
 """)
 
 SELECT_CUSTOMER_ORDER_BY_ID = text("""
                                 SELECT * FROM Manager_Order
                                 WHERE person_id = :id;
                             """)
+
+GET_PRODUCTS_FROM_ORDER = text("""
+                select col.product_id, col.price_at_time_of_order, col.quantity
+                from Customer_Order_Line col
+                where col.order_id = :order_id;
+            """)
 
 DELETE_FROM_CUSTOMER_ORDER = text("""
                                 DELETE FROM Manager_Order

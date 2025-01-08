@@ -2,7 +2,7 @@ from datetime import datetime
 
 from faker import Faker
 
-from models import Product, Manager, ManagerOrder, Category, DeliveryService
+from models import Product, Manager, ManagerOrder, Category, DeliveryService, Cart
 from models.customers import Customer
 import datetime
 
@@ -36,14 +36,11 @@ import datetime
 # x = managers[20]
 # print(x.products)
 # Initialize Faker
-faker = Faker()
+from models.manager_order import ManagerOrder
 
-# Get tomorrow's date and the date two weeks from now
-tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
-two_weeks_from_now = datetime.datetime.now() + datetime.timedelta(days=14)
+cart = Cart()
+cart.add_item(1, 30, 5)
+cart.add_item(2, 30, 5)
+cart.add_item(1, 30, 5)
 
-# Generate a random date within the range
-random_date = faker.date_between(start_date=tomorrow,
-                                 end_date=two_weeks_from_now)
-
-print(random_date)
+manager_order = ManagerOrder.cart_to_manager_order_with_stock(cart, 1)

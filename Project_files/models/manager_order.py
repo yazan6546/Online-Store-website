@@ -42,7 +42,7 @@ class ManagerOrder(Order):
             conn = get_db_connection()
 
         try:
-            result = conn.execute(q.INSERT_MANAGER_ORDER_TABLE, self.to_dict())
+            result = conn.execute(q.manager_order.INSERT_MANAGER_ORDER_TABLE, self.to_dict())
 
             if commit:
                 conn.commit()

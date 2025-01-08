@@ -10,41 +10,64 @@ class CustomerOrder(Order):
         self.address_id = address_id
 
     def insert(self):
-        if self.insert_order() and self.insert_order():
+
+        flag = False
+
+        if self.order_status == 'COMPLETED':
+            self.order_status = 'PLACED'
+            flag = True
+
+        conn = get_db_connection()
+        if self.insert_order(conn=conn) and self.insert_order_lines(conn=conn):
+
+            conn.commit()
+            conn.close()
+
+            if flag:
+                self.order_status = 'COMPLETED'
+                self.update_order()
             return 1
         else:
+            conn.close()
             print("Error in insert()")
             return 0
 
+    def insert_order(self, commit=False, conn=None):
 
-    def insert_order(self):
-        conn = get_db_connection()
+        if conn is None:
+            conn = get_db_connection()
+
         try:
-            result = conn.execute(q.customer_order.INSERT_CUSTOMER_ORDER_TABLE, {
-                self.to_dict(status=True)
-            })
-            conn.commit()
+            result = conn.execute(q.customer_order.INSERT_CUSTOMER_ORDER_TABLE, self.to_dict())
+
+            if commit:
+                conn.commit()
+
             self.order_id = result.lastrowid
             return 1
 
         except Exception as e:
-            print(f"Error in insert(): {e}")
+            print(f"Error in insert_order(): {e}")
             conn.rollback()
             return 0
         finally:
-            conn.close()
+            if commit:
+                conn.close()
 
 
-    def insert_order_lines(self):
+    def insert_order_lines(self, commit=False, conn=None):
         """
         Insert multiple order lines with one query.
         """
-        conn = get_db_connection()
+
+        if conn is None:
+            conn = get_db_connection()
         try:
             conn.execute(
                 q.customer_order_line.INSERT_CUSTOMER_ORDER_LINE_TABLE,
                 [
                     {
+                        "order_id": self.order_id,
                         "product_id": product_id,
                         "price_at_time_of_order": details["price_at_time_of_order"],
                         "quantity": details["quantity"]
@@ -52,19 +75,22 @@ class CustomerOrder(Order):
                     for product_id, details in self.products.items()
                 ]
             )
-            conn.commit()
+
+            if commit:
+                conn.commit()
             return 1
         except Exception as e:
             print(f"Error in insert_order_lines(): {e}")
             conn.rollback()
             return 0
         finally:
-            conn.close()
+            if commit:
+                conn.close()
 
     def update_order(self):
         conn = get_db_connection()
         try:
-            conn.execute(q.customer_order.UPDATE_CUSTOMER_ORDER_TABLE, self.to_dict(status=True))
+            conn.execute(q.customer_order.UPDATE_CUSTOMER_ORDER_TABLE, self.to_dict())
             conn.commit()
             return 1
 
@@ -77,36 +103,44 @@ class CustomerOrder(Order):
             conn.close()
 
     @staticmethod
-    def get_all_orders():
+    def get_all():
+        conn = get_db_connection()
+
+        try:
+            customer_order_objects = []
+            customer_orders = conn.execute(q.customer_order.GET_CUSTOMER_ORDER_TABLE).fetchall()
+
+            # Convert rows to dictionaries using `dict()` for proper mapping
+            customer_orders = [customer_order._mapping for customer_order in customer_orders]
+
+            for customer_order in customer_orders:
+                customer_object = CustomerOrder(**customer_order)  # Mapping the dictionary to the class constructor
+                customer_object.products = CustomerOrder.get_products_by_person_id(customer_object.order_id)
+
+                customer_order_objects.append(customer_object)
+
+            return customer_order_objects
+        except Exception as e:
+            print(f"Error: {e}")
+            return []  # Returning an empty list instead of 0 to indicate failure
+        finally:
+            conn.close()
+
+    @staticmethod
+    def get_products_by_person_id(order_id):
         conn = get_db_connection()
         try:
-            order_details_result = conn.execute(q.customer_order.GET_ALL_PLACED_ORDERS).fetchall()
-            order_details = [order._mapping for order in order_details_result]
-
-            orders = []
-            for order in order_details:
-                order_obj = CustomerOrder(
-                    person_id=order["person_id"],
-                    address_id=order["address_id"],
-                    delivery_date=order["delivery_date"],
-                    order_date=order["order_date"],
-                    delivery_service_id=order["delivery_service_id"],
-                    order_id=order["order_id"]
-                )
-
-                order_obj.products = {
-                    order["product_id"]: {
-                        "price_at_time_of_order": order["price_at_time_of_order"],
-                        "quantity": order["quantity"]
-                    }
-                }
-                orders.append(order_obj)
-
-            return orders
-
+            products = conn.execute(q.customer_order.GET_PRODUCTS_FROM_ORDER, {"order_id": order_id}).fetchall()
+            conn.commit()
+            products = [product._mapping for product in products]
+            product_dict = {
+                product['product_id']: {"price": product['price_at_time_of_order'], "quantity": product['quantity']} for
+                product in products
+            }
+            return product_dict
         except Exception as e:
-            print(f"Error in get_all_orders(): {e}")
-            return None
+            print(f"Error in get_products_by_person_id(): {e}")
+            return []
         finally:
             conn.close()
 
@@ -125,8 +159,7 @@ class CustomerOrder(Order):
         finally:
             conn.close()
 
-    def to_dict(self, status=False):
-        order_dict = super().to_dict()
-        if status:
-            order_dict["order_status"] = "PLACED"
+    def to_dict(self, order_id=True):
+        order_dict = super().to_dict(order_id)
+        order_dict["address_id"] = self.address_id
         return order_dict
