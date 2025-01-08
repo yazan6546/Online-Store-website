@@ -34,7 +34,7 @@ function addToCart(productId) {
     },
     body: JSON.stringify({
       quantity: parseInt(quantity),
-      price: parseFloat(price)
+      price: parseFloat(price),
     })
   })
   .then(response => {

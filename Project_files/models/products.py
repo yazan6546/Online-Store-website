@@ -1,4 +1,8 @@
+from __future__ import annotations  # Enables modern type hinting for forward references
+
+from typing import List
 import utils.queries as q
+from models import Cart
 from utils.db_utils import get_db_connection
 
 
@@ -134,6 +138,18 @@ class Product:
         finally:
             conn.close()
 
+    @staticmethod
+    def get_product_name(product_id):
+        conn = get_db_connection()
+        try:
+            result = conn.execute(q.product.GET_PRODUCT_NAME_BY_ID, {"product_id": product_id}).fetchone()
+            return result[0]
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
+
     @classmethod
     def get_by_category_id(cls, category_id):
 
@@ -193,3 +209,16 @@ class Product:
 
     def __str__(self):
         return f"Product: {self.product_name} - {self.product_description} - {self.brand} - {self.price} - {self.photo} - {self.stock_quantity} - {self.category_id} - {self.supplier_id} - {self.product_id}"
+
+    @staticmethod
+    def products_from_cart(cart : Cart)-> List[Product]:
+        dict = cart.items
+        products = []
+        for key in dict:
+            product = Product.get_by_product_id(key)
+            product.price = dict[key]["price_at_time_of_order"]
+            product.stock_quantity = dict[key]["quantity"]
+            products.append(product)
+
+        return products
+
