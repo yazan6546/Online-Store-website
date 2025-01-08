@@ -658,9 +658,18 @@ def get_products():
 ############################################################################################################
 
 # Route for the Parents page
+
 @app.route('/admin_dashboard/categories')
 def admin_dashboard_categories():
-    return "<h1>Categories Page</h1>"  # Replace with render_template if applicable
+    if 'user' not in session.keys() or session.get('role') != 'manager':
+        flash("You must be logged in as manager to access the admin dashboard.", "warning")
+        return redirect(url_for('login'))
+
+    categories = Category.get_all()
+    categories = [category.to_dict() for category in categories]
+
+    return render_template('category.html', categories=categories)
+
 
 
 @app.route('/fetch_categories', methods=['GET'])
@@ -672,6 +681,94 @@ def fetch_categories():
         return jsonify(success=True, categories=categories)
     except Exception as e:
         return jsonify(success=False, error=str(e))
+
+
+@app.route('/add_category', methods=['POST'])
+def add_category():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        name = data.get('name')
+        description = data.get('description')
+
+        # Validate inputs
+        if not name or not description:
+            return jsonify(success=False, error="Name and description are required.")
+
+        # Create and insert a new supplier
+        new_category = Category(category_name=name, category_description=description)
+        new_category.insert()
+
+        return jsonify(success=True, category=new_category.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# update
+@app.route('/update_category/<int:category_id>', methods=['POST'])
+def update_category(category_id):
+    try:
+        # Extract data from the request
+        name = request.form.get('name')
+        description = request.form.get('description')
+
+        # Validate inputs
+        if not name or not description:
+            return jsonify(success=False, error="Name and description are required.")
+
+        # Fetch the supplier by ID and update its fields
+
+        category = Category.get_by_id(category_id)
+
+        if not category:
+            return jsonify(success=False, error="category not found.")
+
+        category.category_name = name
+        category.category_description = description
+        result = category.update()
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to update supplier.")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# Delete
+@app.route('/delete_category/<int:category_id>', methods=['POST'])
+def delete_category(category_id):
+    try:
+        # Call the delete method of the Supplier class
+        result = Category.delete(category_id)
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to delete category from that database")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# search
+@app.route('/search_category', methods=['GET'])
+def search_category():
+    try:
+        # Get the search query from the request
+        query = request.args.get('query', '')
+
+        # Fetch all suppliers and filter them by name or phone
+        all_categories = Category.get_all()
+        filtered_categories = [
+            category.to_dict() for category in all_categories
+            if query.lower() in category.category_name.lower() or query in category.category_description.lower()
+        ]
+
+        return jsonify(success=True, categories=filtered_categories)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
 
 
 ############################################################################################################
