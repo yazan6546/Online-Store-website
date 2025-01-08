@@ -161,3 +161,35 @@ function updateCartSummaryQuantity(option) {
   totalElement.textContent = `$${total.toFixed(2)}`;
   subTotalElement.textContent = `$${subTotal.toFixed(2)}`;
 }
+
+
+document.getElementById('checkout-btn').addEventListener('click', function() {
+    placeOrder();
+});
+
+function placeOrder() {
+    const deliveryDropdown = document.getElementById('delivery-dropdown');
+    const deliveryServiceName = deliveryDropdown.value;
+
+    fetch('/api/placeorder', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            delivery_service_name: deliveryServiceName
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = '/admin_dashboard';
+        } else {
+            alert('Failed to place order: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while placing the order.');
+    });
+}
