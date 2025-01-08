@@ -19,6 +19,11 @@ SELECT_PRODUCT_BY_CATEGORY = text("""
                                 SELECT * FROM Product   
                                 WHERE category_id = :category_id;
                             """)
+SELECT_DESCRIPTION_BY_PRODUCT = text("""
+                                SELECT product_description FROM Product 
+                                WHERE product_id = :product_id;
+                            """)
+
 
 SELECT_PRODUCT_BY_SUPPLIER = text("""
                                 SELECT * FROM Product   
@@ -31,7 +36,6 @@ UPDATE_PRODUCTS_TABLE = text("""
                                     product_description = :product_description,
                                     brand = :brand,
                                     price = :price,
-                                    photo = :photo,
                                     stock_quantity = :stock_quantity,
                                     category_id = :category_id,
                                     supplier_id = :supplier_id

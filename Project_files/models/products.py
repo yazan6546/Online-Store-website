@@ -165,6 +165,19 @@ class Product:
         finally:
             conn.close()
 
+
+    @classmethod
+    def get_desc_by_id(cls, product_id):
+        conn = get_db_connection()
+        try:
+            result = conn.execute(q.product.SELECT_DESCRIPTION_BY_PRODUCT, {"product_id": product_id}).fetchone()
+            return result[0]
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
+
     @staticmethod
     def delete_all():
         conn = get_db_connection()
