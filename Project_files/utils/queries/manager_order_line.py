@@ -2,8 +2,8 @@ from sqlalchemy import text
 
 
 INSERT_MANAGER_ORDER_LINE_TABLE = text("""
-                                INSERT INTO Manager_Order_Line (order_line_id, order_id, product_id, quantity, price_at_time_of_order) 
-                                VALUES (:orderline_id, :order_id, :product_id, :quantity, :price_at_time_of_order);
+                                INSERT INTO Manager_Order_Line (order_id, product_id, quantity, price_at_time_of_order) 
+                                VALUES (:order_id, :product_id, :quantity, :price_at_time_of_order);
                             """)
 
 GET_MANAGER_ORDER_TABLE = text("""

@@ -80,7 +80,11 @@ Admin Dashboard
         </div>
 
         <div class="center-container">
-          <select id="delivery-dropdown"></select>
+          <select id="delivery-dropdown">
+              {% for service in delivery_services %}
+                  <option value="{{ service.id }}">{{ service.delivery_service_name }} ({{ service.phone_number }})</option>
+              {% endfor %}
+          </select>
         </div>
 
         <button class="checkout-btn">Continue to checkout</button>

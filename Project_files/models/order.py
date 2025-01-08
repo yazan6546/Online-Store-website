@@ -29,6 +29,19 @@ class Order:
         total_price = sum(product['price_at_time_of_order'] * product['quantity'] for product in self.products.values())
         return total_price
 
+    @staticmethod
+    def from_dict(dict):
+        order = Order(
+            person_id=dict["person_id"],
+            delivery_date=dict["delivery_date"],
+            order_status=dict["order_status"],
+            delivery_service_id=dict["delivery_service_id"],
+            order_date=dict["order_date"],
+            order_id=dict["order_id"]
+        )
+        order.products = dict["products"]
+        return order
+
     def to_dict(self, order_id=True):
         temp = {
             "person_id": self.person_id,

@@ -2,13 +2,31 @@ from sqlalchemy import text
 
 
 INSERT_MANAGER_ORDER_TABLE = text("""
-                                INSERT INTO Manager_Order (person_id, order_date, delivery_date, order_status) 
-                                VALUES (:person_id, :order_date, :delivery_date, :order_status);
+                                INSERT INTO Manager_Order (person_id, order_date, delivery_date, order_status, delivery_service_id) 
+                                VALUES (:person_id, :order_date, :delivery_date, :order_status, :delivery_service_id);
                             """)
 
 GET_MANAGER_ORDER_TABLE = text("""
-                            SELECT * FROM Manager_Order ORDER BY 1 ;
+                            SELECT 
+                            person_id as person_id,
+                            order_id as order_id,
+                            order_date as order_date,
+                            delivery_date as delivery_date,
+                            order_status as order_status,
+                            delivery_service_id as delivery_service_id
+                            
+                             FROM Manager_Order ORDER BY 1 ;
 """)
+
+
+GET_PRODUCTS_FROM_ORDER = text("""
+                select col.product_id, col.price_at_time_of_order, col.quantity
+                from Manager_Order_Line col
+                where col.order_id = :order_id;
+            """)
+
+
+
 
 SELECT_MANAGER_ORDER_BY_ID = text("""
                                 SELECT * FROM Manager_Order
@@ -28,6 +46,7 @@ UPDATE_MANAGER_ORDER_TABLE = text("""
                             order_date=:order_date
                             WHERE order_id = :order_id;
                             """)
+
 
 CREATE_MANAGER_ORDER_TABLE = text("""
                             CREATE TABLE IF NOT EXISTS Manager_Order(
