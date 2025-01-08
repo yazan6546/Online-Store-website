@@ -15,6 +15,11 @@ SELECT_PRODUCT_BY_ID = text("""
                                 WHERE product_id = :product_id;
                             """)
 
+GET_PRODUCT_NAME_BY_ID = text("""
+                                SELECT product_name FROM Product
+                                WHERE product_id = :product_id;
+                            """)
+
 SELECT_PRODUCT_BY_CATEGORY = text("""
                                 SELECT * FROM Product   
                                 WHERE category_id = :category_id;
