@@ -1,4 +1,8 @@
 import os
+from datetime import datetime, timedelta
+from itertools import product
+
+from faker import Faker
 from werkzeug.utils import secure_filename
 from flask import render_template, request, jsonify, session, flash, redirect, url_for
 from wtforms.validators import email
@@ -6,7 +10,9 @@ from wtforms.validators import email
 from app import app
 from app.forms import *
 import app.auth as auth
-from models import DeliveryService
+from models import ManagerOrder
+from models.delivery_service import DeliveryService
+from models.cart import Cart
 from models.addresses import Address
 from models.customers import Customer
 from models.manager import Manager
@@ -14,6 +20,7 @@ from models.suppliers import Supplier
 import models.data_analysis as da
 from models.products import Product
 from models.category import Category
+from models.person import Person
 
 app.first_request_handled = False
 
@@ -403,8 +410,6 @@ def fetch_suppliers():
         return jsonify(success=False, error=str(e))
 
 
-
-
 ############################################################################################################
 # Products section
 ############################################################################################################
@@ -421,10 +426,11 @@ def admin_dashboard_products():
 
     categories = [cat.to_dict() for cat in categories]  # [{'category_id': 1, 'category_name': 'Electronics'}, ...]
     suppliers = [sup.to_dict() for sup in suppliers]  # [{'supplier_id': 1, 'name': 'Amazon'}, ...]
-    #print("Categories:", categories)
+    # print("Categories:", categories)
     # for cat in categories:
     #     print(cat['category_name'])
-    return render_template('products.html', products=products,suppliers=suppliers,categories=categories)  # Replace with render_template if applicable
+    return render_template('products.html', products=products, suppliers=suppliers,
+                           categories=categories)  # Replace with render_template if applicable
 
 
 @app.route('/add_product')
@@ -460,9 +466,9 @@ def add_product_upload():
         category_id = Category.get_id_by_name(category_name)
         supplier_id = Supplier.get_id_by_name(supplier_name)
 
-        print (category_id)
+        print(category_id)
         print("-----------------")
-        print (supplier_id)
+        print(supplier_id)
 
         # Save product data and image path to the database
         product = Product(
@@ -489,24 +495,72 @@ def add_product_upload():
 def update_product(product_id):
     try:
         # Extract data from the request
-        name = request.form.get('name')
-        price = request.form.get('price')
-        category = request.form.get('category')
-        supplier_id = request.form.get('supplier_id')
+        data = request.get_json()
+        product_name = data.get('product_name')
+        category_id = data.get('category_id')
+        supplier_id = data.get('supplier_id')
+        brand = data.get('brand')
+        price = data.get('price')
+        stock_quantity = data.get('stock_quantity')
+        product_description = Product.get_desc_by_id(product_id)
 
-        # Validate inputs
-        if not name or not price or not category or not supplier_id:
-            return jsonify(success=False, error="Name, price, category, and supplier_id are required.")
+        print("------------------")
+        print(product_description)
+        print(supplier_id)
+        print(category_id)
+        print("------------------")
 
-        # Fetch the product by ID and update its fields
-        product = Product.get_by_product_id(product_id)
-        if not product:
-            return jsonify(success=False, error="Product not found.")
+        product = Product(
+            product_id=product_id,
+            product_name=product_name,
+            product_description=product_description,
+            brand=brand,
+            price=price,
+            photo="",
+            stock_quantity=stock_quantity,
+            category_id=category_id,
+            supplier_id=supplier_id
+        )
+        result = product.update()
 
-        product.name = name
-        product.price = price
-        product.category = category
-        product.supplier_id = supplier_id
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to update product.")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+@app.route('/update_description/<int:product_id>', methods=['POST'])
+def update_description(product_id):
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        # Now you can access the data fields, for example:
+        product_id = data.get('product_id')
+        product_name = data.get('product_name')
+        category_id = data.get('category_id')
+        supplier_id = data.get('supplier_id')
+        brand = data.get('brand')
+        price = data.get('price')
+        stock_quantity = data.get('stock_quantity')
+        product_description = data.get('product_description')
+
+        print(product_description)
+        print(supplier_id)
+        print(category_id)
+
+        product = Product(
+            product_id=product_id,
+            product_name=product_name,
+            product_description=product_description,
+            brand=brand,
+            price=price,
+            photo="",
+            stock_quantity=stock_quantity,
+            category_id=Category.get_id_by_name(category_id),
+            supplier_id=Supplier.get_id_by_name(supplier_id)
+        )
         result = product.update()
 
         if result:
@@ -542,7 +596,6 @@ def search_product():
         # Fetch all products and filter them by name or category
         all_products = Product.get_all()
         products = [product.to_print() for product in all_products]
-
 
         filtered_products = [
             product for product in products
@@ -609,9 +662,18 @@ def get_products():
 ############################################################################################################
 
 # Route for the Parents page
+
 @app.route('/admin_dashboard/categories')
 def admin_dashboard_categories():
-    return "<h1>Categories Page</h1>"  # Replace with render_template if applicable
+    if 'user' not in session.keys() or session.get('role') != 'manager':
+        flash("You must be logged in as manager to access the admin dashboard.", "warning")
+        return redirect(url_for('login'))
+
+    categories = Category.get_all()
+    categories = [category.to_dict() for category in categories]
+
+    return render_template('category.html', categories=categories)
+
 
 
 @app.route('/fetch_categories', methods=['GET'])
@@ -625,6 +687,92 @@ def fetch_categories():
         return jsonify(success=False, error=str(e))
 
 
+@app.route('/add_category', methods=['POST'])
+def add_category():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        name = data.get('name')
+        description = data.get('description')
+
+        # Validate inputs
+        if not name or not description:
+            return jsonify(success=False, error="Name and description are required.")
+
+        # Create and insert a new supplier
+        new_category = Category(category_name=name, category_description=description)
+        new_category.insert()
+
+        return jsonify(success=True, category=new_category.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# update
+@app.route('/update_category/<int:category_id>', methods=['POST'])
+def update_category(category_id):
+    try:
+        # Extract data from the request
+        name = request.form.get('name')
+        description = request.form.get('description')
+
+        # Validate inputs
+        if not name or not description:
+            return jsonify(success=False, error="Name and description are required.")
+
+        # Fetch the supplier by ID and update its fields
+
+        category = Category.get_by_id(category_id)
+
+        if not category:
+            return jsonify(success=False, error="category not found.")
+
+        category.category_name = name
+        category.category_description = description
+        result = category.update()
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to update supplier.")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# Delete
+@app.route('/delete_category/<int:category_id>', methods=['POST'])
+def delete_category(category_id):
+    try:
+        # Call the delete method of the Supplier class
+        result = Category.delete(category_id)
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to delete category from that database")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# search
+@app.route('/search_category', methods=['GET'])
+def search_category():
+    try:
+        # Get the search query from the request
+        query = request.args.get('query', '')
+
+        # Fetch all suppliers and filter them by name or phone
+        all_categories = Category.get_all()
+        filtered_categories = [
+            category.to_dict() for category in all_categories
+            if query.lower() in category.category_name.lower() or query in category.category_description.lower()
+        ]
+
+        return jsonify(success=True, categories=filtered_categories)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
 
 
 ############################################################################################################
@@ -632,9 +780,16 @@ def fetch_categories():
 ############################################################################################################
 
 # Route for the Payments page
-@app.route('/admin_dashboard/customer_orders')
-def admin_dashboard_customer_orders():
+@app.route('/admin_dashboard/customers_orders')
+def admin_dashboard_customers_orders():
     return "<h1>customer's orders</h1>"  # Replace with render_template if applicable
+
+
+
+
+
+
+
 
 
 ############################################################################################################
@@ -643,7 +798,175 @@ def admin_dashboard_customer_orders():
 
 @app.route('/admin_dashboard/managers_orders')
 def admin_dashboard_managers_orders():
-    return "<h1>manager's orders</h1>"  # Replace with render_template if applicable
+    if 'user' not in session.keys() or session.get('role') != 'manager':
+        flash("You must be logged in as manager to access the admin dashboard.", "warning")
+        return redirect(url_for('login'))
+
+    orders = ManagerOrder.get_all()
+    orders_fullInfo = [order.to_dict() for order in orders]
+
+    # Adding additional attributes to each dictionary
+    for order in orders_fullInfo:
+        order['email'] = Person.get_email_by_id(order['person_id'])
+        order['delivery_service_name'] = DeliveryService.get_name_by_id(order['delivery_service_id'])
+
+    return render_template('managers_orders.html', orders=orders_fullInfo)
+
+
+
+@app.route('/fetch_managers_orders', methods=['GET'])
+def fetch_manager_orders():
+    try:
+        categories = Category.get_names()
+        if not categories:
+            return jsonify(success=False, error="No categories found.")
+        return jsonify(success=True, categories=categories)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+@app.route('/add_manager_order', methods=['POST'])
+def add_manager_order():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        name = data.get('name')
+        description = data.get('description')
+
+        # Validate inputs
+        if not name or not description:
+            return jsonify(success=False, error="Name and description are required.")
+
+        # Create and insert a new supplier
+        new_category = Category(category_name=name, category_description=description)
+        new_category.insert()
+
+        return jsonify(success=True, category=new_category.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# update
+@app.route('/update_manager_order/<int:category_id>', methods=['POST'])
+def update_manager_order(category_id):
+    try:
+        # Extract data from the request
+        name = request.form.get('name')
+        description = request.form.get('description')
+
+        # Validate inputs
+        if not name or not description:
+            return jsonify(success=False, error="Name and description are required.")
+
+        # Fetch the supplier by ID and update its fields
+
+        category = Category.get_by_id(category_id)
+
+        if not category:
+            return jsonify(success=False, error="category not found.")
+
+        category.category_name = name
+        category.category_description = description
+        result = category.update()
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to update supplier.")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# Delete
+@app.route('/delete_managers_orders/<int:order_id>', methods=['POST'])
+def delete_manager_order(order_id):
+    try:
+        # Call the delete method of the Supplier class
+        status = ManagerOrder.get_status_by_order_id(order_id)
+        result = ManagerOrder.delete(order_id)
+
+        if status == 'COMPLETED':
+            return jsonify(success=False, error="You cannot delete a completed order.")
+        elif status == 'CANCELLED':
+            return jsonify(success=False, error="The order has already been cancelled.")
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to cancel the Order in the database")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# search
+@app.route('/search_managers_orders', methods=['GET'])
+def search_manager_order():
+    try:
+        # Get the search query from the request
+        query = request.args.get('query', '')
+
+        orders = ManagerOrder.get_all()
+        orders_fullInfo = [order.to_dict() for order in orders]
+
+        # Adding additional attributes to each dictionary
+        for order in orders_fullInfo:
+            order['email'] = Person.get_email_by_id(order['person_id'])
+            order['delivery_service_name'] = DeliveryService.get_name_by_id(order['delivery_service_id'])
+
+        filtered_orders = [
+            order for order in orders_fullInfo
+            if query.lower() in order['email'].lower() or query in order['delivery_service_name'].lower()
+        ]
+
+        return jsonify(success=True, orders=filtered_orders)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+@app.route('/get_managers_order', methods=['GET'])
+def get_managers_orders():
+    try:
+        # Fetch page and limit parameters from the query string
+        page = int(request.args.get('page', 1))  # Default to page 1
+        limit = int(request.args.get('limit', 8))  # Default to 8 rows per page
+        offset = (page - 1) * limit
+
+        # Fetch all suppliers
+        orders = ManagerOrder.get_all()
+
+        # Slice the suppliers list based on the page and limit
+        paginated_orders = orders[offset:offset + limit]
+        orders_dicts = [order.to_dict() for order in paginated_orders]
+
+        # Calculate total suppliers count
+        total_orders = len(orders)
+
+        return jsonify(
+            success=True,
+            orders=orders_dicts,
+            total_count=total_orders,
+            page=page,
+            limit=limit
+        )
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############################################################################################################
+# Main section
+############################################################################################################
 
 
 @app.route('/')
@@ -704,7 +1027,10 @@ def admin_shop():
     categories = Category.get_all()
     categories = [category.to_dict() for category in categories]
 
-    return render_template('admin_shop.html', categories=categories)
+    products = Product.get_all()
+    products = [product.to_dict() for product in products]
+
+    return render_template('admin_shop.html', categories=categories, products=products)
 
 
 # Cart for manager Page
@@ -713,7 +1039,12 @@ def admin_cart():
 
     delivery_services = DeliveryService.get_all()
     delivery_services = [delivery_services.to_dict() for delivery_services in delivery_services]
-    return render_template('admin_cart.html', delivery_services=delivery_services)
+
+    cart = Cart.from_dict(session.get('cart', {}))
+    products = Product.products_from_cart(cart)
+    total = cart.get_total()
+    return render_template('admin_cart.html', delivery_services=delivery_services, products=products, total=total)
+
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
@@ -785,12 +1116,11 @@ def get_best_selling_products_by_month():
     best_selling_products = da.get_best_selling_product_by_month(2023)
     return jsonify(best_selling_products)
 
+
 # @app.route('/api/best_customers', methods=['GET'])
 # def get_best_customers():
 #     best_customers = da.get_best_customers()
 #     return jsonify(best_customers)
-
-
 
 
 ############################################################################################################
@@ -805,6 +1135,7 @@ def admin_dashboard_delivery():
     print(delivery_services)
 
     return render_template('delivery_service.html', delivery_service=delivery_services)
+
 
 # update
 @app.route('/update_delivery/<int:delivery_service_id>', methods=['POST'])
@@ -834,6 +1165,7 @@ def update_delivery(delivery_service_id):
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
+
 # Delete
 @app.route('/delete_delivery/<int:delivery_service_id>', methods=['POST'])
 def delete_delivery(delivery_service_id):
@@ -847,6 +1179,7 @@ def delete_delivery(delivery_service_id):
             return jsonify(success=False, error="Failed to delete delivery service from that database")
     except Exception as e:
         return jsonify(success=False, error=str(e))
+
 
 # search
 @app.route('/search_delivery', methods=['GET'])
@@ -896,10 +1229,6 @@ def get_delivery():
         return jsonify(success=False, error=str(e))
 
 
-
-
-
-
 @app.route('/add_delivery', methods=['POST'])
 def add_delivery():
     try:
@@ -926,6 +1255,98 @@ def get_addresses(person_id):
     addresses = Address.get_by_person_id(person_id)
     addresses = [address.to_dict() for address in addresses]
 
+@app.route('/api/cart/add/<int:product_id>', methods=['POST'])
+def add_to_cart(product_id:int):
+
+    try:
+
+        product_id = str(product_id)
+        data = request.get_json()
+        cart = session.get('cart', {})
+        cart = Cart.from_dict(cart)
+
+        price = float(data.get('price'))
+        quantity = int(data.get('quantity'))
+
+        cart.add_item(product_id=product_id, price=price, quantity=quantity)
+        session['cart'] = cart.to_dict()
+        print('Added the product successfully')
+        print(session['cart'])
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+
+@app.route('/api/cart/remove/<int:product_id>', methods=['DELETE'])
+def remove_from_cart(product_id:int):
+
+    try:
+        product_id = str(product_id)
+        cart = session.get('cart', {})
+        cart = Cart.from_dict(cart)
+
+        cart.remove_item(product_id)
+        session['cart'] = cart.to_dict()
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+@app.route('/api/cart/update_quantity/<int:product_id>', methods=['POST'])
+def update_cart_quantity(product_id:int):
+
+    try:
+        product_id = str(product_id)
+        data = request.get_json()
+        cart = session.get('cart', {})
+        cart = Cart.from_dict(cart)
+
+        quantity = int(data.get('quantity'))
+
+        cart.update_quantity(product_id, quantity)
+        session['cart'] = cart.to_dict()
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+@app.route('/api/placeorder', methods=['POST'])
+def place_order():
+
+    try:
+        person_id = session['user']['person_id']
+        data = request.get_json()
+        delivery_service_id = data.get('delivery_service_name')
+        # delivery_service_id = DeliveryService.get_id_by_name(delivery_service_name)
+
+        cart = Cart.from_dict(session['cart'])
+
+        # Initialize Faker
+        faker = Faker()
+
+        # Get tomorrow's date and the date two weeks from now
+        tomorrow = datetime.now() + timedelta(days=1)
+        two_weeks_from_now = datetime.now() + timedelta(days=14)
+
+        # Generate a random date within the range
+        random_date = faker.date_between(start_date=tomorrow, end_date=two_weeks_from_now)
+
+        order = ManagerOrder.cart_to_manager_order_with_stock(cart, person_id, random_date, delivery_service_id=delivery_service_id)
+        if not order.insert():
+            return jsonify({"success": False, "error": "Failed to place order."})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+    session['cart'] = Cart().to_dict()
+    return jsonify({"success": True})
 
     return jsonify(addresses)
 
@@ -934,4 +1355,3 @@ def get_addresses(person_id):
 def page_not_found(e):
     role = session.get('role', 'guest')  # Default to 'guest' if not logged in
     return render_template('404.html', role=role), 404
-

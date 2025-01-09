@@ -27,6 +27,19 @@ class Person:
         finally:
             conn.close()
 
+    @classmethod
+    def get_email_by_id(cls, person_id):
+        conn = get_db_connection()
+        try:
+            email = conn.execute(q.person.SELECT_EMAIL_BY_ID, {"person_id": person_id}).fetchone()
+            return email[0]
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
+
+
     def to_dict(self, person_id=True):
         temp =  {
             "first_name": self.first_name,
