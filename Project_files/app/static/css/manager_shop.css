@@ -222,23 +222,25 @@ h2 {
 
 
 /* Product List */
-
-/* Main container for the product cards */
+/* Main container for products */
 .product-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; /* Space between cards */
-  justify-content: flex-start;
-  max-width: 1135px;
-  margin: 0 auto;
+  gap: 20px;
+
 }
 
-/* Each product card */
+/* Individual product cards */
 .product-card {
-  flex: 1 1 calc(25% - 20px); /* Each card takes 25% width, minus the gap */
-  max-width: calc(25% - 20px); /* Prevent overflow */
-  box-sizing: border-box; /* Include padding/border in the width */
-  width: 230px;
+  width: 300px;
+  /*height: auto;*/
   height: 420px;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -426,30 +428,23 @@ h2 {
 }
 
 .quantity-selector {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.quantity-btn {
-    width: 35px;
-    height: 35px;
-    border: 2px solid #ccc;
-    border-radius: 50%;
-    background-color: #f9f9f9;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
+.quantity-selector button {
+  width: 40px;
+  height: 40px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.quantity-btn:hover {
-    background-color: #ddd;
-    border-color: #888;
+.quantity-selector button:hover {
+  background-color: #ddd;
 }
 
 .quantity-value {
@@ -467,6 +462,7 @@ h2 {
   color: #fff;
   border: none;
   border-radius: 25px;
+  padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
