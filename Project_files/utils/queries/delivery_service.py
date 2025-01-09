@@ -14,6 +14,12 @@ GET_DELIVERY_SERVICE_BY_ID = text("""
     SELECT * FROM DeliveryService WHERE delivery_service_id = :delivery_service_id;
 """)
 
+GET_NAME_BY_ID = text("""  
+    SELECT delivery_service_name FROM DeliveryService   
+    WHERE delivery_service_id = :delivery_service_id;
+""")
+
+
 # Query to add a new delivery service
 ADD_DELIVERY_SERVICE = text("""
     INSERT INTO DeliveryService (delivery_service_name, phone_number)

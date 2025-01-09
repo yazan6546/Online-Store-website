@@ -34,7 +34,8 @@ SELECT_MANAGER_ORDER_BY_ID = text("""
                             """)
 
 DELETE_FROM_MANAGER_ORDER = text("""
-                                DELETE FROM Manager_Order
+                                UPDATE Manager_Order
+                                SET order_status = 'CANCELLED'
                                 WHERE order_id = :order_id;
                             """)
 

@@ -42,11 +42,11 @@ Categories
                 <td>{{ category.category_id }}</td>
                 <td>
                     <span id="name-{{ category.category_id }}-text">{{ category.category_name }}</span>
-                    <input type="text" id="name-{{ category.category_id }}-input" value="{{ category.category_name }}" style="display:none; width: 100px;">
+                    <input type="text" id="name-{{ category.category_id }}-input" value="{{ category.category_name }}" style="display:none; width: 120px;">
                 </td>
                 <td>
                     <span id="description-{{ category.category_id }}-text">{{ category.category_description }}</span>
-                    <input type="text" id="description-{{ category.category_id }}-input" value="{{ category.category_description }}" style="display:none; width: 100px;">
+                    <input type="text" id="description-{{ category.category_id }}-input" value="{{ category.category_description }}" style="display:none; width: 350px;">
                 </td>
                 <td class="action-buttons">
                     <button id="edit-btn-{{ category.category_id }}" class="edit" onclick="enableEditCategory({{ category.category_id }})">Edit</button>
