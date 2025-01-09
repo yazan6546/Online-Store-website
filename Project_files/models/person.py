@@ -53,8 +53,8 @@ class Person:
 
         return temp
 
-    @staticmethod
-    def delete(person_id):
+    @classmethod
+    def delete(cls, person_id):
         conn = get_db_connection()
 
         try:
