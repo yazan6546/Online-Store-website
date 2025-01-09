@@ -19,6 +19,12 @@ SELECT_PERSON_BY_ID = text("""
                                 SELECT * FROM Person
                                 WHERE person_id = :person_id;
                             """)
+SELECT_EMAIL_BY_ID = text("""
+                                SELECT email FROM Person
+                                WHERE person_id = :person_id;
+                            """)
+
+
 
 DELETE_FROM_PERSON = text("""
                                 DELETE FROM Person 

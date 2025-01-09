@@ -8,6 +8,9 @@ class Cart:
     def add_item(self, product_id, price, quantity):
         product_id = str(product_id)
 
+        if quantity < 1:
+            quantity = 1
+
         if product_id in self.items:
             print('ahahhha')
             self.items[product_id]['quantity'] += quantity

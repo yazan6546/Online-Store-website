@@ -78,13 +78,13 @@ class Category:
             conn.close()
 
 
-    @staticmethod
-    def get_by_id(category_id):
+    @classmethod
+    def get_by_id(cls, category_id):
         conn = get_db_connection()
         try:
             result = conn.execute(q.category.SELECT_CATEGORY_BY_ID, {'category_id': category_id}).fetchone()
             result = result._mapping
-            return Category(**result)
+            return cls(**result)
         except Exception as e:
             print(f"Error in get_by_id(): {e}")
             return None

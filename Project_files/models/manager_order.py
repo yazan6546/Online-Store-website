@@ -42,7 +42,7 @@ class ManagerOrder(Order):
             conn = get_db_connection()
 
         try:
-            result = conn.execute(q.INSERT_MANAGER_ORDER_TABLE, self.to_dict())
+            result = conn.execute(q.manager_order.INSERT_MANAGER_ORDER_TABLE, self.to_dict())
 
             if commit:
                 conn.commit()
@@ -117,7 +117,7 @@ class ManagerOrder(Order):
 
             for manager_order in manager_orders:
                 manager_object = ManagerOrder(**manager_order)  # Mapping the dictionary to the class constructor
-                manager_object.products = ManagerOrder.get_products_by_person_id(manager_object.order_id)
+                manager_object.products = ManagerOrder.get_products_by_order_id(manager_object.order_id)
 
                 manager_order_objects.append(manager_object)
 
@@ -129,7 +129,7 @@ class ManagerOrder(Order):
             conn.close()
 
     @staticmethod
-    def get_products_by_person_id(order_id):
+    def get_products_by_order_id(order_id):
         conn = get_db_connection()
         try:
             products = conn.execute(q.manager_order.GET_PRODUCTS_FROM_ORDER, {"order_id": order_id}).fetchall()
@@ -145,6 +145,20 @@ class ManagerOrder(Order):
             return []
         finally:
             conn.close()
+
+    @staticmethod
+    def get_status_by_order_id(order_id):
+        conn = get_db_connection()
+        try:
+            order_status = conn.execute(q.manager_order.GET_STATUS_BY_ORDER_ID, {"order_id": order_id}).fetchone()
+            conn.commit()
+            return order_status[0]
+        except Exception as e:
+            print(f"Error in get_status_by_order_id(): {e}")
+            return None
+        finally:
+            conn.close()
+
 
     def get_products(self):
         conn = get_db_connection()
@@ -170,6 +184,21 @@ class ManagerOrder(Order):
             return 1
         except Exception as e:
             print(f"Error in delete_all(): {e}")
+            conn.rollback()
+            return 0
+        finally:
+            conn.close()
+
+    @staticmethod
+    def delete(order_id):
+        conn = get_db_connection()
+        try:
+            conn.execute(q.manager_order.DELETE_FROM_MANAGER_ORDER, {"order_id": order_id})
+
+            conn.commit()
+            return 1
+        except Exception as e:
+            print(f"Error in delete(): {e}")
             conn.rollback()
             return 0
         finally:

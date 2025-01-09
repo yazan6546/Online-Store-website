@@ -32,10 +32,16 @@ SELECT_MANAGER_ORDER_BY_ID = text("""
                                 SELECT * FROM Manager_Order
                                 WHERE person_id = :id;
                             """)
+GET_STATUS_BY_ORDER_ID = text("""
+                                SELECT order_status FROM Manager_Order
+                                WHERE order_id = :order_id;
+                            """)
+
 
 DELETE_FROM_MANAGER_ORDER = text("""
-                                DELETE FROM Manager_Order
-                                WHERE order_id = :order_id;
+                                UPDATE Manager_Order
+                                SET order_status = 'CANCELLED'
+                                WHERE order_id = :order_id AND order_status = 'PLACED';
                             """)
 
 UPDATE_MANAGER_ORDER_TABLE = text("""
