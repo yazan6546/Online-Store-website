@@ -33,7 +33,6 @@ function sortCustomers(column) {
     rows.forEach(row => tableBody.appendChild(row));
 }
 
-// Utility function to map column names to their respective indices
 function getColumnIndex(column) {
     switch (column) {
         case 'person_id':
@@ -48,6 +47,50 @@ function getColumnIndex(column) {
             return 1;
     }
 }
+
+function getColumnIndexAddress(column) {
+    switch (column) {
+        case 'street':
+            return 1; // 1st column
+        case 'city':
+            return 2; // 2nd column
+        case 'zip_code':
+            return 3; // 3rd column
+        default:
+            return 1;
+    }
+}
+
+function sortAddresses(column) {
+    console.log('Sorting by:', column);
+
+    // Get the table body and convert rows to an array
+    const tableBody = document.querySelector('#address-table-body');
+    const rows = Array.from(tableBody.querySelectorAll('tr'));
+
+    // Determine the sort direction
+    currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+
+    // Sort rows based on the specified column
+    rows.sort((a, b) => {
+        let aValue = a.querySelector(`td:nth-child(${getColumnIndexAddress(column)})`).innerText.trim();
+        let bValue = b.querySelector(`td:nth-child(${getColumnIndexAddress(column)})`).innerText.trim();
+
+
+        if (currentSortOrder === 'asc') {
+            return aValue > bValue ? 1 : -1;
+        } else {
+            return aValue < bValue ? 1 : -1;
+        }
+    });
+
+    // Clear the table body and append sorted rows
+    tableBody.innerHTML = '';
+    rows.forEach(row => tableBody.appendChild(row));
+}
+
+
+// Utility function to map column names to their respective indices
 
 
 
@@ -325,27 +368,6 @@ function gnerateRowAddress(address) {
 
 }
 
-// document.querySelectorAll('.action-dropdown-btn').forEach((btn) => {
-//     btn.addEventListener('click', function (event) {
-//         // Close other open dropdowns
-//         document.querySelectorAll('.action-dropdown').forEach((dropdown) => {
-//             if (dropdown !== btn.parentElement) {
-//                 dropdown.classList.remove('active');
-//             }
-//         });
-//
-//         // Toggle the current dropdown
-//         btn.parentElement.classList.toggle('active');
-//         event.stopPropagation(); // Prevent event bubbling
-//     });
-// });
-//
-// document.addEventListener('click', () => {
-//     document.querySelectorAll('.action-dropdown').forEach((dropdown) => {
-//         dropdown.classList.remove('active');
-//     });
-// });
-
 
 function searchCustomers() {
     console.log('Searching customers');
@@ -395,7 +417,6 @@ function searchCustomers() {
         }
     });
 }
-
 
 
 
