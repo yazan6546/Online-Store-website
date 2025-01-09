@@ -7,17 +7,41 @@ INSERT_MANAGER_ORDER_TABLE = text("""
                             """)
 
 GET_MANAGER_ORDER_TABLE = text("""
-                            SELECT * FROM Manager_Order ORDER BY 1 ;
+                            SELECT 
+                            person_id as person_id,
+                            order_id as order_id,
+                            order_date as order_date,
+                            delivery_date as delivery_date,
+                            order_status as order_status,
+                            delivery_service_id as delivery_service_id
+                            
+                             FROM Manager_Order ORDER BY 1 ;
 """)
+
+
+GET_PRODUCTS_FROM_ORDER = text("""
+                select col.product_id, col.price_at_time_of_order, col.quantity
+                from Manager_Order_Line col
+                where col.order_id = :order_id;
+            """)
+
+
+
 
 SELECT_MANAGER_ORDER_BY_ID = text("""
                                 SELECT * FROM Manager_Order
                                 WHERE person_id = :id;
                             """)
+GET_STATUS_BY_ORDER_ID = text("""
+                                SELECT order_status FROM Manager_Order
+                                WHERE order_id = :order_id;
+                            """)
+
 
 DELETE_FROM_MANAGER_ORDER = text("""
-                                DELETE FROM Manager_Order
-                                WHERE order_id = :order_id;
+                                UPDATE Manager_Order
+                                SET order_status = 'CANCELLED'
+                                WHERE order_id = :order_id AND order_status = 'PLACED';
                             """)
 
 UPDATE_MANAGER_ORDER_TABLE = text("""

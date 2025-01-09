@@ -146,6 +146,10 @@ function saveProduct() {
         alert('Please enter stock quantity.');
         return;
     }
+    if(stockQuantity<0){
+        alert('Stock quantity cannot be negative');
+        return;
+    }
 
     // FormData for files and form fields
     const formData = new FormData();

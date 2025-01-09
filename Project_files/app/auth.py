@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import flash, render_template, url_for, redirect, session
 from markupsafe import Markup
 import utils.password_manager as pm
+from models import Cart
 from models.manager import Manager
 from models.customers import Customer
 
@@ -102,6 +103,7 @@ def validate_login(login_form, signup_form):
             flash("Login successful!", "success")
             print("ok error here")
             session['user'] = user1.to_dict()
+            session['cart'] = Cart().to_dict()
             session['role'] = 'customer'
             print("ok error her2")
             return redirect(url_for('customer'))
@@ -117,6 +119,7 @@ def validate_login(login_form, signup_form):
             flash("Login successful!", "success")
             print("ok error her1")
             session['user'] = user2.to_dict()
+            session['cart'] = Cart().to_dict()
             session['role'] = 'manager'
             print("ok error her2")
             return redirect(url_for('admin_dashboard'))
