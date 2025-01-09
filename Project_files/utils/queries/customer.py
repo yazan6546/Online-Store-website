@@ -75,7 +75,7 @@ SEARCH_CUSTOMERS = text("""
                             c.birth_date AS birth_date
                             FROM Customer c
                             JOIN Person p on c.person_id = p.person_id
-                            WHERE p.first_name like :name or p.last_name like :name;
+                            WHERE p.first_name like :name or p.last_name like :name or p.email like :name;
                         """)
 
 DROP_CUSTOMERS_TABLE = text("""

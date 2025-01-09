@@ -50,6 +50,59 @@ function getColumnIndex(column) {
 }
 
 
+
+// enable edit mode for the specified customer
+function enableEditCustomer(person_id) {
+    console.log('Enabling edit for customer ID:', person_id);
+    var row = document.getElementById('row-' + person_id);
+    row.classList.add('edit-mode');
+    document.getElementById('first_name-' + person_id + '-text').style.display = 'none';
+    document.getElementById('first_name-' + person_id + '-input').style.display = 'inline';
+    document.getElementById('last_name-' + person_id + '-text').style.display = 'none';
+    document.getElementById('last_name-' + person_id + '-input').style.display = 'inline';
+    document.getElementById('email-' + person_id + '-text').style.display = 'none';
+    document.getElementById('email-' + person_id + '-input').style.display = 'inline';
+    document.getElementById('save-btn-' + person_id).style.display = 'inline';
+    document.getElementById('edit-btn-' + person_id).style.display = 'none';
+}
+
+// save the edited customer
+function saveEditCustomer(person_id) {
+    console.log('Saving edit for customer ID:', person_id);
+    var first_name = $('#first_name-' + person_id + '-input').val();
+    var last_name = $('#last_name-' + person_id + '-input').val();
+    var email = $('#email-' + person_id + '-input').val();
+    $.ajax({
+        url: '/update_customer/' + person_id,
+        type: 'POST',
+        data: {
+            first_name: first_name,
+            last_name: last_name,
+            email: email
+        },
+        success: function (response) {
+            if (response.success) {
+                $('#first_name-' + person_id + '-text').text(first_name).show();
+                $('#first_name-' + person_id + '-input').hide();
+                $('#last_name-' + person_id + '-text').text(last_name).show();
+                $('#last_name-' + person_id + '-input').hide();
+                $('#email-' + person_id + '-text').text(email).show();
+                $('#email-' + person_id + '-input').hide();
+                $('#edit-btn-' + person_id).show();
+                $('#save-btn-' + person_id).hide();
+            } else {
+                alert('Error updating customer: ' + response.error);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert('Error updating customer: ' + xhr.responseText);
+        }
+    });
+}
+
+
+
+// enable edit mode for the specified address
 function enableEditAddress(address_id) {
 
     console.log('Enabling edit for address ID:', address_id);
@@ -66,6 +119,7 @@ function enableEditAddress(address_id) {
     document.getElementById('edit-address-btn-' + address_id).style.display = 'none';
 }
 
+// save the edited address
 function saveEditAddress(address_id) {
     console.log('Saving edit for address ID:', address_id);
     var street_address = $('#street_address-' + address_id + '-input').val();
@@ -98,6 +152,9 @@ function saveEditAddress(address_id) {
         }
     });
 }
+
+
+
 
 function deleteAddress(address_id) {
     console.log('Deleting address ID:', address_id);
@@ -206,6 +263,90 @@ function addAddress() {
 }
 
 
+
+
+
+function generateRowCustomer(customer) {
+    return `
+    <tr id="row-{{ customer.person_id }}">
+                <td>${customer.person_id}</td>
+                <td>
+                    <span id="first_name-${customer.person_id}-text">${customer.first_name}</span>
+                    <input type="text" id="first_name-${customer.person_id}-input" value="${customer.first_name}" style="display:none; width: 100px;">
+                </td>
+                <td>
+                    <span id="last_name-${customer.person_id}-text">${customer.last_name}</span>
+                    <input type="text" id="last_name-${customer.person_id}-input" value="${customer.last_name}" style="display:none; width: 100px;">
+                </td>
+                <td>
+                    <span id="email-${customer.person_id}-text">${customer.email}</span>
+                    <input type="text" id="email-${customer.person_id}-input" value="${customer.email}" style="display:none; width: 200px;">
+                </td>
+
+                <td class="action-column">
+                    <div class="action-dropdown">
+                        <button class="action-dropdown-btn">
+                            <i class="fas fa-ellipsis-v"></i> <!-- Vertical three dots icon -->
+                        </button>
+                        <div class="action-dropdown-menu">
+                            <button id="edit-btn-${customer.person_id}" class="edit" onclick="enableEditCustomer(${customer.person_id})">Edit</button>
+                            <button id="save-btn-${customer.person_id}" class="save" style="display:none;" onclick="saveEditCustomer(${customer.person_id})">Save</button>
+                            <button class="delete" onclick="deleteCustomer(${customer.person_id})">Delete</button>
+                            <button class="show-addresses" onclick="showAddresses(${customer.person_id})">Show Addresses</button>
+                        </div>
+                    </div>
+                </td>
+
+
+            </tr>`;
+}
+
+function gnerateRowAddress(address) {
+    return `
+    <tr id="address-row-${address.address_id}">
+    <td>
+        <span id="street_address-${address.address_id}-text">${address.street}</span>
+        <input type="text" id="street_address-${address.address_id}-input" value="${address.street}" style="display:none; width: 100px;">
+    </td>
+    <td>
+        <span id="city-${address.address_id}-text">${address.city}</span>
+        <input type="text" id="city-${address.address_id}-input" value="${address.city}" style="display:none; width: 100px;">
+    </td>
+    <td>
+        <span id="zip_code-${address.address_id}-text">${address.zip_code}</span>
+        <input type="text" id="zip_code-${address.address_id}-input" value="${address.zip_code}" style="display:none; width: 100px;">
+    </td>
+    <td class="action-buttons">
+        <button id="edit-address-btn-${address.address_id}" class="edit" onclick="enableEditAddress(${address.address_id})">Edit</button>
+        <button id="save-address-btn-${address.address_id}" class="save" style="display:none;" onclick="saveEditAddress(${address.address_id})">Save</button>
+        <button class="delete" onclick="deleteAddress(${address.address_id})">Delete</button>
+    </td>
+</tr>`;
+
+}
+
+// document.querySelectorAll('.action-dropdown-btn').forEach((btn) => {
+//     btn.addEventListener('click', function (event) {
+//         // Close other open dropdowns
+//         document.querySelectorAll('.action-dropdown').forEach((dropdown) => {
+//             if (dropdown !== btn.parentElement) {
+//                 dropdown.classList.remove('active');
+//             }
+//         });
+//
+//         // Toggle the current dropdown
+//         btn.parentElement.classList.toggle('active');
+//         event.stopPropagation(); // Prevent event bubbling
+//     });
+// });
+//
+// document.addEventListener('click', () => {
+//     document.querySelectorAll('.action-dropdown').forEach((dropdown) => {
+//         dropdown.classList.remove('active');
+//     });
+// });
+
+
 function searchCustomers() {
     console.log('Searching customers');
     var query = $('#search-query').val();
@@ -220,68 +361,30 @@ function searchCustomers() {
                 response.customers.forEach(function (customer) {
                     var addressesHtml = '';
                     console.log(customer.addresses)
-                    if (Array.isArray(customer.addresses)) {
-                        customer.addresses.forEach(function (address) {
-                            console.log("street = " + address.street)
-                            addressesHtml += `
-                            <tr id="address-row-${address.address_id}">
-                                <td>
-                                    <span id="street_address-${address.address_id}-text">${address.street}</span>
-                                    <input type="text" id="street_address-${address.address_id}-input" value="${address.street}" style="display:none; width: 100px;">
-                                </td>
-                                <td>
-                                    <span id="city-${address.id}-text">${address.city}</span>
-                                    <input type="text" id="city-${address.address_id}-input" value="${address.city}" style="display:none; width: 100px;">
-                                </td>
-                                <td>
-                                    <span id="zip_code-${address.id}-text">${address.zip_code}</span>
-                                    <input type="text" id="zip_code-${address.address_id}-input" value="${address.zip_code}" style="display:none; width: 100px;">
-                                </td>
-                                <td class="action-buttons">
-                                    <button id="edit-address-btn-${address.address_id}" class="edit" onclick="enableEditAddress(${address.address_id})">Edit</button>
-                                    <button id="save-address-btn-${address.address_id}" class="save" style="display:none;" onclick="saveEditAddress(${address.address_id})">Save</button>
-                                    <button class="delete" onclick="deleteAddress(${address.address_id})">Delete</button>
-                                </td>
-                            </tr>`;
-                        });
-                    }
-                    var row = `
-                    <tr id="row-${customer.person_id}">
-                        <td>${customer.person_id}</td>
-                        <td>
-                            <span id="first_name-${customer.person_id}-text">${customer.first_name}</span>
-                            <input type="text" id="first_name-${customer.person_id}-input" value="${customer.first_name}" style="display:none; width: 100px;">
-                        </td>
-                        <td>
-                            <span id="last_name-${customer.person_id}-text">${customer.last_name}</span>
-                            <input type="text" id="last_name-${customer.person_id}-input" value="${customer.last_name}" style="display:none; width: 100px;">
-                        </td>
-                        <td>
-                            <span id="email-${customer.person_id}-text">${customer.email}</span>
-                            <input type="text" id="email-${customer.person_id}-input" value="${customer.email}" style="display:none; width: 100px;">
-                        </td>
-                        <td>
-                            <table class="address-subtable">
-                                <thead>
-                                    <tr>
-                                        <th>Street Address</th>
-                                        <th>City</th>
-                                        <th>Zip Code</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${addressesHtml}
-                                </tbody>
-                            </table>
-                        </td>
-                        <td class="action-buttons">
-                            <button id="edit-btn-${customer.person_id}" class="edit" onclick="enableEdit(${customer.person_id})">Edit</button>
-                            <button id="save-btn-${customer.person_id}" class="save" style="display:none;" onclick="saveEdit(${customer.person_id})">Save</button>
-                            <button class="delete" onclick="deleteCustomer(${customer.person_id})">Delete</button>
-                        </td>
-                    </tr>`;
+
+                    var row = generateRowCustomer(customer);
                     tableBody.append(row);
+                    document.querySelectorAll('.action-dropdown-btn').forEach((btn) => {
+                        btn.addEventListener('click', function (event) {
+                            // Close other open dropdowns
+                            document.querySelectorAll('.action-dropdown').forEach((dropdown) => {
+                                if (dropdown !== btn.parentElement) {
+                                    dropdown.classList.remove('active');
+                                }
+                            });
+
+                            // Toggle the current dropdown
+                            btn.parentElement.classList.toggle('active');
+                            event.stopPropagation(); // Prevent event bubbling
+                        });
+                    });
+
+                    document.addEventListener('click', () => {
+                        document.querySelectorAll('.action-dropdown').forEach((dropdown) => {
+                            dropdown.classList.remove('active');
+                        });
+                    });
+
                 });
             } else {
                 alert('Error searching customers: ' + response.error);
@@ -294,52 +397,7 @@ function searchCustomers() {
 }
 
 
-function enableEditCustomer(person_id) {
-    console.log('Enabling edit for customer ID:', person_id);
-    var row = document.getElementById('row-' + person_id);
-    row.classList.add('edit-mode');
-    document.getElementById('first_name-' + person_id + '-text').style.display = 'none';
-    document.getElementById('first_name-' + person_id + '-input').style.display = 'inline';
-    document.getElementById('last_name-' + person_id + '-text').style.display = 'none';
-    document.getElementById('last_name-' + person_id + '-input').style.display = 'inline';
-    document.getElementById('email-' + person_id + '-text').style.display = 'none';
-    document.getElementById('email-' + person_id + '-input').style.display = 'inline';
-    document.getElementById('save-btn-' + person_id).style.display = 'inline';
-    document.getElementById('edit-btn-' + person_id).style.display = 'none';
-}
 
-function saveEditCustomer(person_id) {
-    console.log('Saving edit for customer ID:', person_id);
-    var first_name = $('#first_name-' + person_id + '-input').val();
-    var last_name = $('#last_name-' + person_id + '-input').val();
-    var email = $('#email-' + person_id + '-input').val();
-    $.ajax({
-        url: '/update_customer/' + person_id,
-        type: 'POST',
-        data: {
-            first_name: first_name,
-            last_name: last_name,
-            email: email
-        },
-        success: function (response) {
-            if (response.success) {
-                $('#first_name-' + person_id + '-text').text(first_name).show();
-                $('#first_name-' + person_id + '-input').hide();
-                $('#last_name-' + person_id + '-text').text(last_name).show();
-                $('#last_name-' + person_id + '-input').hide();
-                $('#email-' + person_id + '-text').text(email).show();
-                $('#email-' + person_id + '-input').hide();
-                $('#edit-btn-' + person_id).show();
-                $('#save-btn-' + person_id).hide();
-            } else {
-                alert('Error updating customer: ' + response.error);
-            }
-        },
-        error: function (xhr, status, error) {
-            alert('Error updating customer: ' + xhr.responseText);
-        }
-    });
-}
 
 function deleteCustomer(person_id) {
     console.log('Deleting customer ID:', person_id);
@@ -543,3 +601,7 @@ function addCustomer() {
             alert('An error occurred: ' + error.message);
         });
 }
+
+
+
+
