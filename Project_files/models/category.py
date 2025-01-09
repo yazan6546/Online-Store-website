@@ -1,3 +1,6 @@
+from unicodedata import category
+
+from sqlalchemy import text
 from utils.db_utils import get_db_connection
 import utils.queries as q
 
