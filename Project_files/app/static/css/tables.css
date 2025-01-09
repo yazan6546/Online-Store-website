@@ -161,7 +161,8 @@ h1 {
     margin-bottom: 5px;
     color: #176B87;
 }
-
+#birth_date,
+#customer-pass,
 #customer-firstName,
 #customer-lastName,
 #customer-email {

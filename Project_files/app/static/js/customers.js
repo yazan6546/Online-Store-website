@@ -564,20 +564,25 @@ function addCustomer() {
     const first_name = document.getElementById('customer-firstName').value;
     const last_name = document.getElementById('customer-lastName').value;
     const email = document.getElementById('customer-email').value;
+    const pass = document.getElementById('customer-pass').value;
+    const birth_date = document.getElementById('birth-date').value;
+
+    //console.log(first_name, last_name, email, pass, birth_date);
+
 
     // Validate inputs
-    if (!first_name || !last_name || !email) {
+    if (!first_name || !last_name || !email || !pass || !birth_date) {
         alert('Please fill in all fields.');
         return;
     }
 
     // Send data to the server via AJAX
-    fetch('/add_customer', {
+    fetch('/add_customer_by_manager', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({first_name, last_name, email}),
+        body: JSON.stringify({first_name, last_name, email,pass,birth_date}),
     })
         .then(response => response.json())
         .then(data => {
@@ -587,38 +592,7 @@ function addCustomer() {
 
                 // Optionally, update the table dynamically
                 const tableBody = document.querySelector('#table tbody');
-                const newRow = `
-                    <tr id="row-${data.customer.person_id}">
-                        <td>${data.customer.person_id}</td>
-                        <td>
-                            <span id="first_name-${data.customer.person_id}-text">${data.customer.first_name}</span>
-                            <input type="text" id="first_name-${data.customer.person_id}-input" value="${data.customer.first_name}" style="display:none; width: 100px;">
-                        </td>
-
-                        <td>
-                            <span id="last_name-${data.customer.person_id}-text">${data.customer.last_name}</span>
-                            <input type="text" id="last_name-${data.customer.person_id}-input" value="${data.customer.last_name}" style="display:none; width: 100px;">
-                        </td>
-
-                        <td>
-                            <span id="email-${data.customer.person_id}-text">${data.customer.email}</span>
-                            <input type="text" id="email-${data.customer.person_id}-input" value="${data.customer.email}" style="display:none; width: 100px;">
-                        </td>
-
-                        <td class="action-column">
-                            <div class="action-dropdown">
-                                <button class="action-dropdown-btn">
-                                    <i class="fas fa-ellipsis-v"></i> <!-- Vertical three dots icon -->
-                                </button>
-                                <div class="action-dropdown-menu">
-                                    <button id="edit-btn-${data.customer.person_id}" class="edit" onclick="enableEdit(${data.customer.person_id})">Edit</button>
-                                    <button id="save-btn-${data.customer.person_id}" class="save" style="display:none;" onclick="saveEdit(${data.customer.person_id})">Save</button>
-                                    <button class="delete" onclick="deleteCustomer(${data.customer.person_id})">Delete</button>
-                                    <button class="show-addresses" onclick="showAddresses(${data.customer.person_id})">Show Addresses</button>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>`;
+                const newRow = generateRowCustomer(data.customer);
                 tableBody.insertAdjacentHTML('beforeend', newRow);
             } else {
                 alert('Error adding customer: ' + data.error);

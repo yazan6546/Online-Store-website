@@ -52,6 +52,7 @@ Customers
                     <input type="text" id="email-{{ customer.person_id }}-input" value="{{ customer.email }}" style="display:none; width: 200px;">
                 </td>
 
+
                 <td class="action-column">
                     <div class="action-dropdown">
                         <button class="action-dropdown-btn">
@@ -92,6 +93,16 @@ Customers
             <!-- Email -->
             <label for="customer-email">Email</label>
             <input type="email" id="customer-email" placeholder="Enter customer Email" required>
+
+            <!-- Password -->
+            <label for="customer-pass">Password</label>
+            <input type="text" id="customer-pass" placeholder="Enter customer password" required>
+
+
+            <label for="birth-date">Birth Date</label>
+            <input type="date" id="birth-date" class="form-control">
+
+
 
             <!-- Submit Button -->
             <button type="submit" class="btn">Add Customer</button>

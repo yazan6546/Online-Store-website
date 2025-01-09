@@ -1043,6 +1043,40 @@ def admin_cart():
     total = cart.get_total()
     return render_template('admin_cart.html', delivery_services=delivery_services, products=products, total=total)
 
+@app.route('/add_customer_by_manager', methods=['POST'])
+def add_customer_by_manager():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        email = data.get('email')
+        passcode = data.get('pass')
+        birth_date_str = data.get('birth_date')
+
+        try:
+            # Convert the string to a datetime.date object
+            birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
+        except ValueError:
+            return jsonify({'success': False, 'error': 'Invalid birth date format.'}), 400
+
+        # Validate inputs
+        if not first_name or not last_name or not email or not passcode:
+            return jsonify(success=False, error="firstName, lastName, email, and password are required.")
+
+        # Create and insert a new manager
+        new_customer = Customer(first_name=first_name, last_name=last_name, email=email, passcode=passcode, birth_date=birth_date, hash=True)
+        new_customer.insert()
+
+        return jsonify(success=True, customer=new_customer.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+
+
+
+
 
 @app.route('/add_customer', methods=['GET', 'POST'])
 def add_customer():
