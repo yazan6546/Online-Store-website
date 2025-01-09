@@ -879,12 +879,18 @@ def update_manager_order(category_id):
 def delete_manager_order(order_id):
     try:
         # Call the delete method of the Supplier class
+        status = ManagerOrder.get_status_by_order_id(order_id)
         result = ManagerOrder.delete(order_id)
+
+        if status == 'COMPLETED':
+            return jsonify(success=False, error="You cannot delete a completed order.")
+        elif status == 'CANCELLED':
+            return jsonify(success=False, error="The order has already been cancelled.")
 
         if result:
             return jsonify(success=True)
         else:
-            return jsonify(success=False, error="Failed to cancel the Orderin the database")
+            return jsonify(success=False, error="Failed to cancel the Order in the database")
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
