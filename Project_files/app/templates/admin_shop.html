@@ -89,8 +89,10 @@ Admin Dashboard
     <div class="product-card" data-id="{{ product.product_id }}">
       <!-- Upper Section -->
       <div class="product-image-section">
-        <img src="{{ product.photo }}" alt="{{ product.product_name }}">
-        <div class="circle-btn open-modal-btn" data-id="{{ product.product_id }}" onclick="openModal('{{ product.product_id }}')">
+          <div class="image-container">
+            <img src="{{ product.photo }}" alt="{{ product.product_name }}">
+            </div>
+              <div class="circle-btn open-modal-btn" data-id="{{ product.product_id }}" onclick="openModal('{{ product.product_id }}')">
           <i class="bx bx-plus"></i>
         </div>
       </div>

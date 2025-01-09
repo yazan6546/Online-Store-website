@@ -2,6 +2,7 @@ from models.person import Person
 import utils.queries as q
 from utils.db_utils import get_db_connection
 
+
 class Manager(Person):
     def __init__(self, first_name, last_name, email, passcode='0000', since='2021-01-01', role='Financial Manager', person_id=None, hash=False):
         super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
@@ -141,11 +142,12 @@ class Manager(Person):
     def to_dict(self, person=True, person_id=True):
 
         if person:
-          temp = super().to_dict(person_id=person_id)
+            temp = super().to_dict(person_id=person_id)
         else:
-            temp= {'person_id': self.person_id}
+            temp = {'person_id': self.person_id}
 
         temp['since'] = self.since
+        temp['since'] = temp['since'].strftime('%Y-%m-%d')  # Format as 'YYYY-MM-DD'
         temp['role'] = self.role
 
         return temp
