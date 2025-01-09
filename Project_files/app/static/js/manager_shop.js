@@ -58,3 +58,84 @@ function addToCart(productId) {
     notification.classList.remove("show");
   }, 3000);
 }
+
+/////////////////////////////////////////////////////////////
+// Handle the sort functionality
+const sortSelect = document.getElementById("sort-options");
+
+// Event listener for sorting
+sortSelect.addEventListener("change", function () {
+    const selectedOption = this.value;
+    sortProducts(selectedOption);
+});
+
+function sortProducts(criteria) {
+    const productContainer = document.querySelector(".product-container");
+    const products = Array.from(productContainer.querySelectorAll(".product-card"));
+
+    // Sorting logic based on criteria
+    products.sort((a, b) => {
+        switch (criteria) {
+            case "best-selling":
+                return 0;
+            case "a-z":
+                return a.querySelector(".product-info-section h5").innerText.localeCompare(
+                    b.querySelector(".product-info-section h5").innerText
+                );
+            case "z-a":
+                return b.querySelector(".product-info-section h5").innerText.localeCompare(
+                    a.querySelector(".product-info-section h5").innerText
+                );
+            case "low-high":
+                return parseFloat(a.querySelector(".price").innerText.replace("$", "")) -
+                       parseFloat(b.querySelector(".price").innerText.replace("$", ""));
+            case "high-low":
+                return parseFloat(b.querySelector(".price").innerText.replace("$", "")) -
+                       parseFloat(a.querySelector(".price").innerText.replace("$", ""));
+            default:
+                return 0;
+        }
+    });
+
+    // Clear the container and append sorted products
+    productContainer.innerHTML = "";
+    products.forEach(product => productContainer.appendChild(product));
+}
+
+
+//////////////////////////////////////////////////////////////////////
+document.querySelectorAll('input[name="category"]').forEach((radio) => {
+    radio.addEventListener('change', function () {
+        const selectedCategory = this.value;
+
+        // Fetch filtered products via AJAX
+        fetch(`/filter_products?category=${encodeURIComponent(selectedCategory)}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    const productContainer = document.querySelector('.product-container');
+                    productContainer.innerHTML = ''; // Clear current products
+
+                    // Populate filtered products
+                    data.products.forEach((product) => {
+                        const productCard = `
+                            <div class="product-card">
+                                <div class="product-image-section">
+                                    <img src="${product.photo}" alt="${product.product_name}">
+                                </div>
+                                <div class="product-info-section">
+                                    <h5>${product.product_name}</h5>
+                                    <p class="price">$${product.price}</p>
+                                </div>
+                            </div>`;
+                        productContainer.insertAdjacentHTML('beforeend', productCard);
+                    });
+                } else {
+                    alert('No products found for this category.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+});
