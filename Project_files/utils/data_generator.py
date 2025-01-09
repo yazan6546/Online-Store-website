@@ -152,15 +152,16 @@ def generate_supplier_data(num_records):
 
 def generate_customer_order_data(num_records, customer_ids, address_ids, delivery_service_ids):
     data = []
-    order_date = fake.date_between(start_date='-4y', end_date='today')
-
-    # Calculate the end date as two weeks after the order date
-    end_date = order_date + timedelta(days=10)
-
-    # Generate a delivery date between the order date and the end date
-    delivery_date = fake.date_between(start_date=order_date, end_date=end_date)
 
     for _ in range(num_records):
+        order_date = fake.date_between(start_date='-4y', end_date='today')
+
+        # Calculate the end date as two weeks after the order date
+        end_date = order_date + timedelta(days=10)
+
+        # Generate a delivery date between the order date and the end date
+        delivery_date = fake.date_between(start_date=order_date, end_date=end_date)
+
         data.append({
             'person_id': random.choice(customer_ids),
             'address_id': random.choice(address_ids),
