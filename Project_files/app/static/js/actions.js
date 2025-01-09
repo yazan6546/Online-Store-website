@@ -30,6 +30,7 @@ document.addEventListener('click', () => {
 
 // Get references to the modal and close button
 const addressModal = document.getElementById('address-modal');
+
 const closeModalBtn = addressModal.querySelector('.close-btn');
 
 // Function to show addresses in the modal
@@ -37,7 +38,7 @@ async function showAddresses(personId) {
     // Fetch addresses dynamically (you can replace this with an AJAX call if needed)
     const customerAddresses = await mockGetAddresses(personId); // Replace with backend call
     console.log(customerAddresses)
-
+    currentCustomerID = personId;
     const addressTableBody = document.getElementById('address-table-body');
     addressTableBody.innerHTML = ''; // Clear existing rows
 
@@ -46,7 +47,7 @@ async function showAddresses(personId) {
             <tr id="address-row-${address.address_id}">
                 <td>
                     <span id="street_address-${address.address_id}-text">${address.street}</span>
-                    <input type="text" id="street_address-${address.address_id}-input" value="${address.street}" style="display:none; width: 100px;">
+                    <input type="text" id="street_address-${address.address_id}-input" value="${address.street}" style="display:none; width: 300px;">
                 </td>
                 <td>
                     <span id="city-${address.address_id}-text">${address.city}</span>

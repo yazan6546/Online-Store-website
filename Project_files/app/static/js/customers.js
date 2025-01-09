@@ -1,5 +1,5 @@
 let currentSortOrder = 'asc'; // Keeps track of the current sort order
-
+let currentCustomerID = null; // Keeps track of the current customer ID
 function sortCustomers(column) {
     console.log('Sorting by:', column);
 
@@ -261,50 +261,6 @@ function deleteAddress(address_id) {
 // }
 
 
-function addAddress() {
-    const customerId = document.getElementById('customer-id').value;
-    const street = document.getElementById('address-street').value;
-    const city = document.getElementById('address-city').value;
-    const zip = document.getElementById('address-zip').value;
-
-    // Validate inputs
-    if (!street || !city || !zip) {
-        alert('Please fill in all fields.');
-        return;
-    }
-
-    // AJAX call to server
-    $.ajax({
-        url: `/add_address/${customerId}`,
-        type: 'POST',
-        data: JSON.stringify({street, city, zip}),
-        contentType: 'application/json',
-        success: function (response) {
-            if (response.success) {
-                alert('Address added successfully!');
-                const addressesTable = document.querySelector(`#row-${customerId} .address-subtable tbody`);
-                const newRow = `
-                    <tr id="address-row-${response.address.address_id}">
-                        <td>${response.address.street}</td>
-                        <td>${response.address.city}</td>
-                        <td>${response.address.zip}</td>
-                        <td class="action-buttons">
-                            <button class="edit" onclick="enableEditAddress(${response.address.address_id})">Edit</button>
-                            <button class="delete" onclick="deleteAddress(${response.address.address_id})">Delete</button>
-                        </td>
-                    </tr>`;
-                addressesTable.insertAdjacentHTML('beforeend', newRow);
-                closeAddAddressModal();
-            } else {
-                alert('Error adding address: ' + response.error);
-            }
-        },
-        error: function (xhr) {
-            alert('Error adding address: ' + xhr.responseText);
-        },
-    });
-}
-
 
 
 
@@ -441,6 +397,54 @@ function deleteCustomer(person_id) {
 }
 
 
+
+
+function addAddress() {
+    const customerId = document.getElementById('customer-id').value;
+    const street = document.getElementById('address-street').value;
+    const city = document.getElementById('address-city').value;
+    const zip = document.getElementById('address-zip').value;
+
+    // Validate inputs
+    if (!street || !city || !zip) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    // AJAX call to server
+    $.ajax({
+        url: `/add_address/${customerId}`,
+        type: 'POST',
+        data: JSON.stringify({street, city, zip}),
+        contentType: 'application/json',
+        success: function (response) {
+            if (response.success) {
+                alert('Address added successfully!');
+                const addressesTable = document.querySelector(`#row-${customerId} .address-subtable tbody`);
+                const newRow = `
+                    <tr id="address-row-${response.address.address_id}">
+                        <td>${response.address.street}</td>
+                        <td>${response.address.city}</td>
+                        <td>${response.address.zip}</td>
+                        <td class="action-buttons">
+                            <button class="edit" onclick="enableEditAddress(${response.address.address_id})">Edit</button>
+                            <button class="delete" onclick="deleteAddress(${response.address.address_id})">Delete</button>
+                        </td>
+                    </tr>`;
+                addressesTable.insertAdjacentHTML('beforeend', newRow);
+                closeAddAddressModal();
+            } else {
+                alert('Error adding address: ' + response.error);
+            }
+        },
+        error: function (xhr) {
+            alert('Error adding address: ' + xhr.responseText);
+        },
+    });
+}
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 document.getElementById('add-address-btn').addEventListener('click', function () {
@@ -505,7 +509,8 @@ function saveNewAddress() {
         return;
     }
 
-    const customerId = document.getElementById('customer-id').value;
+
+    const customerId = currentCustomerID;
 
     // Send the new address to the backend
     $.ajax({
@@ -517,12 +522,13 @@ function saveNewAddress() {
             if (response.success) {
                 alert('Address added successfully!');
                 // Update the address table with the new row
-                const addressesTable = document.querySelector(`#row-${customerId} .address-subtable tbody`);
+                const addressesTable = document.getElementById('address-table-body');
+                console.log("Addresses Table:", addressesTable);
                 const newRow = `
                     <tr id="address-row-${response.address.address_id}">
                         <td>${response.address.street}</td>
                         <td>${response.address.city}</td>
-                        <td>${response.address.zip}</td>
+                        <td>${response.address.zip_code}</td>
                         <td class="action-buttons">
                             <button class="edit" onclick="enableEditAddress(${response.address.address_id})">Edit</button>
                             <button class="delete" onclick="deleteAddress(${response.address.address_id})">Delete</button>
@@ -542,7 +548,7 @@ function saveNewAddress() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
-function openModalCustomer() {
+function openModalCustomer(person_id) {
     const modal = document.getElementById("add-customer-modal");
     modal.classList.add("show");
 }

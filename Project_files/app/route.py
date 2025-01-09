@@ -119,10 +119,8 @@ def filter_customers():
     return jsonify({"success": True, "customers": customers})
 
 ###########################################################################################
-
+# Address section
 ###########################################################################################
-
-# the following routes are for the address section
 
 @app.route('/add_address/<int:customer_id>', methods=['POST'])
 def add_address(customer_id):
