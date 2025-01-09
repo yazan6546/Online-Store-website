@@ -49,7 +49,7 @@ Customers
                 </td>
                 <td>
                     <span id="email-{{ customer.person_id }}-text">{{ customer.email }}</span>
-                    <input type="text" id="email-{{ customer.person_id }}-input" value="{{ customer.email }}" style="display:none; width: 100px;">
+                    <input type="text" id="email-{{ customer.person_id }}-input" value="{{ customer.email }}" style="display:none; width: 200px;">
                 </td>
 
                 <td class="action-column">
@@ -58,8 +58,8 @@ Customers
                             <i class="fas fa-ellipsis-v"></i> <!-- Vertical three dots icon -->
                         </button>
                         <div class="action-dropdown-menu">
-                            <button id="edit-btn-{{ customer.person_id }}" class="edit" onclick="enableEdit({{ customer.person_id }})">Edit</button>
-                            <button id="save-btn-{{ customer.person_id }}" class="save" style="display:none;" onclick="saveEdit({{ customer.person_id }})">Save</button>
+                            <button id="edit-btn-{{ customer.person_id }}" class="edit" onclick="enableEditCustomer({{ customer.person_id }})">Edit</button>
+                            <button id="save-btn-{{ customer.person_id }}" class="save" style="display:none;" onclick="saveEditCustomer({{ customer.person_id }})">Save</button>
                             <button class="delete" onclick="deleteCustomer({{ customer.person_id }})">Delete</button>
                             <button class="show-addresses" onclick="showAddresses({{ customer.person_id }})">Show Addresses</button>
                         </div>
@@ -72,6 +72,8 @@ Customers
         </tbody>
     </table>
 </div>
+
+
 
 <div id="add-customer-modal" class="modal">
     <div class="modal-content">
