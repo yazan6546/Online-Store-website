@@ -118,6 +118,9 @@ def filter_customers():
     ]
     return jsonify({"success": True, "customers": customers})
 
+###########################################################################################
+
+###########################################################################################
 
 # the following routes are for the address section
 
@@ -1357,6 +1360,10 @@ def add_delivery():
         return jsonify(success=False, error=str(e))
 
 
+@app.route('/api/get_addresses/<int:person_id>', methods=['GET'])
+def get_addresses(person_id):
+    addresses = Address.get_by_person_id(person_id)
+    addresses = [address.to_dict() for address in addresses]
 
 @app.route('/api/cart/add/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id:int):
@@ -1450,6 +1457,8 @@ def place_order():
 
     session['cart'] = Cart().to_dict()
     return jsonify({"success": True})
+
+    return jsonify(addresses)
 
 
 @app.errorhandler(404)
