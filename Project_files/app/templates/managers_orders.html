@@ -1,7 +1,7 @@
 {% extends "admin_base.html" %}
 
 {% block title %}
-Customers
+Managers' Orders
 {% endblock %}
 
 {% block extra_css %}
@@ -28,15 +28,58 @@ Customers
     <table id="table">
         <thead>
             <tr>
-                <th onclick="sortOrders('order_id')">Order ID</th>
-                <th onclick="sortOrders('manager_email')">Manager Email</th>
-                <th onclick="sortOrders('order_date')">Order Date</th>
-                <th onclick="sortOrders('delivery_date')">Delivery Date</th>
-                <th onclick="sortOrders('delivery_service_name')">Delivery Service Name</th>
-                <th onclick="sortOrders('order_status')">Order Status</th>
+                <th onclick="sortManagersOrders('order_id')">Order ID</th>
+                <th onclick="sortManagersOrders('manager_email')">Manager Email</th>
+                <th onclick="sortManagersOrders('order_date')">Order Date</th>
+                <th onclick="sortManagersOrders('delivery_date')">Delivery Date</th>
+                <th onclick="sortManagersOrders('delivery_service_name')">Delivery Service Name</th>
+                <th onclick="sortManagersOrders('order_status')">Order Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr id="row-{{ order.order_id }}">
+
+                <td>{{ order.order_id }}</td>
+                <td>
+                    <span id="email-{{ order.order_id }}-text"> {{ order.email }} </span>
+
+                </td>
+                <td>
+                    <span id="order_date-{{ order.order_id }}-text">{{ order.order_date }}</span>
+                    <input type="text" id="order_date-{{ order.order_id }}-input" value="{{ order.order_date }}" style="display:none; width: 100px;">
+                </td>
+
+                <td>
+                    <span id="delivery_date-{{ order.order_id }}-text">{{ order.delivery_date }}</span>
+                    <input type="text" id="delivery_date-{{ order.order_id }}-input" value="{{ order.delivery_date }}" style="display:none; width: 100px;">
+
+                </td>
+
+                <td>
+                    <span id="delivery_service_name-{{ order.order_id }}-text">{{ order.delivery_service_name }}</span>
+                    <input type="text" id="delivery_service_name-{{ order.order_id }}-input" value="{{ order.delivery_service_name }}" style="display:none; width: 100px;">
+                </td>
+
+                <td>
+                    <span id="order_status-{{ order.order_id }}-text">{{ order.order_status }}</span>
+                    <input type="text" id="order_status-{{ order.order_id }}-input" value="{{ order.order_status }}" style="display:none; width: 100px;">
+
+                <td class="action-buttons">
+                    <button id="edit-btn-{{ order.order_id  }}" class="edit" onclick="enableEditManagersOrders({{ order.order_id }})">Edit</button>
+                    <button id="save-btn-{{ order.order_id  }}" class="save" style="display:none;" onclick="saveEditManagersOrders({{ order.order_id }})">Save</button>
+                    <button class="delete" onclick="deleteManagerOrder({{ order.order_id }})">Cancel</button>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+
+
+
+
+
     </table>
 </div>
 
