@@ -139,3 +139,101 @@ document.querySelectorAll('input[name="category"]').forEach((radio) => {
             });
     });
 });
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+document.querySelectorAll('input[name="availability"]').forEach((radio) => {
+    radio.addEventListener('change', (event) => {
+        const selectedAvailability = event.target.value; // Get selected availability
+        filterProductsByAvailability(selectedAvailability);
+    });
+});
+
+function filterProductsByAvailability(availability) {
+    const productCards = document.querySelectorAll('.product-card');
+
+    productCards.forEach((card) => {
+        const productAvailability = card.getAttribute('data-availability');
+
+        if (availability === 'all' || availability === productAvailability) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+/////////////////////////////////////////////////////////////////////////////////////////
+function updateProductCount() {
+    const productCount = document.querySelectorAll(".product-card").length;
+    document.getElementById("product-count").innerText = `${productCount} products`;
+}
+
+// Call the function initially to set the count
+updateProductCount();
+
+// Update the count whenever the products are filtered or sorted
+document.querySelectorAll("input[name='availability'], input[name='category']").forEach(input => {
+    input.addEventListener("change", updateProductCount);
+});
+
+document.getElementById("sort-options").addEventListener("change", updateProductCount);
+
+
+fetch(`/filter_products?availability=${availability}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const productContainer = document.querySelector(".product-container");
+            productContainer.innerHTML = ""; // Clear current products
+
+            // Update product count
+            document.getElementById("product-count").innerText = `${data.count} products`;
+
+            // Render products
+            data.products.forEach(product => {
+                const productCard = `
+                    <div class="product-card" data-id="${product.product_id}">
+                        <div class="product-image-section">
+                            <img src="${product.photo}" alt="${product.product_name}">
+                        </div>
+                        <div class="product-info-section">
+                            <h5>${product.product_name}</h5>
+                            <p class="price">$${product.price}</p>
+                        </div>
+                    </div>
+                `;
+                productContainer.insertAdjacentHTML("beforeend", productCard);
+            });
+        }
+    });
+//////////////////////////////////////////////////////////////////////////////////////
+document.addEventListener("DOMContentLoaded", function () {
+    const minPriceInput = document.getElementById("minPrice");
+    const maxPriceInput = document.getElementById("maxPrice");
+    const priceMinDisplay = document.getElementById("priceMin");
+    const priceMaxDisplay = document.getElementById("priceMax");
+    const productCards = document.querySelectorAll(".product-card");
+
+    // Function to filter products based on price range
+    function filterProductsByPrice() {
+      const minPrice = parseFloat(minPriceInput.value);
+      const maxPrice = parseFloat(maxPriceInput.value);
+
+      priceMinDisplay.textContent = minPrice.toFixed(2);
+      priceMaxDisplay.textContent = maxPrice.toFixed(2);
+
+      productCards.forEach((card) => {
+        const productPrice = parseFloat(card.getAttribute("data-price"));
+        if (productPrice >= minPrice && productPrice <= maxPrice) {
+          card.style.display = "block"; // Show the product
+        } else {
+          card.style.display = "none"; // Hide the product
+        }
+      });
+    }
+
+    // Attach event listeners to the range inputs
+    minPriceInput.addEventListener("input", filterProductsByPrice);
+    maxPriceInput.addEventListener("input", filterProductsByPrice);
+
+    // Set initial values
+    filterProductsByPrice();
+});

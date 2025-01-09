@@ -804,6 +804,67 @@ def filter_products():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+# @app.route('/count_products', methods=['GET'])
+# def count_products():
+#     availability = request.args.get('availability', 'all')
+#
+#     conn = get_db_connection()
+#     try:
+#         if availability == 'in-stock':
+#             query = "SELECT * FROM product WHERE stock_quantity > 0"
+#         elif availability == 'out-of-stock':
+#             query = "SELECT * FROM product WHERE stock_quantity = 0"
+#         else:
+#             query = "SELECT * FROM product"
+#
+#         result = conn.execute(query).fetchall()
+#         products = [dict(row) for row in result]
+#
+#         return jsonify({
+#             "success": True,
+#             "products": products,
+#             "count": len(products)
+#         })
+#     except Exception as e:
+#         print(f"Error in count_products: {e}")
+#         return jsonify({"success": False, "error": str(e)})
+#     finally:
+#         conn.close()
+#
+#  @app.route('/filter_availability', methods=['GET'])
+# def filter_availability():
+#     availability = request.args.get('availability')
+#
+#     if availability not in ["in-stock", "out-of-stock"]:
+#         return jsonify({"success": False, "error": "Invalid availability parameter."}), 400
+#
+#     try:
+#         # Determine availability
+#         in_stock = availability == "in-stock"
+#
+#         # Fetch products based on availability
+#         products = Product.get_by_availability(in_stock)
+#
+#         # Handle case where no products are returned
+#         if products is None:
+#             return jsonify({"success": False, "error": "No products found for the given availability."}), 404
+#
+#         # Prepare response
+#         product_list = [
+#             {
+#                 "product_id": product.product_id,
+#                 "product_name": product.product_name,
+#                 "price": product.price,
+#                 "photo": product.photo,
+#                 "product_description": product.product_description,
+#             }
+#             for product in products
+#         ]
+#
+#         return jsonify({"success": True, "products": product_list})
+#     except Exception as e:
+#         return jsonify({"success": False, "error": str(e)}), 500
+
 ############################################################################################################
 # Customer's orders section
 ############################################################################################################
@@ -1052,14 +1113,31 @@ def admin_dashboard():
 # Shop for manager Page
 @app.route('/admin_shop')
 def admin_shop():
-
+    # Fetch categories
     categories = Category.get_all()
     categories = [category.to_dict() for category in categories]
 
+    # Fetch products
     products = Product.get_all()
     products = [product.to_dict() for product in products]
 
-    return render_template('admin_shop.html', categories=categories, products=products)
+    # Calculate min and max price for the price range filter
+    if products:
+        min_price = min(product['price'] for product in products)
+        max_price = max(product['price'] for product in products)
+    else:
+        # Set default values if no products exist
+        min_price = 0
+        max_price = 0
+
+    return render_template(
+        'admin_shop.html',
+        categories=categories,
+        products=products,
+        min_price=min_price,
+        max_price=max_price
+    )
+
 
 
 # Cart for manager Page
