@@ -375,33 +375,33 @@ document.getElementById('add-address-btn').addEventListener('click', function ()
 
 
 // Open Address Modal
-function showAddresses(customerId) {
-    const modal = document.getElementById('address-modal');
-    const addressTableBody = document.getElementById('address-table-body');
-
-    // Clear existing rows
-    addressTableBody.innerHTML = '';
-
-    // Fetch addresses dynamically (assuming a fetchAddresses function is defined)
-    fetchAddresses(customerId).then(addresses => {
-        addresses.forEach(address => {
-            const row = `
-        <tr id="address-row-${address.address_id}">
-          <td>${address.street}</td>
-          <td>${address.city}</td>
-          <td>${address.zip_code}</td>
-          <td>
-            <button class="edit" onclick="enableEditAddress(${address.address_id})">Edit</button>
-            <button class="delete" onclick="deleteAddress(${address.address_id})">Delete</button>
-          </td>
-        </tr>
-      `;
-            addressTableBody.insertAdjacentHTML('beforeend', row);
-        });
-    });
-
-    modal.style.display = 'block';
-}
+// function showAddresses(customerId) {
+//     const modal = document.getElementById('address-modal');
+//     const addressTableBody = document.getElementById('address-table-body');
+//
+//     // Clear existing rows
+//     addressTableBody.innerHTML = '';
+//
+//     // Fetch addresses dynamically (assuming a fetchAddresses function is defined)
+//     fetchAddresses(customerId).then(addresses => {
+//         addresses.forEach(address => {
+//             const row = `
+//         <tr id="address-row-${address.address_id}">
+//           <td>${address.street}</td>
+//           <td>${address.city}</td>
+//           <td>${address.zip_code}</td>
+//           <td>
+//             <button class="edit" onclick="enableEditAddress(${address.address_id})">Edit</button>
+//             <button class="delete" onclick="deleteAddress(${address.address_id})">Delete</button>
+//           </td>
+//         </tr>
+//       `;
+//             addressTableBody.insertAdjacentHTML('beforeend', row);
+//         });
+//     });
+//
+//     modal.style.display = 'block';
+// }
 
 // Close Modal
 document.querySelector('.close-btn').addEventListener('click', () => {

@@ -22,10 +22,10 @@ document.addEventListener('click', () => {
 });
 
 // Add functionality for "Show Addresses"
-function showAddresses(personId) {
-    // Replace with your actual logic to fetch and display addresses
-    alert(`Show addresses for customer ID: ${personId}`);
-}
+// function showAddresses(personId) {
+//     // Replace with your actual logic to fetch and display addresses
+//     alert(`Show addresses for customer ID: ${personId}`);
+// }
 
 
 // Get references to the modal and close button
