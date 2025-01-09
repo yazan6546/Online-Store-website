@@ -20,6 +20,7 @@ from models.suppliers import Supplier
 import models.data_analysis as da
 from models.products import Product
 from models.category import Category
+from models.person import Person
 
 app.first_request_handled = False
 
@@ -776,18 +777,187 @@ def search_category():
 ############################################################################################################
 
 # Route for the Payments page
-@app.route('/admin_dashboard/customer_orders')
-def admin_dashboard_customer_orders():
+@app.route('/admin_dashboard/customers_orders')
+def admin_dashboard_customers_orders():
     return "<h1>customer's orders</h1>"  # Replace with render_template if applicable
+
+
+
+
+
+
+
 
 
 ############################################################################################################
 # Manager's orders section
 ############################################################################################################
 
-@app.route('/managers_orders')
-def managers_orders():
-    return render_template('managers_orders.html')
+@app.route('/admin_dashboard/managers_orders')
+def admin_dashboard_managers_orders():
+    if 'user' not in session.keys() or session.get('role') != 'manager':
+        flash("You must be logged in as manager to access the admin dashboard.", "warning")
+        return redirect(url_for('login'))
+
+    orders = ManagerOrder.get_all()
+    orders_fullInfo = [order.to_dict() for order in orders]
+
+    # Adding additional attributes to each dictionary
+    for order in orders_fullInfo:
+        order['email'] = Person.get_email_by_id(order['person_id'])
+        order['delivery_service_name'] = DeliveryService.get_name_by_id(order['delivery_service_id'])
+
+    return render_template('managers_orders.html', orders=orders_fullInfo)
+
+
+
+@app.route('/fetch_managers_orders', methods=['GET'])
+def fetch_manager_orders():
+    try:
+        categories = Category.get_names()
+        if not categories:
+            return jsonify(success=False, error="No categories found.")
+        return jsonify(success=True, categories=categories)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+@app.route('/add_manager_order', methods=['POST'])
+def add_manager_order():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        name = data.get('name')
+        description = data.get('description')
+
+        # Validate inputs
+        if not name or not description:
+            return jsonify(success=False, error="Name and description are required.")
+
+        # Create and insert a new supplier
+        new_category = Category(category_name=name, category_description=description)
+        new_category.insert()
+
+        return jsonify(success=True, category=new_category.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# update
+@app.route('/update_manager_order/<int:category_id>', methods=['POST'])
+def update_manager_order(category_id):
+    try:
+        # Extract data from the request
+        name = request.form.get('name')
+        description = request.form.get('description')
+
+        # Validate inputs
+        if not name or not description:
+            return jsonify(success=False, error="Name and description are required.")
+
+        # Fetch the supplier by ID and update its fields
+
+        category = Category.get_by_id(category_id)
+
+        if not category:
+            return jsonify(success=False, error="category not found.")
+
+        category.category_name = name
+        category.category_description = description
+        result = category.update()
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to update supplier.")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# Delete
+@app.route('/delete_managers_orders/<int:order_id>', methods=['POST'])
+def delete_manager_order(order_id):
+    try:
+        # Call the delete method of the Supplier class
+        result = ManagerOrder.delete(order_id)
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to cancel the Orderin the database")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# search
+@app.route('/search_managers_orders', methods=['GET'])
+def search_manager_order():
+    try:
+        # Get the search query from the request
+        query = request.args.get('query', '')
+
+        orders = ManagerOrder.get_all()
+        orders_fullInfo = [order.to_dict() for order in orders]
+
+        # Adding additional attributes to each dictionary
+        for order in orders_fullInfo:
+            order['email'] = Person.get_email_by_id(order['person_id'])
+            order['delivery_service_name'] = DeliveryService.get_name_by_id(order['delivery_service_id'])
+
+        filtered_orders = [
+            order for order in orders_fullInfo
+            if query.lower() in order['email'].lower() or query in order['delivery_service_name'].lower()
+        ]
+
+        return jsonify(success=True, orders=filtered_orders)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+@app.route('/get_managers_order', methods=['GET'])
+def get_managers_orders():
+    try:
+        # Fetch page and limit parameters from the query string
+        page = int(request.args.get('page', 1))  # Default to page 1
+        limit = int(request.args.get('limit', 8))  # Default to 8 rows per page
+        offset = (page - 1) * limit
+
+        # Fetch all suppliers
+        orders = ManagerOrder.get_all()
+
+        # Slice the suppliers list based on the page and limit
+        paginated_orders = orders[offset:offset + limit]
+        orders_dicts = [order.to_dict() for order in paginated_orders]
+
+        # Calculate total suppliers count
+        total_orders = len(orders)
+
+        return jsonify(
+            success=True,
+            orders=orders_dicts,
+            total_count=total_orders,
+            page=page,
+            limit=limit
+        )
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############################################################################################################
+# Main section
+############################################################################################################
 
 
 @app.route('/')
