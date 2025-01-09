@@ -79,11 +79,6 @@ h1 {
   opacity: 0.8;
 }
 
-.action-buttons .cancel {
-  background-color: #A31D1D;
-}
-
-
 /*search and add section*/
 #container_search_add {
     display: flex;
@@ -263,18 +258,21 @@ h1 {
 
 
 /* Styling the modal form elements specifically */
+#add-category-form,
 #add-supplier-form {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
-
+#add-category-form,
 #add-supplier-form label {
     font-weight: bold;
     margin-bottom: 5px;
     color: #176B87;
 }
 
+#category-name,
+#category-description ,
 #supplier-name,
 #supplier-phone,
 #address-street,
@@ -290,6 +288,8 @@ h1 {
     transition: all 0.3s ease-in-out;
 }
 
+
+
 #supplier-name:focus,
 #supplier-phone:focus,
 #address-street:focus,
@@ -301,6 +301,7 @@ h1 {
     outline: none;
 }
 
+#add-category-form,
 #add-supplier-form button {
     background-color: #176B87;
     color: white;
@@ -311,13 +312,13 @@ h1 {
     font-size: 16px;
     transition: all 0.2s ease-in-out;
 }
-
+#add-category-form,
 #add-supplier-form button:hover {
     background-color: #0B4F5F;
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-
+#add-category-form,
 #add-supplier-form button:active {
     transform: scale(0.95);
     box-shadow: none;
@@ -399,60 +400,8 @@ h1 {
 
 
 
-#add-customer-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-#add-customer-form label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #176B87;
-}
-
-#customer-firstName,
-#customer-lastName,
-#customer-email {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #176B87;
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-size: 14px;
-    transition: all 0.3s ease-in-out;
-}
-
-#customer-firstName:focus,
-#customer-lastName:focus,
-#customer-email:focus {
-    border-color: #0B4F5F;
-    box-shadow: 0 0 5px rgba(23, 107, 135, 0.6);
-    outline: none;
-}
 
 
-#add-customer-form button {
-    background-color: #176B87;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.2s ease-in-out;
-}
-
-#add-customer-form button:hover {
-    background-color: #0B4F5F;
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-#add-customer-form button:active {
-    transform: scale(0.95);
-    box-shadow: none;
-}
 
 
 
@@ -639,7 +588,7 @@ h1 {
   }
   .product-name-photo img {
       width: 50px;
-      height: auto;
+      height: 50px;
       margin-right: 8px;
   }
   .pencil-icon {
@@ -689,8 +638,6 @@ h1 {
   /* Simple example for a resizable textarea */
   .description-edit-container textarea {
       width: 100%;
-      min-height: 80px;
+      min-height: 160px;
       resize: vertical;
   }
-
-/*********************************************************************************************/
