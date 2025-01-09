@@ -9,121 +9,123 @@
 {% endblock %}
 
 {% block content %}
-<div id="wrapper">
-    <div class="card-heading">
-        <h1>Products</h1>
-    </div>
+    <div id="wrapper">
+        <div class="card-heading">
+            <h1>Products</h1>
+        </div>
 
-    <div id="container_search_add">
-        <!-- Search form -->
-        <form id="search-form" onsubmit="event.preventDefault(); searchProducts();">
-            <input type="text" id="search-query" placeholder="Search products...">
-            <button type="submit" class="btn">Search</button>
-        </form>
+        <div id="container_search_add">
+            <!-- Search form -->
+            <form id="search-form" onsubmit="event.preventDefault(); searchProducts();">
+                <input type="text" id="search-query" placeholder="Search products...">
+                <button type="submit" class="btn">Search</button>
+            </form>
 
-        <!-- Add product button -->
-        <button onclick="window.location.href='{{ url_for('add_product') }}'" class="btn">Add Product</button>
-    </div>
+            <!-- Add product button -->
+            <button onclick="window.location.href='{{ url_for('add_product') }}'" class="btn">Add Product</button>
+        </div>
 
-    <!-- Products table -->
-    <table id="table">
-        <thead>
-        <tr>
-            <th onclick="sortProducts('product_id')">Product ID</th>
-            <th onclick="sortProducts('product_name')">Name</th>
-            <th onclick="sortProducts('category_id')">Category</th>
-            <th onclick="sortProducts('supplier_id')">Supplier</th>
-            <th onclick="sortProducts('brand')">Brand</th>
-            <th onclick="sortProducts('price')">Price</th>
-            <th onclick="sortProducts('stock_quantity')">Stock</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
-            <tr id="row-{{ product.product_id }}">
-                <!-- Product ID -->
-                <td>{{ product.product_id }}</td>
+        <!-- Products table -->
+        <table id="table">
+            <thead>
+            <tr>
+                <th onclick="sortProducts('product_id')">Product ID</th>
+                <th onclick="sortProducts('product_name')">Name</th>
+                <th onclick="sortProducts('category_id')">Category</th>
+                <th onclick="sortProducts('supplier_id')">Supplier</th>
+                <th onclick="sortProducts('brand')">Brand</th>
+                <th onclick="sortProducts('price')">Price</th>
+                <th onclick="sortProducts('stock_quantity')">Stock</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+                <tr id="row-{{ product.product_id }}">
+                    <!-- Product ID -->
+                    <td>{{ product.product_id }}</td>
 
-                <!-- Name + Photo in same cell -->
-                <td>
-                    <div class="product-name-photo">
-                        <img src="{{ product.photo }}" alt="Product Image">
-                        <div class="product-name">
-                            <span id="name-{{ product.product_id }}-text">{{ product.product_name }}</span>
-                            <input type="text" id="name-{{ product.product_id }}-input"
-                                   value="{{ product.product_name }}" style="display:none; width: 100px;">
+
+                    <!-- Name + Photo in same cell -->
+                    <td>
+                        <div class="product-name-photo">
+                            <img src="{{ product.photo }}" alt="Product Image">
+                            <div class="product-name">
+                                <span id="name-{{ product.product_id }}-text">{{ product.product_name }}</span>
+                                <input type="text" id="name-{{ product.product_id }}-input"
+                                       value="{{ product.product_name }}" style="display:none; width: 100px;">
+                            </div>
                         </div>
-                    </div>
-                </td>
+                    </td>
 
-                <!-- Category ID -->
-                <td>
-                  <!-- Display text for non-edit mode -->
-                  <span id="category-{{ product.product_id }}-text">
+                    <!-- Category ID -->
+                    <td>
+                        <!-- Display text for non-edit mode -->
+                        <span id="category-{{ product.product_id }}-text">
                     {{ product.category_id }}
                   </span>
 
-                  <!-- Dropdown for edit mode -->
-                  <select
-                      id="category-{{ product.product_id }}-input"
-                      style="display: none; width: 150px;"
-                  >
-                    {% for cat in categories %}
-                      <option
-                        value="{{ cat.category_id }}"
-                        {% if cat.category_id == product.category_id %}selected{% endif %}
-                      >
-                          {{ cat.category_name }}
-                      </option>
-                    {% endfor %}
-                  </select>
-                </td>
+                        <!-- Dropdown for edit mode -->
+                        <select
+                                id="category-{{ product.product_id }}-input"
+                                style="display: none; width: 150px;"
+                        >
+                            {% for cat in categories %}
+                                <option
+                                        value="{{ cat.category_id }}"
+                                        {% if cat.category_id == product.category_id %}selected{% endif %}
+                                >
+                                    {{ cat.category_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
 
-                <!-- Supplier ID -->
-                <td>
-                  <!-- Display text for non-edit mode -->
-                  <span id="supplier-{{ product.product_id }}-text">
+                    <!-- Supplier ID -->
+                    <td>
+                        <!-- Display text for non-edit mode -->
+                        <span id="supplier-{{ product.product_id }}-text">
                     {{ product.supplier_id }}
                   </span>
 
-                  <!-- Dropdown for edit mode -->
-                  <select
-                      id="supplier-{{ product.product_id }}-input"
-                      style="display: none; width: 150px;"
-                  >
-                    {% for sup in suppliers %}
-                      <option
-                        value="{{ sup.supplier_id }}"
-                        {% if sup.supplier_id == product.supplier_id %}selected{% endif %}
-                      >
-                        {{sup.name}}
-                      </option>
-                    {% endfor %}
-                  </select>
-                </td>
 
-                <!-- Brand -->
-                <td>
-                    <span id="brand-{{ product.product_id }}-text">{{ product.brand }}</span>
-                    <input type="text" id="brand-{{ product.product_id }}-input" value="{{ product.brand }}"
-                           style="display:none; width: 100px;">
-                </td>
+                        <!-- Dropdown for edit mode -->
+                        <select
+                                id="supplier-{{ product.product_id }}-input"
+                                style="display: none; width: 150px;"
+                        >
+                            {% for sup in suppliers %}
+                                <option
+                                        value="{{ sup.supplier_id }}"
+                                        {% if sup.supplier_id == product.supplier_id %}selected{% endif %}
+                                >
+                                    {{ sup.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
 
-                <!-- Price -->
-                <td>
-                    <span id="price-{{ product.product_id }}-text">{{ product.price }}</span>
-                    <input type="number" step="0.01" id="price-{{ product.product_id }}-input"
-                           value="{{ product.price }}" style="display:none; width: 100px;">
-                </td>
+                    <!-- Brand -->
+                    <td>
+                        <span id="brand-{{ product.product_id }}-text">{{ product.brand }}</span>
+                        <input type="text" id="brand-{{ product.product_id }}-input" value="{{ product.brand }}"
+                               style="display:none; width: 100px;">
+                    </td>
 
-                <!-- Stock -->
-                <td>
-                    <span id="stock-{{ product.product_id }}-text">{{ product.stock_quantity }}</span>
-                    <input type="number" id="stock-{{ product.product_id }}-input"
-                           value="{{ product.stock_quantity }}" style="display:none; width: 100px;">
-                </td>
+                    <!-- Price -->
+                    <td>
+                        <span id="price-{{ product.product_id }}-text">{{ product.price }}</span>
+                        <input type="number" step="0.01" id="price-{{ product.product_id }}-input"
+                               value="{{ product.price }}" style="display:none; width: 100px;">
+                    </td>
+
+                    <!-- Stock -->
+                    <td>
+                        <span id="stock-{{ product.product_id }}-text">{{ product.stock_quantity }}</span>
+                        <input type="number" id="stock-{{ product.product_id }}-input"
+                               value="{{ product.stock_quantity }}" style="display:none; width: 100px;">
+                    </td>
 
                     {#                <!-- Description with pencil icon to trigger edit -->#}
                     {#                <td>#}
@@ -218,34 +220,49 @@
                     <textarea>id="description-{{ product.product_id }}-input"
                             placeholder="Write your new description here...">
                     </textarea>
-                    </div>
-                </td>
+                        </div>
+                    </td>
 
-                <!-- Actions: 3 vertical dots dropdown + Save button -->
-                        <td class="action-buttons">
-                            <!-- Three-dots dropdown -->
-                            <div class="dropdown" id="three-dots-${ product.product_id }">
-                                <!-- Replace "..." with the vertical ellipsis character -->
-                                <button class="three-dots-btn" onclick="toggleDropdown(${ product.product_id })">
-                                    ⋮
-                                </button>
-                                <div class="dropdown-content">
-                                    <a onclick="enableEditProduct(${ product.product_id })">Edit</a>
-                                    <a onclick="deleteProduct(${ product.product_id })">Make Unavailable</a>
-                                </div>
-                            </div>
-
-                            <!-- Save button (hidden by default) -->
-                            <button id="save-btn-${ product.product_id }"
-                                    class="save"
-                                    style="display: none;"
-                                    onclick="saveEditProduct(${ product.product_id })">
-                                Save
+                    <!-- Actions: 3 vertical dots dropdown + Save button -->
+                    <td class="action-buttons">
+                        <!-- Three-dots dropdown -->
+                        <div class="dropdown" id="three-dots-${ product.product_id }">
+                            <!-- Replace "..." with the vertical ellipsis character -->
+                            <button class="three-dots-btn" onclick="toggleDropdown(${{ product.product_id }})">
+                                ⋮
                             </button>
-                        </td>
-            </tr>
-        {% endfor %}
-        </tbody>
+                            <div class="dropdown-content">
+                                <a onclick="enableEditProduct(${{ product.product_id }})">Edit</a>
+                                <a onclick="deleteProduct(${{ product.product_id }})">Make Unavailable</a>
+                            </div>
+                        </div>
+
+                        <!-- Save button (hidden by default) -->
+                        <button id="save-btn-${ product.product_id }"
+                                class="save"
+                                style="display: none;"
+                                onclick="saveEditProduct(${product.product_id})">
+                            Save
+
+                        </button>
+                        <div class="dropdown-content">
+                            <a onclick="enableEditProduct(${ product.product_id })">Edit</a>
+                            <a onclick="deleteProduct(${ product.product_id })">Make Unavailable</a>
+                        </div>
+                </div>
+
+                <!-- Save button (hidden by default) -->
+                <button id="save-btn-${ product.product_id }"
+                        class="save"
+                        style="display: none;"
+                        onclick="saveEditProduct(${ product.product_id })">
+                    Save
+                </button>
+                </td>
+                </tr>
+            {% endfor %}
+
+    </tbody>
     </table>
     </div>
 
