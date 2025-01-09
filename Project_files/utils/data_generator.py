@@ -152,12 +152,20 @@ def generate_supplier_data(num_records):
 
 def generate_customer_order_data(num_records, customer_ids, address_ids, delivery_service_ids):
     data = []
+    order_date = fake.date_between(start_date='-4y', end_date='today')
+
+    # Calculate the end date as two weeks after the order date
+    end_date = order_date + timedelta(days=10)
+
+    # Generate a delivery date between the order date and the end date
+    delivery_date = fake.date_between(start_date=order_date, end_date=end_date)
+
     for _ in range(num_records):
         data.append({
             'person_id': random.choice(customer_ids),
             'address_id': random.choice(address_ids),
-            'order_date': fake.date_between(start_date='-4y', end_date='today'),
-            'delivery_date': fake.date_between(start_date='today', end_date='+10d'),
+            'order_date': order_date,
+            'delivery_date': delivery_date,
             'order_status': random.choice(['CANCELLED', 'PLACED', 'COMPLETED']),
             'delivery_service_id' : random.choice(delivery_service_ids)
         })
@@ -203,10 +211,18 @@ def generate_delivery_service_data(num_records):
 def generate_manager_order_data(num_records, manager_ids, delivery_service_ids):
     data = []
     for i in range(num_records):
+        order_date = fake.date_between(start_date='-4y', end_date='today')
+
+        # Calculate the end date as two weeks after the order date
+        end_date = order_date + timedelta(days=10)
+
+        # Generate a delivery date between the order date and the end date
+        delivery_date = fake.date_between(start_date=order_date, end_date=end_date)
+
         data.append({
             'person_id': random.choice(manager_ids),
-            'order_date': fake.date_between(start_date='-4y', end_date='today'),
-            'delivery_date': fake.date_between(start_date='today', end_date='+10d'),
+            'order_date': order_date,
+            'delivery_date': delivery_date,
             'order_status': random.choice(['CANCELLED', 'PLACED', 'COMPLETED']),
             'delivery_service_id': random.choice(delivery_service_ids)
         })
@@ -249,14 +265,14 @@ if __name__ == '__main__':
     #
     df = generate_customer_data(num_customer_records)
     df['person_id'] = df['person_id'] + num_manager_records
-
-    generate_delivery_service_data(num_delivery_service_records)
-    generate_address_data(num_address_records, df['person_id'].tolist())
-    generate_category_data()
-
-    generate_product_data(num_product_records, list(range(1, num_category_records)), list(range(1, num_supplier_records)))
+    #
+    # generate_delivery_service_data(num_delivery_service_records)
+    # generate_address_data(num_address_records, df['person_id'].tolist())
+    # generate_category_data()
+    #
+    # generate_product_data(num_product_records, list(range(1, num_category_records)), list(range(1, num_supplier_records)))
     generate_manager_order_data(num_manager_order_records, list(range(1, num_manager_records)), list(range(1, num_delivery_service_records)))
-    generate_supplier_data(num_supplier_records)
+    # generate_supplier_data(num_supplier_records)
     generate_customer_order_data(num_customer_order_records, df['person_id'].tolist(), list(range(1, num_address_records)), list(range(1, num_delivery_service_records)))
     generate_customer_order_line_data(num_customer_order_line_records, list(range(1, num_customer_order_records+1)), list(range(1, num_product_records)))
     generate_manager_order_line_data(num_manager_order_line_records, list(range(1, num_manager_order_records+1)), list(range(1, num_product_records+1)))
