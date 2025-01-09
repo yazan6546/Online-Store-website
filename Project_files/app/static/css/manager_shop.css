@@ -270,8 +270,8 @@ h2 {
 }
 
 .product-image-section img {
-  width: 100%;
-  height: auto;
+  width: 200px;
+  height: 230px;
   border-radius: 8px;
 }
 
