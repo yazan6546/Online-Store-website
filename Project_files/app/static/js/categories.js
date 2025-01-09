@@ -47,6 +47,27 @@ function getColumnIndex(column) {
     }
 }
 
+function generateRowCategory(category) {
+    return `
+        <tr id="row-${category.category_id}">
+            <td>${category.category_id}</td>
+            <td>
+                <span id="name-${category.category_id}-text">${category.category_name}</span>
+                <input type="text" id="name-${category.category_id}-input" value="${category.category_name}" style="display:none; width: 120px;">
+            </td>
+            <td>
+                <span id="description-${category.category_id}-text">${category.category_description}</span>
+                <input type="text" id="description-${category.category_id}-input" value="${category.category_description}" style="display:none; width: 350px;">
+            </td>
+            <td class="action-buttons">
+                <button id="edit-btn-${category.category_id}" class="edit" onclick="enableEditCategory(${category.category_id})">Edit</button>
+                <button id="save-btn-${category.category_id}" class="save" style="display:none;" onclick="saveEditCategory(${category.category_id})">Save</button>
+                <button class="delete" onclick="deleteCategory(${category.category_id})">Delete</button>
+            </td>
+        </tr>`;
+}
+
+
 
 function enableEditCategory(category_id) {
     console.log('Enabling edit for category ID:', category_id);
@@ -121,23 +142,7 @@ function searchCategories() {
                 var tableBody = $('#table tbody');
                 tableBody.empty();
                 response.categories.forEach(function(category) {
-                    var row = `
-                        <tr id="row-${category.category_id}">
-                            <td>${category.category_id}</td>
-                            <td>
-                                <span id="name-${category.category_id}-text">${category.category_name}</span>
-                                <input type="text" id="name-${category.category_id}-input" value="${category.category_name}" style="display:none; width: 100px;">
-                            </td>
-                            <td>
-                                <span id="description-${category.category_id}-text">${category.category_description}</span>
-                                <input type="text" id="description-${category.category_id}-input" value="${category.category_description}" style="display:none; width: 100px;">
-                            </td>
-                            <td class="action-buttons">
-                                <button id="edit-btn-${category.category_id}" class="edit" onclick="enableEditCategory(${category.category_id})">Edit</button>
-                                <button id="save-btn-${category.category_id}" class="save" style="display:none;" onclick="saveEditCategory(${category.category_id})">Save</button>
-                                <button class="delete" onclick="deleteCategory(${category.category_id})">Delete</button>
-                            </td>
-                        </tr>`;
+                    var row = generateRowCategory(category); ;
                     tableBody.append(row);
                 });
             } else {
@@ -223,6 +228,8 @@ async function fetchCategories(page = 1) {
     }
 }
 
+
+
 // Add category and refresh the table
 function addCategory() {
     const name = document.getElementById('category-name').value;
@@ -248,6 +255,11 @@ function addCategory() {
                 alert('category added successfully!');
                 closeModal(); // Close the modal
                 fetchCategories(currentPage); // Refresh the current page
+                const tableBody = document.querySelector('#table tbody');
+                const newRow = generateRowCategory(data.category);
+                tableBody.insertAdjacentHTML('beforeend', newRow);
+
+
             } else {
                 alert('Error adding Category: ' + data.error);
             }
