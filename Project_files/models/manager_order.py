@@ -175,6 +175,21 @@ class ManagerOrder(Order):
         finally:
             conn.close()
 
+    @staticmethod
+    def delete(order_id):
+        conn = get_db_connection()
+        try:
+            conn.execute(q.manager_order.DELETE_FROM_MANAGER_ORDER, {"order_id": order_id})
+
+            conn.commit()
+            return 1
+        except Exception as e:
+            print(f"Error in delete(): {e}")
+            conn.rollback()
+            return 0
+        finally:
+            conn.close()
+
 
     def cart_to_manager_order_with_stock(cart : Cart, person_id : int, delivery_date : datetime, delivery_service_id : int) -> ManagerOrder:
         """
