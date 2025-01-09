@@ -282,3 +282,9 @@ fetchCategoryData();
 
 // Call the function to fetch and process the data
 fetchRevenues();
+
+//////////////////////////////////////////////////////////////////////////////////////////
+const ctxHistogram = document.getElementById('coloredHistogramChart').getContext('2d');
+const coloredHistogramChart = new Chart(ctxHistogram, {
+
+});
