@@ -1,41 +1,69 @@
 let sortDirection = {}; // Tracks sorting direction for each column
 
-function sortManagers(column) {
-    const table = document.getElementById('table');
-    const tbody = table.querySelector('tbody');
-    const rows = Array.from(tbody.querySelectorAll('tr'));
 
-    // Determine sort direction (toggle if already sorted by this column)
-    sortDirection[column] = !sortDirection[column];
+function sortManagers(column) {
+    console.log('Sorting managers by:', column);
+
+    // Get the table body and convert rows to an array
+    const tableBody = document.querySelector('#table tbody');
+    const rows = Array.from(tableBody.querySelectorAll('tr'));
+
+    // Toggle the sort direction for the specified column
+    if (!sortDirection[column]) {
+        sortDirection[column] = 'asc'; // Default to ascending if not defined
+    } else {
+        sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+    }
 
     // Sort rows based on the specified column
     rows.sort((rowA, rowB) => {
-        let cellA = rowA.querySelector(`#${column}-${rowA.id.split('-')[1]}-text`)?.textContent.trim() || '';
-        let cellB = rowB.querySelector(`#${column}-${rowB.id.split('-')[1]}-text`)?.textContent.trim() || '';
+        let aValue = rowA.querySelector(`td:nth-child(${getColumnIndex(column)})`).innerText.trim();
+        let bValue = rowB.querySelector(`td:nth-child(${getColumnIndex(column)})`).innerText.trim();
 
+        // Handle numeric sorting for `person_id`
         if (column === 'person_id') {
-            // Numeric sort for Person ID
-            cellA = parseInt(cellA, 10) || 0; // Fallback to 0 if not a valid number
-            cellB = parseInt(cellB, 10) || 0;
-            return sortDirection[column] ? cellA - cellB : cellB - cellA;
+            aValue = parseInt(aValue, 10) || 0;
+            bValue = parseInt(bValue, 10) || 0;
         }
 
+        // Handle date sorting for `since`
         if (column === 'since') {
-            // Date sort for Since column
-            const dateA = new Date(cellA).getTime() || 0; // Fallback to 0 for invalid dates
-            const dateB = new Date(cellB).getTime() || 0;
-            return sortDirection[column] ? dateA - dateB : dateB - dateA;
+            aValue = new Date(aValue).getTime() || 0;
+            bValue = new Date(bValue).getTime() || 0;
         }
 
-        // Default: String sort (alphabetical)
-        return sortDirection[column]
-            ? cellA.localeCompare(cellB, undefined, { numeric: true })
-            : cellB.localeCompare(cellA, undefined, { numeric: true });
+        // Sort based on the sort direction
+        if (sortDirection[column] === 'asc') {
+            return aValue > bValue ? 1 : -1;
+        } else {
+            return aValue < bValue ? 1 : -1;
+        }
     });
 
-    // Update the table with sorted rows
-    tbody.innerHTML = '';
-    rows.forEach(row => tbody.appendChild(row));
+    // Clear the table body and append sorted rows
+    tableBody.innerHTML = '';
+    rows.forEach(row => tableBody.appendChild(row));
+}
+
+
+
+function getColumnIndex(column) {
+    switch (column) {
+        case 'person_id':
+            return 1; // 1st column
+        case 'first_name':
+            return 2; // 2nd column
+        case 'last_name':
+            return 3; // 3rd column
+        case 'email':
+            return 4; // 4th column
+        case 'since':
+            return 5; // 5th column
+            case 'role':
+            return 6; // 6th column
+        default:
+            return 1; // Default to the first column
+    }
 }
 
 
