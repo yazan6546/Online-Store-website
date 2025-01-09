@@ -146,6 +146,20 @@ class ManagerOrder(Order):
         finally:
             conn.close()
 
+    @staticmethod
+    def get_status_by_order_id(order_id):
+        conn = get_db_connection()
+        try:
+            order_status = conn.execute(q.manager_order.GET_STATUS_BY_ORDER_ID, {"order_id": order_id}).fetchone()
+            conn.commit()
+            return order_status[0]
+        except Exception as e:
+            print(f"Error in get_status_by_order_id(): {e}")
+            return None
+        finally:
+            conn.close()
+
+
     def get_products(self):
         conn = get_db_connection()
         try:
