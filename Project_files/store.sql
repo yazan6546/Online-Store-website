@@ -277,3 +277,5 @@ where product_id > 101;
 
 select * from Address
 where person_id = 205;
+
+select * from Manager_Order_Line where order_id = 353;
