@@ -199,72 +199,8 @@ async function fetchTopCustomersData() {
     }
 }
 
-// Define a fixed set of 12 colors
-const colors2 = [
-    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
-    '#E7E9ED', '#76D7C4', '#F7DC6F', '#F1948A', '#85C1E9', '#BB8FCE'
-];
-
-// Initialize the chart
-const ctxBar = document.getElementById('coloredBarChart').getContext('2d');
-const coloredBarChart = new Chart(ctxBar, {
-    type: 'bar',
-    data: {
-        labels: [], // To be filled with the month of input data
-        datasets: [{
-            label: 'Total Quantity Sold',
-            data: [], // To be filled with the total_quantity_sold of input data
-            backgroundColor: colors2 // Use the defined colors
-        }]
-    },
-    options: {
-        indexAxis: 'x',
-        responsive: true,
-        plugins: {
-            legend: {
-                display: false // Disable the legend
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true, // Adjust the y-axis to start at zero
-                title: {
-                    display: true,
-                    text: 'Total Quantity Sold',
-                    color: '#0C356A',
-                    font: {
-                        size: 14,
-                        weight: 'normal'
-                    }
-                }
-            },
-            x: {
-                ticks: {
-                    font: {
-                        size: 12
-                    }
-                }
-            }
-        }
-    }
-});
 
 
-// Function to process input data and update the chart
-async function fetchBestProductsByMonth() {
-
-    const response = await fetch('/api/best_selling_products_by_month');
-    const data = await response.json();
-
-    // Assuming inputData is an array of objects with 3 columns
-    const labels = data.map(item => item.month);
-    const datasetData = data.map(item => item.total_quantity_sold);
-
-    // Update the chart data
-    coloredBarChart.data.labels = labels;
-    coloredBarChart.data.datasets[0].data = datasetData;
-    coloredBarChart.update();
-}
 
 
 
@@ -311,9 +247,81 @@ async function fetchAgeDistribution() {
 }
 
 
+// Create the chart
+const ctxSalesChart = document.getElementById('coloredBarChart').getContext('2d');
+const salesChart = new Chart(ctxSalesChart, {
+    type: 'bar',
+    data: {
+        labels: [], // Will be populated dynamically
+        datasets: [{
+            label: 'Total Quantity Sold',
+            data: [], // Will be populated dynamically
+            backgroundColor: [], // Colors for each bar
+            borderColor: [], // Border colors for each bar
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function (tooltipItem) {
+                        const productName = salesChart.data.datasets[0].customData[tooltipItem.dataIndex];
+                        return `Product: ${productName}, Sold: ${tooltipItem.raw}`;
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
 
-// Update the chart with the example input data
-fetchBestProductsByMonth();
+// Function to process input data and update the chart
+async function fetchSalesData() {
+    // Replace this with your actual API endpoint or use static JSON for testing
+    const response = await fetch('/api/best_selling_products_by_month');
+    const data = await response.json();
+
+    // Extract labels (month names), data (quantities), and colors
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    const sortedData = data.sort((a, b) => new Date(a.month) - new Date(b.month));
+    const labels = sortedData.map(item => monthNames[parseInt(item.month.split("-")[1]) - 1]);
+    const quantities = sortedData.map(item => item.total_quantity_sold);
+    const productNames = sortedData.map(item => item.product_name);
+
+    // Define a fixed set of 12 colors
+    const colors = [
+        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+        '#E7E9ED', '#76D7C4', '#a37f23', '#F1948A', '#85C1E9', '#BB8FCE'
+    ];
+    const borderColors = colors.map(color => color.replace('0.5', '1'));
+
+    // Update the chart data
+    salesChart.data.labels = labels;
+    salesChart.data.datasets[0].data = quantities;
+    salesChart.data.datasets[0].backgroundColor = colors;
+    salesChart.data.datasets[0].borderColor = borderColors;
+
+    // Attach product names to the dataset for tooltip access
+    salesChart.data.datasets[0].customData = productNames;
+
+    // Refresh the chart
+    salesChart.update();
+}
+
+
+// Call the function to fetch and populate the chart
+fetchSalesData();
+
 
 
 // // Call the function to fetch and process the data

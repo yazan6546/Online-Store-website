@@ -1166,7 +1166,7 @@ def get_best_customers():
 @app.route('/api/best_selling_products_by_month', methods=['GET'])
 def get_best_selling_products_by_month():
     # year = request.args.get('year')
-    best_selling_products = da.get_best_selling_product_by_month(2023)
+    best_selling_products = da.get_best_selling_product_by_month(2024)
     return jsonify(best_selling_products)
 
 
