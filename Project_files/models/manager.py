@@ -1,10 +1,12 @@
+import datetime
+
 from models.person import Person
 import utils.queries as q
 from utils.db_utils import get_db_connection
 
 
 class Manager(Person):
-    def __init__(self, first_name, last_name, email, passcode='0000', since='2021-01-01', role='Financial Manager', person_id=None, hash=False):
+    def __init__(self, first_name, last_name, email, passcode='0000', since=datetime.datetime.now(), role='Financial Manager', person_id=None, hash=False):
         super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
         self.since = since
         self.role = role
