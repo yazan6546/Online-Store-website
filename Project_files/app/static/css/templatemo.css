@@ -186,7 +186,7 @@ body, ul, li, p, a, label, input, div {
   .tempaltemo-carousel .h1 { font-size: 1em !important;}
 }
 
-/// Medium devices (tablets, 768px and up)/
+/* Medium devices (tablets, 768px and up)*/
 @media (min-width: 768px) {
   #templatemo_main_nav .navbar-nav {max-width: 450px;}
  }
@@ -540,17 +540,23 @@ label {
 
 .image-container {
     width: 100%; /* Full width of the card */
+    padding-top: 100%; /* 4:3 aspect ratio */
     height: 150px; /* Uniform height for all images */
     overflow: hidden; /* Prevent overflow */
     display: flex; /* Flexbox for centering */
+    border-radius: 8px; /* Optional: Add rounded corners */
     justify-content: center; /* Center image horizontally */
     align-items: center; /* Center image vertically */
 }
 
 .image-container img {
+    position: absolute; /* Position the image */
+    top: 0;
+    left: 0;
     max-width: 100%; /* Ensure the image scales properly */
     max-height: 100%; /* Prevent overflow */
-    object-fit: contain; /* Fit the image within the container */
+    object-fit: cover; /* Ensures the image fills the container while maintaining its aspect ratio */
+    object-position: center; /* Centers the image */
 }
 
 .category-card h5 {
@@ -562,6 +568,11 @@ label {
     line-height: 1.4; /* Better text readability */
 }
 
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
 
 /* Navigation Buttons */
 .nav-btn {

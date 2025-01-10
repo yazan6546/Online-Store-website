@@ -45,8 +45,8 @@ class Order:
     def to_dict(self, order_id=True):
         temp = {
             "person_id": self.person_id,
-            "order_date": self.order_date,
-            "delivery_date": self.delivery_date,
+            "order_date": self.order_date.strftime('%Y-%m-%d'),
+            "delivery_date": self.delivery_date.strftime('%Y-%m-%d'),
             "order_status": self.order_status,
             "delivery_service_id": self.delivery_service_id
         }

@@ -85,23 +85,25 @@ Admin Dashboard
       </div>
 
     </div>
-    <div class="product-container">
-      {% for product in products %}
-        <div class="product-card" data-id="{{ product.product_id }}" data-price="{{ product.price }}" data-availability="{{ 'in-stock' if product.stock_quantity > 0 else 'out-of-stock' }}">
-          <!-- Upper Section -->
-          <div class="product-image-section">
+  <!-- Main Product Section -->
+  <div class="product-container">
+  {% for product in products %}
+    <div class="product-card" data-id="{{ product.product_id }}">
+      <!-- Upper Section -->
+      <div class="product-image-section">
+          <div class="image-container">
             <img src="{{ product.photo }}" alt="{{ product.product_name }}">
-            <div class="circle-btn open-modal-btn" data-id="{{ product.product_id }}" onclick="openModal('{{ product.product_id }}')">
-              <i class="bx bx-plus"></i>
             </div>
-          </div>
-          <!-- Lower Section -->
-          <div class="product-info-section">
-            <h5>{{ product.product_name }}</h5>
-            <p class="price">${{ product.price }}</p>
-          </div>
+              <div class="circle-btn open-modal-btn" data-id="{{ product.product_id }}" onclick="openModal('{{ product.product_id }}')">
+          <i class="bx bx-plus"></i>
         </div>
-
+      </div>
+      <!-- Lower Section -->
+      <div class="product-info-section">
+        <h5>{{ product.product_name }}</h5>
+        <p class="price">${{ product.price }}</p>
+      </div>
+    </div>
     <!-- Modal for {{ product.product_id }} -->
     <div id="modal-{{ product.product_id }}" class="modal" style="display: none;">
       <div class="modal-content">

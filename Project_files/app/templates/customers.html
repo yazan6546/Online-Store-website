@@ -6,18 +6,23 @@ Customers
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/actions.css') }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 {% endblock %}
 
 {% block content %}
 <div id="wrapper">
-    <h1>Customers</h1>
+    <div class="card-heading">
+        <h1>Customers</h1>
+    </div>
 
     <div id="container_search_add">
         <form id="search-form" onsubmit="event.preventDefault(); searchCustomers();">
             <input type="text" id="search-query" placeholder="Search customers...">
             <button type="submit" class="btn">Search</button>
         </form>
-        <button onclick="window.location.href='{{ url_for('add_customer') }}'" class="btn">Add Customer</button>
+        <button onclick="openModalCustomer()" class="btn">Add Customer</button>
     </div>
 
     <table id="table">
@@ -27,7 +32,6 @@ Customers
                 <th onclick="sortCustomers('first_name')">First Name</th>
                 <th onclick="sortCustomers('last_name')">Last Name</th>
                 <th onclick="sortCustomers('email')">Email</th>
-                <th>Addresses</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -45,93 +49,110 @@ Customers
                 </td>
                 <td>
                     <span id="email-{{ customer.person_id }}-text">{{ customer.email }}</span>
-                    <input type="text" id="email-{{ customer.person_id }}-input" value="{{ customer.email }}" style="display:none; width: 100px;">
+                    <input type="text" id="email-{{ customer.person_id }}-input" value="{{ customer.email }}" style="display:none; width: 200px;">
                 </td>
-                <td>
-                    <table class="address-subtable">
-                        <thead>
-                            <tr>
-                                <th>Street Address</th>
-                                <th>City</th>
-                                <th>Zip Code</th>
-                                <th class="actions-header">Actions
-                                <button class="add-address-btn" onclick="openAddAddressModal({{ customer.person_id }})">Add</button>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for address in customer.addresses %}
-                            <tr id="address-row-{{ address.address_id }}">
-                                <td>
-                                    <span id="street_address-{{ address.address_id }}-text">{{ address.street }}</span>
-                                    <input type="text" id="street_address-{{ address.address_id }}-input" value="{{ address.street }}" style="display:none; width: 100px;">
-                                </td>
-                                <td>
-                                    <span id="city-{{ address.address_id }}-text">{{ address.city }}</span>
-                                    <input type="text" id="city-{{ address.address_id }}-input" value="{{ address.city }}" style="display:none; width: 100px;">
-                                </td>
-                                <td>
-                                    <span id="zip_code-{{ address.address_id }}-text">{{ address.zip_code }}</span>
-                                    <input type="text" id="zip_code-{{ address.address_id }}-input" value="{{ address.zip_code }}" style="display:none; width: 100px;">
-                                </td>
-                                <td class="action-buttons">
-                                <button id="edit-address-btn-{{ address.address_id }}" class="edit" onclick="enableEditAddress({{ address.address_id }})">Edit</button>
-                                <button id="save-address-btn-{{ address.address_id }}" class="save" style="display:none;" onclick="saveEditAddress({{ address.address_id }})">Save</button>
-                                <button class="delete" onclick="deleteAddress({{ address.address_id }})">Delete</button>
 
-                                </td>
-                            </tr>
-                            {% endfor %}
 
-                        </tbody>
-                    </table>
+                <td class="action-column">
+                    <div class="action-dropdown">
+                        <button class="action-dropdown-btn">
+                            <i class="fas fa-ellipsis-v"></i> <!-- Vertical three dots icon -->
+                        </button>
+                        <div class="action-dropdown-menu">
+                            <button id="edit-btn-{{ customer.person_id }}" class="edit" onclick="enableEditCustomer({{ customer.person_id }})">Edit</button>
+                            <button id="save-btn-{{ customer.person_id }}" class="save" style="display:none;" onclick="saveEditCustomer({{ customer.person_id }})">Save</button>
+                            <button class="delete" onclick="deleteCustomer({{ customer.person_id }})">Delete</button>
+                            <button class="show-addresses" onclick="showAddresses({{ customer.person_id }})">Show Addresses</button>
+                        </div>
+                    </div>
                 </td>
-                <td class="action-buttons">
-                    <button id="edit-btn-{{ customer.person_id }}" class="edit" onclick="enableEdit({{ customer.person_id }})">Edit</button>
-                    <button id="save-btn-{{ customer.person_id }}" class="save" style="display:none;" onclick="saveEdit({{ customer.person_id }})">Save</button>
-                    <button class="delete" onclick="deleteCustomer({{ customer.person_id }})">Delete</button>
-                </td>
+
+
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
 
-<!-- Add Address Modal -->
-{#<div id="add-address-modal" class="modal">#}
-{#    <div class="modal-content">#}
-{#        <span class="close" onclick="closeAddAddressModal()">&times;</span>#}
-{#        <h2>Add Address</h2>#}
-{#        <form id="add-address-form" onsubmit="event.preventDefault(); addAddress();">#}
-{#            <input type="hidden" id="customer-id">#}
-{#            <label for="street">Street Address</label>#}
-{#            <input type="text" id="street" placeholder="Enter street address" required>#}
-{#            <label for="city">City</label>#}
-{#            <input type="text" id="city" placeholder="Enter city" required>#}
-{#            <label for="zip">Zip Code</label>#}
-{#            <input type="text" id="zip" placeholder="Enter zip code" required>#}
-{#            <button type="submit" class="btn">Add Address</button>#}
-{#        </form>#}
-{#    </div>#}
-{#</div>#}
 
-    <div id="add-address-modal" class="modal">
+
+<div id="add-customer-modal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeAddAddressModal()">&times;</span>
-        <h2>Add Address</h2>
-        <form id="add-supplier-form" onsubmit="event.preventDefault(); addAddress();">
-            <!-- Hidden field to store the customer ID -->
-            <input type="hidden" id="customer-id">
-            <label for="address-street">Street Address</label>
-            <input type="text" id="address-street" placeholder="Enter street address" required>
-            <label for="address-city">City</label>
-            <input type="text" id="address-city" placeholder="Enter city" required>
-            <label for="address-zip">Zip Code</label>
-            <input type="text" id="address-zip" placeholder="Enter zip code" required>
-            <button type="submit" class="btn" >Add Address</button>
+        <span class="close" onclick="closeModalCustomer()">&times;</span>
+        <h2>Add Customer</h2>
+        <form id="add-customer-form" onsubmit="event.preventDefault(); addCustomer();">
+
+            <!-- First Name -->
+            <label for="customer-firstName">First Name</label>
+            <input type="text" id="customer-firstName" placeholder="Enter customer First Name" required>
+
+            <!-- Last Name -->
+            <label for="customer-lastName">Last Name</label>
+            <input type="text" id="customer-lastName" placeholder="Enter customer Last Name" required>
+
+            <!-- Email -->
+            <label for="customer-email">Email</label>
+            <input type="email" id="customer-email" placeholder="Enter customer Email" required>
+
+            <!-- Password -->
+            <label for="customer-pass">Password</label>
+            <input type="text" id="customer-pass" placeholder="Enter customer password" required>
+
+
+            <label for="birth-date">Birth Date</label>
+            <input type="date" id="birth-date" class="form-control">
+
+
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn">Add Customer</button>
         </form>
     </div>
 </div>
+
+
+<!-- Modal for Address Table -->
+<div id="address-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Customer Addresses</h2>
+
+    <!-- Add Address Button -->
+    <div class="add-address-container">
+      <button id="add-address-btn" class="add-address-btn">Add Address</button>
+    </div>
+
+
+    <!-- Address Table -->
+    <table class="address-table">
+      <thead>
+        <tr>
+          <th onclick="sortAddresses('street_address')">Street Address</th>
+          <th onclick="sortAddresses('city')">City</th>
+          <th onclick="sortAddresses('zip_code')">Zip Code</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="address-table-body">
+        <!-- Address rows will be dynamically inserted here -->
+      </tbody>
+
+    <!-- New Address Row -->
+    <tr id="new-address-row" style="display:none;">
+      <td><input type="text" id="new-street" placeholder="Street Address"></td>
+      <td><input type="text" id="new-city" placeholder="City"></td>
+      <td><input type="text" id="new-zip" placeholder="Zip Code"></td>
+        <td class="action-buttons">
+            <button class="save" onclick="saveNewAddress()">Save</button>
+            <button class="cancel" onclick="cancelNewAddress()">Cancel</button>
+        </td>
+    </tr>
+
+
+    </table>
+  </div>
+</div>
+
 
 <div class="pagination">
   <button id="prevPage" disabled>Previous</button>
@@ -141,4 +162,7 @@ Customers
 
 
 <script src="{{ url_for('static', filename='js/customers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/actions.js') }}"></script>
+
+
 {% endblock %}

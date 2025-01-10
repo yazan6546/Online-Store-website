@@ -70,12 +70,13 @@ def edit_customer(person_id):
 @app.route('/delete_customer/<int:person_id>', methods=['POST'])
 def delete_customer(person_id):
     # Logic to delete the customer with the given person_id
-    result = Customer.delete(person_id)
-    if result:
-        return jsonify({"success": True})
-    else:
-        return jsonify({"success": False, "error": "Customer not found"})
 
+    try:
+        Customer.delete(person_id)
+        return jsonify(success=True)
+
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
 
 @app.route('/update_customer/<int:person_id>', methods=['POST'])
 def update_customer(person_id):
@@ -118,6 +119,9 @@ def filter_customers():
     ]
     return jsonify({"success": True, "customers": customers})
 
+###########################################################################################
+# Address section
+###########################################################################################
 
 # the following routes are for the address section
 
@@ -201,11 +205,11 @@ def delete_manager(person_id):
     if session['user']['person_id'] == person_id:
         return jsonify({"success": False, "error": "You cannot delete yourself."})
 
-    result = Manager.delete(person_id)
-    if result:
+    try :
+        Manager.delete(person_id)
         return jsonify({"success": True})
-    else:
-        return jsonify({"success": False, "error": "Manager not found"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
 
 
 @app.route('/update_manager/<int:person_id>', methods=['POST'])
@@ -741,6 +745,7 @@ def update_category(category_id):
 def delete_category(category_id):
     try:
         # Call the delete method of the Supplier class
+
         result = Category.delete(category_id)
 
         if result:
@@ -804,66 +809,6 @@ def filter_products():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-# @app.route('/count_products', methods=['GET'])
-# def count_products():
-#     availability = request.args.get('availability', 'all')
-#
-#     conn = get_db_connection()
-#     try:
-#         if availability == 'in-stock':
-#             query = "SELECT * FROM product WHERE stock_quantity > 0"
-#         elif availability == 'out-of-stock':
-#             query = "SELECT * FROM product WHERE stock_quantity = 0"
-#         else:
-#             query = "SELECT * FROM product"
-#
-#         result = conn.execute(query).fetchall()
-#         products = [dict(row) for row in result]
-#
-#         return jsonify({
-#             "success": True,
-#             "products": products,
-#             "count": len(products)
-#         })
-#     except Exception as e:
-#         print(f"Error in count_products: {e}")
-#         return jsonify({"success": False, "error": str(e)})
-#     finally:
-#         conn.close()
-#
-#  @app.route('/filter_availability', methods=['GET'])
-# def filter_availability():
-#     availability = request.args.get('availability')
-#
-#     if availability not in ["in-stock", "out-of-stock"]:
-#         return jsonify({"success": False, "error": "Invalid availability parameter."}), 400
-#
-#     try:
-#         # Determine availability
-#         in_stock = availability == "in-stock"
-#
-#         # Fetch products based on availability
-#         products = Product.get_by_availability(in_stock)
-#
-#         # Handle case where no products are returned
-#         if products is None:
-#             return jsonify({"success": False, "error": "No products found for the given availability."}), 404
-#
-#         # Prepare response
-#         product_list = [
-#             {
-#                 "product_id": product.product_id,
-#                 "product_name": product.product_name,
-#                 "price": product.price,
-#                 "photo": product.photo,
-#                 "product_description": product.product_description,
-#             }
-#             for product in products
-#         ]
-#
-#         return jsonify({"success": True, "products": product_list})
-#     except Exception as e:
-#         return jsonify({"success": False, "error": str(e)}), 500
 
 ############################################################################################################
 # Customer's orders section
@@ -1152,26 +1097,60 @@ def admin_cart():
     total = cart.get_total()
     return render_template('admin_cart.html', delivery_services=delivery_services, products=products, total=total)
 
+@app.route('/add_customer_by_manager', methods=['POST'])
+def add_customer_by_manager():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        email = data.get('email')
+        passcode = data.get('pass')
+        birth_date_str = data.get('birth_date')
 
-@app.route('/add_customer', methods=['GET', 'POST'])
-def add_customer():
-    customer_form = CustomerForm()
-    print(customer_form.first_name.data)
-    print(request.method)
-    if customer_form.validate_on_submit():
-        first_name = customer_form.first_name.data
-        last_name = customer_form.last_name.data
-        email = customer_form.email.data
-        passcode = customer_form.password.data
+        try:
+            # Convert the string to a datetime.date object
+            birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
+        except ValueError:
+            return jsonify({'success': False, 'error': 'Invalid birth date format.'}), 400
 
-        print("ok")
-        customer = Customer(first_name=first_name, last_name=last_name, email=email, passcode=passcode, hash=True)
-        customer.insert()
-        return redirect(url_for('admin_dashboard_customers'))
-    else:
-        print(customer_form.form_errors)
-        return render_template('add_customer.html', form=customer_form)
+        # Validate inputs
+        if not first_name or not last_name or not email or not passcode:
+            return jsonify(success=False, error="firstName, lastName, email, and password are required.")
 
+        # Create and insert a new manager
+        new_customer = Customer(first_name=first_name, last_name=last_name, email=email, passcode=passcode, birth_date=birth_date, hash=True)
+        new_customer.insert()
+
+        return jsonify(success=True, customer=new_customer.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+
+
+
+
+#
+# @app.route('/add_customer', methods=['GET', 'POST'])
+# def add_customer():
+#     customer_form = CustomerForm()
+#     print(customer_form.first_name.data)
+#     print(request.method)
+#     if customer_form.validate_on_submit():
+#         first_name = customer_form.first_name.data
+#         last_name = customer_form.last_name.data
+#         email = customer_form.email.data
+#         passcode = customer_form.password.data
+#
+#         print("ok")
+#         customer = Customer(first_name=first_name, last_name=last_name, email=email, passcode=passcode, hash=True)
+#         customer.insert()
+#         return redirect(url_for('admin_dashboard_customers'))
+#     else:
+#         print(customer_form.form_errors)
+#         return render_template('add_customer.html', form=customer_form)
+#
 
 # Login Page
 @app.route('/Login', methods=['GET', 'POST'])
@@ -1357,6 +1336,11 @@ def add_delivery():
         return jsonify(success=False, error=str(e))
 
 
+@app.route('/api/get_addresses/<int:person_id>', methods=['GET'])
+def get_addresses(person_id):
+    addresses = Address.get_by_person_id(person_id)
+    addresses = [address.to_dict() for address in addresses]
+    return jsonify(addresses)
 
 @app.route('/api/cart/add/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id:int):

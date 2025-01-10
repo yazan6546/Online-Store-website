@@ -17,9 +17,12 @@ class Address:
         try:
             if self.address_id is not None:
                 conn.execute(q.address.INSERT_ADDRESS_TABLE, self.to_dict(person_id=True))
+                print("not None")
             else:
                 result = conn.execute(q.address.INSERT_ADDRESS_TABLE, self.to_dict(person_id=True))
                 self.address_id = result.lastrowid
+                print("None")
+                print(self.address_id)
 
             conn.commit()
 
@@ -56,6 +59,7 @@ class Address:
 
         try:
             conn.execute(q.address.DELETE_FROM_ADDRESS, {"id": address_id})
+            print("done deleteing")
             conn.commit()
             return 1
         except Exception as e:
@@ -114,7 +118,8 @@ class Address:
         finally:
             conn.close()
 
-    def to_dict(self, person_id=False, address_id=False):
+
+    def to_dict(self, address_id=True, person_id=True,):
         dict_temp = {
             "city": self.city,
             "zip_code": self.zip_code,

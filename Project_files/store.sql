@@ -273,3 +273,7 @@ WHERE col.order_id = 351;
 
 delete from Product
 where product_id > 101;
+
+
+select * from Address
+where person_id = 205;

@@ -183,7 +183,7 @@ function saveProduct() {
         success: function (data) {
             if (data.success) {
                 alert('Product added successfully!');
-                //window.location.href = '/dashboar';
+                window.location.href = '/admin_dashboard/products';
             } else {
                 alert('Error adding product: ' + data.error);
             }

@@ -248,18 +248,18 @@ class Product:
     #     finally:
     #         conn.close()
 
-    @classmethod
-    def get_by_availability(cls, in_stock):
-        conn = get_db_connection()
-        try:
-            query = "SELECT * FROM product WHERE stock_quantity > 0" if in_stock else "SELECT * FROM product WHERE stock_quantity = 0"
-            result = conn.execute(query).fetchall()
-            products = [cls(**row._mapping) for row in result]
-            return products
-        except Exception as e:
-            print(f"Error in get_by_availability(): {e}")
-            return []
-        finally:
-            conn.close()
+    # @classmethod
+    # def get_by_availability(cls, in_stock):
+    #     conn = get_db_connection()
+    #     try:
+    #         query = "SELECT * FROM product WHERE stock_quantity > 0" if in_stock else "SELECT * FROM product WHERE stock_quantity = 0"
+    #         result = conn.execute(query).fetchall()
+    #         products = [cls(**row._mapping) for row in result]
+    #         return products
+    #     except Exception as e:
+    #         print(f"Error in get_by_availability(): {e}")
+    #         return []
+    #     finally:
+    #         conn.close()
 
 

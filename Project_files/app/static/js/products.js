@@ -506,13 +506,6 @@ body: JSON.stringify({
 });
 }
 
-
-
-
-
-
-
-
 // ------------------- MODALS ------------------- //
 function openDescriptionModal(button) {
 // Set the description in the modal's <p>

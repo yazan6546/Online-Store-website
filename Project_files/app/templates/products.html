@@ -49,9 +49,11 @@
 
                     <!-- Name + Photo in same cell -->
                     <td>
-                        <div class="product-name-photo">
+                        <div class="product-category">
+                            <div class="image-container">
                             <img src="{{ product.photo }}" alt="Product Image">
-                            <div class="product-name">
+                            </div>
+                                <div class="product-name">
                                 <span id="name-{{ product.product_id }}-text">{{ product.product_name }}</span>
                                 <input type="text" id="name-{{ product.product_id }}-input"
                                        value="{{ product.product_name }}" style="display:none; width: 100px;">
