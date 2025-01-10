@@ -271,8 +271,14 @@ function addManager() {
                         
                         <td>
                             <span id="role-${data.manager.person_id}-text">${data.manager.role}</span>
-                            <input type="text" id="role-${data.manager.person_id}-input" value="${data.manager.role}" style="display:none; width: 100px;">
+                            <select id="role-${data.manager.person_id}-input" style="display:none; width: 150px;">
+                            <option value="Financial Manager" ${data.manager.role === 'Financial Manager' ? 'selected' : ''}>Financial Manager</option>
+                            <option value="Assistant Manager" ${data.manager.role === 'Assistant Manager' ? 'selected' : ''}>Assistant Manager</option>
+                            <option value="Regional Manager" ${data.manager.role === 'Regional Manager' ? 'selected' : ''}>Regional Manager</option>
+                            </select>
                         </td>
+                        
+                        
 
 
                         <td class="action-buttons">
