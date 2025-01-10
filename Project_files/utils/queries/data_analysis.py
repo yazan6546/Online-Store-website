@@ -1,14 +1,16 @@
 from sqlalchemy import text
 
-TOP_10_SELLING_PRODUCTS = text("""
-    SELECT p.product_id, p.product_name, c.category_name, s.supplier_name, p.price, SUM(col.quantity) AS total_quantity_sold
+TOP_5_SELLING_PRODUCTS = text("""
+    SELECT p.product_name, p.photo, p.price, SUM(col.quantity) AS total_quantity_sold
     FROM Product p
     JOIN Customer_Order_Line col ON p.product_id = col.product_id
     JOIN Customer_Order co ON col.order_id = co.order_id
     JOIN Category c ON p.category_id = c.category_id
     JOIN Supplier s ON p.supplier_id = s.supplier_id
     WHERE co.order_status = 'COMPLETED'
-    GROUP BY p.product_id, p.product_name
+    GROUP BY p.product_id
+    ORDER BY total_quantity_sold DESC
+    LIMIT 5;
     """)
 
 
@@ -165,13 +167,13 @@ TOTAL_REVENUE = text("""
     WHERE order_status = 'COMPLETED';
 """)
 
-CUSTOMER_RECENT_ORDERS = text("""
+CUSTOMER_RECENT_ORDERS = ("""
         SELECT 
             co.order_id,
-            p.first_name,
-            p.last_name,
+            p.email,
             co.order_date,
             co.delivery_date,
+            d.delivery_service_name,
             co.order_status
         FROM 
             Customer_Order co
@@ -179,8 +181,8 @@ CUSTOMER_RECENT_ORDERS = text("""
             Customer c ON co.person_id = c.person_id
         JOIN 
             Person p ON c.person_id = p.person_id
-        WHERE 
-            co.order_status = 'COMPLETED'
+        JOIN 
+            DeliveryService d on d.delivery_service_id = co.delivery_service_id
         ORDER BY 
             co.order_date DESC
         LIMIT 5;
