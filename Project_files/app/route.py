@@ -70,12 +70,13 @@ def edit_customer(person_id):
 @app.route('/delete_customer/<int:person_id>', methods=['POST'])
 def delete_customer(person_id):
     # Logic to delete the customer with the given person_id
-    result = Customer.delete(person_id)
-    if result:
-        return jsonify({"success": True})
-    else:
-        return jsonify({"success": False, "error": "Customer not found"})
 
+    try:
+        Customer.delete(person_id)
+        return jsonify(success=True)
+
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
 
 @app.route('/update_customer/<int:person_id>', methods=['POST'])
 def update_customer(person_id):
@@ -202,11 +203,11 @@ def delete_manager(person_id):
     if session['user']['person_id'] == person_id:
         return jsonify({"success": False, "error": "You cannot delete yourself."})
 
-    result = Manager.delete(person_id)
-    if result:
+    try :
+        Manager.delete(person_id)
         return jsonify({"success": True})
-    else:
-        return jsonify({"success": False, "error": "Manager not found"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
 
 
 @app.route('/update_manager/<int:person_id>', methods=['POST'])
