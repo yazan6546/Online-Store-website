@@ -123,6 +123,8 @@ def filter_customers():
 # Address section
 ###########################################################################################
 
+# the following routes are for the address section
+
 @app.route('/add_address/<int:customer_id>', methods=['POST'])
 def add_address(customer_id):
     data = request.json
@@ -773,6 +775,39 @@ def search_category():
         return jsonify(success=False, error=str(e))
 
 
+@app.route('/filter_products', methods=['GET'])
+def filter_products():
+    category_name = request.args.get('category')  # Get category from query params
+
+    if not category_name:
+        return jsonify({"success": False, "error": "Category name is required"}), 400
+
+    try:
+        # Get category_id for the given category_name
+        category_id = Category.get_id_by_name(category_name)
+
+        if not category_id:
+            return jsonify({"success": False, "error": "Category not found"}), 404
+
+        # Fetch products for the category
+        products = Product.get_by_category_id(category_id)
+
+        # Prepare response
+        product_list = [
+            {
+                "product_id": product.product_id,
+                "product_name": product.product_name,
+                "price": product.price,
+                "photo": product.photo,
+                "product_description": product.product_description,
+            }
+            for product in products
+        ]
+
+        return jsonify({"success": True, "products": product_list})
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 ############################################################################################################
@@ -1023,14 +1058,31 @@ def admin_dashboard():
 # Shop for manager Page
 @app.route('/admin_shop')
 def admin_shop():
-
+    # Fetch categories
     categories = Category.get_all()
     categories = [category.to_dict() for category in categories]
 
+    # Fetch products
     products = Product.get_all()
     products = [product.to_dict() for product in products]
 
-    return render_template('admin_shop.html', categories=categories, products=products)
+    # Calculate min and max price for the price range filter
+    if products:
+        min_price = min(product['price'] for product in products)
+        max_price = max(product['price'] for product in products)
+    else:
+        # Set default values if no products exist
+        min_price = 0
+        max_price = 0
+
+    return render_template(
+        'admin_shop.html',
+        categories=categories,
+        products=products,
+        min_price=min_price,
+        max_price=max_price
+    )
+
 
 
 # Cart for manager Page
@@ -1079,26 +1131,26 @@ def add_customer_by_manager():
 
 
 
-
-@app.route('/add_customer', methods=['GET', 'POST'])
-def add_customer():
-    customer_form = CustomerForm()
-    print(customer_form.first_name.data)
-    print(request.method)
-    if customer_form.validate_on_submit():
-        first_name = customer_form.first_name.data
-        last_name = customer_form.last_name.data
-        email = customer_form.email.data
-        passcode = customer_form.password.data
-
-        print("ok")
-        customer = Customer(first_name=first_name, last_name=last_name, email=email, passcode=passcode, hash=True)
-        customer.insert()
-        return redirect(url_for('admin_dashboard_customers'))
-    else:
-        print(customer_form.form_errors)
-        return render_template('add_customer.html', form=customer_form)
-
+#
+# @app.route('/add_customer', methods=['GET', 'POST'])
+# def add_customer():
+#     customer_form = CustomerForm()
+#     print(customer_form.first_name.data)
+#     print(request.method)
+#     if customer_form.validate_on_submit():
+#         first_name = customer_form.first_name.data
+#         last_name = customer_form.last_name.data
+#         email = customer_form.email.data
+#         passcode = customer_form.password.data
+#
+#         print("ok")
+#         customer = Customer(first_name=first_name, last_name=last_name, email=email, passcode=passcode, hash=True)
+#         customer.insert()
+#         return redirect(url_for('admin_dashboard_customers'))
+#     else:
+#         print(customer_form.form_errors)
+#         return render_template('add_customer.html', form=customer_form)
+#
 
 # Login Page
 @app.route('/Login', methods=['GET', 'POST'])
@@ -1382,8 +1434,6 @@ def place_order():
 
     session['cart'] = Cart().to_dict()
     return jsonify({"success": True})
-
-    return jsonify(addresses)
 
 
 @app.errorhandler(404)
