@@ -1,4 +1,4 @@
-// Toggle dropdown menu
+// Toggle dropdown menu and close other dropdowns
 document.querySelectorAll('.action-dropdown-btn').forEach((btn) => {
     btn.addEventListener('click', function (event) {
         // Close other open dropdowns
@@ -14,7 +14,8 @@ document.querySelectorAll('.action-dropdown-btn').forEach((btn) => {
     });
 });
 
-// Close dropdown when clicking outside
+
+// make a global event listener to close the dropdown when clicking outside
 document.addEventListener('click', () => {
     document.querySelectorAll('.action-dropdown').forEach((dropdown) => {
         dropdown.classList.remove('active');

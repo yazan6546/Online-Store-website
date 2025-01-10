@@ -1,5 +1,22 @@
 let currentSortOrder = 'asc'; // Keeps track of the current sort order
 let currentCustomerID = null; // Keeps track of the current customer ID
+
+document.getElementById('add-address-btn').addEventListener('click', function () {
+    // Show the row for adding a new address
+    document.getElementById('new-address-row').style.display = 'table-row';
+
+    // Make sure the "Save" button is visible
+    document.querySelector('#new-address-row .save').style.display = 'inline-block';
+    document.querySelector('#new-address-row .cancel').style.display = 'inline-block';
+});
+
+
+// Close Modal
+document.querySelector('.close-btn').addEventListener('click', () => {
+    document.getElementById('address-modal').style.display = 'none';
+});
+
+
 function sortCustomers(column) {
     console.log('Sorting by:', column);
 
@@ -48,18 +65,7 @@ function getColumnIndex(column) {
     }
 }
 
-function getColumnIndexAddress(column) {
-    switch (column) {
-        case 'street':
-            return 1; // 1st column
-        case 'city':
-            return 2; // 2nd column
-        case 'zip_code':
-            return 3; // 3rd column
-        default:
-            return 1;
-    }
-}
+
 
 function sortAddresses(column) {
     console.log('Sorting by:', column);
@@ -89,8 +95,18 @@ function sortAddresses(column) {
     rows.forEach(row => tableBody.appendChild(row));
 }
 
-
-// Utility function to map column names to their respective indices
+function getColumnIndexAddress(column) {
+    switch (column) {
+        case 'street':
+            return 1; // 1st column
+        case 'city':
+            return 2; // 2nd column
+        case 'zip_code':
+            return 3; // 3rd column
+        default:
+            return 1;
+    }
+}
 
 
 
@@ -261,6 +277,25 @@ function deleteAddress(address_id) {
 // }
 
 
+function deleteCustomer(person_id) {
+    console.log('Deleting customer ID:', person_id);
+    if (confirm('Are you sure you want to delete this customer?')) {
+        $.ajax({
+            url: '/delete_customer/' + person_id,
+            type: 'POST',
+            success: function (response) {
+                if (response.success) {
+                    $('#row-' + person_id).remove();
+                } else {
+                    alert('Error deleting customer: ' + response.error);
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('Error deleting customer: ' + xhr.responseText);
+            }
+        });
+    }
+}
 
 
 
@@ -325,6 +360,7 @@ function gnerateRowAddress(address) {
 }
 
 
+
 function searchCustomers() {
     console.log('Searching customers');
     var query = $('#search-query').val();
@@ -375,88 +411,6 @@ function searchCustomers() {
 }
 
 
-
-function deleteCustomer(person_id) {
-    console.log('Deleting customer ID:', person_id);
-    if (confirm('Are you sure you want to delete this customer?')) {
-        $.ajax({
-            url: '/delete_customer/' + person_id,
-            type: 'POST',
-            success: function (response) {
-                if (response.success) {
-                    $('#row-' + person_id).remove();
-                } else {
-                    alert('Error deleting customer: ' + response.error);
-                }
-            },
-            error: function (xhr, status, error) {
-                alert('Error deleting customer: ' + xhr.responseText);
-            }
-        });
-    }
-}
-
-
-
-
-function addAddress() {
-    const customerId = document.getElementById('customer-id').value;
-    const street = document.getElementById('address-street').value;
-    const city = document.getElementById('address-city').value;
-    const zip = document.getElementById('address-zip').value;
-
-    // Validate inputs
-    if (!street || !city || !zip) {
-        alert('Please fill in all fields.');
-        return;
-    }
-
-    // AJAX call to server
-    $.ajax({
-        url: `/add_address/${customerId}`,
-        type: 'POST',
-        data: JSON.stringify({street, city, zip}),
-        contentType: 'application/json',
-        success: function (response) {
-            if (response.success) {
-                alert('Address added successfully!');
-                const addressesTable = document.querySelector(`#row-${customerId} .address-subtable tbody`);
-                const newRow = `
-                    <tr id="address-row-${response.address.address_id}">
-                        <td>${response.address.street}</td>
-                        <td>${response.address.city}</td>
-                        <td>${response.address.zip}</td>
-                        <td class="action-buttons">
-                            <button class="edit" onclick="enableEditAddress(${response.address.address_id})">Edit</button>
-                            <button class="delete" onclick="deleteAddress(${response.address.address_id})">Delete</button>
-                        </td>
-                    </tr>`;
-                addressesTable.insertAdjacentHTML('beforeend', newRow);
-                closeAddAddressModal();
-            } else {
-                alert('Error adding address: ' + response.error);
-            }
-        },
-        error: function (xhr) {
-            alert('Error adding address: ' + xhr.responseText);
-        },
-    });
-}
-
-
-
-///////////////////////////////////////////////////////////////////////////////////
-
-document.getElementById('add-address-btn').addEventListener('click', function () {
-    // Show the row for adding a new address
-    document.getElementById('new-address-row').style.display = 'table-row';
-
-    // Make sure the "Save" button is visible
-    document.querySelector('#new-address-row .save').style.display = 'inline-block';
-    document.querySelector('#new-address-row .cancel').style.display = 'inline-block';
-});
-
-
 // Open Address Modal
 // function showAddresses(customerId) {
 //     const modal = document.getElementById('address-modal');
@@ -485,11 +439,6 @@ document.getElementById('add-address-btn').addEventListener('click', function ()
 //
 //     modal.style.display = 'block';
 // }
-
-// Close Modal
-document.querySelector('.close-btn').addEventListener('click', () => {
-    document.getElementById('address-modal').style.display = 'none';
-});
 
 function cancelNewAddress() {
     document.getElementById('new-street').value = '';
