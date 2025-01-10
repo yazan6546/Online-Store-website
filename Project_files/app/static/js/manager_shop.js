@@ -73,6 +73,16 @@ function sortProducts(criteria) {
     const productContainer = document.querySelector(".product-container");
     const products = Array.from(productContainer.querySelectorAll(".product-card"));
 
+    // Create a map of product ID to its corresponding modal
+    const modals = {};
+    products.forEach(product => {
+        const productId = product.getAttribute('data-id');
+        const productModal = document.querySelector(`#modal-${productId}`);
+        if (productModal) {
+            modals[productId] = productModal;
+        }
+    });
+
     // Sorting logic based on criteria
     products.sort((a, b) => {
         switch (criteria) {
@@ -97,48 +107,43 @@ function sortProducts(criteria) {
         }
     });
 
-    // Clear the container and append sorted products
+    // Clear the container
     productContainer.innerHTML = "";
-    products.forEach(product => productContainer.appendChild(product));
+
+    // Append sorted products and their corresponding modals
+    products.forEach(product => {
+        const productId = product.getAttribute('data-id');
+        productContainer.appendChild(product);
+        if (modals[productId]) {
+            productContainer.appendChild(modals[productId]);
+        }
+    });
 }
 
 
-//////////////////////////////////////////////////////////////////////
 document.querySelectorAll('input[name="category"]').forEach((radio) => {
     radio.addEventListener('change', function () {
-        const selectedCategory = this.value;
+        const selectedCategory = this.value; // Selected category ID
+        const productContainer = document.querySelector('.product-container');
+        const products = Array.from(productContainer.querySelectorAll('.product-card'));
 
-        // Fetch filtered products via AJAX
-        fetch(`/filter_products?category=${encodeURIComponent(selectedCategory)}`)
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.success) {
-                    const productContainer = document.querySelector('.product-container');
-                    productContainer.innerHTML = ''; // Clear current products
+        // Filter products and their modals
+        products.forEach((product) => {
+            const productCategoryId = product.getAttribute('data-category');
+            const productId = product.getAttribute('data-id');
+            const productModal = document.querySelector(`#modal-${productId}`);
 
-                    // Populate filtered products
-                    data.products.forEach((product) => {
-                        const productCard = `
-                            <div class="product-card">
-                                <div class="product-image-section">
-                                    <img src="${product.photo}" alt="${product.product_name}">
-                                </div>
-                                <div class="product-info-section">
-                                    <h5>${product.product_name}</h5>
-                                    <p class="price">$${product.price}</p>
-                                </div>
-                            </div>`;
-                        productContainer.insertAdjacentHTML('beforeend', productCard);
-                    });
-                } else {
-                    alert('No products found for this category.');
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            if (selectedCategory === 'all' || productCategoryId === selectedCategory) {
+                product.style.display = ''; // Show product card
+                if (productModal) productModal.style.display = 'none'; // Hide modal until opened
+            } else {
+                product.style.display = 'none'; // Hide product card
+                if (productModal) productModal.style.display = 'none'; // Hide modal
+            }
+        });
     });
 });
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 document.querySelectorAll('input[name="availability"]').forEach((radio) => {
     radio.addEventListener('change', (event) => {

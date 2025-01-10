@@ -775,39 +775,6 @@ def search_category():
         return jsonify(success=False, error=str(e))
 
 
-@app.route('/filter_products', methods=['GET'])
-def filter_products():
-    category_name = request.args.get('category')  # Get category from query params
-
-    if not category_name:
-        return jsonify({"success": False, "error": "Category name is required"}), 400
-
-    try:
-        # Get category_id for the given category_name
-        category_id = Category.get_id_by_name(category_name)
-
-        if not category_id:
-            return jsonify({"success": False, "error": "Category not found"}), 404
-
-        # Fetch products for the category
-        products = Product.get_by_category_id(category_id)
-
-        # Prepare response
-        product_list = [
-            {
-                "product_id": product.product_id,
-                "product_name": product.product_name,
-                "price": product.price,
-                "photo": product.photo,
-                "product_description": product.product_description,
-            }
-            for product in products
-        ]
-
-        return jsonify({"success": True, "products": product_list})
-
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
 
 
 ############################################################################################################
@@ -1201,6 +1168,12 @@ def get_best_selling_products_by_month():
     # year = request.args.get('year')
     best_selling_products = da.get_best_selling_product_by_month(2023)
     return jsonify(best_selling_products)
+
+
+@app.route('/api/age_distribution', methods=['GET'])
+def get_age_distribution():
+    age_distribution = da.get_age_distribution()
+    return jsonify(age_distribution)
 
 
 # @app.route('/api/best_customers', methods=['GET'])

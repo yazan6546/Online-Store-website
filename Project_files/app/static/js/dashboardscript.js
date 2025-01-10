@@ -1,6 +1,6 @@
 // Initialize the chart
-const ctx = document.getElementById('revenueChart').getContext('2d');
-const revenueChart = new Chart(ctx, {
+const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+const revenueChart = new Chart(ctxRevenue, {
     type: 'line',
     data: {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -32,7 +32,8 @@ async function fetchRevenues() {
 
         // Process the data to fit the chart format
         const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const datasets = Object.keys(data).map((year, index) => ({
+        // Update the chart
+        revenueChart.data.datasets = Object.keys(data).map((year, index) => ({
             label: year,
             data: labels.map((_, monthIndex) => {
                 const monthData = data[year].find(item => item.month === monthIndex + 1);
@@ -43,9 +44,6 @@ async function fetchRevenues() {
             fill: true,
             tension: 0.4,
         }));
-
-        // Update the chart
-        revenueChart.data.datasets = datasets;
         revenueChart.update();
     } catch (error) {
         console.error('Error fetching revenues:', error);
@@ -269,6 +267,51 @@ async function fetchBestProductsByMonth() {
 }
 
 
+
+ // Create the chart
+ const ctxHistogram = document.getElementById('ageDistribution').getContext('2d');
+ const ageDistribution = new Chart(ctxHistogram, {
+     type: 'bar',
+     data: {
+         labels: [],
+         datasets: [{
+             label: 'Age Distribution',
+             data: [],
+             backgroundColor: 'rgba(54, 162, 235, 0.2)',
+             borderColor: 'rgba(54, 162, 235, 1)',
+             borderWidth: 1
+         }]
+     },
+     options: {
+         responsive: true,
+         scales: {
+             y: {
+                 beginAtZero: true
+             }
+         }
+     }
+ });
+
+
+
+// Function to process input data and update the chart
+async function fetchAgeDistribution() {
+
+    const response = await fetch('/api/age_distribution');
+    const data = await response.json();
+
+    // Assuming inputData is an array of objects with 3 columns
+    const labels = data.map(item => item.age_group);
+    const counts = data.map(item => item.count);
+
+    // Update the chart data
+    ageDistribution.data.labels = labels;
+    ageDistribution.data.datasets[0].data = counts;
+    ageDistribution.update();
+}
+
+
+
 // Update the chart with the example input data
 fetchBestProductsByMonth();
 
@@ -283,8 +326,5 @@ fetchCategoryData();
 // Call the function to fetch and process the data
 fetchRevenues();
 
-//////////////////////////////////////////////////////////////////////////////////////////
-const ctxHistogram = document.getElementById('coloredHistogramChart').getContext('2d');
-const coloredHistogramChart = new Chart(ctxHistogram, {
 
-});
+fetchAgeDistribution();

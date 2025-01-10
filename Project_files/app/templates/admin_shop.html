@@ -49,7 +49,7 @@ Admin Dashboard
             {% for category in categories %}
         <li>
         <label>
-        <input type="radio" name="category" value="{{ category.category_name }}">
+        <input type="radio" name="category" value="{{ category.category_id }}">
         {{ category.category_name }}
         </label>
         </li>
@@ -86,9 +86,9 @@ Admin Dashboard
 
     </div>
   <!-- Main Product Section -->
-  <div class="product-container">
+<div class="product-container">
   {% for product in products %}
-    <div class="product-card" data-id="{{ product.product_id }}">
+    <div class="product-card" data-id="{{ product.product_id }}" data-category="{{ product.category_id }}">
       <!-- Upper Section -->
       <div class="product-image-section">
           <div class="image-container">
