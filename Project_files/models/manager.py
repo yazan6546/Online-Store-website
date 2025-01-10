@@ -1,4 +1,6 @@
+from __future__ import annotations  # Enables modern type hinting for forward references
 import datetime
+from typing import Dict, List
 
 from models.person import Person
 import utils.queries as q
@@ -11,7 +13,7 @@ class Manager(Person):
         self.since = since
         self.role = role
 
-    def insert(self):
+    def insert(self) -> None:
         conn = get_db_connection()
 
         try:
@@ -35,7 +37,7 @@ class Manager(Person):
         finally:
             conn.close()
 
-    def update(self):
+    def update(self) -> int:
         conn = get_db_connection()
 
         try:
@@ -55,7 +57,7 @@ class Manager(Person):
 
 
     @classmethod
-    def get(cls, person_id):
+    def get(cls, person_id) -> Manager | None:
         conn = get_db_connection()
 
         try:
@@ -71,7 +73,7 @@ class Manager(Person):
             conn.close()
 
     @classmethod
-    def search(cls, search_term):
+    def search(cls, search_term) -> List[Manager] | None:
         conn = get_db_connection()
 
         try:
@@ -88,12 +90,12 @@ class Manager(Person):
             return managers_objects
         except Exception as e:
             print(f"Error: {e}")
-            return 0
+            return None
         finally:
             conn.close()
 
     @classmethod
-    def get_all(cls):
+    def get_all(cls) -> List[Manager] | None:
         conn = get_db_connection()
 
         try:
@@ -111,12 +113,12 @@ class Manager(Person):
             return managers_objects
         except Exception as e:
             print(f"Error: {e}")
-            return 0
+            return None
         finally:
             conn.close()
 
     @classmethod
-    def get_by_email(cls, email):
+    def get_by_email(cls, email: str) -> Manager | None:
         conn = get_db_connection()
 
         try:
@@ -141,15 +143,14 @@ class Manager(Person):
             **data_dict
         )
 
-    def to_dict(self, person=True, person_id=True):
+    def to_dict(self : datetime, person=True, person_id=True) -> Dict[str, any]:
 
         if person:
             temp = super().to_dict(person_id=person_id)
         else:
             temp = {'person_id': self.person_id}
 
-        temp['since'] = self.since
-        temp['since'] = temp['since'].strftime('%Y-%m-%d')  # Format as 'YYYY-MM-DD'
+        temp['since'] = self.since.strftime('%Y-%m-%d')  # Format as 'YYYY-MM-DD'
         temp['role'] = self.role
 
         return temp

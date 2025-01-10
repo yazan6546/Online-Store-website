@@ -1,22 +1,12 @@
 import pandas as pd
-import plotly.express as px
 import utils.queries.data_analysis as da
-import plotly.io as pio
-from . import *
-import plotly.graph_objects as go
 from utils.db_utils import get_db_connection
 
-# SQL Queries mapping
-queries = {
-    "Top 10 Selling Products": da.TOP_10_SELLING_PRODUCTS,
-    "Low Stock Products": da.LOW_STOCK_PRODUCTS,
-    "Monthly Income Report": da.MONTHLY_INCOME_REPORT,
-}
 
 def get_top_10_selling_products():
     conn = get_db_connection()
     try:
-        df = pd.read_sql(queries["Top 10 Selling Products"], conn)
+        df = pd.read_sql(da.TOP_10_SELLING_PRODUCTS, conn)
         return df
     except Exception as e:
         print(f"Error: {e}")
@@ -28,7 +18,7 @@ def get_top_10_selling_products():
 def get_low_stock_products():
     conn = get_db_connection()
     try:
-        df = pd.read_sql(queries["Low Stock Products"], conn)
+        df = pd.read_sql(da.LOW_STOCK_PRODUCTS, conn)
         return df
     except Exception as e:
         print(f"Error: {e}")

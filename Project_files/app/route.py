@@ -224,6 +224,8 @@ def update_manager(person_id):
     manager.last_name = request.form['last_name']
     manager.email = request.form['email']
     manager.role = request.form['role']
+    since = request.form['since']
+    manager.since = datetime.strptime(since, "%Y-%m-%d")
 
     result = manager.update()
 
