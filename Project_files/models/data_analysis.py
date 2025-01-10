@@ -128,4 +128,15 @@ def get_all_revenues():
     finally:
         conn.close()
 
+def get_age_distribution():
+    conn = get_db_connection()
+    try:
+        df = pd.read_sql(da.AGE_DISTRIBUTION, conn)
+        return df.to_dict(orient='records')
+    except Exception as e:
+        print(f"Error: {e}")
+        return []
+    finally:
+        conn.close()
+
 

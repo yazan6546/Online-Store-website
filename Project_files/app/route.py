@@ -1170,6 +1170,12 @@ def get_best_selling_products_by_month():
     return jsonify(best_selling_products)
 
 
+@app.route('/api/age_distribution', methods=['GET'])
+def get_age_distribution():
+    age_distribution = da.get_age_distribution()
+    return jsonify(age_distribution)
+
+
 # @app.route('/api/best_customers', methods=['GET'])
 # def get_best_customers():
 #     best_customers = da.get_best_customers()
