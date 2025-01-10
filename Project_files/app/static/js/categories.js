@@ -187,7 +187,7 @@ const limit = 10; // Rows per page
 // Fetch categorys and update the table
 async function fetchCategories(page = 1) {
     try {
-        const response = await fetch(`/get_categorys?page=${page}&limit=${limit}`);
+        const response = await fetch(`/get_categories?page=${page}&limit=${limit}`);
         const data = await response.json();
 
         if (data.success) {

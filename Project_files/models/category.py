@@ -41,10 +41,11 @@ class Category:
         finally:
             conn.close()
 
-    def delete(self):
+    @staticmethod
+    def delete(category_id):
         conn = get_db_connection()
         try:
-            conn.execute(q.category.DELETE_FROM_CATEGORY, {'category_id': self.category_id})
+            conn.execute(q.category.DELETE_FROM_CATEGORY, {'category_id': category_id})
             conn.commit()
             return 1
         except Exception as e:

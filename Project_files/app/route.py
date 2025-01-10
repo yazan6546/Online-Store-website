@@ -742,6 +742,7 @@ def update_category(category_id):
 def delete_category(category_id):
     try:
         # Call the delete method of the Supplier class
+
         result = Category.delete(category_id)
 
         if result:
