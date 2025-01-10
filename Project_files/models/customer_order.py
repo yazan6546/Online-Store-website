@@ -1,5 +1,8 @@
 from datetime import datetime
 
+import pandas as pd
+from pandas.core.interchange.dataframe_protocol import DataFrame
+
 from models.order import Order
 import utils.queries as q
 from utils.db_utils import get_db_connection

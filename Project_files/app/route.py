@@ -10,7 +10,7 @@ from wtforms.validators import email
 from app import app
 from app.forms import *
 import app.auth as auth
-from models import ManagerOrder
+from models import ManagerOrder, CustomerOrder
 from models.delivery_service import DeliveryService
 from models.cart import Cart
 from models.addresses import Address
@@ -50,6 +50,7 @@ def admin_dashboard_customers():
 
     customers = Customer.get_all()
     customers = [customer.to_dict(address=True) for customer in customers]
+
 
     # print(customers[0]['addresses'][0]['address_id'])
     return render_template('customers.html', customers=customers)  # Replace with render_template if applicable
@@ -1019,9 +1020,12 @@ def admin_dashboard():
         print('ok loser')
         return redirect(url_for('login'))
 
+    top5_products = da.get_top_5_products()
+    orders = da.get_recent_orders()
+
     dict_stats = da.get_stats()
     admin = session['user']
-    return render_template('admin_dashboard.html', admin=admin, stats=dict_stats)
+    return render_template('admin_dashboard.html', admin=admin, stats=dict_stats, products=top5_products, orders=orders)
 
 
 # Shop for manager Page

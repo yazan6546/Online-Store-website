@@ -129,4 +129,26 @@ def get_age_distribution():
     finally:
         conn.close()
 
+def get_top_5_products():
+    conn = get_db_connection()
+    try:
+        df = pd.read_sql(da.TOP_5_SELLING_PRODUCTS, conn)
+        return df.to_dict(orient='records')
+    except Exception as e:
+        print(f"Error: {e}")
+        return []
+    finally:
+        conn.close()
+
+def get_recent_orders():
+    conn = get_db_connection()
+    try:
+        df = pd.read_sql(da.CUSTOMER_RECENT_ORDERS, conn)
+        return df.to_dict(orient='records')
+    except Exception as e:
+        print(f"Error: {e}")
+        return []
+    finally:
+        conn.close()
+
 
