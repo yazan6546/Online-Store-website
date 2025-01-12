@@ -22,16 +22,12 @@ Admin Dashboard
     <div class="sort-box">
       <label for="sort-options">Sort by:</label>
       <select id="sort-options">
-            <option value="featured">Featured</option>
-            <option value="best-selling">Best Selling</option>
             <option value="a-z">Alphabetically, A-Z</option>
             <option value="z-a">Alphabetically, Z-A</option>
             <option value="low-high">Price, Low to High</option>
             <option value="high-low">Price, High to Low</option>
-            <option value="old-new">Date, Old to New</option>
-            <option value="new-old">Date, New to Old</option>
       </select>
-      <span class="product-count"># of products</span>
+      <span id="product-count" class="product-count"># of products</span>
     </div>
   </div>
   </div>
@@ -53,7 +49,7 @@ Admin Dashboard
             {% for category in categories %}
         <li>
         <label>
-        <input type="radio" name="category" value="{{ category.category_name }}">
+        <input type="radio" name="category" value="{{ category.category_id }}">
         {{ category.category_name }}
         </label>
         </li>
@@ -65,13 +61,14 @@ Admin Dashboard
       <!-- Filter: Price -->
       <div class="filter-box">
         <h3>Price</h3>
-        <p>The highest price is $#</p>
-          <div class="range-slider">
-            <input type="range" id="minPrice" class="range-input" min="0" max="1500" value="122">
-            <input type="range" id="maxPrice" class="range-input" min="0" max="1500" value="891">
-          </div>
-          <p>Price: $<span id="priceMin">#</span> - $<span id="priceMax">#</span></p>
+        <p>The highest price is ${{ max_price }}</p>
+        <div class="range-slider">
+          <input type="range" id="minPrice" class="range-input" min="{{ min_price }}" max="{{ max_price }}" value="{{ min_price }}">
+          <input type="range" id="maxPrice" class="range-input" min="{{ min_price }}" max="{{ max_price }}" value="{{ max_price }}">
         </div>
+        <p>Price: $<span id="priceMin">{{ min_price }}</span> - $<span id="priceMax">{{ max_price }}</span></p>
+      </div>
+
 
       <!-- Filter: Availability -->
       <div class="filter-box">
@@ -79,14 +76,19 @@ Admin Dashboard
         <ul>
           <li><input type="radio" name="availability" id="in-stock" value="in-stock"> <label for="in-stock">In Stock</label></li>
           <li><input type="radio" name="availability" id="out-of-stock" value="out-of-stock"> <label for="out-of-stock">Out of Stock</label></li>
+          <li>
+            <input type="radio" name="availability" id="all" value="all" checked>
+            <label for="all">Show All</label>
+          </li>
+
         </ul>
       </div>
 
     </div>
   <!-- Main Product Section -->
-  <div class="product-container">
+<div class="product-container">
   {% for product in products %}
-    <div class="product-card" data-id="{{ product.product_id }}">
+    <div class="product-card" data-id="{{ product.product_id }}" data-category="{{ product.category_id }}">
       <!-- Upper Section -->
       <div class="product-image-section">
           <div class="image-container">

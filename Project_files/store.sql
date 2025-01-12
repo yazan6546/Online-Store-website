@@ -273,3 +273,25 @@ WHERE col.order_id = 351;
 
 delete from Product
 where product_id > 101;
+
+
+select * from Address
+where person_id = 205;
+
+select * from Manager_Order_Line where order_id = 353;
+
+SELECT
+    CASE
+        WHEN age BETWEEN 18 AND 30 THEN '18-30'
+        WHEN age BETWEEN 31 AND 40 THEN '31-40'
+        WHEN age BETWEEN 41 AND 50 THEN '41-50'
+        WHEN age > 50 THEN '50+'
+    END AS age_group,
+    COUNT(*) AS count
+FROM (
+    SELECT
+        TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age
+    FROM Customer
+) AS age_data
+GROUP BY age_group
+ORDER BY FIELD(age_group, '18-30', '31-40', '41-50', '50+');

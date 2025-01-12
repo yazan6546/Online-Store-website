@@ -10,7 +10,7 @@ from wtforms.validators import email
 from app import app
 from app.forms import *
 import app.auth as auth
-from models import ManagerOrder
+from models import ManagerOrder, CustomerOrder
 from models.delivery_service import DeliveryService
 from models.cart import Cart
 from models.addresses import Address
@@ -51,6 +51,7 @@ def admin_dashboard_customers():
     customers = Customer.get_all()
     customers = [customer.to_dict(address=True) for customer in customers]
 
+
     # print(customers[0]['addresses'][0]['address_id'])
     return render_template('customers.html', customers=customers)  # Replace with render_template if applicable
 
@@ -70,12 +71,13 @@ def edit_customer(person_id):
 @app.route('/delete_customer/<int:person_id>', methods=['POST'])
 def delete_customer(person_id):
     # Logic to delete the customer with the given person_id
-    result = Customer.delete(person_id)
-    if result:
-        return jsonify({"success": True})
-    else:
-        return jsonify({"success": False, "error": "Customer not found"})
 
+    try:
+        Customer.delete(person_id)
+        return jsonify(success=True)
+
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
 
 @app.route('/update_customer/<int:person_id>', methods=['POST'])
 def update_customer(person_id):
@@ -121,6 +123,8 @@ def filter_customers():
 ###########################################################################################
 # Address section
 ###########################################################################################
+
+# the following routes are for the address section
 
 @app.route('/add_address/<int:customer_id>', methods=['POST'])
 def add_address(customer_id):
@@ -202,11 +206,11 @@ def delete_manager(person_id):
     if session['user']['person_id'] == person_id:
         return jsonify({"success": False, "error": "You cannot delete yourself."})
 
-    result = Manager.delete(person_id)
-    if result:
+    try :
+        Manager.delete(person_id)
         return jsonify({"success": True})
-    else:
-        return jsonify({"success": False, "error": "Manager not found"})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
 
 
 @app.route('/update_manager/<int:person_id>', methods=['POST'])
@@ -221,6 +225,8 @@ def update_manager(person_id):
     manager.last_name = request.form['last_name']
     manager.email = request.form['email']
     manager.role = request.form['role']
+    since = request.form['since']
+    manager.since = datetime.strptime(since, "%Y-%m-%d")
 
     result = manager.update()
 
@@ -1014,22 +1020,42 @@ def admin_dashboard():
         print('ok loser')
         return redirect(url_for('login'))
 
+    top5_products = da.get_top_5_products()
+    orders = da.get_recent_orders()
+
     dict_stats = da.get_stats()
     admin = session['user']
-    return render_template('admin_dashboard.html', admin=admin, stats=dict_stats)
+    return render_template('admin_dashboard.html', admin=admin, stats=dict_stats, products=top5_products, orders=orders)
 
 
 # Shop for manager Page
 @app.route('/admin_shop')
 def admin_shop():
-
+    # Fetch categories
     categories = Category.get_all()
     categories = [category.to_dict() for category in categories]
 
+    # Fetch products
     products = Product.get_all()
     products = [product.to_dict() for product in products]
 
-    return render_template('admin_shop.html', categories=categories, products=products)
+    # Calculate min and max price for the price range filter
+    if products:
+        min_price = min(product['price'] for product in products)
+        max_price = max(product['price'] for product in products)
+    else:
+        # Set default values if no products exist
+        min_price = 0
+        max_price = 0
+
+    return render_template(
+        'admin_shop.html',
+        categories=categories,
+        products=products,
+        min_price=min_price,
+        max_price=max_price
+    )
+
 
 
 # Cart for manager Page
@@ -1078,26 +1104,26 @@ def add_customer_by_manager():
 
 
 
-
-@app.route('/add_customer', methods=['GET', 'POST'])
-def add_customer():
-    customer_form = CustomerForm()
-    print(customer_form.first_name.data)
-    print(request.method)
-    if customer_form.validate_on_submit():
-        first_name = customer_form.first_name.data
-        last_name = customer_form.last_name.data
-        email = customer_form.email.data
-        passcode = customer_form.password.data
-
-        print("ok")
-        customer = Customer(first_name=first_name, last_name=last_name, email=email, passcode=passcode, hash=True)
-        customer.insert()
-        return redirect(url_for('admin_dashboard_customers'))
-    else:
-        print(customer_form.form_errors)
-        return render_template('add_customer.html', form=customer_form)
-
+#
+# @app.route('/add_customer', methods=['GET', 'POST'])
+# def add_customer():
+#     customer_form = CustomerForm()
+#     print(customer_form.first_name.data)
+#     print(request.method)
+#     if customer_form.validate_on_submit():
+#         first_name = customer_form.first_name.data
+#         last_name = customer_form.last_name.data
+#         email = customer_form.email.data
+#         passcode = customer_form.password.data
+#
+#         print("ok")
+#         customer = Customer(first_name=first_name, last_name=last_name, email=email, passcode=passcode, hash=True)
+#         customer.insert()
+#         return redirect(url_for('admin_dashboard_customers'))
+#     else:
+#         print(customer_form.form_errors)
+#         return render_template('add_customer.html', form=customer_form)
+#
 
 # Login Page
 @app.route('/Login', methods=['GET', 'POST'])
@@ -1146,8 +1172,14 @@ def get_best_customers():
 @app.route('/api/best_selling_products_by_month', methods=['GET'])
 def get_best_selling_products_by_month():
     # year = request.args.get('year')
-    best_selling_products = da.get_best_selling_product_by_month(2023)
+    best_selling_products = da.get_best_selling_product_by_month(2024)
     return jsonify(best_selling_products)
+
+
+@app.route('/api/age_distribution', methods=['GET'])
+def get_age_distribution():
+    age_distribution = da.get_age_distribution()
+    return jsonify(age_distribution)
 
 
 # @app.route('/api/best_customers', methods=['GET'])
@@ -1387,8 +1419,6 @@ def place_order():
 
     session['cart'] = Cart().to_dict()
     return jsonify({"success": True})
-
-    return jsonify(addresses)
 
 
 @app.errorhandler(404)
