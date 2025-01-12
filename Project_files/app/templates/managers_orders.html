@@ -66,10 +66,22 @@ Managers' Orders
                     <span id="order_status-{{ order.order_id }}-text">{{ order.order_status }}</span>
                     <input type="text" id="order_status-{{ order.order_id }}-input" value="{{ order.order_status }}" style="display:none; width: 100px;">
 
-                <td class="action-buttons">
-                    <button id="edit-btn-{{ order.order_id  }}" class="edit" onclick="enableEditManagersOrders({{ order.order_id }})">Edit</button>
-                    <button id="save-btn-{{ order.order_id  }}" class="save" style="display:none;" onclick="saveEditManagersOrders({{ order.order_id }})">Save</button>
-                    <button class="delete" onclick="deleteManagerOrder({{ order.order_id }})">Cancel</button>
+{#                <td class="action-buttons">#}
+{#                    <button id="edit-btn-{{ order.order_id  }}" class="edit" onclick="enableEditManagersOrders({{ order.order_id }})">Edit</button>#}
+{#                    <button id="save-btn-{{ order.order_id  }}" class="save" style="display:none;" onclick="saveEditManagersOrders({{ order.order_id }})">Save</button>#}
+{#                    <button class="delete" onclick="deleteManagerOrder({{ order.order_id }})">Cancel</button>#}
+{#                </td>#}
+
+                    <td class="action-column">
+                    <div class="action-dropdown">
+                        <button class="action-dropdown-btn">
+                            <i class="fas fa-ellipsis-v"></i> <!-- Vertical three dots icon -->
+                        </button>
+                        <div class="action-dropdown-menu">
+                            <button class="show-order" onclick="showManagerOrder({{ order.order_id }})">View Order</button>
+                            <button class="delete" onclick="deleteManagerOrder({{ order.order_id }})">Cancel</button>
+                        </div>
+                    </div>
                 </td>
 
             </tr>
@@ -92,7 +104,7 @@ Managers' Orders
 
 
 <script src="{{ url_for('static', filename='js/managers_orders.js') }}"></script>
-<script src="{{ url_for('static', filename='js/actions.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ .js') }}"></script>
 
 
 {% endblock %}

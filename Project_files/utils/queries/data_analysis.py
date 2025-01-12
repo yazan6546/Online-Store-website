@@ -18,6 +18,7 @@ LOW_STOCK_PRODUCTS = text("""
     WHERE stock_quantity < 10;
 """)
 
+
 MONTHLY_INCOME_REPORT = text("""
     SELECT DATE_FORMAT(co.order_date, '%Y-%m') AS month, 
            SUM(col.quantity * col.price_at_time_of_order) AS tot

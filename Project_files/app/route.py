@@ -1289,6 +1289,12 @@ def get_addresses(person_id):
     addresses = [address.to_dict() for address in addresses]
     return jsonify(addresses)
 
+@app.route('/api/add_order/<int:order_id>', methods=['GET'])
+def get_order(order_id):
+    order = ManagerOrder.get_by_order_id(order_id)
+    return jsonify(order.to_dict())
+
+
 @app.route('/api/cart/add/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id:int):
 
