@@ -21,6 +21,7 @@ import models.data_analysis as da
 from models.products import Product
 from models.category import Category
 from models.person import Person
+from models.manager_order import ManagerOrder
 
 app.first_request_handled = False
 
@@ -956,6 +957,23 @@ def get_managers_orders():
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
+@app.route('/view_manager_order/<int:order_id>')
+def view_manager_order(order_id):
+    orders = ManagerOrder.get_products_by_order_id(order_id=order_id)
+    for order in orders:
+        product_id = order['product_id']
+        product_name = Product.get_product_name(product_id)
+        category_id = Product.get_category_id(product_id)
+        category_name = Category.get_name(category_id)
+        photo = Product.get_photo(product_id)
+        brand = Product.get_brand(product_id)
+        order['product_name'] = product_name
+        order['category_name'] = category_name
+        order['photo'] = photo
+        order['brand'] = brand
+
+    return render_template('view_manager_order.html', orders=orders)
+
 
 
 
@@ -1321,11 +1339,28 @@ def get_addresses(person_id):
     addresses = [address.to_dict() for address in addresses]
     return jsonify(addresses)
 
-@app.route('/api/add_order/<int:order_id>', methods=['GET'])
+@app.route('/api/get_order/<int:order_id>', methods=['GET'])
 def get_order(order_id):
-    order = ManagerOrder.get_by_order_id(order_id)
-    return jsonify(order.to_dict())
+    orders = ManagerOrder.get_products_by_order_id(order_id=order_id)
+    for order in orders:
+        product_id = order.pop('product_id')
+        product_name = Product.get_product_name(product_id)
+        category_id = Product.get_category_id(product_id)
+        category_name = Category.get_name(category_id)
+        photo = Product.get_photo(product_id)
+        order['product_name'] = product_name
+        order['category_name'] = category_name
+        order['photo'] = photo
 
+    return jsonify(orders)
+
+
+
+# @app.route('/api/add_order/<int:order_id>', methods=['GET'])
+# def get_order(order_id):
+#     order = ManagerOrder.get_by_order_id(order_id)
+#     return jsonify(order.to_dict())
+#
 
 @app.route('/api/cart/add/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id:int):
