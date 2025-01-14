@@ -207,6 +207,38 @@ class Product:
         finally:
             conn.close()
 
+    def get_category_id(self):
+        conn = get_db_connection()
+        try:
+            result = conn.execute(q.product.GET_CATEGORY_ID_BY_PRODUCT__ID, {"product_id": self.product_id}).fetchone()
+            return result[0]
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
+
+    def get_photo(self):
+        conn = get_db_connection()
+        try:
+            result = conn.execute(q.product.GET_PHOTO_BY_PRODUCT_ID, {"product_id": self.product_id}).fetchone()
+            return result[0]
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
+
+    def get_brand(self):
+        conn = get_db_connection()
+        try:
+            result = conn.execute(q.product.GET_BRAND_BY_PRODUCT_ID, {"product_id": self.product_id}).fetchone()
+            return result[0]
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+        finally:
+            conn.close()
     def __str__(self):
         return f"Product: {self.product_name} - {self.product_description} - {self.brand} - {self.price} - {self.photo} - {self.stock_quantity} - {self.category_id} - {self.supplier_id} - {self.product_id}"
 
