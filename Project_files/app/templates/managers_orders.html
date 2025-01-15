@@ -65,6 +65,7 @@ Managers' Orders
                 <td>
                     <span id="order_status-{{ order.order_id }}-text">{{ order.order_status }}</span>
                     <input type="text" id="order_status-{{ order.order_id }}-input" value="{{ order.order_status }}" style="display:none; width: 100px;">
+                </td>
 
 {#                <td class="action-buttons">#}
 {#                    <button id="edit-btn-{{ order.order_id  }}" class="edit" onclick="enableEditManagersOrders({{ order.order_id }})">Edit</button>#}
@@ -78,7 +79,7 @@ Managers' Orders
                             <i class="fas fa-ellipsis-v"></i> <!-- Vertical three dots icon -->
                         </button>
                         <div class="action-dropdown-menu">
-                            <button class="show-order" onclick="showManagerOrder({{ order.order_id }})">View Order</button>
+                            <button class="show-order" onclick="window.location.href='{{ url_for('view_manager_order', order_id=order.order_id) }}'">View Order</button>
                             <button class="delete" onclick="deleteManagerOrder({{ order.order_id }})">Cancel</button>
                         </div>
                     </div>
@@ -96,6 +97,53 @@ Managers' Orders
 </div>
 
 
+
+    <!-- Modal for Address Table -->
+<div id="managerOrder-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Manager Order</h2>
+
+{#    <!-- Add Address Button -->#}
+{#    <div class="add-address-container">#}
+{#      <button id="add-address-btn" class="add-address-btn">Add Address</button>#}
+{#    </div>#}
+
+
+    <!-- Address Table -->
+    <table class="address-table">
+      <thead>
+        <tr>
+          <th onclick="sortAddresses('street_address')">Street Address</th>
+          <th onclick="sortAddresses('city')">City</th>
+          <th onclick="sortAddresses('zip_code')">Zip Code</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="address-table-body">
+        <!-- Address rows will be dynamically inserted here -->
+      </tbody>
+
+    <!-- New Address Row -->
+    <tr id="new-address-row" style="display:none;">
+      <td><input type="text" id="new-street" placeholder="Street Address"></td>
+      <td><input type="text" id="new-city" placeholder="City"></td>
+      <td><input type="text" id="new-zip" placeholder="Zip Code"></td>
+        <td class="action-buttons">
+            <button class="save" onclick="saveNewAddress()">Save</button>
+            <button class="cancel" onclick="cancelNewAddress()">Cancel</button>
+        </td>
+    </tr>
+
+
+    </table>
+
+  </div>
+</div>
+
+
+
+
 <div class="pagination">
   <button id="prevPage" disabled>Previous</button>
   <span id="currentPage">Page 1</span>
@@ -104,7 +152,7 @@ Managers' Orders
 
 
 <script src="{{ url_for('static', filename='js/managers_orders.js') }}"></script>
-<script src="{{ url_for('static', filename='js/ .js') }}"></script>
+<script src="{{ url_for('static', filename='js/actions.js') }}"></script>
 
 
 {% endblock %}

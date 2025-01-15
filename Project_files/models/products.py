@@ -207,10 +207,11 @@ class Product:
         finally:
             conn.close()
 
-    def get_category_id(self):
+    @staticmethod
+    def get_category_id(product_id):
         conn = get_db_connection()
         try:
-            result = conn.execute(q.product.GET_CATEGORY_ID_BY_PRODUCT__ID, {"product_id": self.product_id}).fetchone()
+            result = conn.execute(q.product.GET_CATEGORY_ID_BY_PRODUCT__ID, {"product_id": product_id}).fetchone()
             return result[0]
         except Exception as e:
             print(f"Error: {e}")
@@ -218,10 +219,11 @@ class Product:
         finally:
             conn.close()
 
-    def get_photo(self):
+    @staticmethod
+    def get_photo(product_id):
         conn = get_db_connection()
         try:
-            result = conn.execute(q.product.GET_PHOTO_BY_PRODUCT_ID, {"product_id": self.product_id}).fetchone()
+            result = conn.execute(q.product.GET_PHOTO_BY_PRODUCT_ID, {"product_id": product_id}).fetchone()
             return result[0]
         except Exception as e:
             print(f"Error: {e}")
@@ -229,10 +231,11 @@ class Product:
         finally:
             conn.close()
 
-    def get_brand(self):
+    @staticmethod
+    def get_brand(product_id):
         conn = get_db_connection()
         try:
-            result = conn.execute(q.product.GET_BRAND_BY_PRODUCT_ID, {"product_id": self.product_id}).fetchone()
+            result = conn.execute(q.product.GET_BRAND_BY_PRODUCT_ID, {"product_id": product_id}).fetchone()
             return result[0]
         except Exception as e:
             print(f"Error: {e}")

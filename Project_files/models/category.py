@@ -78,10 +78,11 @@ class Category:
         finally:
             conn.close()
 
-    def get_name(self):
+    @staticmethod
+    def get_name(category_id):
         conn = get_db_connection()
         try:
-            result = conn.execute(q.category.GET_CATEGORY_NAME, {'category_id': self.category_id}).fetchone()
+            result = conn.execute(q.category.GET_CATEGORY_NAME, {'category_id': category_id}).fetchone()
             return result[0]
         except Exception as e:
             print(f"Error in get_name(): {e}")

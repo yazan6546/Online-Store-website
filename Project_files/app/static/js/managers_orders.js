@@ -1,5 +1,6 @@
 let currentSortOrder = 'asc'; // Keeps track of the current sort order
 
+
 function sortManagersOrders(column) {
     console.log('Sorting by:', column);
 
@@ -19,10 +20,9 @@ function sortManagersOrders(column) {
         if (column === 'order_id') {
             aValue = parseInt(aValue, 10);
             bValue = parseInt(bValue, 10);
-        }
-        else if (column === 'order_date' || column === 'delivery_date') {
-        aValue = new Date(aValue);
-        bValue = new Date(bValue);
+        } else if (column === 'order_date' || column === 'delivery_date') {
+            aValue = new Date(aValue);
+            bValue = new Date(bValue);
         }
 
         if (currentSortOrder === 'asc') {
@@ -36,6 +36,7 @@ function sortManagersOrders(column) {
     tableBody.innerHTML = '';
     rows.forEach(row => tableBody.appendChild(row));
 }
+
 
 // Utility to map column names to their respective indices
 function getColumnIndex(column) {
@@ -61,38 +62,45 @@ function generateRow(order) {
 // console.log(product);
 // console.log(categories);
 // console.log(suppliers);
-return `
-<tr id="row-${ order.order_id }">
+    return `
+<tr id="row-${order.order_id}">
 
-                <td>${ order.order_id }</td>
+                <td>${order.order_id}</td>
                 <td>
-                    <span id="email-${ order.order_id }-text"> ${ order.email } </span>
+                    <span id="email-${order.order_id}-text"> ${order.email} </span>
 
                 </td>
                 <td>
-                    <span id="order_date-${ order.order_id }-text">${ order.order_date }</span>
-                    <input type="text" id="order_date-${ order.order_id }-input" value="${ order.order_date }" style="display:none; width: 100px;">
+                    <span id="order_date-${order.order_id}-text">${order.order_date}</span>
+                    <input type="text" id="order_date-${order.order_id}-input" value="${order.order_date}" style="display:none; width: 100px;">
                 </td>
 
                 <td>
-                    <span id="delivery_date-${ order.order_id }-text">${ order.delivery_date }</span>
-                    <input type="text" id="delivery_date-${ order.order_id }-input" value="${ order.delivery_date }" style="display:none; width: 100px;">
+                    <span id="delivery_date-${order.order_id}-text">${order.delivery_date}</span>
+                    <input type="text" id="delivery_date-${order.order_id}-input" value="${order.delivery_date}" style="display:none; width: 100px;">
 
                 </td>
 
                 <td>
-                    <span id="delivery_service_name-${ order.order_id }-text">${ order.delivery_service_name }</span>
-                    <input type="text" id="delivery_service_name-${ order.order_id }-input" value="${ order.delivery_service_name }" style="display:none; width: 100px;">
+                    <span id="delivery_service_name-${order.order_id}-text">${order.delivery_service_name}</span>
+                    <input type="text" id="delivery_service_name-${order.order_id}-input" value="${order.delivery_service_name}" style="display:none; width: 100px;">
                 </td>
 
                 <td>
-                    <span id="order_status-${ order.order_id }-text">${ order.order_status }</span>
-                    <input type="text" id="order_status-${ order.order_id }-input" value="${ order.order_status }" style="display:none; width: 100px;">
+                    <span id="order_status-${order.order_id}-text">${order.order_status}</span>
+                    <input type="text" id="order_status-${order.order_id}-input" value="${order.order_status}" style="display:none; width: 100px;">
+                </td>
 
-                <td class="action-buttons">
-                    <button id="edit-btn-${ order.order_id  }" class="edit" onclick="enableEditManagersOrders(${ order.order_id })">Edit</button>
-                    <button id="save-btn-${ order.order_id  }" class="save" style="display:none;" onclick="saveEditManagersOrders(${ order.order_id })">Save</button>
-                    <button class="delete" onclick="deleteManagerOrder(${order.order_id })">Cancel</button>
+                 <td class="action-column">
+                    <div class="action-dropdown">
+                        <button class="action-dropdown-btn">
+                            <i class="fas fa-ellipsis-v"></i> <!-- Vertical three dots icon -->
+                        </button>
+                        <div class="action-dropdown-menu">
+                            <button class="show-order" onclick="window.location.href='/view_manager_order/${order.order_id}'">View Order</button>
+                            <button class="delete" onclick="deleteManagerOrder(${order.order_id})">Cancel</button>
+                        </div>
+                    </div>
                 </td>
 
             </tr>`;
@@ -122,7 +130,7 @@ function saveEditManagersOrders(supplier_id) {
             name: name,
             phone: phone
         },
-        success: function(response) {
+        success: function (response) {
             if (response.success) {
                 $('#name-' + supplier_id + '-text').text(name).show();
                 $('#name-' + supplier_id + '-input').hide();
@@ -134,7 +142,7 @@ function saveEditManagersOrders(supplier_id) {
                 alert('Error updating supplier: ' + response.error);
             }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             alert('Error updating supplier: ' + xhr.responseText);
         }
     });
@@ -146,7 +154,7 @@ function deleteManagerOrder(order_id) {
         $.ajax({
             url: '/delete_managers_orders/' + order_id,
             type: 'POST',
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     // $('#row-' + order_id).remove();
                     $('#order_status-' + order_id + '-text').text("CANCELLED").show();
@@ -154,7 +162,7 @@ function deleteManagerOrder(order_id) {
                     alert('Error deleting Order: ' + response.error);
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 alert('Error deleting Order: ' + xhr.responseText);
             }
         });
@@ -167,24 +175,51 @@ function searchManagersOrders() {
     $.ajax({
         url: '/search_managers_orders',
         type: 'GET',
-        data: { query: query },
-        success: function(response) {
+        data: {query: query},
+        success: function (response) {
             if (response.success) {
                 var tableBody = $('#table tbody');
                 tableBody.empty();
-                response.orders.forEach(function(order) {
+                response.orders.forEach(function (order) {
                     var row = generateRow(order);
                     tableBody.append(row);
                 });
             } else {
                 alert('Error searching orders: ' + response.error);
             }
+            document.querySelectorAll('.action-dropdown-btn').forEach((btn) => {
+                btn.addEventListener('click', function (event) {
+                    // Close other open dropdowns
+                    document.querySelectorAll('.action-dropdown').forEach((dropdown) => {
+                        if (dropdown !== btn.parentElement) {
+                            dropdown.classList.remove('active');
+                        }
+                    });
+
+                    // Toggle the current dropdown
+                    btn.parentElement.classList.toggle('active');
+                    event.stopPropagation(); // Prevent event bubbling
+                });
+            });
+
+
+// make a global event listener to close the dropdown when clicking outside
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.action-dropdown').forEach((dropdown) => {
+                    dropdown.classList.remove('active');
+                });
+            });
+
+
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             alert('Error searching orders: ' + xhr.responseText);
         }
     });
 }
+
+
+
 /////////////////////////////////////////////////////////////////////////
 
 // Open the modal
@@ -230,16 +265,39 @@ async function fetchManagersOrders(page = 1) {
                 const newRow = generateRow(order);
                 tableBody.innerHTML += newRow;
             });
+            document.querySelectorAll('.action-dropdown-btn').forEach((btn) => {
+                btn.addEventListener('click', function (event) {
+                    // Close other open dropdowns
+                    document.querySelectorAll('.action-dropdown').forEach((dropdown) => {
+                        if (dropdown !== btn.parentElement) {
+                            dropdown.classList.remove('active');
+                        }
+                    });
+
+                    // Toggle the current dropdown
+                    btn.parentElement.classList.toggle('active');
+                    event.stopPropagation(); // Prevent event bubbling
+                });
+            });
+
+
+// make a global event listener to close the dropdown when clicking outside
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.action-dropdown').forEach((dropdown) => {
+                    dropdown.classList.remove('active');
+                });
+            });
+
 
             // Update pagination controls
             document.getElementById('currentPage').innerText = `Page ${data.page}`;
             document.getElementById('prevPage').disabled = data.page === 1;
             document.getElementById('nextPage').disabled = data.page * limit >= data.total_count;
         } else {
-            console.error('Error fetching suppliers:', data.error);
+            console.error('Error fetching manager order:', data.error);
         }
     } catch (error) {
-        console.error('Error fetching suppliers:', error);
+        console.error('Error fetching manager orders:', error);
     }
 }
 
@@ -260,7 +318,7 @@ function addManagersOrders() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, phone }),
+        body: JSON.stringify({name, phone}),
     })
         .then(response => response.json())
         .then(data => {
@@ -277,6 +335,7 @@ function addManagersOrders() {
             alert('An error occurred while adding the supplier.');
         });
 }
+
 
 // Event Listeners for Pagination
 document.getElementById('prevPage').addEventListener('click', () => {
