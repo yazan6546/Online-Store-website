@@ -150,6 +150,10 @@ function saveProduct() {
         alert('Stock quantity cannot be negative');
         return;
     }
+    if(price<0){
+        alert('Price cannot be negative');
+        return;
+    }
 
     // FormData for files and form fields
     const formData = new FormData();

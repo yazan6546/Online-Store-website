@@ -53,7 +53,6 @@ def admin_dashboard_customers():
     customers = Customer.get_all()
     customers = [customer.to_dict(address=True) for customer in customers]
 
-
     # print(customers[0]['addresses'][0]['address_id'])
     return render_template('customers.html', customers=customers)  # Replace with render_template if applicable
 
@@ -80,6 +79,7 @@ def delete_customer(person_id):
 
     except Exception as e:
         return jsonify(success=False, error=str(e))
+
 
 @app.route('/update_customer/<int:person_id>', methods=['POST'])
 def update_customer(person_id):
@@ -121,6 +121,7 @@ def filter_customers():
         {"person_id": 5, "addresses": "654 Cedar Street, North Haverbrook"}
     ]
     return jsonify({"success": True, "customers": customers})
+
 
 ###########################################################################################
 # Address section
@@ -208,7 +209,7 @@ def delete_manager(person_id):
     if session['user']['person_id'] == person_id:
         return jsonify({"success": False, "error": "You cannot delete yourself."})
 
-    try :
+    try:
         Manager.delete(person_id)
         return jsonify({"success": True})
     except Exception as e:
@@ -510,11 +511,13 @@ def update_product(product_id):
         stock_quantity = data.get('stock_quantity')
         product_description = Product.get_desc_by_id(product_id)
 
-        print("------------------")
-        print(product_description)
-        print(supplier_id)
-        print(category_id)
-        print("------------------")
+        # if int(price) < 0:
+        #     return jsonify(success=False, error="Price cannot be negative")
+        # print("------------------")
+        # print(product_description)
+        # print(supplier_id)
+        # print(category_id)
+        # print("------------------")
 
         product = Product(
             product_id=product_id,
@@ -681,7 +684,6 @@ def admin_dashboard_categories():
     return render_template('category.html', categories=categories)
 
 
-
 @app.route('/fetch_categories', methods=['GET'])
 def fetch_categories():
     try:
@@ -780,8 +782,6 @@ def search_category():
         return jsonify(success=False, error=str(e))
 
 
-
-
 ############################################################################################################
 # Customer's orders section
 ############################################################################################################
@@ -803,7 +803,6 @@ def admin_dashboard_customers_orders():
         order['delivery_service_name'] = DeliveryService.get_name_by_id(order['delivery_service_id'])
 
     return render_template('customers_orders.html', orders=orders_fullInfo)
-
 
 
 # unused
@@ -946,6 +945,7 @@ def get_customers_orders():
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
+
 @app.route('/view_customer_order/<int:order_id>')
 def view_customer_order(order_id):
     orders = CustomerOrder.get_products_by_order_id(order_id=order_id)
@@ -979,15 +979,6 @@ def get_address(address_id):
     return jsonify(address)
 
 
-
-
-
-
-
-
-
-
-
 ############################################################################################################
 # Manager's orders section
 ############################################################################################################
@@ -1007,7 +998,6 @@ def admin_dashboard_managers_orders():
         order['delivery_service_name'] = DeliveryService.get_name_by_id(order['delivery_service_id'])
 
     return render_template('managers_orders.html', orders=orders_fullInfo)
-
 
 
 @app.route('/fetch_managers_orders', methods=['GET'])
@@ -1147,6 +1137,7 @@ def get_managers_orders():
     except Exception as e:
         return jsonify(success=False, error=str(e))
 
+
 @app.route('/view_manager_order/<int:order_id>')
 def view_manager_order(order_id):
     orders = ManagerOrder.get_products_by_order_id(order_id=order_id)
@@ -1170,19 +1161,7 @@ def view_manager_order(order_id):
     # orders here mean products (a list of products)
     total_price = Order.calculate_total_price(orders)
 
-    return render_template('view_manager_order.html', orders=orders , total_price=total_price)
-
-
-
-
-
-
-
-
-
-
-
-
+    return render_template('view_manager_order.html', orders=orders, total_price=total_price)
 
 
 ############################################################################################################
@@ -1273,11 +1252,9 @@ def admin_shop():
     )
 
 
-
 # Cart for manager Page
 @app.route('/admin_cart')
 def admin_cart():
-
     delivery_services = DeliveryService.get_all()
     delivery_services = [delivery_services.to_dict() for delivery_services in delivery_services]
 
@@ -1285,6 +1262,7 @@ def admin_cart():
     products = Product.products_from_cart(cart)
     total = cart.get_total()
     return render_template('admin_cart.html', delivery_services=delivery_services, products=products, total=total)
+
 
 @app.route('/add_customer_by_manager', methods=['POST'])
 def add_customer_by_manager():
@@ -1308,16 +1286,13 @@ def add_customer_by_manager():
             return jsonify(success=False, error="firstName, lastName, email, and password are required.")
 
         # Create and insert a new manager
-        new_customer = Customer(first_name=first_name, last_name=last_name, email=email, passcode=passcode, birth_date=birth_date, hash=True)
+        new_customer = Customer(first_name=first_name, last_name=last_name, email=email, passcode=passcode,
+                                birth_date=birth_date, hash=True)
         new_customer.insert()
 
         return jsonify(success=True, customer=new_customer.to_dict())
     except Exception as e:
         return jsonify(success=False, error=str(e))
-
-
-
-
 
 
 #
@@ -1537,6 +1512,7 @@ def get_addresses(person_id):
     addresses = [address.to_dict() for address in addresses]
     return jsonify(addresses)
 
+
 @app.route('/api/get_order/<int:order_id>', methods=['GET'])
 def get_order(order_id):
     orders = ManagerOrder.get_products_by_order_id(order_id=order_id)
@@ -1553,7 +1529,6 @@ def get_order(order_id):
     return jsonify(orders)
 
 
-
 # @app.route('/api/add_order/<int:order_id>', methods=['GET'])
 # def get_order(order_id):
 #     order = ManagerOrder.get_by_order_id(order_id)
@@ -1561,8 +1536,7 @@ def get_order(order_id):
 #
 
 @app.route('/api/cart/add/<int:product_id>', methods=['POST'])
-def add_to_cart(product_id:int):
-
+def add_to_cart(product_id: int):
     try:
 
         product_id = str(product_id)
@@ -1584,10 +1558,8 @@ def add_to_cart(product_id:int):
         return jsonify({"success": False, "error": str(e)})
 
 
-
 @app.route('/api/cart/remove/<int:product_id>', methods=['DELETE'])
-def remove_from_cart(product_id:int):
-
+def remove_from_cart(product_id: int):
     try:
         product_id = str(product_id)
         cart = session.get('cart', {})
@@ -1603,8 +1575,7 @@ def remove_from_cart(product_id:int):
 
 
 @app.route('/api/cart/update_quantity/<int:product_id>', methods=['POST'])
-def update_cart_quantity(product_id:int):
-
+def update_cart_quantity(product_id: int):
     try:
         product_id = str(product_id)
         data = request.get_json()
@@ -1624,7 +1595,6 @@ def update_cart_quantity(product_id:int):
 
 @app.route('/api/placeorder', methods=['POST'])
 def place_order():
-
     try:
         person_id = session['user']['person_id']
         data = request.get_json()
@@ -1643,7 +1613,8 @@ def place_order():
         # Generate a random date within the range
         random_date = faker.date_between(start_date=tomorrow, end_date=two_weeks_from_now)
 
-        order = ManagerOrder.cart_to_manager_order_with_stock(cart, person_id, random_date, delivery_service_id=delivery_service_id)
+        order = ManagerOrder.cart_to_manager_order_with_stock(cart, person_id, random_date,
+                                                              delivery_service_id=delivery_service_id)
         if not order.insert():
             return jsonify({"success": False, "error": "Failed to place order."})
 
