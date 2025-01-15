@@ -24,9 +24,9 @@ class Order:
                 'quantity': quantity
             }
 
-
-    def calculate_total_price(self):
-        total_price = sum(product['price_at_time_of_order'] * product['quantity'] for product in self.products.values())
+    @staticmethod
+    def calculate_total_price(products):
+        total_price = sum(product['price'] * product['quantity'] for product in products)
         return total_price
 
     @staticmethod

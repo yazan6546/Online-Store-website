@@ -17,8 +17,19 @@ GET_CUSTOMER_ORDER_TABLE = text("""
                             FROM Customer_Order ORDER BY 1 ;
 """)
 
+GET_STATUS_BY_ORDER_ID = text("""
+                            SELECT order_status FROM Customer_Order
+                            WHERE order_id = :order_id;
+                        """)
+
+DELETE_FROM_CUSTOMER_ORDER = text("""
+                                UPDATE Customer_Order
+                                SET order_status = 'CANCELLED'
+                                WHERE order_id = :order_id AND order_status = 'PLACED';
+                            """)
+
 SELECT_CUSTOMER_ORDER_BY_ID = text("""
-                                SELECT * FROM Manager_Order
+                                SELECT * FROM customer_order
                                 WHERE person_id = :id;
                             """)
 
@@ -28,10 +39,6 @@ GET_PRODUCTS_FROM_ORDER = text("""
                 where col.order_id = :order_id;
             """)
 
-DELETE_FROM_CUSTOMER_ORDER = text("""
-                                DELETE FROM Manager_Order
-                                WHERE order_id = :order_id;
-                            """)
 
 
 UPDATE_CUSTOMER_ORDER_TABLE = text("""

@@ -35,6 +35,22 @@ SELECT_PRODUCT_BY_SUPPLIER = text("""
                                 WHERE supplier_id = :supplier_id;
                             """)
 
+
+GET_CATEGORY_ID_BY_PRODUCT__ID = text("""
+                                SELECT category_id FROM Product
+                                WHERE product_id = :product_id;
+                                """)
+
+GET_PHOTO_BY_PRODUCT_ID = text("""
+                                SELECT photo FROM Product
+                                WHERE product_id = :product_id;
+                            """)
+
+GET_BRAND_BY_PRODUCT_ID = text("""
+                                SELECT brand FROM Product
+                                WHERE product_id = :product_id;
+                            """)
+
 UPDATE_PRODUCTS_TABLE = text("""
                                 UPDATE Product
                                 SET product_name = :product_name,

@@ -1,0 +1,119 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+    Order
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div id="wrapper">
+        <div class="card-heading">
+            <h1>Order</h1>
+        </div>
+
+        {#        <div id="container_search_add">#}
+        {#            <!-- Search form -->#}
+        {#            <form id="search-form" onsubmit="event.preventDefault(); searchProducts();">#}
+        {#                <input type="text" id="search-query" placeholder="Search products...">#}
+        {#                <button type="submit" class="btn">Search</button>#}
+        {#            </form>#}
+        {##}
+        {#            <!-- Add product button -->#}
+        {#            <button onclick="window.location.href='{{ url_for('add_product') }}'" class="btn">Add Product</button>#}
+        {#        </div>#}
+
+        <!-- Products table -->
+        <table id="table">
+            <thead>
+            <tr>
+                <th onclick="sortOrder('product_id')">Product ID</th>
+                <th onclick="sortOrder('product_name')">Name</th>
+                <th onclick="sortOrder('brand')">Brand</th>
+                <th onclick="sortOrder('category_id')">Category</th>
+                <th onclick="sortOrder('price')">Price</th>
+                <th onclick="sortOrder('quantity')">Quantity</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in orders %}
+                <tr id="row-{{ product.product_id }}">
+                    <!-- Product ID -->
+                    <td>{{ product.product_id }}</td>
+
+
+                    <!-- Name + Photo in same cell -->
+                    {#                    <td>#}
+                    {#                        <div class="product-category" style="display: flex; align-items: center;">#}
+                    {#                            <div class="image-container" style="margin-right: 10px;">#}
+                    {#                                <img src="{{ product.photo }}" alt="Product Image">#}
+                    {#                            </div>#}
+                    {#                            <div class="product-name">#}
+                    {#                                <span id="name-{{ product.product_id }}-text">{{ product.product_name }}</span>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    </td>#}
+                    <!-- Name + Photo in same cell -->
+                    <td>
+                        <div class="product-name-photo">
+                            <img src="{{product.photo}}" alt="Product Image">
+                            <div class="product-name">
+                                <span id="name-{{product.product_id}}-text">{{product.product_name}}</span>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- Brand -->
+                    <td>
+                        <span id="brand-{{ product.product_id }}-text">{{ product.brand }}</span>
+                        <input type="text" id="brand-{{ product.product_id }}-input" value="{{ product.brand }}"
+                               style="display:none; width: 100px;">
+                    </td>
+
+                    <!-- Category name -->
+                    <td>
+                        <!-- Display text for non-edit mode -->
+                        <span id="category-{{ product.product_id }}-text">
+                    {{ product.category_name }}
+                  </span>
+
+
+                    </td>
+
+
+                    <!-- Price -->
+                    <td>
+                        <span id="price-{{ product.product_id }}-text">{{ product.price }}</span>
+                    </td>
+
+                    <!-- Quantity -->
+                    <td>
+                        <span id="quantity-{{ product.product_id }}-text">{{ product.quantity }}</span>
+                    </td>
+
+
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="total-price-container">
+    <h2>Order Total : {{ total_price }} $</h2>
+</div>
+
+
+{#    <!-- Pagination -->#}
+{#    <div class="pagination">#}
+{#        <button id="prevPage" disabled>Previous</button>#}
+{#        <span id="currentPage">Page 1</span>#}
+{#        <button id="nextPage">Next</button>#}
+{#    </div>#}
+
+    <!-- Link to your JS file for handling products -->
+    <script src="{{ url_for('static', filename='js/order.js') }}"></script>
+{% endblock %}

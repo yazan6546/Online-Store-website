@@ -9,10 +9,13 @@ from utils.db_utils import get_db_connection
 from models.cart import Cart
 from models.order import Order
 
+
 class ManagerOrder(Order):
     def __init__(self, person_id, order_status, delivery_date, delivery_service_id, order_date=datetime.now(), order_id=None):
         super().__init__(person_id, delivery_date, order_status, delivery_service_id, order_date, order_id)
-
+    
+        
+    
     def insert(self):
 
         flag = False
@@ -135,11 +138,12 @@ class ManagerOrder(Order):
             products = conn.execute(q.manager_order.GET_PRODUCTS_FROM_ORDER, {"order_id": order_id}).fetchall()
             conn.commit()
             products = [product._mapping for product in products]
-            product_dict = {
-                product['product_id']: {"price": product['price_at_time_of_order'], "quantity": product['quantity']} for
-                product in products
-            }
-            return product_dict
+            product_list = [
+                {"product_id": product['product_id'], "price": product['price_at_time_of_order'],
+                 "quantity": product['quantity']}
+                for product in products
+            ]
+            return product_list
         except Exception as e:
             print(f"Error in get_products_by_person_id(): {e}")
             return []

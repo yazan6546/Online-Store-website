@@ -21,6 +21,8 @@ import models.data_analysis as da
 from models.products import Product
 from models.category import Category
 from models.person import Person
+from models.manager_order import ManagerOrder
+from models.order import Order
 
 app.first_request_handled = False
 
@@ -785,9 +787,198 @@ def search_category():
 ############################################################################################################
 
 # Route for the Payments page
+
 @app.route('/admin_dashboard/customers_orders')
 def admin_dashboard_customers_orders():
-    return "<h1>customer's orders</h1>"  # Replace with render_template if applicable
+    if 'user' not in session.keys() or session.get('role') != 'manager':
+        flash("You must be logged in as manager to access the admin dashboard.", "warning")
+        return redirect(url_for('login'))
+
+    orders = CustomerOrder.get_all()
+    orders_fullInfo = [order.to_dict() for order in orders]
+
+    # Adding additional attributes to each dictionary
+    for order in orders_fullInfo:
+        order['email'] = Person.get_email_by_id(order['person_id'])
+        order['delivery_service_name'] = DeliveryService.get_name_by_id(order['delivery_service_id'])
+
+    return render_template('customers_orders.html', orders=orders_fullInfo)
+
+
+
+# unused
+@app.route('/fetch_customers_orders', methods=['GET'])
+def fetch_customer_orders():
+    try:
+        categories = Category.get_names()
+        if not categories:
+            return jsonify(success=False, error="No categories found.")
+        return jsonify(success=True, categories=categories)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+#unused
+@app.route('/add_customer_order', methods=['POST'])
+def add_customer_order():
+    try:
+        # Extract data from the request
+        data = request.get_json()
+        name = data.get('name')
+        description = data.get('description')
+
+        # Validate inputs
+        if not name or not description:
+            return jsonify(success=False, error="Name and description are required.")
+
+        # Create and insert a new supplier
+        new_category = Category(category_name=name, category_description=description)
+        new_category.insert()
+
+        return jsonify(success=True, category=new_category.to_dict())
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# update - unused
+@app.route('/update_customer_order/<int:category_id>', methods=['POST'])
+def update_customer_order(category_id):
+    try:
+        # Extract data from the request
+        name = request.form.get('name')
+        description = request.form.get('description')
+
+        # Validate inputs
+        if not name or not description:
+            return jsonify(success=False, error="Name and description are required.")
+
+        # Fetch the supplier by ID and update its fields
+
+        category = Category.get_by_id(category_id)
+
+        if not category:
+            return jsonify(success=False, error="category not found.")
+
+        category.category_name = name
+        category.category_description = description
+        result = category.update()
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to update supplier.")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# Delete
+@app.route('/delete_customers_orders/<int:order_id>', methods=['POST'])
+def delete_customer_order(order_id):
+    try:
+        # Call the delete method of the Supplier class
+        status = CustomerOrder.get_status_by_order_id(order_id)
+        result = CustomerOrder.delete(order_id)
+
+        if status == 'COMPLETED':
+            return jsonify(success=False, error="You cannot delete a completed order.")
+        elif status == 'CANCELLED':
+            return jsonify(success=False, error="The order has already been cancelled.")
+
+        if result:
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Failed to cancel the Order in the database")
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# search
+@app.route('/search_customers_orders', methods=['GET'])
+def search_customer_order():
+    try:
+        # Get the search query from the request
+        query = request.args.get('query', '')
+
+        orders = CustomerOrder.get_all()
+        orders_fullInfo = [order.to_dict() for order in orders]
+
+        # Adding additional attributes to each dictionary
+        for order in orders_fullInfo:
+            order['email'] = Person.get_email_by_id(order['person_id'])
+            order['delivery_service_name'] = DeliveryService.get_name_by_id(order['delivery_service_id'])
+
+        filtered_orders = [
+            order for order in orders_fullInfo
+            if query.lower() in order['email'].lower() or query in order['delivery_service_name'].lower()
+        ]
+
+        return jsonify(success=True, orders=filtered_orders)
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+# unused
+@app.route('/get_customers_order', methods=['GET'])
+def get_customers_orders():
+    try:
+        # Fetch page and limit parameters from the query string
+        page = int(request.args.get('page', 1))  # Default to page 1
+        limit = int(request.args.get('limit', 8))  # Default to 8 rows per page
+        offset = (page - 1) * limit
+
+        # Fetch all suppliers
+        orders = ManagerOrder.get_all()
+
+        # Slice the suppliers list based on the page and limit
+        paginated_orders = orders[offset:offset + limit]
+        orders_dicts = [order.to_dict() for order in paginated_orders]
+
+        # Calculate total suppliers count
+        total_orders = len(orders)
+
+        return jsonify(
+            success=True,
+            orders=orders_dicts,
+            total_count=total_orders,
+            page=page,
+            limit=limit
+        )
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+@app.route('/view_customer_order/<int:order_id>')
+def view_customer_order(order_id):
+    orders = CustomerOrder.get_products_by_order_id(order_id=order_id)
+    for order in orders:
+        product_id = order['product_id']
+        product_name = Product.get_product_name(product_id)
+        category_id = Product.get_category_id(product_id)
+        category_name = Category.get_name(category_id)
+        # print(product_name)
+        # print(category_id)
+        # print(category_name)
+        photo = Product.get_photo(product_id)
+        brand = Product.get_brand(product_id)
+        print(photo)
+        print(brand)
+        order['product_name'] = product_name
+        order['category_name'] = category_name
+        order['photo'] = photo
+        order['brand'] = brand
+
+    # orders here mean products (a list of products)
+    total_price = Order.calculate_total_price(orders)
+
+    return render_template('view_manager_order.html', orders=orders, total_price=total_price)
+
+
+@app.route('/api/get_address/<int:address_id>', methods=['GET'])
+def get_address(address_id):
+    address = Address.get(address_id)
+    address = address.to_dict()
+    return jsonify(address)
+
+
 
 
 
@@ -955,6 +1146,31 @@ def get_managers_orders():
         )
     except Exception as e:
         return jsonify(success=False, error=str(e))
+
+@app.route('/view_manager_order/<int:order_id>')
+def view_manager_order(order_id):
+    orders = ManagerOrder.get_products_by_order_id(order_id=order_id)
+    for order in orders:
+        product_id = order['product_id']
+        product_name = Product.get_product_name(product_id)
+        category_id = Product.get_category_id(product_id)
+        category_name = Category.get_name(category_id)
+        print(product_name)
+        print(category_id)
+        print(category_name)
+        photo = Product.get_photo(product_id)
+        brand = Product.get_brand(product_id)
+        print(photo)
+        print(brand)
+        order['product_name'] = product_name
+        order['category_name'] = category_name
+        order['photo'] = photo
+        order['brand'] = brand
+
+    # orders here mean products (a list of products)
+    total_price = Order.calculate_total_price(orders)
+
+    return render_template('view_manager_order.html', orders=orders , total_price=total_price)
 
 
 
@@ -1320,6 +1536,29 @@ def get_addresses(person_id):
     addresses = Address.get_by_person_id(person_id)
     addresses = [address.to_dict() for address in addresses]
     return jsonify(addresses)
+
+@app.route('/api/get_order/<int:order_id>', methods=['GET'])
+def get_order(order_id):
+    orders = ManagerOrder.get_products_by_order_id(order_id=order_id)
+    for order in orders:
+        product_id = order.pop('product_id')
+        product_name = Product.get_product_name(product_id)
+        category_id = Product.get_category_id(product_id)
+        category_name = Category.get_name(category_id)
+        photo = Product.get_photo(product_id)
+        order['product_name'] = product_name
+        order['category_name'] = category_name
+        order['photo'] = photo
+
+    return jsonify(orders)
+
+
+
+# @app.route('/api/add_order/<int:order_id>', methods=['GET'])
+# def get_order(order_id):
+#     order = ManagerOrder.get_by_order_id(order_id)
+#     return jsonify(order.to_dict())
+#
 
 @app.route('/api/cart/add/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id:int):

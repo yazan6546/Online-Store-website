@@ -136,16 +136,45 @@ class CustomerOrder(Order):
             products = conn.execute(q.customer_order.GET_PRODUCTS_FROM_ORDER, {"order_id": order_id}).fetchall()
             conn.commit()
             products = [product._mapping for product in products]
-            product_dict = {
-                product['product_id']: {"price": product['price_at_time_of_order'], "quantity": product['quantity']} for
-                product in products
-            }
-            return product_dict
+            product_list = [
+                {"product_id": product['product_id'], "price": product['price_at_time_of_order'],
+                 "quantity": product['quantity']}
+                for product in products
+            ]
+            return product_list
         except Exception as e:
             print(f"Error in get_products_by_person_id(): {e}")
             return []
         finally:
             conn.close()
+
+    @staticmethod
+    def get_status_by_order_id(order_id):
+        conn = get_db_connection()
+        try:
+            order_status = conn.execute(q.customer_order.GET_STATUS_BY_ORDER_ID, {"order_id": order_id}).fetchone()
+            conn.commit()
+            return order_status[0]
+        except Exception as e:
+            print(f"Error in get_status_by_order_id(): {e}")
+            return None
+        finally:
+            conn.close()
+
+    @staticmethod
+    def delete(order_id):
+        conn = get_db_connection()
+        try:
+            conn.execute(q.customer_order.DELETE_FROM_CUSTOMER_ORDER, {"order_id": order_id})
+            conn.commit()
+            return 1
+        except Exception as e:
+            print(f"Error in delete(): {e}")
+            conn.rollback()
+            return 0
+        finally:
+            conn.close()
+
 
     @staticmethod
     def delete_all():

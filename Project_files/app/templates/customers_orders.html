@@ -1,7 +1,7 @@
 {% extends "admin_base.html" %}
 
 {% block title %}
-Managers' Orders
+Customers' Orders
 {% endblock %}
 
 {% block extra_css %}
@@ -14,11 +14,11 @@ Managers' Orders
 {% block content %}
 <div id="wrapper">
     <div class="card-heading">
-        <h1>Managers' Orders</h1>
+        <h1>Customers' Orders</h1>
     </div>
 
     <div id="container_search_add">
-        <form id="search-form" onsubmit="event.preventDefault(); searchManagersOrders();">
+        <form id="search-form" onsubmit="event.preventDefault(); searchCustomersOrders();">
             <input type="text" id="search-query" placeholder="Search managers' orders...">
             <button type="submit" class="btn">Search</button>
         </form>
@@ -28,12 +28,12 @@ Managers' Orders
     <table id="table">
         <thead>
             <tr>
-                <th onclick="sortManagersOrders('order_id')">Order ID</th>
-                <th onclick="sortManagersOrders('manager_email')">Manager Email</th>
-                <th onclick="sortManagersOrders('order_date')">Order Date</th>
-                <th onclick="sortManagersOrders('delivery_date')">Delivery Date</th>
-                <th onclick="sortManagersOrders('delivery_service_name')">Delivery Service Name</th>
-                <th onclick="sortManagersOrders('order_status')">Order Status</th>
+                <th onclick="sortCustomersOrders('order_id')">Order ID</th>
+                <th onclick="sortCustomersOrders('customer_email')">Manager Email</th>
+                <th onclick="sortCustomersOrders('order_date')">Order Date</th>
+                <th onclick="sortCustomersOrders('delivery_date')">Delivery Date</th>
+                <th onclick="sortCustomersOrders('delivery_service_name')">Delivery Service Name</th>
+                <th onclick="sortCustomersOrders('order_status')">Order Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -79,8 +79,9 @@ Managers' Orders
                             <i class="fas fa-ellipsis-v"></i> <!-- Vertical three dots icon -->
                         </button>
                         <div class="action-dropdown-menu">
-                            <button class="show-order" onclick="window.location.href='{{ url_for('view_manager_order', order_id=order.order_id) }}'">View Order</button>
-                            <button class="delete" onclick="deleteManagerOrder({{ order.order_id }})">Cancel</button>
+                            <button class="show-order" onclick="window.location.href='{{ url_for('view_customer_order', order_id=order.order_id) }}'">View Order</button>
+                            <button id="show-order-{{ order.order_id  }}" class="show-order" onclick="showAddress({{ order.address_id }})">View Address</button>
+                            <button class="delete" onclick="deleteCustomerOrder({{ order.order_id }})">Cancel</button>
                         </div>
                     </div>
                 </td>
@@ -89,20 +90,17 @@ Managers' Orders
             {% endfor %}
         </tbody>
 
-
-
-
-
     </table>
 </div>
 
 
 
-    <!-- Modal for Address Table -->
-<div id="managerOrder-modal" class="modal">
+
+<!-- Modal for Address Table -->
+<div id="address-modal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
-    <h2>Manager Order</h2>
+    <h2>Customer Address</h2>
 
 {#    <!-- Add Address Button -->#}
 {#    <div class="add-address-container">#}
@@ -114,44 +112,43 @@ Managers' Orders
     <table class="address-table">
       <thead>
         <tr>
-          <th onclick="sortAddresses('street_address')">Street Address</th>
-          <th onclick="sortAddresses('city')">City</th>
-          <th onclick="sortAddresses('zip_code')">Zip Code</th>
-          <th>Actions</th>
+          <th>Street Address</th>
+          <th>City</th>
+          <th>Zip Code</th>
+
         </tr>
       </thead>
       <tbody id="address-table-body">
         <!-- Address rows will be dynamically inserted here -->
       </tbody>
 
-    <!-- New Address Row -->
-    <tr id="new-address-row" style="display:none;">
-      <td><input type="text" id="new-street" placeholder="Street Address"></td>
-      <td><input type="text" id="new-city" placeholder="City"></td>
-      <td><input type="text" id="new-zip" placeholder="Zip Code"></td>
-        <td class="action-buttons">
-            <button class="save" onclick="saveNewAddress()">Save</button>
-            <button class="cancel" onclick="cancelNewAddress()">Cancel</button>
-        </td>
-    </tr>
+{#    <!-- New Address Row -->#}
+{#    <tr id="new-address-row" style="display:none;">#}
+{#      <td><input type="text" id="new-street" placeholder="Street Address"></td>#}
+{#      <td><input type="text" id="new-city" placeholder="City"></td>#}
+{#      <td><input type="text" id="new-zip" placeholder="Zip Code"></td>#}
+{#        <td class="action-buttons">#}
+{#            <button class="save" onclick="saveNewAddress()">Save</button>#}
+{#            <button class="cancel" onclick="cancelNewAddress()">Cancel</button>#}
+{#        </td>#}
+{#    </tr>#}
 
 
     </table>
-
   </div>
 </div>
 
 
 
 
-<div class="pagination">
-  <button id="prevPage" disabled>Previous</button>
-  <span id="currentPage">Page 1</span>
-  <button id="nextPage">Next</button>
-</div>
+{#<div class="pagination">#}
+{#  <button id="prevPage" disabled>Previous</button>#}
+{#  <span id="currentPage">Page 1</span>#}
+{#  <button id="nextPage">Next</button>#}
+{#</div>#}
 
 
-<script src="{{ url_for('static', filename='js/managers_orders.js') }}"></script>
+<script src="{{ url_for('static', filename='js/customers_orders.js') }}"></script>
 <script src="{{ url_for('static', filename='js/actions.js') }}"></script>
 
 
