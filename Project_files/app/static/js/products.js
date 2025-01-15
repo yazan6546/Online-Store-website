@@ -434,23 +434,32 @@ const brand = document.getElementById(`brand-${product_id}-input`).value;
 const price = document.getElementById(`price-${product_id}-input`).value;
 const stock_quantity = document.getElementById(`stock-${product_id}-input`).value;
 //const descContainer = document.getElementById(`description-edit-container-${product_id}`);
-console.log("--------------------");
-console.log(product_name);
-console.log(category_id);
-console.log(supplier_id);
-console.log(brand);
-console.log(price);
-console.log(stock_quantity);
-console.log("--------------------");
+// console.log("--------------------");
+// console.log(product_name);
+// console.log(category_id);
+// console.log(supplier_id);
+// console.log(brand);
+// console.log(price);
+// console.log(stock_quantity);
+// console.log("--------------------");
 
 // For description
 // let newDescription = null;
 // if (descContainer.style.display === 'block') {
 //     newDescription = document.getElementById(`description-${product_id}-input`).value;
 // }
-
-// Example: Make an AJAX call to update on the server
-// (Using fetch as an example)
+    if(!product_name || !category_id || !supplier_id || !brand || !price || !stock_quantity){
+        alert('Please fill in all required fields.');
+        return;
+    }
+    if(price < 0 ){
+        alert('Price cannot be negative');
+        return;
+    }
+    if(stock_quantity < 0){
+        alert('Stock quantity cannot be negative');
+        return;
+    }
 fetch(`/update_product/${product_id}`, {
 method: 'POST',
 headers: {'Content-Type': 'application/json'},
@@ -466,6 +475,7 @@ body: JSON.stringify({
 .then(res => res.json())
 .then(response => {
     if (response.success) {
+        alert('Product updated successfully!');
         // Update text spans
         document.getElementById(`name-${product_id}-text`).innerText = product_name;
         document.getElementById(`category-${product_id}-text`).innerText = category_id;
@@ -474,7 +484,7 @@ body: JSON.stringify({
         document.getElementById(`price-${product_id}-text`).innerText = price;
         document.getElementById(`stock-${product_id}-text`).innerText = stock_quantity;
 
-
+        fetchProducts(currentPage);
 
         // Hide input fields, show text
         document.getElementById(`name-${product_id}-input`).style.display = 'none';
@@ -496,7 +506,7 @@ body: JSON.stringify({
         // Show the 3-dots again, hide the Save button
         document.getElementById(`three-dots-${product_id}`).style.display = 'inline-block';
         document.getElementById(`save-btn-${product_id}`).style.display = 'none';
-        fet
+
     } else {
         alert('Error updating product: ' + response.error);
     }
