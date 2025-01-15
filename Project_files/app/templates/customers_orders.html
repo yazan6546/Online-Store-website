@@ -1,0 +1,155 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+Customers' Orders
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tables.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/actions.css') }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+    <div class="card-heading">
+        <h1>Customers' Orders</h1>
+    </div>
+
+    <div id="container_search_add">
+        <form id="search-form" onsubmit="event.preventDefault(); searchCustomersOrders();">
+            <input type="text" id="search-query" placeholder="Search managers' orders...">
+            <button type="submit" class="btn">Search</button>
+        </form>
+        <button onclick="window.location.href='{{ url_for('admin_shop') }}'" class="btn">Insert Order</button>
+    </div>
+
+    <table id="table">
+        <thead>
+            <tr>
+                <th onclick="sortCustomersOrders('order_id')">Order ID</th>
+                <th onclick="sortCustomersOrders('customer_email')">Manager Email</th>
+                <th onclick="sortCustomersOrders('order_date')">Order Date</th>
+                <th onclick="sortCustomersOrders('delivery_date')">Delivery Date</th>
+                <th onclick="sortCustomersOrders('delivery_service_name')">Delivery Service Name</th>
+                <th onclick="sortCustomersOrders('order_status')">Order Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr id="row-{{ order.order_id }}">
+
+                <td>{{ order.order_id }}</td>
+                <td>
+                    <span id="email-{{ order.order_id }}-text"> {{ order.email }} </span>
+
+                </td>
+                <td>
+                    <span id="order_date-{{ order.order_id }}-text">{{ order.order_date }}</span>
+                    <input type="text" id="order_date-{{ order.order_id }}-input" value="{{ order.order_date }}" style="display:none; width: 100px;">
+                </td>
+
+                <td>
+                    <span id="delivery_date-{{ order.order_id }}-text">{{ order.delivery_date }}</span>
+                    <input type="text" id="delivery_date-{{ order.order_id }}-input" value="{{ order.delivery_date }}" style="display:none; width: 100px;">
+
+                </td>
+
+                <td>
+                    <span id="delivery_service_name-{{ order.order_id }}-text">{{ order.delivery_service_name }}</span>
+                    <input type="text" id="delivery_service_name-{{ order.order_id }}-input" value="{{ order.delivery_service_name }}" style="display:none; width: 100px;">
+                </td>
+
+                <td>
+                    <span id="order_status-{{ order.order_id }}-text">{{ order.order_status }}</span>
+                    <input type="text" id="order_status-{{ order.order_id }}-input" value="{{ order.order_status }}" style="display:none; width: 100px;">
+                </td>
+
+{#                <td class="action-buttons">#}
+{#                    <button id="edit-btn-{{ order.order_id  }}" class="edit" onclick="enableEditManagersOrders({{ order.order_id }})">Edit</button>#}
+{#                    <button id="save-btn-{{ order.order_id  }}" class="save" style="display:none;" onclick="saveEditManagersOrders({{ order.order_id }})">Save</button>#}
+{#                    <button class="delete" onclick="deleteManagerOrder({{ order.order_id }})">Cancel</button>#}
+{#                </td>#}
+
+                    <td class="action-column">
+                    <div class="action-dropdown">
+                        <button class="action-dropdown-btn">
+                            <i class="fas fa-ellipsis-v"></i> <!-- Vertical three dots icon -->
+                        </button>
+                        <div class="action-dropdown-menu">
+                            <button class="show-order" onclick="window.location.href='{{ url_for('view_customer_order', order_id=order.order_id) }}'">View Order</button>
+                            <button id="show-order-{{ order.order_id  }}" class="show-order" onclick="showAddress({{ order.address_id }})">View Address</button>
+                            <button class="delete" onclick="deleteCustomerOrder({{ order.order_id }})">Cancel</button>
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+
+
+
+<!-- Modal for Address Table -->
+<div id="address-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Customer Address</h2>
+
+{#    <!-- Add Address Button -->#}
+{#    <div class="add-address-container">#}
+{#      <button id="add-address-btn" class="add-address-btn">Add Address</button>#}
+{#    </div>#}
+
+
+    <!-- Address Table -->
+    <table class="address-table">
+      <thead>
+        <tr>
+          <th>Street Address</th>
+          <th>City</th>
+          <th>Zip Code</th>
+
+        </tr>
+      </thead>
+      <tbody id="address-table-body">
+        <!-- Address rows will be dynamically inserted here -->
+      </tbody>
+
+{#    <!-- New Address Row -->#}
+{#    <tr id="new-address-row" style="display:none;">#}
+{#      <td><input type="text" id="new-street" placeholder="Street Address"></td>#}
+{#      <td><input type="text" id="new-city" placeholder="City"></td>#}
+{#      <td><input type="text" id="new-zip" placeholder="Zip Code"></td>#}
+{#        <td class="action-buttons">#}
+{#            <button class="save" onclick="saveNewAddress()">Save</button>#}
+{#            <button class="cancel" onclick="cancelNewAddress()">Cancel</button>#}
+{#        </td>#}
+{#    </tr>#}
+
+
+    </table>
+  </div>
+</div>
+
+
+
+
+{#<div class="pagination">#}
+{#  <button id="prevPage" disabled>Previous</button>#}
+{#  <span id="currentPage">Page 1</span>#}
+{#  <button id="nextPage">Next</button>#}
+{#</div>#}
+
+
+<script src="{{ url_for('static', filename='js/customers_orders.js') }}"></script>
+<script src="{{ url_for('static', filename='js/actions.js') }}"></script>
+
+
+{% endblock %}

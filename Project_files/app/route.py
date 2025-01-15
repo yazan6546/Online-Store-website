@@ -972,6 +972,12 @@ def view_customer_order(order_id):
     return render_template('view_manager_order.html', orders=orders, total_price=total_price)
 
 
+@app.route('/api/get_address/<int:address_id>', methods=['GET'])
+def get_address(address_id):
+    address = Address.get(address_id)
+    address = address.to_dict()
+    return jsonify(address)
+
 
 
 

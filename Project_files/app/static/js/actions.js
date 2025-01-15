@@ -73,6 +73,40 @@ async function showAddresses(personId) {
 }
 
 
+async function showAddress(address_id) {
+    try {
+        const response = await fetch(`/api/get_address/${address_id}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const address = await response.json();
+
+        const addressTableBody = document.getElementById('address-table-body');
+        addressTableBody.innerHTML = ''; // Clear existing rows
+
+        const row = `
+            <tr id="address-row-${address.address_id}">
+                <td>
+                    <span id="street_address-${address.address_id}-text">${address.street}</span>
+                </td>
+                <td>
+                    <span id="city-${address.address_id}-text">${address.city}</span>
+                </td>
+                <td>
+                    <span id="zip_code-${address.address_id}-text">${address.zip_code}</span>
+                </td>
+                
+            </tr>
+        `;
+        addressTableBody.innerHTML += row;
+
+        // Show the modal
+        addressModal.style.display = 'flex';
+    } catch (error) {
+        console.error('Error fetching address:', error);
+    }
+}
+
 async function showManagerOrder(OrderId) {
     // Fetch addresses dynamically (you can replace this with an AJAX call if needed)
     const OrderDetails = await mockGetOrder(OrderId); // Replace with backend call
@@ -138,6 +172,10 @@ async function mockGetAddresses(personId) {
         return [];
     }
 }
+
+
+
+
 
 
 async function mockGetOrder(OrderId) {
