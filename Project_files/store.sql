@@ -61,7 +61,7 @@ create table Product(
     product_name varchar(255) unique not null,
     product_description varchar(255) not null,
     brand varchar(30) not null,
-    price decimal(10,2) not null,
+    price decimal(10,2) not null check (price > 0),
     photo varchar(100),
     stock_quantity int not null check ( stock_quantity >= 0),
     category_id int not null,
