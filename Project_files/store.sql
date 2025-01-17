@@ -297,4 +297,46 @@ GROUP BY age_group
 ORDER BY FIELD(age_group, '18-30', '31-40', '41-50', '50+');
 
 
-select * from Manager_Order_Line where order_id=182
+select * from Manager_Order_Line where order_id=182;
+
+
+SELECT
+    month,
+    product_name,
+    total_quantity_sold
+FROM (
+    SELECT
+        DATE_FORMAT(co.order_date, '%Y-%m') AS month,
+        p.product_name,
+        SUM(col.quantity) AS total_quantity_sold,
+        ROW_NUMBER() OVER (PARTITION BY DATE_FORMAT(co.order_date, '%Y-%m') ORDER BY SUM(col.quantity) DESC) AS rn
+    FROM
+        Customer_Order co
+    JOIN
+        Customer_Order_Line col ON co.order_id = col.order_id
+    JOIN
+        Product p ON col.product_id = p.product_id
+    WHERE
+        co.order_status = 'COMPLETED' AND YEAR(co.order_date) = 2024
+    GROUP BY
+        month, p.product_name
+) subquery
+WHERE rn = 1
+ORDER BY month;
+
+
+SELECT
+        DATE_FORMAT(co.order_date, '%Y-%m') AS month,
+        p.product_name,
+        SUM(col.quantity) AS total_quantity_sold,
+        ROW_NUMBER() OVER (PARTITION BY DATE_FORMAT(co.order_date, '%Y-%m') ORDER BY SUM(col.quantity) DESC) AS rn
+    FROM
+        Customer_Order co
+    JOIN
+        Customer_Order_Line col ON co.order_id = col.order_id
+    JOIN
+        Product p ON col.product_id = p.product_id
+    WHERE
+        co.order_status = 'COMPLETED' AND YEAR(co.order_date) = 2024
+    GROUP BY
+        month, p.product_name

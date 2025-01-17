@@ -1,8 +1,17 @@
-import pandas as pd
+import os
+import sys
 
+sys.path.append(
+    os.path.abspath(
+    os.path.join(
+    os.path.dirname(__file__), '..')))
+
+import pandas as pd
 from models.manager import Manager
 from models.customers import Customer
 from utils.db_utils import get_db_connection, reset_db
+
+
 
 
 def read_csv_to_objects(file_path, model_class:Customer| Manager):
