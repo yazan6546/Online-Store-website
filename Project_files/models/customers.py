@@ -11,16 +11,25 @@ class Customer(Person):
         super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
         self.addresses = []  # List of Address objects
         self.birth_date = birth_date
+        self.age = datetime.now().year - self.birth_date.year
 
-        # Ensure birth_date is a date object
-        if isinstance(birth_date, datetime):
-            birth_date = birth_date.date()
+    @property
+    def birth_date(self):
+        return self._birth_date
 
-        # Check if birth_date is at least 5 years ago
-        if birth_date > date.today() - timedelta(days=18 * 365):
+    @birth_date.setter
+    def birth_date(self, value):
+        if isinstance(value, str):
+            value = datetime.strptime(value, '%Y-%m-%d').date()
+
+        elif isinstance(value, datetime):
+            value = value.date()
+
+        if value > date.today() - timedelta(days=18 * 365):
             raise ValueError("Birth date must be at least 18 years ago.")
+        self._birth_date = value
 
-        self.age = datetime.now().year - birth_date.year
+
     def insert(self):
 
         conn = get_db_connection()

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from models import Manager
+from models.manager import Manager
 from models.customers import Customer
 from utils.db_utils import get_db_connection, reset_db
 

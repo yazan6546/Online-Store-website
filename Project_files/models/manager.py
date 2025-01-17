@@ -1,5 +1,5 @@
 from __future__ import annotations  # Enables modern type hinting for forward references
-import datetime
+from datetime import datetime, date
 from typing import Dict, List
 
 from models.person import Person
@@ -8,10 +8,27 @@ from utils.db_utils import get_db_connection
 
 
 class Manager(Person):
-    def __init__(self, first_name, last_name, email, passcode='0000', since=datetime.datetime.now(), role='Financial Manager', person_id=None, hash=False):
+    def __init__(self, first_name, last_name, email, passcode='0000', since=date.today(), role='Financial Manager', person_id=None, hash=False):
         super().__init__(person_id, first_name, last_name, email, passcode, hash=hash)
+
         self.since = since
         self.role = role
+
+    @property
+    def since(self):
+        return self._since
+
+    @since.setter
+    def since(self, value):
+        if isinstance(value, str):
+            value = datetime.strptime(value, '%Y-%m-%d').date()
+
+        elif isinstance(value, datetime):
+            value = value.date()
+
+        if value > date.today():
+            raise ValueError("Since date must be in the past.")
+        self._since = value
 
     def insert(self) -> None:
         conn = get_db_connection()
