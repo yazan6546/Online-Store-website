@@ -295,3 +295,6 @@ FROM (
 ) AS age_data
 GROUP BY age_group
 ORDER BY FIELD(age_group, '18-30', '31-40', '41-50', '50+');
+
+
+select * from Manager_Order_Line where order_id=182

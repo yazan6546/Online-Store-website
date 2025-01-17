@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 import pandas as pd
 from pandas.core.interchange.dataframe_protocol import DataFrame
@@ -8,7 +8,7 @@ import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class CustomerOrder(Order):
-    def __init__(self, person_id, order_status, delivery_date, delivery_service_id, address_id, order_date, order_id=None):
+    def __init__(self, person_id, order_status, delivery_date, delivery_service_id, address_id, order_date=date.today(), order_id=None):
         super().__init__(person_id, delivery_date, order_status, delivery_service_id, order_date, order_id)
         self.address_id = address_id
 

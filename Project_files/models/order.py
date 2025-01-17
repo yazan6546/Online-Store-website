@@ -1,15 +1,27 @@
 from typing import Dict
 
 from sqlalchemy import text
-from datetime import datetime
+from datetime import datetime, date
 import utils.queries as q
 from utils.db_utils import get_db_connection
 
 class Order:
-    def __init__(self, person_id, delivery_date, order_status, delivery_service_id, order_date=datetime.now(), order_id=None):
+    def __init__(self, person_id, delivery_date, order_status, delivery_service_id, order_date=date.today(), order_id=None):
         self.order_id = order_id
         self.person_id = person_id
+
+        if isinstance(order_date, str):
+            order_date = datetime.strptime(order_date, "%Y-%m-%d").date()
+        elif isinstance(order_date, datetime):
+            order_date = order_date.date()
         self.order_date = order_date
+
+
+        if isinstance(delivery_date, str):
+            delivery_date = datetime.strptime(delivery_date, "%Y-%m-%d").date()
+        elif isinstance(delivery_date, datetime):
+            delivery_date = delivery_date.date()
+
         self.delivery_date = delivery_date
         self.delivery_service_id = delivery_service_id
         self.order_status = order_status

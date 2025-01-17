@@ -1,6 +1,6 @@
 from __future__ import annotations  # Enables modern type hinting for forward references
 
-from datetime import datetime
+from datetime import datetime, date
 
 from models import Manager
 from models.order import Order
@@ -11,7 +11,7 @@ from models.order import Order
 
 
 class ManagerOrder(Order):
-    def __init__(self, person_id, order_status, delivery_date, delivery_service_id, order_date=datetime.now(), order_id=None):
+    def __init__(self, person_id, order_status, delivery_date, delivery_service_id, order_date=date.today(), order_id=None):
         super().__init__(person_id, delivery_date, order_status, delivery_service_id, order_date, order_id)
     
         
