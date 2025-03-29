@@ -326,10 +326,11 @@ ORDER BY month;
 
 
 SELECT
-        DATE_FORMAT(co.order_date, '%Y-%m') AS month,
+        MONTH(co.order_date) AS month,
         p.product_name,
         SUM(col.quantity) AS total_quantity_sold,
-        ROW_NUMBER() OVER (PARTITION BY DATE_FORMAT(co.order_date, '%Y-%m') ORDER BY SUM(col.quantity) DESC) AS rn
+        ROW_NUMBER() OVER (PARTITION BY MONTH(co.order_date, '%Y-%m') ORDER BY SUM(col.quantity) DESC) AS rn
+
     FROM
         Customer_Order co
     JOIN
