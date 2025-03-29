@@ -13,6 +13,7 @@ Project_files/__pycache__
 Project_files/.vscode
 .idea
 .venv
+venv
 Project_files/app/__pycache__
 Project_files/models/__pycache__
 Project_files/utils/__pycache__

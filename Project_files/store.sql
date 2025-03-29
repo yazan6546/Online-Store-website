@@ -1,4 +1,4 @@
-drop database Store;
+drop database if exists Store;
 create database Store;
 use Store;
 

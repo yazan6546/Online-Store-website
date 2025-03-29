@@ -10,7 +10,7 @@ from wtforms.validators import email
 from app import app
 from app.forms import *
 import app.auth as auth
-from models import ManagerOrder, CustomerOrder
+from models.customer_order import CustomerOrder
 from models.delivery_service import DeliveryService
 from models.cart import Cart
 from models.addresses import Address

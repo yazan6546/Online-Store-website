@@ -1,9 +1,5 @@
-from typing import Dict
-
-from sqlalchemy import text
 from datetime import datetime, date
-import utils.queries as q
-from utils.db_utils import get_db_connection
+
 
 class Order:
     def __init__(self, person_id, delivery_date, order_status, delivery_service_id, order_date=date.today(), order_id=None):

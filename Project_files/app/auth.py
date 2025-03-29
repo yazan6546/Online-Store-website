@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import flash, render_template, url_for, redirect, session
 from markupsafe import Markup
 import utils.password_manager as pm
-from models import Cart
+from models.cart import Cart
 from models.manager import Manager
 from models.customers import Customer
 
