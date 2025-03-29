@@ -47,7 +47,7 @@ The Online-Store-website is a fully functional web application that simulates an
 1. Clone the repository to your local machine:
     ```bash
     git clone https://github.com/yazan6546/Online-Store-website.git
-    cd Online-Store-website
+    cd Online-Store-website/Project_files
     ```
 
 2. Create a virtual environment and activate it:
