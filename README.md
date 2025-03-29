@@ -108,3 +108,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Disclaimer
 Please note that the customer side of this project is static and incomplete.
+
+## Team
+- [Yazan Abualoun](https://github.com/yazan6546)
+- [Osaid Nour](https://github.com/osaidnur)
+- [Lana Musaffer](https://github.com/Lanamahd)
