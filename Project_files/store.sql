@@ -330,6 +330,7 @@ SELECT
         p.product_name,
         SUM(col.quantity) AS total_quantity_sold,
         ROW_NUMBER() OVER (PARTITION BY MONTH(co.order_date, '%Y-%m') ORDER BY SUM(col.quantity) DESC) AS rn
+
     FROM
         Customer_Order co
     JOIN
