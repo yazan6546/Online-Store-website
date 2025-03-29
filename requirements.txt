@@ -6,3 +6,5 @@ flask_wtf==1.2.2
 wtforms==3.2.1
 flask_sqlalchemy==3.1.1
 mysqlclient==2.2.6
+faker==37.1.0
+bcrypt==4.3.0
