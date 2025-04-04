@@ -9,6 +9,7 @@ An online store website built using Python, JavaScript, HTML, and CSS. This proj
 - [Libraries and Dependencies](#libraries-and-dependencies)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Database ERD](#database-erd)
 - [Contributing](#contributing)
 - [License](#license)
 - [Disclaimer](#disclaimer)
@@ -99,6 +100,11 @@ The Online-Store-website is a fully functional web application that simulates an
 3. Register a new user account or log in with an existing account:
     - **Customer login**: Leads to a static web page that is not yet completed.
     - **Manager login**: Leads to an admin dashboard showing statistics and allows managers to view and modify all tables, as well as purchase products from suppliers.
+
+## Database ERD 
+Found below is the final edited ERD for the project, containing the tables used in actual code. 
+![ERD](assets/Database-ERD.svg)
+
 
 ## Contributing
 Contributions are welcome! Please fork this repository and submit pull requests to add new features or fix bugs.
