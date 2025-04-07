@@ -1,6 +1,6 @@
 # Online-Store-website
 
-An online store website built using Python, JavaScript, HTML, and CSS. This project is designed to provide a seamless shopping experience for users with a variety of features such as product browsing, shopping cart, and checkout process.
+An online store website built using Python, JavaScript, HTML, and CSS. This project is designed to provide a seamless shopping experience for users with a variety of features such as product browsing, shopping cart, and checkout process. Along with database integration.
 
 ## Table of Contents
 - [Introduction](#introduction)
